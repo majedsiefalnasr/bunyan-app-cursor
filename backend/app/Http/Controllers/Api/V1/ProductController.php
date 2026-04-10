@@ -8,6 +8,7 @@ use App\Http\Resources\Api\V1\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends BaseController
 {
@@ -49,9 +50,10 @@ class ProductController extends BaseController
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
+            'sku' => 'SKU-'.strtoupper(Str::random(10)),
             'category' => $request->category,
             'price' => $request->price,
-            'quantity' => $request->quantity,
+            'quantity_in_stock' => $request->quantity,
         ]);
 
         return $this->sendSuccess(
@@ -65,7 +67,12 @@ class ProductController extends BaseController
     {
         $this->authorize('update', $product);
 
-        $product->update($request->validated());
+        $data = $request->validated();
+        if (array_key_exists('quantity', $data)) {
+            $data['quantity_in_stock'] = $data['quantity'];
+            unset($data['quantity']);
+        }
+        $product->update($data);
 
         return $this->sendSuccess(
             new ProductResource($product),

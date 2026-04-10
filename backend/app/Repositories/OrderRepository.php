@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Order;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrderRepository
 {
     public function __construct(
         private readonly Order $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Order
     {
@@ -59,6 +60,7 @@ class OrderRepository
     public function update(Order $order, array $data): Order
     {
         $order->update($data);
+
         return $order->fresh(['customer', 'items.product']);
     }
 

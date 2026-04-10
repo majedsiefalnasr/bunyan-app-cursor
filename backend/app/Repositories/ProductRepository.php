@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Product;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductRepository
 {
     public function __construct(
         private readonly Product $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Product
     {
@@ -66,6 +67,7 @@ class ProductRepository
     public function update(Product $product, array $data): Product
     {
         $product->update($data);
+
         return $product->fresh();
     }
 

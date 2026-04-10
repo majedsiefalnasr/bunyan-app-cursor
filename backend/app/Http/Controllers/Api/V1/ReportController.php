@@ -47,6 +47,7 @@ class ReportController extends BaseController
             'project_id' => $request->project_id,
             'title' => $request->title,
             'content' => $request->content,
+            'description' => $request->content,
             'status' => 'draft',
             'created_by' => $request->user()->id,
         ]);

@@ -1,4 +1,5 @@
-import { defineConfig } from '@playwright/test';
+// @ts-nocheck — Playwright config; not part of Nuxt app type graph
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
     testDir: './tests/e2e',

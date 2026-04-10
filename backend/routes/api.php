@@ -1,14 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\V1\{
-    UserController,
-    ProjectController,
-    PhaseController,
-    TaskController,
-    ReportController,
-    TransactionController,
-    ProductController,
     OrderController,
+    PhaseController,
+    ProductController,
+    ProjectController,
+    ReportController,
+    TaskController,
+    TransactionController,
+    UserController,
 };
 use Illuminate\Support\Facades\Route;
 

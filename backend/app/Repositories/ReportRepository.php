@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Report;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReportRepository
 {
     public function __construct(
         private readonly Report $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Report
     {
@@ -60,6 +61,7 @@ class ReportRepository
     public function update(Report $report, array $data): Report
     {
         $report->update($data);
+
         return $report->fresh(['task', 'phase', 'creator']);
     }
 

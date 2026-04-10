@@ -9,7 +9,8 @@ class ApprovalRuleRepository
 {
     public function __construct(
         private readonly ApprovalRule $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?ApprovalRule
     {
@@ -48,6 +49,7 @@ class ApprovalRuleRepository
     public function update(ApprovalRule $rule, array $data): ApprovalRule
     {
         $rule->update($data);
+
         return $rule->fresh();
     }
 

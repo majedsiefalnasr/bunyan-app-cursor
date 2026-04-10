@@ -4,14 +4,15 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Models\User;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProjectRepository
 {
     public function __construct(
         private readonly Project $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Project
     {
@@ -81,6 +82,7 @@ class ProjectRepository
     public function update(Project $project, array $data): Project
     {
         $project->update($data);
+
         return $project->fresh(['customer', 'contractor', 'supervisingArchitect']);
     }
 

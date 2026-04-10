@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
+    use AuthorizesRequests;
+
     public function sendSuccess($data = null, $message = 'Operation successful', $statusCode = 200): JsonResponse
     {
         return response()->json([

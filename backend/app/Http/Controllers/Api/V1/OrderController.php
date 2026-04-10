@@ -49,19 +49,22 @@ class OrderController extends BaseController
         $order = Order::create([
             'customer_id' => $request->user()->id,
             'project_id' => $request->project_id,
-            'total_price' => 0,
+            'total_amount' => 0,
             'status' => 'pending',
         ]);
 
         foreach ($request->items as $item) {
+            $unitPrice = (float) $item['price'];
+            $quantity = (int) $item['quantity'];
             $order->items()->create([
                 'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'subtotal' => $unitPrice * $quantity,
             ]);
         }
 
-        $order->update(['total_price' => $order->items()->sum('price')]);
+        $order->update(['total_amount' => $order->items()->sum('subtotal')]);
 
         return $this->sendSuccess(
             new OrderResource($order),

@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -24,24 +27,42 @@ class Handler extends ExceptionHandler
 
     public function render(Request $request, Throwable $exception): JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
     {
-        if ($request->wantsJson()) {
+        if ($this->shouldReturnJson($request, $exception)) {
+            if ($exception instanceof ValidationException) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'message' => $exception->getMessage(),
+                    'errors' => $exception->errors(),
+                ], $exception->status);
+            }
+
+            if ($exception instanceof AuthenticationException) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'message' => $exception->getMessage() ?: 'Unauthenticated',
+                    'errors' => [],
+                ], 401);
+            }
+
+            if ($exception instanceof HttpExceptionInterface) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'message' => $exception->getMessage() ?: 'An error occurred',
+                    'errors' => [],
+                ], $exception->getStatusCode());
+            }
+
             return response()->json([
                 'success' => false,
                 'data' => null,
                 'message' => $exception->getMessage() ?: 'An error occurred',
                 'errors' => [],
-            ], status: $this->getHttpStatusCode($exception));
+            ], 500);
         }
 
         return parent::render($request, $exception);
-    }
-
-    private function getHttpStatusCode(Throwable $exception): int
-    {
-        if (method_exists($exception, 'getStatusCode')) {
-            return $exception->getStatusCode();
-        }
-
-        return 500;
     }
 }

@@ -13,7 +13,7 @@ class OrderItemResource extends JsonResource
             'id' => $this->id,
             'product_id' => $this->product_id,
             'quantity' => $this->quantity,
-            'price' => number_format((float) $this->price, 2, '.', ''),
+            'price' => number_format((float) ($this->unit_price ?? $this->price ?? 0), 2, '.', ''),
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
     }

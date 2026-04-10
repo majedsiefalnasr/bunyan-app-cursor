@@ -4,6 +4,8 @@
 **Date:** 2026-04-10  
 **Scope:** Backend (Laravel), Frontend (Nuxt.js), Docker, CI/CD, E2E
 
+**Implementation alignment:** This document matches the repository layout and scripts as of **2026-04-10** (Laravel 11, Sanctum, Nuxt 3, `@pinia/nuxt`, PHPUnit 11, Vitest 3, ESLint 9 flat config). When commands or counts drift, prefer **`backend/composer.json`**, **`frontend/package.json`**, and **`.github/workflows/*.yml`** as the source of truth.
+
 ---
 
 ## Table of Contents
@@ -23,7 +25,7 @@
 ### Prerequisites
 
 - **Node.js:** 20 LTS or higher
-- **PHP:** 8.2 or higher
+- **PHP:** 8.2 or higher (platform **8.5** may log PDO/MySQL constant deprecations from **vendor** Laravel config during bootstrap; app `backend/config/database.php` mitigates for the app config. PHPUnit lowers deprecation noise for test runs—see [Running Backend Tests](#running-backend-tests).)
 - **Composer:** 2.6 or higher
 - **Docker:** 20.10 or higher (optional, for containerized testing)
 - **Docker Compose:** 3.8 or higher (optional)
@@ -77,6 +79,9 @@ cd frontend
 # Install npm dependencies
 npm install
 
+# Generate .nuxt (types + tsconfig) — required before typecheck / first IDE run
+npx nuxi prepare
+
 # Start development server
 npm run dev
 # Frontend accessible at: http://localhost:3000
@@ -114,100 +119,86 @@ npx husky install
 
 ## Running Backend Tests
 
-### Unit Tests
+### Quick reference (this repository)
 
-**Command:**
+| Goal | Command |
+|------|---------|
+| Run all automated tests | `cd backend && composer test` or `cd backend && php artisan test` |
+| Feature / API tests only | `cd backend && php artisan test tests/Feature` |
+| PHP style (dry-run) | `cd backend && composer run lint` |
+| PHP style (apply fixes) | `cd backend && composer run lint:fix` |
+| PHPStan | `cd backend && composer run analyze` |
+| PHPUnit directly (debug) | `cd backend && ./vendor/bin/phpunit` |
+
+**Database for tests:** `backend/phpunit.xml` sets **`DB_CONNECTION=sqlite`** and **`DB_DATABASE=:memory:`** under `<php><env>`. You do **not** need MySQL running for `php artisan test`.
+
+### What the suite covers today
+
+- **`tests/Feature/`** — HTTP JSON API tests (`Tests\Feature\Api\V1\…`), Sanctum-authenticated requests, factories, migrations on SQLite in-memory.
+- **`tests/Unit/`** — Reserved for fast unit tests (may be empty).
+
+### Expected output (order of magnitude)
+
+After `composer install`, a green run looks like:
+
+```text
+Tests:    40 passed (82 assertions)
+Duration: ~10–20s
+```
+
+Exact **test** and **assertion** counts will change as specs grow; **exit code 0** is the pass criterion.
+
+You may see lines such as **`Tests: 40 deprecated`** in the console: that counts **PHP deprecations emitted during tests** (often from vendor code on PHP 8.5). The bundled **`phpunit.xml`** sets **`failOnDeprecation="false"`** and **`failOnPhpunitWarning="false"`** so those do not fail the job unless you tighten the config.
+
+### Caveats
+
+1. **`composer test`** runs **`php artisan test`**, which expects dev dependency **`nunomaduro/collision`**. If Collision were removed, use **`./vendor/bin/phpunit`** instead.
+2. **API validation (422)** for `api/*` JSON requests returns the Bunyan envelope, configured in **`bootstrap/app.php`**:  
+   `{ "success": false, "data": null, "message": "…", "errors": { … } }`.
+3. **Coverage in `phpunit.xml`:** The committed file is optimized for a **green default test run** without a coverage driver. **`composer run test:coverage`** / **`php artisan test --coverage`** require **PCOV** or **Xdebug** on the PHP binary; there is **no** `--min=` threshold in `composer.json` yet.
+
+### Code coverage (optional)
+
 ```bash
 cd backend
-php artisan test
+composer run test:coverage
+# equivalent:
+# php artisan test --coverage
 ```
 
-**What It Tests:**
-- Service layer logic (ProjectService, PhaseService, etc.)
-- Repository queries and relationships
-- Eloquent model scopes and accessors
-- Validation logic
-- Utility functions
+Add HTML/text reports by restoring PHPUnit 11 **`source`** / **`coverage`** blocks in `phpunit.xml` once a driver is installed (see PHPUnit 11 docs).
 
-**Expected Output:**
-```
-Tests:  25 passed (XX assertions)
-Duration: X.XXs
-```
+### Static analysis (PHPStan)
 
-### Feature Tests (Integration Tests)
-
-**Command:**
 ```bash
 cd backend
-php artisan test --filter Feature
+composer run analyze
 ```
 
-**What It Tests:**
-- API endpoints with real database
-- HTTP request/response cycles
-- Authentication flows
-- RBAC authorization
-- Error handling and status codes
+Equivalent: `vendor/bin/phpstan analyse --memory-limit=512M`.
 
-**Expected Output:**
-```
-Tests:  35 passed (XX assertions)
-Duration: X.XXs
-```
+### Code formatting (PHP-CS-Fixer)
 
-### Code Coverage
-
-**Command:**
 ```bash
 cd backend
-php artisan test --coverage --min=80
-```
-
-**Requirements:**
-- Minimum 80% code coverage across all files
-- Coverage report generated in `coverage/` directory
-- Includes line coverage, branch coverage, method coverage
-
-### Static Analysis
-
-**Command:**
-```bash
-cd backend
-vendor/bin/phpstan analyse --memory-limit=512M
-```
-
-**What It Checks:**
-- Type errors
-- Undefined variables
-- Unused imports
-- Logical errors
-- Memory limits
-
-**Expected Output:**
-```
-[OK] No errors
-```
-
-### Code Formatting
-
-**Check (Dry Run):**
-```bash
-cd backend
-php-cs-fixer fix --dry-run --diff
-```
-
-**Auto-Fix:**
-```bash
-cd backend
-php-cs-fixer fix
+composer run lint       # dry-run (matches CI)
+composer run lint:fix   # apply fixes
 ```
 
 ---
 
 ## Running Frontend Tests
 
-### Unit Tests
+### Before `typecheck`: generate Nuxt types
+
+Nuxt writes **`frontend/.nuxt/tsconfig.json`** and generated types during **`nuxi prepare`**. Run after **`npm install`** and in CI **before** `npm run typecheck`:
+
+```bash
+cd frontend
+npx nuxi prepare
+```
+
+### Unit tests (Vitest)
 
 **Command:**
 ```bash
@@ -215,65 +206,54 @@ cd frontend
 npm run test
 ```
 
-**What It Tests:**
-- Composable logic (useAuth, useProject, useApi, etc.)
-- Pinia store actions and getters
-- Vue component logic
-- Utility functions
-- Form validation
+**Layout:**
 
-**Expected Output:**
+- Specs are discovered from **`tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`** (see `vitest.config.ts`).
+- A minimal **`tests/unit/smoke.spec.ts`** keeps the pipeline green until more suites land.
+- **`passWithNoTests: true`** avoids failing when no files match (useful on sparse branches).
+
+**Target areas for future specs:** composables, Pinia stores, components, utilities, form validation.
+
+**Expected output (current smoke):**
+
+```text
+✓ tests/unit/smoke.spec.ts (1 test)
+
+Test Files  1 passed (1)
+Tests       1 passed (1)
 ```
-✓ composables/useAuth.spec.ts (12 tests)
-✓ stores/auth.spec.ts (8 tests)
-✓ composables/useApi.spec.ts (10 tests)
 
-Test Files: 3 passed (3)
-Tests: 30 passed (30)
-```
+### Unit tests (watch mode)
 
-### Unit Tests (Watch Mode)
-
-**Command:**
 ```bash
 cd frontend
 npm run test:watch
 ```
 
-**Benefit:** Re-runs tests on file changes, useful during development
+### TypeScript (`nuxi typecheck`)
 
-### Code Coverage
-
-**Command:**
 ```bash
 cd frontend
-npm run test:coverage
-```
-
-**Requirements:**
-- Minimum 70% code coverage
-- Coverage report in `coverage/` directory
-
-### TypeScript Type Checking
-
-**Command:**
-```bash
-cd frontend
+npx nuxi prepare
 npm run typecheck
 ```
 
-**What It Checks:**
-- Type errors in .ts/.tsx/.vue files
-- Unused imports
-- Type mismatches
-- Missing type annotations
+**Configuration:**
 
-**Expected Output:**
-```
-✓ No type errors detected
-```
+- Root **`tsconfig.json`** should **`extends`: `./.nuxt/tsconfig.json`** (Nuxt 3 default).
+- **`compilerOptions.ignoreDeprecations`**: `"6.0"` silences TypeScript 6 migration noise for `baseUrl` until Nuxt/tsconfig templates update.
 
-### ESLint Code Quality
+**Tooling-only `// @ts-nocheck`:** `nuxt.config.ts`, `playwright.config.ts`, and `vitest.config.ts` may suppress strict checking where **@nuxt/ui** / **@pinia/nuxt** / **Vite–Vitest** plugin types lag; application Vue/TS files remain fully checked.
+
+### Warnings you may see (often non-fatal)
+
+| Warning | Meaning |
+|--------|---------|
+| **Tailwind / Nuxt UI** — `Failed to load .nuxt/nuxtui-tailwind.config.mjs` … `defaultExtractor` | **Tailwind v4** exports do not match what **@nuxt/ui** + **@nuxtjs/tailwindcss** expect yet. Build/typecheck may still succeed; fix = upgrade **@nuxt/ui** / Tailwind stack when upstream releases align. |
+| **i18n** — `iso` property deprecated | `@nuxtjs/i18n` v9+ will prefer `language` instead of `iso` on locale entries. |
+| **npm `EBADENGINE`** | Some ESLint-related packages declare Node **20.19+ / 22.13+ / 24+**; use **Node 20 LTS** in CI for the fewest warnings. |
+
+### ESLint (ESLint 9 flat config)
 
 **Check:**
 ```bash
@@ -281,61 +261,68 @@ cd frontend
 npm run lint
 ```
 
-**Auto-Fix:**
+**Auto-fix:**
 ```bash
 cd frontend
 npm run lint:fix
 ```
 
-**What It Checks:**
-- Code style compliance
-- Unused variables
-- Naming conventions
-- Import organization
-- Vue best practices
+**Config file:** `frontend/eslint.config.mjs` (not `.eslintrc`). **Warnings** (e.g. Vue attribute order) may remain; **errors** must be **0** for a clean run.
 
-### Prettier Code Formatting
+### Prettier
 
-**Command:**
 ```bash
 cd frontend
-npx prettier --write . --check
+npm run format
 ```
+
+### Pinia
+
+Use the Nuxt module **`@pinia/nuxt`** with **`pinia` ^3** (see `package.json`). In `nuxt.config.ts`, register **`'@pinia/nuxt'`** in `modules`, not the bare string **`'pinia'`**, or Nuxt will error with **Could not load pinia**.
 
 ---
 
 ## Running E2E Tests
 
-### Playwright E2E Tests
+### Playwright E2E tests
 
-**Prerequisites:**
+**Prerequisites**
+
+- **`@playwright/test`** is already listed in **`frontend/package.json`** (`devDependencies`). Install **browser binaries** once per machine (and in CI):
+
 ```bash
 cd frontend
-npm install -D @playwright/test @nuxt/test-utils
+npm install
+npx playwright install
+# Optional on Linux agents — system libs:
+# npx playwright install-deps
 ```
 
-**Run All E2E Tests:**
+- **`playwright.config.ts`** defines a **`webServer`** that runs **`npm run dev`** when **`CI`** is unset, targeting **`http://localhost:3000`**. Free port **3000** or change **`baseURL` / `webServer`** in config.
+
+**Run all E2E tests:**
 ```bash
 cd frontend
 npm run test:e2e
 ```
 
-**What It Tests:**
-- User authentication flows (login, register, logout)
-- Project creation and management
-- Phase status transitions and approvals
-- Task assignment and completion
-- RBAC enforcement in UI
+**What it will test (as specs are added):**
 
-**Expected Output:**
-```
-✓ tests/e2e/auth.spec.ts (2 tests)
-✓ tests/e2e/project-creation.spec.ts (2 tests)
-✓ tests/e2e/phase-transition.spec.ts (2 tests)
-✓ tests/e2e/task-completion.spec.ts (2 tests)
+- Authentication flows (login, register, logout)
+- Project / phase / task journeys
+- RBAC-sensitive UI routes
 
-Tests: 8 passed
-Duration: X.XXs
+**Caveats**
+
+- The **`tests/e2e/`** tree may be **empty or minimal** in early phases; Playwright may report **no tests** until specs exist—this is expected.
+- E2E is **slower** and **flakier** than unit tests; run locally with **`npm run test:e2e:ui`** when debugging.
+
+**Example output (when specs exist):**
+
+```text
+Running X tests using Y workers
+…
+X passed
 ```
 
 ### E2E Tests (Headed Mode - Visual Debugging)
@@ -603,15 +590,13 @@ npm run test:e2e -- --update-snapshots
      -d '{"email": "user@example.com", "password": "wrong"}'
    ```
 
-2. Verify response format:
+2. Verify response format (Bunyan envelope; **message** / **errors** may be **Arabic** strings from the API):
    ```json
    {
      "success": false,
      "data": null,
-     "message": "Unauthorized",
-     "errors": {
-       "password": ["Invalid credentials"]
-     }
+     "message": "string",
+     "errors": {}
    }
    ```
 
@@ -628,7 +613,7 @@ npm run test:e2e -- --update-snapshots
      -H "Authorization: Bearer invalid_token"
    ```
 
-6. Verify 403 Forbidden response
+6. Verify **401** for missing/invalid bearer token (and **403** when authenticated but forbidden, depending on route)
 
 **Expected Behavior:**
 - ✅ All errors follow standard format
@@ -652,26 +637,29 @@ npm run test:e2e -- --update-snapshots
    mysql -h 127.0.0.1 -u root -p bunyan
    ```
 3. List tables: `SHOW TABLES;`
-4. Verify all expected tables exist:
+4. Verify all expected tables exist (adjust for your migration set):
    - ✅ users
+   - ✅ personal_access_tokens (Laravel Sanctum)
    - ✅ roles
    - ✅ permissions
+   - ✅ role_permissions
    - ✅ projects
    - ✅ phases
    - ✅ tasks
-   - ✅ reports
-   - ✅ transactions
-   - ✅ products
-   - ✅ orders
    - ✅ workflow_configurations
    - ✅ approval_rules
+   - ✅ reports
+   - ✅ products
+   - ✅ orders
+   - ✅ order_items
+   - ✅ transactions
 
 5. Inspect table structure:
    ```bash
    DESCRIBE users;
    ```
 
-6. Verify columns: id, name, email, password, role_id, created_at, updated_at
+6. Verify columns: e.g. `id`, `name`, `email`, `password`, **`role`** (string), `created_at`, `updated_at` — use `DESCRIBE users;` as truth
 
 **Expected Behavior:**
 - ✅ All migrations run successfully
@@ -741,6 +729,7 @@ npm run test:e2e -- --update-snapshots
 - [ ] npm installed: `npm --version`
 - [ ] Nuxt 3 installed: `cd frontend && npm ls nuxt`
 - [ ] Nuxt UI installed: `cd frontend && npm ls @nuxt/ui`
+- [ ] Pinia (Nuxt module) installed: `cd frontend && npm ls @pinia/nuxt && npm ls pinia`
 - [ ] Tailwind CSS v4 installed: `cd frontend && npm ls tailwindcss`
 - [ ] TypeScript installed: `cd frontend && npm ls typescript`
 - [ ] Vitest installed: `cd frontend && npm ls vitest`
@@ -770,20 +759,23 @@ npm run test:e2e -- --update-snapshots
 
 ### Test Frameworks Ready
 
-- [ ] PHPUnit configured: `cd backend && cat phpunit.xml`
+- [ ] PHPUnit configured (**PHPUnit 11** schema): `cd backend && cat phpunit.xml`
 - [ ] Vitest configured: `cd frontend && cat vitest.config.ts`
 - [ ] Playwright configured: `cd frontend && cat playwright.config.ts`
+- [ ] Nuxt types generated: `cd frontend && test -f .nuxt/tsconfig.json` (run `npx nuxi prepare` if missing)
 - [ ] Test directories exist:
-  - [ ] `backend/tests/Unit/`
+  - [ ] `backend/tests/Unit/` (may be empty)
   - [ ] `backend/tests/Feature/`
-  - [ ] `frontend/tests/unit/`
-  - [ ] `frontend/tests/e2e/`
+  - [ ] `frontend/tests/unit/` (e.g. smoke spec)
+  - [ ] `frontend/tests/e2e/` (may be empty until UI specs land)
 
 ### CI/CD Workflows
 
-- [ ] backend-ci.yml exists: `cat .github/workflows/backend-ci.yml`
-- [ ] frontend-ci.yml exists: `cat .github/workflows/frontend-ci.yml`
-- [ ] pre-commit-guard.yml exists: `cat .github/workflows/pre-commit-guard.yml`
+- [ ] `ci.yml` exists (combined / main pipeline): `cat .github/workflows/ci.yml`
+- [ ] `backend-ci.yml` exists: `cat .github/workflows/backend-ci.yml`
+- [ ] `frontend-ci.yml` exists: `cat .github/workflows/frontend-ci.yml`
+- [ ] `pre-commit-guard.yml` exists: `cat .github/workflows/pre-commit-guard.yml`
+- [ ] `architecture-governance.yml` exists (repo checks): `cat .github/workflows/architecture-governance.yml`
 
 ---
 
@@ -822,6 +814,14 @@ php artisan migrate:reset        # Reset all migrations
 php artisan migrate              # Re-run migrations
 ```
 
+#### Issue: Feature tests fail on foreign keys / missing tables (e.g. `orders`, `personal_access_tokens`)
+
+**Symptom:** SQLite errors during `php artisan test` about unknown tables or FK order.
+
+**Meaning:** Migrations must create **parent** tables before **child** FKs (e.g. **`transactions.order_id`** after **`orders`**). If you add migrations, keep timestamps ordered or ship a **new** forward migration—do not edit **old** migration files per project policy.
+
+**Sanctum:** The **`personal_access_tokens`** table must exist for **`createToken()`** / logout tests; it is created by a first-party migration in **`database/migrations/`**.
+
 #### Issue: PHPStan fails with "memory limit exceeded"
 
 **Solution:** Increase memory limit
@@ -839,11 +839,36 @@ vendor/bin/phpstan analyse --memory-limit=1G
 **Symptom:** `ERR! code ERESOLVE` or dependency conflicts
 
 **Solution:**
+
+The repo pins compatible peers (**`happy-dom` ^17** with **`@nuxt/test-utils`**, **`@vitest/ui` ^3** with **`vitest` ^3**, **`@pinia/nuxt`** with **`pinia` ^3**). Prefer a clean install from the committed **`package-lock.json`**:
+
 ```bash
 cd frontend
 rm -rf node_modules package-lock.json
-npm install --legacy-peer-deps
+npm install
 ```
+
+If you must override resolution temporarily: `npm install --legacy-peer-deps` (not ideal for CI reproducibility).
+
+#### Issue: `Could not load pinia` / `Is it installed?` during `nuxi typecheck` or `nuxt dev`
+
+**Symptom:** Nuxt fails while resolving the Pinia module.
+
+**Solution:** Ensure **`package.json`** includes **`@pinia/nuxt`** and **`pinia` ^3**, and **`nuxt.config.ts`** lists **`'@pinia/nuxt'`** in **`modules`** (not the bare string **`'pinia'`**). Then:
+
+```bash
+cd frontend
+npm install
+npx nuxi prepare
+```
+
+#### Issue: Tailwind / Nuxt UI — `defaultExtractor` or `nuxtui-tailwind.config.mjs`
+
+**Symptom:** Log: `Package subpath './lib/lib/defaultExtractor.js' is not defined by "exports" in ... tailwindcss`.
+
+**Meaning:** **Tailwind CSS v4** package exports do not match what the current **@nuxt/ui** + **@nuxtjs/tailwindcss** stack expects. **`npm run typecheck`** may still exit **0**; **`npm run dev`** / **`nuxt build`** should be verified after upgrades.
+
+**Mitigation:** Track **@nuxt/ui** / Nuxt Tailwind module releases; consider pinning **tailwindcss** to a supported major if builds break.
 
 #### Issue: `npm run dev` fails with port 3000 in use
 
@@ -860,16 +885,19 @@ cd frontend
 npm run dev -- --port 3001
 ```
 
-#### Issue: TypeScript errors after npm install
+#### Issue: TypeScript errors after `npm install` / missing Nuxt globals
 
-**Symptom:** `TS2688: Cannot find type definition for 'node'`
+**Symptom:** `Cannot find name 'defineNuxtConfig'`, missing `$t`, etc.
 
 **Solution:**
+
 ```bash
 cd frontend
-npm install -D @types/node
+npx nuxi prepare
 npm run typecheck
 ```
+
+Ensure **`tsconfig.json`** contains **`"extends": "./.nuxt/tsconfig.json"`**. Application code should not rely on **`// @ts-nocheck`**; only **`nuxt.config.ts`**, **`playwright.config.ts`**, and **`vitest.config.ts`** use it intentionally.
 
 #### Issue: Playwright can't find browsers
 
@@ -935,32 +963,40 @@ docker-compose logs mysql           # Check logs
 
 ### Testing Issues
 
-#### Issue: `php artisan test` fails with "No tests found"
+#### Issue: `php artisan test` reports "No tests found"
 
 **Solution:**
 ```bash
 cd backend
-# Verify tests directory exists
 ls tests/Feature/
 ls tests/Unit/
-
-# Check phpunit.xml points to tests directory
 cat phpunit.xml
-
-# Run with verbose
 php artisan test --verbose
 ```
+
+Ensure **`phpunit.xml`** declares the **Feature** / **Unit** test suites (see repository file).
+
+#### Issue: `php artisan test` prints deprecations / exit code confusion
+
+**Symptom:** Console shows **`Constant PDO::MYSQL_ATTR_SSL_CA is deprecated`** or **`Tests: N deprecated`**.
+
+**Meaning:** Often **PHP 8.5 + vendor Laravel** config. Tests may still **pass** (`exit 0`). **`phpunit.xml`** sets relaxed **`failOn*`** flags; **`error_reporting`** omits deprecation bits during the run.
+
+**If you need a silent console:** run tests on **PHP 8.2–8.4** in CI, or accept the noise until upstream Laravel removes the legacy constant from vendor stubs.
+
+#### Issue: `npm run test` reports "No test files found"
+
+**Symptom:** Vitest exits **1** with no matching files.
+
+**Solution:** Add specs under **`frontend/tests/`** or rely on **`passWithNoTests: true`** in **`vitest.config.ts`** (already set in this repo). Smoke file: **`tests/unit/smoke.spec.ts`**.
 
 #### Issue: `npm run test` fails with timeout
 
 **Solution:**
 ```bash
 cd frontend
-# Increase timeout
 npm run test -- --reporter=verbose
-
-# Or run single test file
-npm run test tests/composables/useAuth.spec.ts
+npm run test tests/unit/smoke.spec.ts
 ```
 
 #### Issue: E2E tests fail with "Browser not found"
@@ -977,32 +1013,43 @@ npm run test:e2e               # Retry
 
 ## Success Criteria
 
-### All Tests Passing
+### Automated gates (match current repo scripts)
 
-✅ **Backend:**
-- [ ] `php artisan test` → All tests pass, ≥80% coverage
-- [ ] `vendor/bin/phpstan analyse` → [OK] No errors
-- [ ] `php-cs-fixer fix --dry-run` → No violations
+✅ **Backend**
 
-✅ **Frontend:**
-- [ ] `npm run test` → All tests pass, ≥70% coverage
-- [ ] `npm run typecheck` → No type errors
-- [ ] `npm run lint` → No linting errors
+- [ ] `cd backend && composer test` (or `php artisan test`) → **exit 0**, all tests green
+- [ ] `cd backend && composer run lint` → **exit 0** (PHP-CS-Fixer dry-run)
+- [ ] `cd backend && composer run analyze` → **exit 0** (PHPStan), when the project enables static analysis in CI
 
-✅ **E2E:**
-- [ ] `npm run test:e2e` → All tests pass
+✅ **Frontend**
 
-✅ **Docker:**
-- [ ] `docker-compose ps` → All services UP
-- [ ] `docker-compose logs` → No errors, health checks pass
+- [ ] `cd frontend && npx nuxi prepare` → succeeds (generates `.nuxt/`)
+- [ ] `cd frontend && npm run typecheck` → **exit 0**
+- [ ] `cd frontend && npm run lint` → **exit 0** (warnings may remain; **no errors**)
+- [ ] `cd frontend && npm run test` → **exit 0**
 
-✅ **Manual Scenarios:**
-- [ ] All 10 scenarios above pass
-- [ ] No console errors in browser
-- [ ] No server 5xx errors
+✅ **E2E** (when Playwright specs exist and browsers are installed)
+
+- [ ] `cd frontend && npx playwright install` (once per environment)
+- [ ] `cd frontend && npm run test:e2e` → **exit 0**
+
+✅ **Docker** (optional)
+
+- [ ] `docker-compose ps` → required services **UP**
+- [ ] `docker-compose logs` → no fatal errors
+
+✅ **Manual scenarios**
+
+- [ ] Execute relevant rows from [Manual Testing Scenarios](#manual-testing-scenarios) for your milestone
+- [ ] No unexpected **5xx** from API; browser console free of blocking errors
+
+### Coverage targets (aspirational — not enforced in STAGE_01)
+
+- Backend **`composer run test:coverage`** requires **PCOV/Xdebug**; add a **`--min=`** threshold in CI only after reports are stable.
+- Frontend **`npm run test:coverage`** is **not** defined in `package.json` yet; add **`vitest run --coverage`** when the team standardizes on a provider.
 
 ---
 
-**Testing Guide Generated:** 2026-04-10  
+**Testing guide updated:** 2026-04-10 (aligned with repo commands & caveats)  
 **Status:** READY FOR PHASE 2  
-**Next:** Implement feature tests for Phase 2 database and API layer
+**Next:** Expand Vitest/Playwright suites and optional coverage gates per phase specs

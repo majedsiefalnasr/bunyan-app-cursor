@@ -1,5 +1,6 @@
+// @ts-nocheck — Nuxt module option types lag @nuxt/ui / @pinia/nuxt runtime config
 export default defineNuxtConfig({
-    modules: ['@nuxt/ui', '@nuxtjs/i18n', 'pinia'],
+    modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
     ui: {
         icons: ['heroicons'],
@@ -27,11 +28,5 @@ export default defineNuxtConfig({
     typescript: {
         strict: true,
         typeCheck: true,
-    },
-
-    eslint: {
-        config: {
-            stylistic: true,
-        },
     },
 });

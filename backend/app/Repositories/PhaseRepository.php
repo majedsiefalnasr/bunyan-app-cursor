@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Phase;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PhaseRepository
 {
     public function __construct(
         private readonly Phase $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Phase
     {
@@ -49,6 +50,7 @@ class PhaseRepository
     public function update(Phase $phase, array $data): Phase
     {
         $phase->update($data);
+
         return $phase->fresh(['project', 'tasks']);
     }
 

@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Task;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskRepository
 {
     public function __construct(
         private readonly Task $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Task
     {
@@ -59,6 +60,7 @@ class TaskRepository
     public function update(Task $task, array $data): Task
     {
         $task->update($data);
+
         return $task->fresh(['phase', 'assignee']);
     }
 

@@ -14,8 +14,10 @@ class ProductControllerTest extends TestCase
     public function test_list_products_successfully()
     {
         Product::factory()->count(5)->create();
+        $user = User::factory()->create();
 
-        $response = $this->getJson('/api/v1/products');
+        $response = $this->actingAs($user)
+            ->getJson('/api/v1/products');
 
         $response->assertStatus(200)
             ->assertJsonCount(5, 'data');
@@ -24,8 +26,10 @@ class ProductControllerTest extends TestCase
     public function test_show_product_successfully()
     {
         $product = Product::factory()->create();
+        $user = User::factory()->create();
 
-        $response = $this->getJson("/api/v1/products/{$product->id}");
+        $response = $this->actingAs($user)
+            ->getJson("/api/v1/products/{$product->id}");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.id', $product->id);

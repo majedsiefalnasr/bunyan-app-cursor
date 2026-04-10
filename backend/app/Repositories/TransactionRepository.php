@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TransactionRepository
 {
     public function __construct(
         private readonly Transaction $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?Transaction
     {
@@ -62,6 +63,7 @@ class TransactionRepository
     public function update(Transaction $transaction, array $data): Transaction
     {
         $transaction->update($data);
+
         return $transaction->fresh(['user', 'project']);
     }
 }

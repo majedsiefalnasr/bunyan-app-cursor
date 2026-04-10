@@ -14,7 +14,7 @@ class OrderResource extends JsonResource
             'customer_id' => $this->customer_id,
             'project_id' => $this->project_id,
             'status' => $this->status,
-            'total_price' => number_format((float) $this->total_price, 2, '.', ''),
+            'total_price' => number_format((float) ($this->total_amount ?? 0), 2, '.', ''),
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

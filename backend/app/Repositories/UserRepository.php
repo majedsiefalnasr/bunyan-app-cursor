@@ -3,14 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepository
 {
     public function __construct(
         private readonly User $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?User
     {
@@ -54,6 +55,7 @@ class UserRepository
     public function update(User $user, array $data): User
     {
         $user->update($data);
+
         return $user->fresh();
     }
 

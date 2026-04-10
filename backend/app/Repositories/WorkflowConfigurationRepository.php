@@ -9,7 +9,8 @@ class WorkflowConfigurationRepository
 {
     public function __construct(
         private readonly WorkflowConfiguration $model,
-    ) {}
+    ) {
+    }
 
     public function findById(int $id): ?WorkflowConfiguration
     {
@@ -58,6 +59,7 @@ class WorkflowConfigurationRepository
     public function update(WorkflowConfiguration $config, array $data): WorkflowConfiguration
     {
         $config->update($data);
+
         return $config->fresh(['approvalRules']);
     }
 

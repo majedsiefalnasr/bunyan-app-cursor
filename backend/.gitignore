@@ -6,7 +6,9 @@ node_modules/
 storage/
 .phpunit.result.cache
 .php_cs.cache
+.php-cs-fixer.cache
 .phpstan.cache
+.phpunit.cache/
 .cache/
 build/
 *.log
