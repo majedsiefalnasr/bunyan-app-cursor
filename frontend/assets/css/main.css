@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #000;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    @apply box-border;
+}
+
+body {
+    @apply bg-white dark:bg-slate-950 text-slate-900 dark:text-white;
+}

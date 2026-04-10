@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Transaction extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'project_id',
+        'order_id',
+        'type',
+        'amount',
+        'status',
+        'payment_method',
+        'reference',
+        'description',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
+    // Relationships
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class)->withTrashed();
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class)->withTrashed();
+    }
+
+    // Scopes
+    public function scopeByUser(Builder $query, int $userId): Builder
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function scopeByType(Builder $query, string $type): Builder
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeByStatus(Builder $query, string $status): Builder
+    {
+        return $query->where('status', $status);
+    }
+
+    public function scopeCompleted(Builder $query): Builder
+    {
+        return $query->where('status', 'completed');
+    }
+}

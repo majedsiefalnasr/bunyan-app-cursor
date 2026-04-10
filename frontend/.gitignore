@@ -1,0 +1,16 @@
+node_modules/
+.nuxt/
+dist/
+.output/
+.env
+.env.*.local
+.env.*.*.local
+.cache/
+coverage/
+.vitest/
+test-results/
+.DS_Store
+.idea/
+*.swp
+*.swo
+*.log
