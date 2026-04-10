@@ -7,9 +7,23 @@
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
+Status: DRAFT
+Step: pre_step
 Risk Level: LOW
+Last Updated: 2026-04-10T00:00:00Z
+
+Scope Open:
+
+- Backend (Laravel): 10 items pending
+- Frontend (Nuxt.js): 11 items pending
+- Testing & CI: 6 items pending
+
+Architecture Governance Compliance:
+
+- Pending governance audit
+
+Notes:
+Stage initialized. Specification in progress.
 
 ## Objective
 
