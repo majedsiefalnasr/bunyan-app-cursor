@@ -1083,11 +1083,11 @@
   - [ ] SANCTUM_STATEFUL_DOMAINS
   - [ ] MAIL_*, FILESYSTEM_* (if applicable)
 
-- [ ] `backend/.env.ci`:
-  - [ ] APP_ENV=testing
-  - [ ] DB_CONNECTION=sqlite, DB_DATABASE=:memory:
-  - [ ] CACHE_DRIVER=array, QUEUE_CONNECTION=sync
-  - [ ] MAIL_MAILER=log
+- [ ] `backend/ci.env`:
+  - [ ] APP_ENV=testing, APP_URL for CI
+  - [ ] DB_* aligned with GitHub Actions MySQL service (`bunyan_test`, root, password)
+  - [ ] CACHE_DRIVER / QUEUE_CONNECTION / REDIS_* aligned with CI Redis service
+  - [ ] MAIL_MAILER=array (or log) for tests
 
 - [ ] `frontend/.env.example`:
   - [ ] VITE_API_BASE_URL=http://localhost:8000

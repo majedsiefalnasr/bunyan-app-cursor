@@ -760,7 +760,7 @@ npm run test:e2e -- --update-snapshots
 ### Test Frameworks Ready
 
 - [ ] PHPUnit configured (**PHPUnit 11** schema): `cd backend && cat phpunit.xml`
-- [ ] Vitest configured: `cd frontend && cat vitest.config.ts`
+- [ ] Vitest configured: `cd frontend && cat vitest.config.ts` (project `pretest` runs `nuxi prepare` so CI jobs that only `npm run test` still get `.nuxt/tsconfig.json`)
 - [ ] Playwright configured: `cd frontend && cat playwright.config.ts`
 - [ ] Nuxt types generated: `cd frontend && test -f .nuxt/tsconfig.json` (run `npx nuxi prepare` if missing)
 - [ ] Test directories exist:
@@ -771,6 +771,7 @@ npm run test:e2e -- --update-snapshots
 
 ### CI/CD Workflows
 
+- [ ] Backend CI env template exists and is tracked in git: `test -f backend/ci.env` (GitHub Actions copy it with `cp ci.env .env` from `working-directory: backend` — avoid `.env.ci` filenames that match common global `.gitignore` rules like `.env.*`)
 - [ ] `ci.yml` exists (combined / main pipeline): `cat .github/workflows/ci.yml`
 - [ ] `backend-ci.yml` exists: `cat .github/workflows/backend-ci.yml`
 - [ ] `frontend-ci.yml` exists: `cat .github/workflows/frontend-ci.yml`

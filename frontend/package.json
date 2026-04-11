@@ -12,6 +12,7 @@
         "lint:fix": "eslint . --fix",
         "format": "prettier --write \"./**/*.{vue,ts,js,json,css}\"",
         "typecheck": "nuxi typecheck",
+        "pretest": "nuxi prepare",
         "test": "vitest run",
         "test:watch": "vitest",
         "test:e2e": "playwright test",

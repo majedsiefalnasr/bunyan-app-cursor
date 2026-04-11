@@ -257,7 +257,7 @@ npm run lint:fix && npm run format && composer lint:fix
 - lint-staged for incremental validation (only changed files)
 - Pre-commit guard workflow on PR (zero-tolerance linting)
 - Playwright browsers installed in CI (`chromium`, `firefox`)
-- Environment files (.env.example, .env.ci)
+- Environment files (`.env.example`, `ci.env` in `backend/`)
 
 ## Dependencies
 
@@ -375,7 +375,7 @@ These scripts CANNOT be bypassed:
 - `.lintstagedrc.json` — lint-staged configuration
 - `docker-compose.yml` — Local development stack
 - `.env.example` — Environment template
-- `.env.ci` — CI environment variables
+- `backend/ci.env` — CI environment template (workflows: `cp ci.env .env`)
 
 ### Scripts (composer.json + package.json)
 

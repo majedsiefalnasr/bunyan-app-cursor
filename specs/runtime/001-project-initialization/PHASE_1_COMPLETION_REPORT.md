@@ -25,7 +25,7 @@ Phase 1 infrastructure setup is **100% complete**. All backend (Laravel 11), fro
 backend/
 ├── composer.json                          ✅ Production & dev dependencies configured
 ├── .env.example                           ✅ Local development template
-├── .env.ci                                ✅ CI/CD environment
+├── ci.env                                 ✅ CI/CD environment template
 ├── .php-cs-fixer.php                      ✅ PHP formatting rules (PSR-12)
 ├── phpstan.neon                           ✅ Static analysis configuration
 ├── phpunit.xml                            ✅ Unit & feature test configuration
@@ -130,7 +130,7 @@ Root Level:
 ├── Dockerfile.frontend                    ✅ Node 20 with Nuxt dev server
 ├── .dockerignore                          ✅ Optimized layer caching
 ├── .env.example                           ✅ Root-level environment template
-└── .env.ci                                ✅ CI/CD environment variables
+└── ci.env                                 ✅ CI/CD environment variables template
 ```
 
 **Docker Compose Services:**
@@ -152,7 +152,7 @@ Root Level:
 
 **Environment Configuration:**
 - `.env.example`: Local development (MySQL on localhost:3306)
-- `.env.ci`: CI/CD testing (in-memory cache, array queue)
+- `backend/ci.env`: CI/CD template for GitHub Actions (`cp ci.env .env`; MySQL + Redis per workflow services)
 
 ---
 
@@ -262,7 +262,7 @@ Root Level:
 
 ### Backend Files Created: 22
 - 1 composer.json
-- 2 .env files (.env.example, .env.ci)
+- 2 backend env templates (`.env.example`, `ci.env`)
 - 4 configuration files (.php-cs-fixer.php, phpstan.neon, phpunit.xml, .gitignore)
 - 1 API routes file
 - 2 controllers (BaseController)
@@ -294,7 +294,7 @@ Root Level:
 
 ### Root Configuration: 6
 - docker-compose.yml
-- 2 .env files (.env.example, .env.ci)
+- 2 backend env templates (`.env.example`, `ci.env`)
 - 3 pre-commit setup files (.husky/pre-commit, .lintstagedrc.json, package.json)
 - .gitignore
 
@@ -337,7 +337,7 @@ Root Level:
 - ✅ Networks: bunyan-network bridge
 - ✅ Volumes: Persistence configured
 - ✅ Dockerfiles: Both backend and frontend
-- ✅ Environment: .env.example and .env.ci
+- ✅ Environment: `.env.example` and `ci.env`
 
 ### CI/CD
 

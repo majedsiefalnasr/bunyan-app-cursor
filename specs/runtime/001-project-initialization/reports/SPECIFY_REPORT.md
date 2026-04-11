@@ -144,7 +144,7 @@ Successfully generated comprehensive specification for STAGE_01: Project Initial
   - Git & pre-commit setup (.husky/, .lintstagedrc.json)
   - GitHub Actions workflows (pre-commit-guard.yml with 7+ jobs)
   - Docker Compose setup (MySQL, Redis, PHP, Node)
-  - Environment variables (.env.example, .env.ci, .env for frontend)
+  - Environment variables (`.env.example`, `backend/ci.env`, `.env` for frontend)
   - Root configuration (package.json scripts, docker-compose.yml)
   - Validation pipeline (root script)
   - CI/CD enforcement (branch protection rules)
@@ -189,7 +189,7 @@ Successfully generated comprehensive specification for STAGE_01: Project Initial
 - **Pre-commit Hooks:** 2 (backend + frontend validation)
 - **Configuration Files:** 15+ (backend, frontend, root)
 - **Docker Services:** 4 (MySQL, Redis, PHP, Node)
-- **Environment Templates:** 2 (.env.example, .env.ci)
+- **Environment Templates:** 2 (`.env.example`, `ci.env` in `backend/`)
 
 ### Testing & Quality
 - **Total Test Count:** 50+ backend + 45+ frontend + 10+ E2E = 105+ tests

@@ -844,7 +844,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-      - run: cp backend/.env.ci backend/.env
+      - run: cp backend/ci.env backend/.env
       - run: cd backend && composer install
       - run: cd backend && php artisan migrate
       - run: cd backend && php artisan test --coverage

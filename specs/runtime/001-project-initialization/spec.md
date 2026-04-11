@@ -36,7 +36,7 @@ Establish a production-ready Laravel application with:
 | App namespace | `backend/app/` | All application code |
 | Routes | `backend/routes/api.php` | Versioned API routes |
 | Env template | `backend/.env.example` | Development template |
-| CI env | `backend/.env.ci` | GitHub Actions environment |
+| CI env | `backend/ci.env` | GitHub Actions environment (committed; not named `.env.*` so global gitignore does not block it) |
 | Config | `backend/config/` | Laravel configurations |
 
 #### 1.2.2 Eloquent Models & Database Layer
@@ -253,7 +253,7 @@ class CreateProjectTest extends TestCase {
 | File | Purpose |
 |------|---------|
 | `backend/.env.example` | Development env template |
-| `backend/.env.ci` | CI environment variables |
+| `backend/ci.env` | CI environment variables (template; workflows run `cp ci.env .env` in `backend/`) |
 | `backend/config/sanctum.php` | Sanctum auth config |
 | `backend/config/app.php` | (Laravel default) |
 | `backend/phpunit.xml` | PHPUnit test config |
@@ -834,7 +834,7 @@ VITE_API_BASE_URL=http://localhost:8000
 VITE_API_VERSION=v1
 ```
 
-### 5.3 CI Environment (.env.ci)
+### 5.3 CI Environment (`ci.env`)
 
 ```env
 # Backend
@@ -864,7 +864,7 @@ bunyan-app-cursor/
 ├── .husky/                     # Pre-commit hooks
 ├── docker-compose.yml          # Local dev stack
 ├── .lintstagedrc.json          # lint-staged config
-├── .env.ci                     # CI environment
+├── ci.env                      # CI environment (copy to `.env` in CI)
 ├── package.json                # Root npm scripts
 ├── composer.json               # (in backend/)
 ├── README.md                   # Project documentation
@@ -948,7 +948,7 @@ bunyan-app-cursor/
 | GitHub Actions workflows | 1 | `.github/workflows/pre-commit-guard.yml` |
 | Pre-commit hooks | 2 | `.husky/pre-commit`, `.lintstagedrc.json` |
 | Docker Compose | 1 | `docker-compose.yml` |
-| Configuration | 2 | `.env.example`, `.env.ci` |
+| Configuration | 2 | `.env.example`, `ci.env` |
 
 ---
 

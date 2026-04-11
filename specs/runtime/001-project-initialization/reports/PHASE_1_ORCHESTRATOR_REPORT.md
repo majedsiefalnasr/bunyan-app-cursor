@@ -28,7 +28,7 @@ Phase 1 (Infrastructure & Setup) has been **100% completed**. All 25 tasks have 
 ```
 backend/
 ├── composer.json                          # Production + dev dependencies
-├── .env.example & .env.ci                 # Environment templates
+├── .env.example & ci.env                  # Environment templates (CI: `cp ci.env .env`)
 ├── .php-cs-fixer.php                      # PHP formatting rules
 ├── phpstan.neon                           # Static analysis config
 ├── phpunit.xml                            # Test configuration
@@ -95,7 +95,7 @@ frontend/
 
 ```
 ├── docker-compose.yml                     # Service orchestration
-├── .env.example & .env.ci                 # Environment templates
+├── .env.example & ci.env                  # Environment templates (CI: `cp ci.env .env`)
 ├── .husky/pre-commit                      # Git hook runner
 ├── .lintstagedrc.json                     # Incremental linting
 ├── package.json                           # Root npm scripts
@@ -310,7 +310,7 @@ npx husky install                          # Initialize hooks
 - [ ] Dockerfile.backend — ✅ Created
 - [ ] Dockerfile.frontend — ✅ Created
 - [ ] .env.example — ✅ Created
-- [ ] .env.ci — ✅ Created
+- [ ] `ci.env` — ✅ Created
 
 #### T017-T020: CI/CD ✅
 - [ ] backend-ci.yml — ✅ Created

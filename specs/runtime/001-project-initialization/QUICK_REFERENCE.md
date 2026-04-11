@@ -107,7 +107,7 @@ frontend/
 | File | Purpose |
 |------|---------|
 | `.env.example` | Local dev template |
-| `.env.ci` | CI/CD environment |
+| `backend/ci.env` | CI/CD environment template (`cp ci.env .env` in `backend/` on CI) |
 
 ### CI/CD
 

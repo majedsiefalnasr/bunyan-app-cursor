@@ -13,7 +13,7 @@
 backend/
 ├── composer.json                  (Production + dev dependencies)
 ├── .env.example                   (Local development environment template)
-├── .env.ci                        (CI/CD environment configuration)
+├── ci.env                         (CI/CD environment template → `cp ci.env .env` in CI)
 ├── .php-cs-fixer.php              (PHP code formatting rules - PSR-12)
 ├── phpstan.neon                   (Static analysis configuration - Level 5)
 ├── phpunit.xml                    (Unit & feature test configuration)
@@ -165,7 +165,7 @@ Root/
 ├── .lintstagedrc.json             (Incremental linting configuration)
 ├── package.json                   (Root npm scripts + Husky dependencies)
 ├── .env.example                   (Root environment template)
-├── .env.ci                        (CI/CD environment variables)
+├── ci.env                         (CI/CD environment variables template)
 └── .gitignore                     (Root-level git exclusions)
 ```
 
@@ -253,7 +253,7 @@ bunyan-app-cursor/
 │   ├── phpstan.neon
 │   ├── .php-cs-fixer.php
 │   ├── .env.example
-│   ├── .env.ci
+│   ├── ci.env
 │   └── .gitignore
 │
 ├── frontend/                      # Nuxt 3 application
@@ -292,7 +292,7 @@ bunyan-app-cursor/
 ├── .lintstagedrc.json           # Incremental lint config
 ├── package.json                 # Root npm config
 ├── .env.example                 # Root env template
-├── .env.ci                      # CI env config
+├── ci.env                       # CI env template (`cp ci.env .env` in workflows)
 └── .gitignore                   # Root git ignores
 ```
 
@@ -322,7 +322,7 @@ bunyan-app-cursor/
 - [ ] Dockerfile.backend ✅
 - [ ] Dockerfile.frontend ✅
 - [ ] .env.example ✅
-- [ ] .env.ci ✅
+- [ ] ci.env ✅
 
 **T017-T020: CI/CD** ✅
 - [ ] backend-ci.yml ✅

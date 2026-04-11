@@ -42,7 +42,7 @@ This PR completes **STAGE_01: Project Initialization** of the Bunyan platform. A
 ```
 backend/
 ├── composer.json                    # Dependencies + npm scripts
-├── .env.example & .env.ci          # Environment templates
+├── .env.example & ci.env           # Environment templates (CI: `cp ci.env .env`)
 ├── .php-cs-fixer.php               # PHP formatting rules (PSR-12)
 ├── phpstan.neon                    # Static analysis (level 5)
 ├── phpunit.xml                     # Test configuration
@@ -211,7 +211,7 @@ frontend/
 ```
 ├── package.json                  # Root npm scripts
 ├── .env.example                  # Development environment template
-├── .env.ci                       # CI/CD environment template
+├── ci.env                        # CI/CD environment template
 ├── .husky/pre-commit            # Git hook runner
 ├── .lintstagedrc.json           # Incremental lint configuration
 └── .gitignore                   # Root git exclusions
@@ -443,7 +443,7 @@ git revert <commit-hash>
 ### Deployment
 
 - [ ] Docker Compose tested locally
-- [ ] Environment templates created (.env.example, .env.ci)
+- [ ] Environment templates created (`.env.example`, `ci.env`)
 - [ ] All services start cleanly
 - [ ] No port conflicts
 - [ ] Health checks configured

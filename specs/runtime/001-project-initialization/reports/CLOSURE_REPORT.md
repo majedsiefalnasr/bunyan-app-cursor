@@ -107,7 +107,7 @@ The entire Bunyan platform foundation has been established through systematic ex
   - ✅ Docker stack fully configured (MySQL, Redis, PHP, Node)
   - ✅ GitHub Actions CI/CD pipelines ready
   - ✅ Health checks configured for all services
-  - ✅ Environment templates (.env.example, .env.ci)
+  - ✅ Environment templates (`.env.example`, `ci.env`)
   - ✅ Pre-commit validation automated
 - **Risk Assessment:** LOW
 - **Blocking Issues:** None
@@ -149,7 +149,7 @@ The entire Bunyan platform foundation has been established through systematic ex
   - ✅ .husky/pre-commit hook
   - ✅ .lintstagedrc.json for incremental linting
   - ✅ .env.example template
-  - ✅ .env.ci for CI environment
+  - ✅ `backend/ci.env` for CI environment (`cp ci.env .env` in workflows)
   - ✅ .gitignore for root
 - **Guardian Verdict:** PASS
 - **Risk Assessment:** LOW
@@ -250,7 +250,7 @@ All 4 guardians have verified completion and signed off:
 - **Criteria Met:**
   - [x] Docker Compose stack fully configured (MySQL 8.0, Redis 7, PHP 8.2, Node 20)
   - [x] Health checks configured for all services
-  - [x] Environment templates properly set up (.env.example, .env.ci)
+  - [x] Environment templates properly set up (`.env.example`, `ci.env`)
   - [x] GitHub Actions CI/CD pipelines ready (3 workflows)
   - [x] Pre-commit validation automated
   - [x] Docker images optimized with .dockerignore
