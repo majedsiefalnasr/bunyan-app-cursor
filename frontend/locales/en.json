@@ -5,10 +5,37 @@
     },
     "nav": {
         "home": "Home",
+        "dashboard": "Dashboard",
         "projects": "Projects",
+        "reports": "Reports",
         "services": "Services",
         "products": "Products",
-        "contact": "Contact"
+        "contact": "Contact",
+        "admin": "Admin"
+    },
+    "shell": {
+        "direction": {
+            "rtl": "Arabic (RTL)",
+            "ltr": "English (LTR)"
+        },
+        "sidebar": {
+            "toggle": "Toggle sidebar",
+            "close": "Close"
+        },
+        "theme": {
+            "light": "Light mode",
+            "dark": "Dark mode",
+            "system": "System"
+        },
+        "user": {
+            "profile": "Profile",
+            "logout": "Sign out"
+        },
+        "loading": "Loading...",
+        "nav": {
+            "main": "Main navigation",
+            "breadcrumb": "Breadcrumb"
+        }
     },
     "auth": {
         "login": "Login",

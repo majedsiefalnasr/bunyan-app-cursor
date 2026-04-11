@@ -1,6 +1,20 @@
 export default defineNuxtConfig({
     modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
+    app: {
+        head: {
+            htmlAttrs: { dir: 'rtl', lang: 'ar' },
+            link: [
+                { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+                { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+                {
+                    rel: 'stylesheet',
+                    href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap',
+                },
+            ],
+        },
+    },
+
     ui: {
         // @ts-expect-error Nuxt UI adds `icons`; default Nuxt `ModuleOptions` typing omits it here.
         icons: ['heroicons'],
