@@ -1,4 +1,7 @@
 export default defineNuxtConfig({
+    // Avoid Vite DevTools Kit RPC "Unauthorized … devtoolskit:internal" noise/failures in CI (Playwright webServer).
+    devtools: { enabled: !process.env.CI },
+
     modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
     app: {
