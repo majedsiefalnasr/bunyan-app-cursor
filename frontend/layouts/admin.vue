@@ -4,8 +4,8 @@
             <div class="container mx-auto flex justify-between items-center">
                 <h1 class="text-2xl font-bold">{{ $t('app.name') }} Admin</h1>
                 <button
-                    @click="logout"
                     class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md transition"
+                    @click="logout"
                 >
                     {{ $t('auth.logout') }}
                 </button>

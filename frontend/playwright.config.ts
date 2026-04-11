@@ -1,4 +1,3 @@
-// @ts-nocheck — Playwright config; not part of Nuxt app type graph
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({

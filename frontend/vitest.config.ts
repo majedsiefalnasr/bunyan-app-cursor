@@ -1,4 +1,3 @@
-// @ts-nocheck — Vitest + Vite plugin types differ across toolchain versions
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -8,6 +7,7 @@ import { defineConfig } from 'vitest/config';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
+    // @ts-expect-error Vitest’s nested Vite types differ from root `vite` / Rolldown metadata (runtime OK).
     plugins: [vue()],
     test: {
         globals: true,

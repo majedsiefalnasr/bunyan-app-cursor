@@ -1,8 +1,8 @@
-// @ts-nocheck — Nuxt module option types lag @nuxt/ui / @pinia/nuxt runtime config
 export default defineNuxtConfig({
     modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
     ui: {
+        // @ts-expect-error Nuxt UI adds `icons`; default Nuxt `ModuleOptions` typing omits it here.
         icons: ['heroicons'],
     },
 
@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     },
 
     pinia: {
+        // @ts-expect-error @pinia/nuxt adds `autoImports`; base schema may not list it yet.
         autoImports: ['defineStore'],
     },
 
