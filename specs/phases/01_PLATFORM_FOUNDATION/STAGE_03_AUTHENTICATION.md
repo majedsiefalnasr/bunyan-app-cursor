@@ -8,20 +8,32 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: HIGH
-Initiated: 2026-04-11T00:00:00Z
+Last Updated: 2026-04-11T00:00:00Z
 
-Scope Open:
+Scope Defined:
 
-- Specification pending
+- Sanctum API token auth (register, login, logout)
+- Password reset flow (forgot + reset)
+- Email verification (send, verify, resend)
+- Profile get/update
+- Backend architecture refactor (controller → service delegation)
+- All frontend auth pages (Nuxt UI, Arabic/RTL)
+- 4 architecture violations resolved
+
+Deferred Scope:
+
+- Social/OAuth login
+- Two-factor authentication
+- Admin user management CRUD
 
 Architecture Governance Compliance:
 
-- Pending governance audit
+- Specification drafted — governance audit pending
 
 Notes:
-Stage initialized. Specification in progress.
+Specification complete. Clarification step pending.
 
 ## Objective
 
