@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Task extends BaseModel
 {
     use SoftDeletes;
+
     protected $fillable = [
         'phase_id',
         'name',

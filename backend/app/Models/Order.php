@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends BaseModel
 {
     use SoftDeletes;
+
     protected $fillable = [
         'customer_id',
         'project_id',

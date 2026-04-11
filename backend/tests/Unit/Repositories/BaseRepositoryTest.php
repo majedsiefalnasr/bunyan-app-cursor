@@ -17,7 +17,7 @@ class BaseRepositoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = new UserRepository();
+        $this->repository = new UserRepository;
     }
 
     public function test_find_by_id_returns_model_when_found(): void

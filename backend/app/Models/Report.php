@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Report extends BaseModel
 {
     use SoftDeletes;
+
     protected $fillable = [
         'task_id',
         'phase_id',
