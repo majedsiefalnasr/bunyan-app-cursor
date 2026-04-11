@@ -16,6 +16,7 @@ class UserControllerTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
             'role' => 'customer',
             'phone' => '+966501234567',
         ]);
@@ -31,6 +32,7 @@ class UserControllerTest extends TestCase
             'name' => 'Test User',
             'email' => 'invalid-email',
             'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
             'role' => 'customer',
         ]);
 
