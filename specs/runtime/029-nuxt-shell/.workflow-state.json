@@ -6,20 +6,27 @@
   "branch": "spec/029-nuxt-shell",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "plan",
+  "current_step": "tasks",
   "stage_status": "DRAFT",
   "clarifications_resolved": true,
   "drift_passed": false,
   "implementation_allowed": false,
   "plan_completed": true,
-  "tasks_total": null,
-  "tasks_completed": null,
+  "tasks_total": 35,
+  "tasks_completed": 0,
   "deferred_tasks": [],
   "guardian_verdicts": {
     "architecture_guardian": "PASS",
     "api_designer": "PASS"
   },
-  "parallel_task_groups": [],
+  "parallel_task_groups": [
+    {
+      "group": 1,
+      "tasks": ["T011", "T012", "T013", "T014", "T015", "T016", "T017"]
+    },
+    { "group": 2, "tasks": ["T018", "T019", "T020", "T021"] },
+    { "group": 3, "tasks": ["T030", "T031", "T032"] }
+  ],
   "current_parallel_group": null,
   "session_started_at": "2026-04-11T00:00:00Z",
   "last_updated": "2026-04-11T00:00:00Z",
@@ -37,6 +44,10 @@
       "completed_at": "2026-04-11T00:00:00Z"
     },
     "plan": {
+      "started_at": "2026-04-11T00:00:00Z",
+      "completed_at": "2026-04-11T00:00:00Z"
+    },
+    "tasks": {
       "started_at": "2026-04-11T00:00:00Z",
       "completed_at": "2026-04-11T00:00:00Z"
     }
@@ -57,6 +68,11 @@
     },
     {
       "event": "plan_complete",
+      "timestamp": "2026-04-11T00:00:00Z"
+    },
+    {
+      "event": "tasks_complete",
+      "tasks_total": 35,
       "timestamp": "2026-04-11T00:00:00Z"
     }
   ]
