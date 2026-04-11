@@ -13,5 +13,8 @@
         <UCard class="w-full max-w-md">
             <slot />
         </UCard>
+        <div class="mt-6 text-center text-sm text-[#666666]">
+            <p>{{ $t('app.name') }} &copy; {{ new Date().getFullYear() }}</p>
+        </div>
     </div>
 </template>

@@ -17,8 +17,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', Password::min(8)->mixedCase()->numbers()],
-            'role' => ['required', 'in:customer,contractor,supervising_architect,field_engineer'],
+            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
             'phone' => ['nullable', 'string', 'max:20'],
         ];
     }
@@ -26,13 +25,12 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'الاسم مطلوب',
-            'email.required' => 'البريد الإلكتروني مطلوب',
-            'email.email' => 'البريد الإلكتروني غير صحيح',
-            'email.unique' => 'هذا البريد الإلكتروني مسجل بالفعل',
-            'password.required' => 'كلمة المرور مطلوبة',
-            'role.required' => 'نوع الحساب مطلوب',
-            'role.in' => 'نوع الحساب غير صحيح',
+            'name.required' => __('validation.required', ['attribute' => __('validation.attributes.name')]),
+            'email.required' => __('validation.required', ['attribute' => __('validation.attributes.email')]),
+            'email.email' => __('validation.email', ['attribute' => __('validation.attributes.email')]),
+            'email.unique' => __('validation.unique', ['attribute' => __('validation.attributes.email')]),
+            'password.required' => __('validation.required', ['attribute' => __('validation.attributes.password')]),
+            'password.confirmed' => __('validation.confirmed', ['attribute' => __('validation.attributes.password')]),
         ];
     }
 }

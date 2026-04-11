@@ -38,5 +38,17 @@ return [
         'SERVICE_UNAVAILABLE' => [
             'message' => 'الخدمة غير متاحة حالياً',
         ],
+        'AUTH_ACCOUNT_INACTIVE' => [
+            'message' => 'الحساب غير مفعل',
+        ],
+        'AUTH_INVALID_RESET_TOKEN' => [
+            'message' => 'رابط إعادة تعيين كلمة المرور غير صالح',
+        ],
+        'AUTH_EMAIL_ALREADY_VERIFIED' => [
+            'message' => 'البريد الإلكتروني محقق بالفعل',
+        ],
+        'AUTH_EMAIL_NOT_VERIFIED' => [
+            'message' => 'البريد الإلكتروني غير محقق',
+        ],
     ],
 ];
