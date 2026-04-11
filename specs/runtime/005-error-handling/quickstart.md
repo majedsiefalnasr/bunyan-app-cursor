@@ -170,14 +170,14 @@ class Handler extends ExceptionHandler
 **File:** `frontend/composables/useApi.ts`
 
 ```typescript
-import { useRuntimeConfig } from '#app'
-import { useAuthStore } from '~/stores/auth'
-import { useErrorNotification } from '~/composables/useErrorNotification'
+import { useRuntimeConfig } from "#app";
+import { useAuthStore } from "~/stores/auth";
+import { useErrorNotification } from "~/composables/useErrorNotification";
 
 export function useApi() {
-  const config = useRuntimeConfig()
-  const auth = useAuthStore()
-  const { showErrorNotification } = useErrorNotification()
+  const config = useRuntimeConfig();
+  const auth = useAuthStore();
+  const { showErrorNotification } = useErrorNotification();
 
   const apiFetch = $fetch.create({
     baseURL: config.public.apiBaseUrl,
@@ -188,44 +188,46 @@ export function useApi() {
         options.headers = {
           ...options.headers,
           Authorization: `Bearer ${auth.token}`,
-        }
+        };
       }
 
       // Add correlation ID
       options.headers = {
         ...options.headers,
-        'X-Correlation-ID': `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      }
+        "X-Correlation-ID": `${Date.now()}_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
+      };
     },
 
     onResponseError({ response }) {
-      const data = response._data || {}
-      const error = data.error || {}
+      const data = response._data || {};
+      const error = data.error || {};
 
       // Handle 401
       if (response.status === 401) {
-        auth.logout()
-        navigateTo('/auth/login')
-        return
+        auth.logout();
+        navigateTo("/auth/login");
+        return;
       }
 
       // Handle 403
       if (response.status === 403) {
-        navigateTo('/dashboard')
-        return
+        navigateTo("/dashboard");
+        return;
       }
 
       // Show error notification
       showErrorNotification({
-        code: error.code || 'SERVER_ERROR',
-        message: error.message || 'حدث خطأ غير متوقع',
+        code: error.code || "SERVER_ERROR",
+        message: error.message || "حدث خطأ غير متوقع",
         details: error.details,
         statusCode: response.status,
-      })
+      });
     },
-  })
+  });
 
-  return { apiFetch }
+  return { apiFetch };
 }
 ```
 
@@ -234,31 +236,31 @@ export function useApi() {
 **File:** `frontend/composables/useErrorNotification.ts`
 
 ```typescript
-import { useToast } from '#ui/composables/useToast'
+import { useToast } from "#ui/composables/useToast";
 
 export interface ErrorPayload {
-  code: string
-  message: string
-  details?: Record<string, any>
-  statusCode?: number
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  statusCode?: number;
 }
 
 export function useErrorNotification() {
-  const toast = useToast()
+  const toast = useToast();
 
   const showErrorNotification = (payload: ErrorPayload) => {
-    const { code, message, statusCode } = payload
-    const severity = statusCode && statusCode >= 500 ? 'error' : 'warning'
+    const { code, message, statusCode } = payload;
+    const severity = statusCode && statusCode >= 500 ? "error" : "warning";
 
     toast.add({
       title: code,
       description: message,
-      color: severity === 'error' ? 'red' : 'yellow',
-      timeout: severity === 'error' ? 8000 : 5000,
-    })
-  }
+      color: severity === "error" ? "red" : "yellow",
+      timeout: severity === "error" ? 8000 : 5000,
+    });
+  };
 
-  return { showErrorNotification }
+  return { showErrorNotification };
 }
 ```
 
@@ -268,35 +270,46 @@ export function useErrorNotification() {
 
 ```vue
 <script setup lang="ts">
-import { ref, onErrorCaptured } from 'vue'
+import { ref, onErrorCaptured } from "vue";
 
 const errorState = ref<{ hasError: boolean; message: string }>({
   hasError: false,
-  message: '',
-})
+  message: "",
+});
 
 const resetError = () => {
-  errorState.value = { hasError: false, message: '' }
-}
+  errorState.value = { hasError: false, message: "" };
+};
 
 onErrorCaptured((error) => {
   errorState.value = {
     hasError: true,
     message: error instanceof Error ? error.message : String(error),
-  }
-  console.error('Error caught:', error)
-  return false
-})
+  };
+  console.error("Error caught:", error);
+  return false;
+});
 </script>
 
 <template>
-  <div v-if="errorState.hasError" class="min-h-screen flex items-center justify-center bg-white">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] p-6 text-center">
+  <div
+    v-if="errorState.hasError"
+    class="min-h-screen flex items-center justify-center bg-white"
+  >
+    <div
+      class="max-w-md w-full bg-white rounded-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] p-6 text-center"
+    >
       <h1 class="text-2xl font-semibold text-[#171717] mb-4">حدث خطأ</h1>
       <p class="text-gray-600 mb-6">{{ errorState.message }}</p>
       <div class="space-y-2">
         <UButton color="black" block @click="resetError">العودة</UButton>
-        <UButton color="white" variant="outline" block @click="location.reload()">تحديث</UButton>
+        <UButton
+          color="white"
+          variant="outline"
+          block
+          @click="location.reload()"
+          >تحديث</UButton
+        >
       </div>
     </div>
   </div>
@@ -311,7 +324,7 @@ onErrorCaptured((error) => {
 
 ```vue
 <script setup lang="ts">
-import AppErrorBoundary from '~/components/common/AppErrorBoundary.vue'
+import AppErrorBoundary from "~/components/common/AppErrorBoundary.vue";
 </script>
 
 <template>
@@ -375,19 +388,19 @@ In Nuxt component:
 
 ```vue
 <script setup lang="ts">
-const { apiFetch } = useApi()
+const { apiFetch } = useApi();
 
 const testError = async () => {
   try {
-    await apiFetch('/api/v1/test-validation', {
-      method: 'POST',
+    await apiFetch("/api/v1/test-validation", {
+      method: "POST",
       body: {},
-    })
+    });
   } catch (e) {
     // Error handled by interceptor
-    console.log('Error caught and notified')
+    console.log("Error caught and notified");
   }
-}
+};
 </script>
 
 <template>
@@ -403,7 +416,7 @@ const testError = async () => {
 
 ### Build on this foundation:
 
-1. **Add more error codes** in `ErrorCode` enum (PAYMENT_FAILED, WORKFLOW_*, etc.)
+1. **Add more error codes** in `ErrorCode` enum (PAYMENT*FAILED, WORKFLOW*\*, etc.)
 2. **Create custom exceptions** (InvalidStateTransition, PaymentFailed, etc.)
 3. **Add correlation ID middleware** for request tracing
 4. **Add structured logging** to JSON files
@@ -423,6 +436,7 @@ const testError = async () => {
 ### Issue: Frontend toast not showing
 
 **Solution:**
+
 1. Check `useErrorNotification()` is called in interceptor
 2. Verify `@nuxt/ui` is installed: `npm list @nuxt/ui`
 3. Check browser console for errors

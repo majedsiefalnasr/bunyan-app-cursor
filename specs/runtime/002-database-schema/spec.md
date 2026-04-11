@@ -32,35 +32,40 @@ Stage 02 **does not** introduce HTTP controllers, API endpoints, or auth logic �
 The following already exist and must NOT be modified or replaced:
 
 ### 2.1 Existing Migrations
-| Migration | Table | Status |
-|---|---|---|
-| `2026_04_10_174655` | `personal_access_tokens` | Exists |
-| `2026_04_10_174656` | `users` | Exists — has `role` string column |
-| `2026_04_10_174657` | `roles` | Exists |
-| `2026_04_10_174658` | `permissions` | Exists |
-| `2026_04_10_174659` | `role_permissions` | Exists (pivot) |
-| `2026_04_10_174700` | `projects` | Exists |
-| `2026_04_10_174701` | `phases` | Exists |
-| `2026_04_10_174702` | `tasks` | Exists |
-| `2026_04_10_174703` | `workflow_configurations` | Exists |
-| `2026_04_10_174704` | `approval_rules` | Exists |
-| `2026_04_10_174705` | `reports` | Exists |
-| `2026_04_10_174707` | `products` | Exists |
-| `2026_04_10_174708` | `orders` | Exists |
-| `2026_04_10_174709` | `order_items` | Exists |
-| `2026_04_10_174710` | `transactions` | Exists |
-| `2026_04_10_174711` | report title/content add | Exists |
+
+| Migration           | Table                     | Status                            |
+| ------------------- | ------------------------- | --------------------------------- |
+| `2026_04_10_174655` | `personal_access_tokens`  | Exists                            |
+| `2026_04_10_174656` | `users`                   | Exists — has `role` string column |
+| `2026_04_10_174657` | `roles`                   | Exists                            |
+| `2026_04_10_174658` | `permissions`             | Exists                            |
+| `2026_04_10_174659` | `role_permissions`        | Exists (pivot)                    |
+| `2026_04_10_174700` | `projects`                | Exists                            |
+| `2026_04_10_174701` | `phases`                  | Exists                            |
+| `2026_04_10_174702` | `tasks`                   | Exists                            |
+| `2026_04_10_174703` | `workflow_configurations` | Exists                            |
+| `2026_04_10_174704` | `approval_rules`          | Exists                            |
+| `2026_04_10_174705` | `reports`                 | Exists                            |
+| `2026_04_10_174707` | `products`                | Exists                            |
+| `2026_04_10_174708` | `orders`                  | Exists                            |
+| `2026_04_10_174709` | `order_items`             | Exists                            |
+| `2026_04_10_174710` | `transactions`            | Exists                            |
+| `2026_04_10_174711` | report title/content add  | Exists                            |
 
 ### 2.2 Existing Models
+
 User, Role, Permission, Project, Phase, Task, Report, ApprovalRule, WorkflowConfiguration, Order, OrderItem, Product, Transaction
 
 ### 2.3 Existing Repositories
+
 UserRepository, ProjectRepository, PhaseRepository, TaskRepository, ReportRepository, ApprovalRuleRepository, WorkflowConfigurationRepository, OrderRepository, ProductRepository, TransactionRepository
 
 ### 2.4 Existing Seeders
+
 DatabaseSeeder, RoleSeeder, PermissionSeeder, UserSeeder, ProductSeeder
 
 ### 2.5 Existing Factories
+
 UserFactory, ProjectFactory, PhaseFactory, TaskFactory, ReportFactory, ProductFactory, OrderFactory, TransactionFactory
 
 ---
@@ -69,20 +74,21 @@ UserFactory, ProjectFactory, PhaseFactory, TaskFactory, ReportFactory, ProductFa
 
 ### 3.1 PHP Enums (`backend/app/Enums/`)
 
-| Enum | File | Values |
-|---|---|---|
-| `UserRole` | `UserRole.php` | customer, contractor, supervising_architect, field_engineer, admin |
-| `ProjectStatus` | `ProjectStatus.php` | pending, active, on_hold, completed, cancelled |
-| `PhaseStatus` | `PhaseStatus.php` | pending, in_progress, completed, approved, rejected |
-| `TaskStatus` | `TaskStatus.php` | pending, in_progress, completed, approved, rejected |
-| `OrderStatus` | `OrderStatus.php` | pending, processing, shipped, delivered, cancelled, refunded |
-| `TransactionType` | `TransactionType.php` | payment, withdrawal, refund, commission |
-| `TransactionStatus` | `TransactionStatus.php` | pending, completed, failed, cancelled |
-| `WorkflowType` | `WorkflowType.php` | project, phase, task |
-| `ApprovalStatus` | `ApprovalStatus.php` | pending, approved, rejected |
-| `ReportType` | `ReportType.php` | progress, inspection, incident, completion |
+| Enum                | File                    | Values                                                             |
+| ------------------- | ----------------------- | ------------------------------------------------------------------ |
+| `UserRole`          | `UserRole.php`          | customer, contractor, supervising_architect, field_engineer, admin |
+| `ProjectStatus`     | `ProjectStatus.php`     | pending, active, on_hold, completed, cancelled                     |
+| `PhaseStatus`       | `PhaseStatus.php`       | pending, in_progress, completed, approved, rejected                |
+| `TaskStatus`        | `TaskStatus.php`        | pending, in_progress, completed, approved, rejected                |
+| `OrderStatus`       | `OrderStatus.php`       | pending, processing, shipped, delivered, cancelled, refunded       |
+| `TransactionType`   | `TransactionType.php`   | payment, withdrawal, refund, commission                            |
+| `TransactionStatus` | `TransactionStatus.php` | pending, completed, failed, cancelled                              |
+| `WorkflowType`      | `WorkflowType.php`      | project, phase, task                                               |
+| `ApprovalStatus`    | `ApprovalStatus.php`    | pending, approved, rejected                                        |
+| `ReportType`        | `ReportType.php`        | progress, inspection, incident, completion                         |
 
 Each enum must:
+
 - Implement `BackedEnum` (string-backed)
 - Have an `label(): string` method returning Arabic text
 - Have a `values(): array` static method
@@ -91,18 +97,21 @@ Each enum must:
 ### 3.2 BaseModel (`backend/app/Models/BaseModel.php`)
 
 Abstract Eloquent model providing:
+
 - `SoftDeletes` trait (all main entities must soft-delete)
 - Standardized `$casts` baseline
 - `scopeActive()` — filter non-deleted, active records
 - `scopeOrdered()` — order by `created_at` desc by default
 
 All existing models must extend `BaseModel` instead of `Model` where applicable:
+
 - User (extends `Authenticatable`, so BaseModel traits applied via trait composition)
 - Project, Phase, Task, Report, ApprovalRule, WorkflowConfiguration, Order, OrderItem, Product, Transaction
 
 ### 3.3 BaseRepository (`backend/app/Repositories/BaseRepository.php`)
 
 Abstract base class providing:
+
 ```
 findById(int $id): ?Model
 findByIdOrFail(int $id): Model
@@ -135,22 +144,23 @@ Unique: (user_id, role_id)
 
 Update model `$casts` to use PHP enums:
 
-| Model | Column | Enum Cast |
-|---|---|---|
-| User | `role` | `UserRole` |
-| Project | `status` | `ProjectStatus` |
-| Phase | `status` | `PhaseStatus` |
-| Task | `status` | `TaskStatus` |
-| Order | `status` | `OrderStatus` |
-| Transaction | `type` | `TransactionType` |
-| Transaction | `status` | `TransactionStatus` |
-| WorkflowConfiguration | `type` | `WorkflowType` |
-| ApprovalRule | `status` | `ApprovalStatus` |
-| Report | `type` | `ReportType` |
+| Model                 | Column   | Enum Cast           |
+| --------------------- | -------- | ------------------- |
+| User                  | `role`   | `UserRole`          |
+| Project               | `status` | `ProjectStatus`     |
+| Phase                 | `status` | `PhaseStatus`       |
+| Task                  | `status` | `TaskStatus`        |
+| Order                 | `status` | `OrderStatus`       |
+| Transaction           | `type`   | `TransactionType`   |
+| Transaction           | `status` | `TransactionStatus` |
+| WorkflowConfiguration | `type`   | `WorkflowType`      |
+| ApprovalRule          | `status` | `ApprovalStatus`    |
+| Report                | `type`   | `ReportType`        |
 
 ### 3.6 Factory States
 
 Enhance `UserFactory` with role states:
+
 - `->customer()` state
 - `->contractor()` state
 - `->supervisingArchitect()` state
@@ -159,6 +169,7 @@ Enhance `UserFactory` with role states:
 - `->inactive()` state
 
 Enhance `ProjectFactory` with status states:
+
 - `->pending()`, `->active()`, `->completed()`, `->cancelled()`
 
 Enhance `PhaseFactory` with status states.
@@ -170,17 +181,18 @@ New seeder: `backend/database/seeders/RolePermissionSeeder.php`
 
 Assigns permissions to roles:
 
-| Role | Permissions |
-|---|---|
-| customer | project.view, project.create, order.view, order.create, transaction.view, report.view |
-| contractor | project.view, project.update, phase.view, phase.create, phase.update, task.view, task.create, task.update, report.view, report.create, transaction.view |
-| supervising_architect | project.view, project.approve, phase.view, phase.update, task.view, task.update, report.view, report.create |
-| field_engineer | task.view, task.update, report.view, report.create, report.update |
-| admin | ALL permissions |
+| Role                  | Permissions                                                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| customer              | project.view, project.create, order.view, order.create, transaction.view, report.view                                                                   |
+| contractor            | project.view, project.update, phase.view, phase.create, phase.update, task.view, task.create, task.update, report.view, report.create, transaction.view |
+| supervising_architect | project.view, project.approve, phase.view, phase.update, task.view, task.update, report.view, report.create                                             |
+| field_engineer        | task.view, task.update, report.view, report.create, report.update                                                                                       |
+| admin                 | ALL permissions                                                                                                                                         |
 
 ### 3.8 DatabaseSeeder Update
 
 Update `DatabaseSeeder.php` to call all seeders in correct dependency order:
+
 1. RoleSeeder
 2. PermissionSeeder
 3. RolePermissionSeeder
@@ -190,6 +202,7 @@ Update `DatabaseSeeder.php` to call all seeders in correct dependency order:
 ### 3.9 Tests
 
 #### Unit Tests (`backend/tests/Unit/`)
+
 - `Enums/UserRoleTest.php` — label(), values(), from(), tryFrom()
 - `Enums/ProjectStatusTest.php` — label(), values()
 - `Enums/PhaseStatusTest.php` — label(), values()
@@ -197,6 +210,7 @@ Update `DatabaseSeeder.php` to call all seeders in correct dependency order:
 - `Repositories/BaseRepositoryTest.php` — findById, findByIdOrFail, create, update, delete
 
 #### Feature Tests (`backend/tests/Feature/Database/`)
+
 - `DatabaseSchemaTest.php` — all tables exist with correct columns
 - `MigrationRollbackTest.php` — all migrations roll back cleanly
 - `SeederTest.php` — seeders run without errors, data is correct

@@ -14,6 +14,7 @@
 If the system requires persistent error storage for auditing, debugging, or compliance, use this schema. For MVP, file-based logging is sufficient; this is for later phases.
 
 **When to use:**
+
 - Need to query errors by correlation ID
 - Require audit trail of all errors
 - Compliance requires error log retention
@@ -36,10 +37,10 @@ return new class extends Migration
     {
         Schema::create('error_logs', function (Blueprint $table) {
             $table->id();
-            
+
             // Correlation & tracing
             $table->string('correlation_id', 255)->index();
-            
+
             // Error information
             $table->string('error_code', 100)->index(); // e.g., VALIDATION_ERROR
             $table->string('message', 1000);
@@ -47,29 +48,29 @@ return new class extends Migration
             $table->json('context')->nullable(); // Request context
             $table->string('severity', 50); // error, warning, critical
             $table->integer('http_status')->nullable(); // 422, 401, 500, etc.
-            
+
             // Debugging
             $table->string('exception_class', 255)->nullable();
             $table->longText('stack_trace')->nullable(); // Only in dev/staging
-            
+
             // User context
             $table->foreignIdFor(\App\Models\User::class)
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
             $table->string('user_role', 50)->nullable(); // Snapshot of role at time
-            
+
             // Request context
             $table->string('request_method', 10)->nullable(); // GET, POST, etc.
             $table->string('request_path', 500)->nullable(); // /api/v1/projects
             $table->string('request_ip', 45)->nullable(); // IPv4/IPv6
-            
+
             // Response context
             $table->integer('response_time_ms')->nullable(); // Duration
-            
+
             // Timestamps
             $table->timestamps(); // created_at, updated_at
-            
+
             // Indexes for query performance
             $table->index('error_code');
             $table->index('severity');
@@ -194,7 +195,7 @@ class ErrorLoggingService
         ?array $context = null,
     ): ErrorLog {
         $correlationId = $request->attributes->get('correlation_id', 'unknown');
-        
+
         return ErrorLog::create([
             'correlation_id' => $correlationId,
             'error_code' => $errorCode,
@@ -204,8 +205,8 @@ class ErrorLoggingService
             'severity' => $this->getSeverity($httpStatus),
             'http_status' => $httpStatus,
             'exception_class' => class_basename($exception),
-            'stack_trace' => app()->environment('local') 
-                ? $exception->getTraceAsString() 
+            'stack_trace' => app()->environment('local')
+                ? $exception->getTraceAsString()
                 : null,
             'user_id' => $request->user()?->id,
             'user_role' => $request->user()?->role->value,
@@ -282,27 +283,27 @@ return new class extends Migration
     {
         Schema::create('error_metrics', function (Blueprint $table) {
             $table->id();
-            
+
             // Time bucket (hourly aggregation)
             $table->timestamp('time_bucket')->index(); // e.g., 2026-04-11 10:00:00
-            
+
             // Error classification
             $table->string('error_code', 100)->index();
             $table->integer('http_status');
             $table->string('severity', 50);
-            
+
             // Metrics
             $table->integer('count')->default(0); // Total occurrences
             $table->decimal('avg_response_time_ms', 8, 2)->nullable();
             $table->integer('max_response_time_ms')->nullable();
-            
+
             // Affected users
             $table->integer('unique_users')->default(0);
             $table->integer('unique_ips')->default(0);
-            
+
             // Timestamps
             $table->timestamps();
-            
+
             // Indexes for query performance
             $table->index(['time_bucket', 'error_code']);
             $table->index(['time_bucket', 'severity']);
@@ -342,12 +343,12 @@ class AggregateErrorMetrics implements ShouldQueue
         // Aggregate error logs from last hour
         $oneHourAgo = now()->subHour();
         $hourBucket = now()->startOfHour();
-        
+
         $errors = ErrorLog::whereBetween('created_at', [
             $oneHourAgo,
             now(),
         ])->get();
-        
+
         // Group by error_code and aggregate
         foreach ($errors->groupBy('error_code') as $code => $codeErrors) {
             ErrorMetric::updateOrCreate(
@@ -404,28 +405,28 @@ return new class extends Migration
     {
         Schema::create('audit_trails', function (Blueprint $table) {
             $table->id();
-            
+
             // Correlation
             $table->string('correlation_id', 255)->index();
-            
+
             // Action information
             $table->string('action', 100)->index(); // create, update, delete, approve, etc.
             $table->string('model_type', 255); // Project, Phase, Task, etc.
             $table->unsignedBigInteger('model_id');
-            
+
             // User information
             $table->foreignIdFor(\App\Models\User::class)
                 ->constrained()
                 ->cascadeOnDelete();
-            
+
             // Changes
             $table->json('old_values')->nullable(); // Previous state
             $table->json('new_values')->nullable(); // New state
             $table->json('meta')->nullable(); // Additional context
-            
+
             // Timestamps
             $table->timestamps();
-            
+
             // Indexes
             $table->index(['model_type', 'model_id']);
             $table->index(['user_id', 'created_at']);
@@ -460,11 +461,11 @@ trait AuditableTrait
         static::created(function ($model) {
             $model->logAuditTrail('create');
         });
-        
+
         static::updated(function ($model) {
             $model->logAuditTrail('update');
         });
-        
+
         static::deleted(function ($model) {
             $model->logAuditTrail('delete');
         });
@@ -475,7 +476,7 @@ trait AuditableTrait
         if (!Auth::check()) {
             return;
         }
-        
+
         AuditTrail::create([
             'correlation_id' => Request::get('attributes.correlation_id', 'unknown'),
             'action' => $action,
@@ -509,15 +510,15 @@ CREATE INDEX idx_error_logs_user_date ON error_logs(user_id, created_at);
 
 -- Query: Find all errors for correlation ID
 -- Uses: idx_error_logs_correlation_id
-SELECT * FROM error_logs 
-WHERE correlation_id = 'req_123' 
+SELECT * FROM error_logs
+WHERE correlation_id = 'req_123'
 ORDER BY created_at DESC;
 
 -- Query: Find errors by code in time range
 -- Uses: idx_error_logs_code_date
-SELECT * FROM error_logs 
-WHERE error_code = 'VALIDATION_ERROR' 
-AND created_at BETWEEN ? AND ? 
+SELECT * FROM error_logs
+WHERE error_code = 'VALIDATION_ERROR'
+AND created_at BETWEEN ? AND ?
 LIMIT 100;
 ```
 
@@ -761,11 +762,11 @@ $byRole = ErrorLog::selectRaw('
 
 ## 8. SCHEMA SUMMARY
 
-| Table | Rows (Annual) | Size | Purpose |
-|---|---|---|---|
-| `error_logs` | ~5-10M | 500GB+ | Error audit trail |
-| `error_metrics` | ~8,760 | 5MB | Time-series metrics |
-| `audit_trails` | ~1-5M | 200GB+ | State change audit |
+| Table           | Rows (Annual) | Size   | Purpose             |
+| --------------- | ------------- | ------ | ------------------- |
+| `error_logs`    | ~5-10M        | 500GB+ | Error audit trail   |
+| `error_metrics` | ~8,760        | 5MB    | Time-series metrics |
+| `audit_trails`  | ~1-5M         | 200GB+ | State change audit  |
 
 **Note:** Actual sizes depend on business volume. These are estimates for high-traffic system.
 

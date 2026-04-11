@@ -22,12 +22,12 @@ class Handler extends ExceptionHandler
      * Report the exception (log it)
      */
     public function report(Throwable $e): void {}
-    
+
     /**
      * Render the exception (return response)
      */
     public function render($request, Throwable $e): Response|JsonResponse {}
-    
+
     /**
      * Register custom exception handlers
      */
@@ -66,11 +66,11 @@ public function render($request, Throwable $e)
     if ($e instanceof PaymentFailedException) {
         return $this->paymentErrorResponse($e);
     }
-    
+
     if ($e instanceof ValidationException) {
         return $this->validationResponse($e);
     }
-    
+
     // Default
     return $this->fallbackResponse($e);
 }
@@ -123,7 +123,7 @@ class ProjectService
         if (!$this->canUserCreateProject($data['customer_id'])) {
             throw new InsufficientPermissionException('Cannot create project');
         }
-        
+
         try {
             return Project::create($data);
         } catch (QueryException $e) {
@@ -145,17 +145,17 @@ Nuxt 3 provides `onErrorCaptured()` hook to catch errors in component tree:
 
 ```vue
 <script setup>
-import { onErrorCaptured } from 'vue'
+import { onErrorCaptured } from "vue";
 
-const error = ref(null)
+const error = ref(null);
 
 onErrorCaptured((err) => {
-  error.value = err
-  console.error('Caught error:', err)
-  
+  error.value = err;
+  console.error("Caught error:", err);
+
   // Return false to prevent error from propagating
-  return false
-})
+  return false;
+});
 </script>
 
 <template>
@@ -167,6 +167,7 @@ onErrorCaptured((err) => {
 ```
 
 **Key Points:**
+
 - `onErrorCaptured` only catches errors in child components
 - Return `false` to prevent further propagation
 - Can be used at any component level, but root/app level catches all
@@ -176,15 +177,15 @@ onErrorCaptured((err) => {
 Nuxt 3 provides `useError()` to access and set errors:
 
 ```typescript
-const error = useError()
+const error = useError();
 
 if (error.value) {
   // An error was set
-  console.log(error.value.message)
+  console.log(error.value.message);
 }
 
 // Set an error
-error.value = new Error('Something went wrong')
+error.value = new Error("Something went wrong");
 ```
 
 ### 2.3 Global Error Handler
@@ -193,15 +194,15 @@ Set global error handler in `nuxt.config.ts`:
 
 ```typescript
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
-  
+  modules: ["@nuxt/ui"],
+
   errorHandler: (error, instance) => {
     // Global error handler
-    console.error('Global error:', error)
-    
+    console.error("Global error:", error);
+
     // Can emit to store or notification system
   },
-})
+});
 ```
 
 ### 2.4 Asyncdata/Fetch Error Handling
@@ -209,10 +210,10 @@ export default defineNuxtConfig({
 Errors in `useAsyncData()` or `useFetch()` are caught:
 
 ```typescript
-const { data, error, pending } = await useFetch('/api/projects')
+const { data, error, pending } = await useFetch("/api/projects");
 
 if (error.value) {
-  console.error('Fetch failed:', error.value)
+  console.error("Fetch failed:", error.value);
   // Navigate or show error
 }
 ```
@@ -223,16 +224,16 @@ For lazy-loaded components:
 
 ```vue
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from "vue";
 
 const MyAsyncComponent = defineAsyncComponent({
-  loader: () => import('./MyComponent.vue'),
-  
-  errorComponent: () => import('./ErrorComponent.vue'),
-  
+  loader: () => import("./MyComponent.vue"),
+
+  errorComponent: () => import("./ErrorComponent.vue"),
+
   delay: 200,
   timeout: 5000,
-})
+});
 </script>
 
 <template>
@@ -240,7 +241,7 @@ const MyAsyncComponent = defineAsyncComponent({
     <template #default>
       <MyAsyncComponent />
     </template>
-    
+
     <template #fallback>
       <div>Loading...</div>
     </template>
@@ -255,13 +256,13 @@ Route middleware can throw errors:
 ```typescript
 // middleware/auth.ts
 export default defineRouteMiddleware((to, from) => {
-  const auth = useAuthStore()
-  
+  const auth = useAuthStore();
+
   if (!auth.isAuthenticated) {
-    throw new Error('Unauthorized')
+    throw new Error("Unauthorized");
     // or navigateTo('/login')
   }
-})
+});
 ```
 
 Errors from middleware are caught by the exception handler.
@@ -332,9 +333,9 @@ class CorrelationIdProcessor implements ProcessorInterface
 {
     public function __invoke(array $record): array
     {
-        $record['extra']['correlation_id'] = 
+        $record['extra']['correlation_id'] =
             app('request')->attributes->get('correlation_id', 'unknown');
-        
+
         return $record;
     }
 }
@@ -346,7 +347,7 @@ Register in `bootstrap/app.php`:
 use App\Logging\CorrelationIdProcessor;
 
 // Add processor to all channels
-Log::getHandlers()->each(fn ($handler) => 
+Log::getHandlers()->each(fn ($handler) =>
     $handler->pushProcessor(new CorrelationIdProcessor())
 );
 ```
@@ -394,7 +395,7 @@ Log::emergency('System is unusable');         // 600
 
 ```php
 // Middleware: InjectCorrelationId
-$correlationId = $request->header('X-Correlation-ID') 
+$correlationId = $request->header('X-Correlation-ID')
     ?: uniqid('req_', true);
 
 $request->attributes->set('correlation_id', $correlationId);
@@ -404,11 +405,11 @@ $request->attributes->set('correlation_id', $correlationId);
 
 ```typescript
 function generateCorrelationId(): string {
-  return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
 // Send in header
-headers.set('X-Correlation-ID', generateCorrelationId())
+headers.set("X-Correlation-ID", generateCorrelationId());
 ```
 
 ### 4.2 Correlation ID in Logs
@@ -420,9 +421,9 @@ class CorrelationIdProcessor
 {
     public function __invoke(array $record): array
     {
-        $record['extra']['correlation_id'] = 
+        $record['extra']['correlation_id'] =
             app('request')?->attributes->get('correlation_id');
-        
+
         return $record;
     }
 }
@@ -460,11 +461,13 @@ $span->end();
 ### 4.4 Session-Level vs Request-Level
 
 **Option A (Request-level):** Each request gets unique ID
+
 - Simpler
 - Good for single-request debugging
 - Loses context across multiple requests from same user
 
 **Option B (Session-level):** Multiple requests share same ID
+
 - Better for tracing user workflows
 - Requires session binding
 - More complex
@@ -480,25 +483,26 @@ $span->end();
 Nuxt UI (`@nuxt/ui`) provides `useToast()` composable:
 
 ```typescript
-import { useToast } from '#ui/composables/useToast'
+import { useToast } from "#ui/composables/useToast";
 
-const toast = useToast()
+const toast = useToast();
 
 toast.add({
-  title: 'Error',
-  description: 'Failed to create project',
-  color: 'red',
+  title: "Error",
+  description: "Failed to create project",
+  color: "red",
   timeout: 5000,
   actions: [
     {
-      label: 'Retry',
+      label: "Retry",
       click: () => retryFunction(),
     },
   ],
-})
+});
 ```
 
 **Props:**
+
 - `title`: Toast title
 - `description`: Toast message
 - `color`: Color variant (red, yellow, green, etc.)
@@ -515,10 +519,10 @@ export default defineNuxtConfig({
   ui: {
     // Toast default position
     toast: {
-      position: 'top-right',
+      position: "top-right",
     },
   },
-})
+});
 ```
 
 For RTL, Nuxt UI automatically positions on left side.
@@ -530,36 +534,39 @@ If Nuxt UI's toast isn't sufficient, create custom:
 ```vue
 <script setup lang="ts">
 interface Toast {
-  id: string
-  title: string
-  description: string
-  color: 'red' | 'yellow' | 'green'
-  timeout: number
+  id: string;
+  title: string;
+  description: string;
+  color: "red" | "yellow" | "green";
+  timeout: number;
 }
 
-const toasts = ref<Toast[]>([])
+const toasts = ref<Toast[]>([]);
 
-const add = (payload: Omit<Toast, 'id'>) => {
-  const id = crypto.randomUUID()
-  const toast = { id, ...payload }
-  
-  toasts.value.push(toast)
-  
+const add = (payload: Omit<Toast, "id">) => {
+  const id = crypto.randomUUID();
+  const toast = { id, ...payload };
+
+  toasts.value.push(toast);
+
   setTimeout(() => {
-    remove(id)
-  }, payload.timeout)
-}
+    remove(id);
+  }, payload.timeout);
+};
 
 const remove = (id: string) => {
-  toasts.value = toasts.value.filter(t => t.id !== id)
-}
+  toasts.value = toasts.value.filter((t) => t.id !== id);
+};
 </script>
 
 <template>
   <div class="fixed top-right space-y-2">
-    <div v-for="toast in toasts" :key="toast.id" 
+    <div
+      v-for="toast in toasts"
+      :key="toast.id"
       :class="toastColorClass(toast.color)"
-      class="p-4 rounded">
+      class="p-4 rounded"
+    >
       <p class="font-semibold">{{ toast.title }}</p>
       <p class="text-sm">{{ toast.description }}</p>
     </div>
@@ -578,28 +585,28 @@ const remove = (id: string) => {
 **Implementation for Queue:**
 
 ```typescript
-const toastQueue = ref<ErrorPayload[]>([])
-const currentToast = ref<ErrorPayload | null>(null)
+const toastQueue = ref<ErrorPayload[]>([]);
+const currentToast = ref<ErrorPayload | null>(null);
 
 const enqueue = (payload: ErrorPayload) => {
-  toastQueue.value.push(payload)
+  toastQueue.value.push(payload);
   if (!currentToast.value) {
-    showNext()
+    showNext();
   }
-}
+};
 
 const showNext = () => {
   if (toastQueue.value.length === 0) {
-    currentToast.value = null
-    return
+    currentToast.value = null;
+    return;
   }
-  
-  currentToast.value = toastQueue.value.shift()
-  
+
+  currentToast.value = toastQueue.value.shift();
+
   setTimeout(() => {
-    showNext()
-  }, currentToast.value.timeout)
-}
+    showNext();
+  }, currentToast.value.timeout);
+};
 ```
 
 **For Bunyan:** Stack behavior (show multiple validation errors at once) is better UX.
@@ -619,7 +626,7 @@ protected function filterErrorDetails($error, $request): ?array
     if (!$request->user()) {
         return null;
     }
-    
+
     // Admin in dev gets everything
     if ($request->user()->role === 'admin' && app()->environment('local')) {
         return [
@@ -629,14 +636,14 @@ protected function filterErrorDetails($error, $request): ?array
             'trace' => $error->getTraceAsString(),
         ];
     }
-    
+
     // Other users get role-specific details
     if ($request->user()->role === 'contractor') {
         return [
             'payment_method' => 'masked', // Not full details
         ];
     }
-    
+
     return null; // No details for non-admin
 }
 ```
@@ -689,7 +696,7 @@ class ProjectPolicy
         // Customer can view their own projects
         return $user->id === $project->customer_id;
     }
-    
+
     public function update(User $user, Project $project): bool
     {
         // Only contractor assigned to project can update
@@ -727,7 +734,7 @@ class CheckRole
         if (!in_array($request->user()?->role->value, $roles)) {
             throw new AuthorizationException('User role not permitted');
         }
-        
+
         return $next($request);
     }
 }
@@ -751,47 +758,47 @@ Nuxt 3 provides `$fetch` with interceptors:
 ```typescript
 const apiFetch = $fetch.create({
   baseURL: config.public.apiUrl,
-  
+
   onRequest({ request, options }) {
     // Add auth token
     if (auth.token) {
       options.headers = {
         ...options.headers,
         Authorization: `Bearer ${auth.token}`,
-      }
+      };
     }
-    
+
     // Add correlation ID
     options.headers = {
       ...options.headers,
-      'X-Correlation-ID': generateCorrelationId(),
-    }
+      "X-Correlation-ID": generateCorrelationId(),
+    };
   },
-  
+
   onResponse({ response }) {
     // Success handling (optional)
   },
-  
+
   onResponseError({ request, response, error }) {
     // Handle specific error codes
-    const errorCode = response._data?.error?.code
-    
+    const errorCode = response._data?.error?.code;
+
     if (response.status === 401) {
-      auth.logout()
-      navigateTo('/login')
+      auth.logout();
+      navigateTo("/login");
     } else if (response.status === 403) {
-      navigateTo('/403')
+      navigateTo("/403");
     }
-    
+
     // Emit error event
     useErrorStore().addError({
       code: errorCode,
       message: response._data?.error?.message,
-    })
+    });
   },
-})
+});
 
-export { apiFetch }
+export { apiFetch };
 ```
 
 ### 7.2 Response Typing
@@ -800,19 +807,19 @@ Type the API responses for TypeScript safety:
 
 ```typescript
 interface ApiResponse<T> {
-  success: boolean
-  data: T | null
+  success: boolean;
+  data: T | null;
   error: {
-    code: string
-    message: string
-    details?: Record<string, any>
-  } | null
+    code: string;
+    message: string;
+    details?: Record<string, any>;
+  } | null;
 }
 
 // Usage
-const response = await apiFetch<Project>('/api/v1/projects/1')
+const response = await apiFetch<Project>("/api/v1/projects/1");
 if (response.success) {
-  console.log(response.data.id) // TypeScript knows type
+  console.log(response.data.id); // TypeScript knows type
 }
 ```
 
@@ -828,22 +835,22 @@ async function retryWithBackoff(
 ): Promise<any> {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      return await fn()
+      return await fn();
     } catch (error) {
-      if (attempt === maxRetries - 1) throw error
-      
-      const delay = baseDelay * Math.pow(2, attempt)
-      await new Promise(resolve => setTimeout(resolve, delay))
+      if (attempt === maxRetries - 1) throw error;
+
+      const delay = baseDelay * Math.pow(2, attempt);
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 }
 
 // Usage
 const result = await retryWithBackoff(
-  () => apiFetch('/api/v1/projects'),
+  () => apiFetch("/api/v1/projects"),
   3,
   1000
-)
+);
 ```
 
 ---
@@ -895,9 +902,9 @@ Create translation files in `locales/{locale}.json`:
 Use with `useI18n()`:
 
 ```typescript
-const { t } = useI18n()
+const { t } = useI18n();
 
-const message = t('errors.validation')
+const message = t("errors.validation");
 ```
 
 ### 8.3 Form Validation Messages
@@ -968,12 +975,14 @@ return [
 **Solutions:**
 
 1. **Async logging:** Queue logs and write asynchronously
+
    ```php
    Log::channel('structured')->info('Event', ['data' => $data]);
    // Queued job writes to disk later
    ```
 
 2. **Log sampling:** Only log 10% of non-error requests
+
    ```php
    if (rand(1, 100) <= 10 || $response->status >= 400) {
        Log::info('API Request', $context);
@@ -1013,10 +1022,10 @@ Use fast ID generation:
 
 ```typescript
 // Fast (use this)
-const id = `${Date.now()}_${Math.random().toString(36).substr(2)}`
+const id = `${Date.now()}_${Math.random().toString(36).substr(2)}`;
 
 // Slow (avoid)
-const id = crypto.randomUUID() // Slower on browser
+const id = crypto.randomUUID(); // Slower on browser
 ```
 
 ---
@@ -1033,7 +1042,7 @@ public function test_payment_failed_exception_returns_422()
         'Card declined',
         false
     );
-    
+
     $this->assertEquals('PAYMENT_FAILED', $exception->getErrorCode());
     $this->assertEquals(422, $exception->getHttpStatus());
     $this->assertArrayHasKey('reason', $exception->getDetails());
@@ -1048,7 +1057,7 @@ public function test_validation_error_response_format()
     $response = $this->post('/api/v1/projects', [
         // Missing required fields
     ]);
-    
+
     $response->assertStatus(422);
     $response->assertJson([
         'success' => false,
@@ -1067,33 +1076,33 @@ public function test_validation_error_response_format()
 ### 11.3 Component Test Example (Frontend)
 
 ```typescript
-describe('AppErrorBoundary', () => {
-  it('catches and displays errors', () => {
+describe("AppErrorBoundary", () => {
+  it("catches and displays errors", () => {
     const { getByText } = render(AppErrorBoundary, {
       slots: {
         default: () => {
-          throw new Error('Test error')
+          throw new Error("Test error");
         },
       },
-    })
-    
-    expect(getByText('حدث خطأ')).toBeDefined()
-  })
-})
+    });
+
+    expect(getByText("حدث خطأ")).toBeDefined();
+  });
+});
 ```
 
 ---
 
 ## 12. TOOLS & LIBRARIES SUMMARY
 
-| Tool | Purpose | Version |
-|---|---|---|
-| **Laravel** | Backend framework, exception handling | 11+ |
-| **Monolog** | Structured logging | 3.0+ |
-| **Nuxt UI** | Toast notifications | Latest |
-| **Pinia** | State management | Latest |
-| **VeeValidate** | Form validation | 4.0+ |
-| **Zod** | Schema validation (optional) | 3.0+ |
+| Tool            | Purpose                               | Version |
+| --------------- | ------------------------------------- | ------- |
+| **Laravel**     | Backend framework, exception handling | 11+     |
+| **Monolog**     | Structured logging                    | 3.0+    |
+| **Nuxt UI**     | Toast notifications                   | Latest  |
+| **Pinia**       | State management                      | Latest  |
+| **VeeValidate** | Form validation                       | 4.0+    |
+| **Zod**         | Schema validation (optional)          | 3.0+    |
 
 ---
 

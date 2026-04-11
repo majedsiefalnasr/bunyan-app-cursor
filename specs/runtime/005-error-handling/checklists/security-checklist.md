@@ -14,24 +14,28 @@
 ### 1.1 Role-Based Visibility Matrix
 
 - [ ] **Customer Role:**
+
   - [ ] Can see: error code, human message, validation details, resource type (generic)
   - [ ] Cannot see: stack trace, internal error cause, database details, full request context
   - [ ] Test: POST /api/v1/projects with invalid data as Customer → sees field errors only
   - [ ] Test: Try accessing admin-only resource → sees generic 403, not admin paths
 
 - [ ] **Contractor Role:**
+
   - [ ] Can see: error code, human message, validation details, project context (own projects)
   - [ ] Cannot see: stack trace, other contractor's data, payment details not owned
   - [ ] Test: POST payment without funds → sees "payment failed", not internal reason
   - [ ] Test: Try accessing other contractor's project → sees generic 404, not "contractor_id mismatch"
 
 - [ ] **Supervising Architect Role:**
+
   - [ ] Can see: error code, human message, validation details, project oversight context
   - [ ] Cannot see: stack trace, database internals, raw Eloquent exceptions
   - [ ] Test: Invalid workflow transition → sees "WORKFLOW_INVALID_TRANSITION", allowed transitions
   - [ ] Test: Database error → sees generic "SERVER_ERROR"
 
 - [ ] **Field Engineer Role:**
+
   - [ ] Can see: error code, human message, validation details
   - [ ] Cannot see: stack trace, financial details, approval workflows
   - [ ] Test: Submit invalid field report → sees field validation messages only
@@ -80,10 +84,12 @@
 ### 2.1 Validation Error Details
 
 - [ ] Field names sanitized (no HTML/JavaScript):
+
   - [ ] Test: Input field name `<script>alert(1)</script>` → sanitized in error
   - [ ] Test: Input field name with unicode → properly encoded in JSON
 
 - [ ] Field error messages sanitized:
+
   - [ ] Test: Validation message with user input interpolation → HTML-encoded
   - [ ] Example: "Field name must not contain <script>" → should be escaped in JSON response
 
@@ -94,6 +100,7 @@
 ### 2.2 Resource Details in 404 Errors
 
 - [ ] Resource identifier properly escaped:
+
   - [ ] Test: 404 response with `"id": "123<script>alert(1)</script>"` → ID escaped
   - [ ] Test: Resource type properly escaped
 
@@ -104,6 +111,7 @@
 ### 2.3 RBAC Details in 403 Errors
 
 - [ ] Role names properly formatted:
+
   - [ ] Test: Role enum values used (not raw user input)
   - [ ] Test: "required_role" field contains predefined enum value only
 
@@ -119,12 +127,14 @@
 ### 3.1 Authentication Error Handling
 
 - [ ] AUTH_INVALID_CREDENTIALS error doesn't expose:
+
   - [ ] Which credential was wrong (username vs password)
   - [ ] Whether user exists in system
   - [ ] Password hash format
   - [ ] Attempt count/lockout details
 
 - [ ] AUTH_TOKEN_EXPIRED error doesn't expose:
+
   - [ ] Token format or structure
   - [ ] Token expiration time
   - [ ] Refresh token details
@@ -136,10 +146,12 @@
 ### 3.2 Logging Credential Safety
 
 - [ ] Authorization header never logged:
+
   - [ ] Request logging middleware (section 3.4) skips `Authorization` header
   - [ ] Test: Check logs don't contain `Bearer <token>`
 
 - [ ] Request body passwords never logged:
+
   - [ ] Test: POST /api/v1/auth/login with password → logs show `password: [REDACTED]`
   - [ ] Test: POST /api/v1/users with password → logs show `password: [REDACTED]`
 
@@ -150,6 +162,7 @@
 ### 3.3 Error Log Sanitization
 
 - [ ] Exception messages don't expose tokens:
+
   - [ ] Test: If exception thrown with token in message → message sanitized
   - [ ] Example: "Token abc123... invalid" → logged as "Token [REDACTED] invalid"
 
@@ -166,10 +179,12 @@
 ### 4.1 Payment Information
 
 - [ ] Credit card numbers never exposed:
+
   - [ ] PAYMENT_FAILED error shows only last 4 digits
   - [ ] Test: Payment error response shows `card_last_4: "1234"`, not full number
 
 - [ ] Payment method details masked:
+
   - [ ] Test: "visa" or "mastercard" OK, full number NOT OK
   - [ ] Test: Expiry month/year NOT exposed
 
@@ -180,10 +195,12 @@
 ### 4.2 Personal Information
 
 - [ ] Email addresses partially masked:
+
   - [ ] In error logs: `user@example.com` → `us...@example.com`
   - [ ] In error responses: email NOT included unless necessary
 
 - [ ] Phone numbers partially masked:
+
   - [ ] In logs: `+966500000000` → `+966...0000`
   - [ ] In error responses: phone NOT included unless necessary
 
@@ -195,9 +212,11 @@
 ### 4.3 User Context Masking
 
 - [ ] User IDs can be exposed (system-generated):
+
   - [ ] Test: Error logs include `user_id: 42` (OK)
 
 - [ ] User roles can be exposed:
+
   - [ ] Test: Error logs include `user_role: "contractor"` (OK)
 
 - [ ] User emails NOT exposed in error responses:
@@ -213,6 +232,7 @@
 ### 5.1 JSON Response Escaping
 
 - [ ] All error messages properly JSON-encoded:
+
   - [ ] Test: Error message with special chars → properly escaped in JSON
   - [ ] Example: `"message": "Field \"name\" required"` → escaped quotes
 
@@ -223,6 +243,7 @@
 ### 5.2 CSRF Token Handling
 
 - [ ] CSRF errors don't expose token format:
+
   - [ ] CSRF validation fails → generic 419 or 400 error (not "invalid token")
   - [ ] Error doesn't expose CSRF mechanism details
 
@@ -233,6 +254,7 @@
 ### 5.3 XSS Prevention in Error UI
 
 - [ ] Error boundary component (section 4.3) doesn't use `v-html`:
+
   - [ ] Test: Component uses `{{ message }}`, not `v-html="message"`
   - [ ] Test: Error page doesn't allow HTML in error messages
 
@@ -249,6 +271,7 @@
 ### 6.1 Rate Limit Errors
 
 - [ ] RATE_LIMIT_EXCEEDED (429) returned correctly:
+
   - [ ] After too many requests → 429 response
   - [ ] Retry-After header present (section 3.2, line 330)
   - [ ] Error message doesn't expose rate limit threshold
@@ -261,6 +284,7 @@
 ### 6.2 DoS Prevention
 
 - [ ] Error responses don't generate database queries:
+
   - [ ] 404 response doesn't query database to confirm non-existence
   - [ ] Validation errors don't execute additional queries
   - [ ] Error logging async (no blocking on slow database)
@@ -279,11 +303,13 @@
 ### 7.1 Security Event Logging
 
 - [ ] Authentication failures logged:
+
   - [ ] Failed login attempts logged with user (if exists) and IP
   - [ ] Invalid token attempts logged with IP
   - [ ] Test: Login 3x with wrong password → logs show 3 failed attempts
 
 - [ ] Authorization failures logged:
+
   - [ ] RBAC_ROLE_DENIED logged with user_id, role, resource_id
   - [ ] Test: Contractor tries to delete customer's project → logged
 
@@ -295,6 +321,7 @@
 ### 7.2 Data Breach Response
 
 - [ ] Error logs retained for investigation:
+
   - [ ] CRITICAL/ERROR logs retained for 180 days (section 5.2, line 1023)
   - [ ] Older logs archived/deleted per retention policy
 
@@ -312,6 +339,7 @@
 ### 8.1 Payment Gateway Errors
 
 - [ ] Stripe errors sanitized:
+
   - [ ] Stripe error responses don't expose API keys
   - [ ] Stripe error codes mapped to generic Bunyan codes
   - [ ] Stripe customer IDs NOT exposed to client

@@ -18,6 +18,7 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
 ### Core Plan Files
 
 1. **plan.md** (35 KB)
+
    - Architecture overview with flow diagrams
    - Exception hierarchy (base + 7 specific classes)
    - Middleware pipeline order
@@ -27,6 +28,7 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Testing strategy
 
 2. **research.md** (24 KB)
+
    - Laravel exception handling patterns
    - Nuxt.js 3 error boundaries & lifecycle
    - Structured logging (Monolog, JSON)
@@ -36,6 +38,7 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Best practices & anti-patterns
 
 3. **data-model.md** (20 KB)
+
    - Persistent error logging schema (optional)
    - Error metrics aggregation
    - Audit trail schema
@@ -44,6 +47,7 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Common SQL queries
 
 4. **quickstart.md** (12 KB)
+
    - Backend bootstrap (15 min)
    - Frontend bootstrap (30 min)
    - E2E test setup (15 min)
@@ -85,24 +89,25 @@ enum ErrorCode: string
 
 **HTTP Status Mapping (Fixed):**
 
-| Error Code | Status | Description |
-|---|---|---|
-| VALIDATION_ERROR | 422 | Form/input validation failures |
-| AUTH_INVALID_CREDENTIALS | 401 | Login failed |
-| AUTH_TOKEN_EXPIRED | 401 | JWT/session expired |
-| AUTH_UNAUTHORIZED | 401 | Authentication required |
-| RBAC_ROLE_DENIED | 403 | Insufficient permissions |
-| RESOURCE_NOT_FOUND | 404 | Resource not found |
-| WORKFLOW_INVALID_TRANSITION | 422 | Invalid workflow state |
-| WORKFLOW_PREREQUISITES_UNMET | 422 | Prerequisites not met |
-| PAYMENT_FAILED | 422 | Payment processing failure |
-| RATE_LIMIT_EXCEEDED | 429 | Rate limit exceeded |
-| SERVER_ERROR | 500 | Internal server error |
-| SERVICE_UNAVAILABLE | 503 | Service temporarily unavailable |
+| Error Code                   | Status | Description                     |
+| ---------------------------- | ------ | ------------------------------- |
+| VALIDATION_ERROR             | 422    | Form/input validation failures  |
+| AUTH_INVALID_CREDENTIALS     | 401    | Login failed                    |
+| AUTH_TOKEN_EXPIRED           | 401    | JWT/session expired             |
+| AUTH_UNAUTHORIZED            | 401    | Authentication required         |
+| RBAC_ROLE_DENIED             | 403    | Insufficient permissions        |
+| RESOURCE_NOT_FOUND           | 404    | Resource not found              |
+| WORKFLOW_INVALID_TRANSITION  | 422    | Invalid workflow state          |
+| WORKFLOW_PREREQUISITES_UNMET | 422    | Prerequisites not met           |
+| PAYMENT_FAILED               | 422    | Payment processing failure      |
+| RATE_LIMIT_EXCEEDED          | 429    | Rate limit exceeded             |
+| SERVER_ERROR                 | 500    | Internal server error           |
+| SERVICE_UNAVAILABLE          | 503    | Service temporarily unavailable |
 
 #### Exception Hierarchy
 
 **Base Exception:**
+
 ```
 Throwable
   └── Exception
@@ -118,6 +123,7 @@ Throwable
 #### Response Models
 
 **Success Response:**
+
 ```php
 {
     "success": true,
@@ -127,6 +133,7 @@ Throwable
 ```
 
 **Error Response:**
+
 ```php
 {
     "success": false,
@@ -153,23 +160,23 @@ Throwable
 
 **Middleware Details:**
 
-| Middleware | Location | Responsibility |
-|---|---|---|
-| CorrelationIdMiddleware | `app/Http/Middleware/` | Generate/pass correlation ID |
-| RequestLoggingMiddleware | `app/Http/Middleware/` | Log incoming request context |
-| ErrorDetailFilteringMiddleware | `app/Http/Middleware/` | Filter error details by role |
-| ExceptionHandler | `app/Exceptions/Handler.php` | Format exceptions to API contract |
+| Middleware                     | Location                     | Responsibility                    |
+| ------------------------------ | ---------------------------- | --------------------------------- |
+| CorrelationIdMiddleware        | `app/Http/Middleware/`       | Generate/pass correlation ID      |
+| RequestLoggingMiddleware       | `app/Http/Middleware/`       | Log incoming request context      |
+| ErrorDetailFilteringMiddleware | `app/Http/Middleware/`       | Filter error details by role      |
+| ExceptionHandler               | `app/Exceptions/Handler.php` | Format exceptions to API contract |
 
 ### RBAC Error Detail Filtering Matrix
 
-| Role | Error Code | Message | Details | Stack Trace |
-|---|---|---|---|---|
-| **Admin** (Dev) | ✅ | ✅ | ✅ Full | ✅ Yes |
-| **Customer** | ✅ | ✅ | ✅ Limited | ❌ No |
-| **Contractor** | ✅ | ✅ | ✅ Limited | ❌ No |
-| **Supervising Architect** | ✅ | ✅ | ✅ Limited | ❌ No |
-| **Field Engineer** | ✅ | ✅ | ❌ Minimal | ❌ No |
-| **Anonymous** | ✅ | ✅ Generic | ❌ Minimal | ❌ No |
+| Role                      | Error Code | Message    | Details    | Stack Trace |
+| ------------------------- | ---------- | ---------- | ---------- | ----------- |
+| **Admin** (Dev)           | ✅         | ✅         | ✅ Full    | ✅ Yes      |
+| **Customer**              | ✅         | ✅         | ✅ Limited | ❌ No       |
+| **Contractor**            | ✅         | ✅         | ✅ Limited | ❌ No       |
+| **Supervising Architect** | ✅         | ✅         | ✅ Limited | ❌ No       |
+| **Field Engineer**        | ✅         | ✅         | ❌ Minimal | ❌ No       |
+| **Anonymous**             | ✅         | ✅ Generic | ❌ Minimal | ❌ No       |
 
 ---
 
@@ -178,9 +185,11 @@ Throwable
 ### Backend Files to Create (14 total)
 
 **Enums:**
+
 - `backend/app/Enums/ErrorCode.php` — Error code enum
 
 **Exceptions:**
+
 - `backend/app/Exceptions/DomainException.php` — Base exception
 - `backend/app/Exceptions/ValidationException.php`
 - `backend/app/Exceptions/InvalidStateTransition.php`
@@ -189,45 +198,56 @@ Throwable
 - `backend/app/Exceptions/PaymentFailed.php`
 
 **Middleware:**
+
 - `backend/app/Http/Middleware/CorrelationIdMiddleware.php`
 - `backend/app/Http/Middleware/RequestLoggingMiddleware.php`
 - `backend/app/Http/Middleware/ErrorDetailFilteringMiddleware.php`
 
 **Services:**
+
 - `backend/app/Services/LoggingService.php`
 - `backend/app/Services/ErrorCodeRegistry.php`
 
 **Traits:**
+
 - `backend/app/Http/Traits/ApiResponseTrait.php`
 
 **Models (Optional):**
+
 - `backend/app/Models/ErrorLog.php` — For persistent logging
 
 ### Frontend Files to Create (11 total)
 
 **Composables:**
+
 - `frontend/composables/useApi.ts` — API interceptor
 - `frontend/composables/useErrorNotification.ts` — Error notifications
 
 **Components:**
+
 - `frontend/components/ErrorBoundary.vue`
 - `frontend/components/ErrorToast.vue`
 
 **Pages:**
+
 - `frontend/pages/error/404.vue`
 - `frontend/pages/error/500.vue`
 - `frontend/pages/error/403.vue`
 
 **Stores:**
+
 - `frontend/stores/errorStore.ts` — Pinia error state
 
 **Middleware:**
+
 - `frontend/middleware/errorHandler.ts`
 
 **Types:**
+
 - `frontend/types/errors.ts` — TypeScript error types
 
 **Layouts:**
+
 - `frontend/layouts/error.vue` — Error page layout
 
 ---
@@ -237,6 +257,7 @@ Throwable
 ### 5-Phase Implementation Plan
 
 **Phase 1: Backend Exception Infrastructure** (2 days)
+
 - [ ] Create exception hierarchy (base + 7 specific)
 - [ ] Implement exception handler
 - [ ] Create error code registry
@@ -246,6 +267,7 @@ Throwable
 - Risk: Low
 
 **Phase 2: Backend Middleware & Logging** (1 day)
+
 - [ ] Implement CorrelationIdMiddleware
 - [ ] Implement RequestLoggingMiddleware
 - [ ] Implement ErrorDetailFilteringMiddleware
@@ -256,6 +278,7 @@ Throwable
 - Risk: Medium (logging performance)
 
 **Phase 3: Frontend Interceptor & Error Handling** (1 day)
+
 - [ ] Implement useApi composable (interceptor)
 - [ ] Implement useErrorNotification composable
 - [ ] Create error store (Pinia)
@@ -267,6 +290,7 @@ Throwable
 - Risk: Medium (interceptor complexity)
 
 **Phase 4: Localization & i18n** (0.5 days)
+
 - [ ] Create Arabic error messages
 - [ ] Create English fallback messages
 - [ ] Configure translation keys
@@ -276,6 +300,7 @@ Throwable
 - Risk: Low
 
 **Phase 5: Integration & E2E Testing** (1 day)
+
 - [ ] Full-stack integration tests
 - [ ] E2E test scenarios (all error types)
 - [ ] RBAC filtering validation
@@ -375,13 +400,13 @@ Throwable
 
 ### ✅ Risk Assessment
 
-| Component | Risk | Mitigation |
-|---|---|---|
-| Correlation ID | Medium | Unit tests + load testing |
-| RBAC Filtering | High | Security tests + audit |
-| Logging Performance | Medium | Async writes, buffering |
-| Arabic i18n | Low | Native Arabic team review |
-| Error Boundary | Low | Component testing |
+| Component           | Risk   | Mitigation                |
+| ------------------- | ------ | ------------------------- |
+| Correlation ID      | Medium | Unit tests + load testing |
+| RBAC Filtering      | High   | Security tests + audit    |
+| Logging Performance | Medium | Async writes, buffering   |
+| Arabic i18n         | Low    | Native Arabic team review |
+| Error Boundary      | Low    | Component testing         |
 
 ---
 
@@ -390,6 +415,7 @@ Throwable
 ### Unit Tests (Backend)
 
 **Test Files:**
+
 - `tests/Unit/Exceptions/ExceptionHierarchyTest.php`
 - `tests/Unit/Services/ErrorCodeRegistryTest.php`
 - `tests/Unit/Http/Middleware/CorrelationIdMiddlewareTest.php`
@@ -400,6 +426,7 @@ Throwable
 ### Feature Tests (Backend)
 
 **Test Files:**
+
 - `tests/Feature/Api/ErrorHandlingTest.php` — All 12 error codes
 - `tests/Feature/Api/RbacFilteringTest.php` — Role-based detail filtering
 - `tests/Feature/Api/ValidationErrorsTest.php` — Field-level details
@@ -410,6 +437,7 @@ Throwable
 ### Component Tests (Frontend)
 
 **Test Files:**
+
 - `frontend/__tests__/composables/useApi.test.ts`
 - `frontend/__tests__/composables/useErrorNotification.test.ts`
 - `frontend/__tests__/components/ErrorBoundary.test.ts`
@@ -420,10 +448,12 @@ Throwable
 ### Integration Tests (Full Stack)
 
 **Test Files:**
+
 - `tests/Feature/Integration/ErrorFlowTest.php` — End-to-end error scenarios
 - `tests/Feature/Integration/CorrelationIdTraceTest.php` — Correlation ID propagation
 
-**Scenarios:** 
+**Scenarios:**
+
 - Validation error → notification → retry
 - Auth error → redirect to login
 - RBAC error → access denied page
@@ -461,17 +491,17 @@ Throwable
 
 ## Plan Sign-Off
 
-| Component | Status | Verified |
-|---|---|---|
-| Architecture | ✅ | Diagram + validation |
-| Data Models | ✅ | Schema + queries |
-| API Contracts | ✅ | Examples for all error codes |
-| Middleware Pipeline | ✅ | Order + dependencies |
-| File Structure | ✅ | 14 backend + 11 frontend |
-| Implementation Roadmap | ✅ | 5 phases, dependencies |
-| RBAC Filtering | ✅ | 6 roles × 4 detail levels |
-| Testing Strategy | ✅ | Unit + feature + integration |
-| Governance Compliance | ✅ | All rules verified |
+| Component              | Status | Verified                     |
+| ---------------------- | ------ | ---------------------------- |
+| Architecture           | ✅     | Diagram + validation         |
+| Data Models            | ✅     | Schema + queries             |
+| API Contracts          | ✅     | Examples for all error codes |
+| Middleware Pipeline    | ✅     | Order + dependencies         |
+| File Structure         | ✅     | 14 backend + 11 frontend     |
+| Implementation Roadmap | ✅     | 5 phases, dependencies       |
+| RBAC Filtering         | ✅     | 6 roles × 4 detail levels    |
+| Testing Strategy       | ✅     | Unit + feature + integration |
+| Governance Compliance  | ✅     | All rules verified           |
 
 **Final Status:** ✅ **PLAN COMPLETE — READY FOR TASKS**
 

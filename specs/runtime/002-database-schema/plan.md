@@ -10,6 +10,7 @@
 ## 1. Execution Strategy
 
 This stage is **pure backend** — no frontend, no HTTP endpoints. All work is in:
+
 - `backend/app/Enums/`
 - `backend/app/Models/` (modifications to existing files)
 - `backend/app/Models/Concerns/` (new)
@@ -27,32 +28,42 @@ This stage is **pure backend** — no frontend, no HTTP endpoints. All work is i
 ## 2. Implementation Phases
 
 ### Phase A — PHP Enums (unblocked, parallel-safe)
+
 Create all 10 enum files. No dependencies on each other.
 
 ### Phase B — BaseModel + Concerns Trait (depends on: nothing)
+
 Create `BaseModel` abstract class and `HasBaseModelBehavior` trait.
 
 ### Phase C — BaseRepository (depends on: nothing)
+
 Create abstract `BaseRepository` class.
 
 ### Phase D — Model Updates (depends on: Phase A + Phase B)
+
 Update all 13 models to:
+
 - Extend `BaseModel` (or use trait for User)
 - Add enum casts
 
 ### Phase E — Repository Updates (depends on: Phase C)
+
 Update all 10 repositories to extend `BaseRepository`.
 
 ### Phase F — Migration (depends on: nothing — additive)
+
 Create `role_user` pivot migration.
 
 ### Phase G — Factory Updates (depends on: Phase A)
+
 Add role/status states using enum backing values.
 
 ### Phase H — Seeders (depends on: Phase A, existing seeders)
+
 Create `RolePermissionSeeder`. Update `DatabaseSeeder`.
 
 ### Phase I — Tests (depends on: Phase A–H)
+
 Write all unit and feature tests.
 
 ---
@@ -62,6 +73,7 @@ Write all unit and feature tests.
 ### 3.1 Enum Contract
 
 Every enum MUST implement:
+
 ```php
 public function label(): string;          // Arabic label
 public static function values(): array;   // All backing values
@@ -154,6 +166,7 @@ tests/
 ## 4. Architecture Guardian Verdict
 
 ### Architecture Guardian
+
 **VERDICT: PASS**
 
 - No business logic in models ✅
@@ -165,16 +178,17 @@ tests/
 - Enum pattern follows ADR conventions ✅
 
 ### API Designer
+
 **VERDICT: PASS** (no API changes in this stage)
 
 ---
 
 ## 5. Risk Assessment
 
-| Risk | Level | Action |
-|---|---|---|
-| PHPStan fails on existing models after enum casts | MEDIUM | Run PHPStan after each model update |
-| role_user migration FK fails if run out of order | LOW | Laravel runs migrations in timestamp order |
-| Seeder circular dependency | LOW | RolePermissionSeeder explicitly placed after PermissionSeeder |
-| Factory enum string values mismatch | LOW | Use `EnumClass::Case->value` in factories |
-| BaseRepository abstract method missing in child | LOW | PHP will throw Fatal Error at test time — caught immediately |
+| Risk                                              | Level  | Action                                                        |
+| ------------------------------------------------- | ------ | ------------------------------------------------------------- |
+| PHPStan fails on existing models after enum casts | MEDIUM | Run PHPStan after each model update                           |
+| role_user migration FK fails if run out of order  | LOW    | Laravel runs migrations in timestamp order                    |
+| Seeder circular dependency                        | LOW    | RolePermissionSeeder explicitly placed after PermissionSeeder |
+| Factory enum string values mismatch               | LOW    | Use `EnumClass::Case->value` in factories                     |
+| BaseRepository abstract method missing in child   | LOW    | PHP will throw Fatal Error at test time — caught immediately  |

@@ -5,6 +5,7 @@
 Laravel 9+ supports PHP native enums as Eloquent cast targets via the `$casts` array. String-backed enums are stored as their backing value in the database and automatically deserialized.
 
 ### Key Patterns
+
 ```php
 // Backed enum with label and values methods
 enum UserRole: string
@@ -44,6 +45,7 @@ $user->role->value; // Returns 'customer'
 ```
 
 ### Eloquent Enum Casting
+
 - Laravel automatically calls `from()` when reading from DB
 - Calls `->value` (backing value) when writing to DB
 - Validation: use `Rule::enum(UserRole::class)` in Form Requests
@@ -112,6 +114,7 @@ abstract class BaseRepository
 MySQL enforces FK constraints during migration. The `role_user` pivot requires `users` and `roles` tables to exist first.
 
 Current migration timestamps (Stage 01):
+
 - `174656` → users
 - `174657` → roles
 
@@ -120,6 +123,7 @@ New Stage 02 migration must use timestamp `2026_04_11_120000` which sorts AFTER 
 ## 5. Factory States in Laravel
 
 Laravel factories use the `state()` method:
+
 ```php
 public function customer(): static
 {
@@ -132,6 +136,7 @@ public function customer(): static
 ## 6. PHPStan Level 8 Compliance
 
 At level 8, PHPStan requires:
+
 - Return types on all public methods
 - Parameter types on all methods
 - No `mixed` without justification

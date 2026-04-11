@@ -13,7 +13,7 @@ interface ExceptionHandlerContract
 {
     /**
      * Render exception as JSON response
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Throwable  $e
      * @return \Illuminate\Http\JsonResponse
@@ -22,7 +22,7 @@ interface ExceptionHandlerContract
 
     /**
      * Report exception (logging)
-     * 
+     *
      * @param  \Throwable  $e
      * @return void
      */
@@ -108,7 +108,7 @@ if ($e instanceof ModelNotFoundException) {
 ```php
 if ($e instanceof ThrottleRequestsException) {
     $retryAfter = (int)$e->getHeaders()['Retry-After'] ?? 60;
-    
+
     return response()->json([
         'success' => false,
         'data' => null,
@@ -136,7 +136,7 @@ if ($e instanceof DomainException) {
     $httpStatus = method_exists($e, 'getHttpStatus') ? $e->getHttpStatus() : 500;
     $errorCode = method_exists($e, 'getErrorCode') ? $e->getErrorCode() : 'SERVER_ERROR';
     $details = method_exists($e, 'getDetails') ? $e->getDetails() : null;
-    
+
     return response()->json([
         'success' => false,
         'data' => null,
@@ -207,7 +207,7 @@ protected function logError(Throwable $e, Request $request): void
 {
     // Extract correlation ID
     $correlationId = $request->attributes->get('correlation_id', 'unknown');
-    
+
     // Log with full context
     Log::error('Unhandled Exception', [
         'correlation_id' => $correlationId,
@@ -234,22 +234,22 @@ protected function filterDetailsByRole($exception, $request): ?array
     if (!$request->user()) {
         return null;
     }
-    
+
     // Non-admin? No sensitive details
     if ($request->user()->role !== UserRole::Admin) {
         return null;
     }
-    
+
     // Admin in production? Still no stack trace
     if (app()->environment('production')) {
         return null;
     }
-    
+
     // Admin in development? Full details
     if (method_exists($exception, 'getDetails')) {
         return $exception->getDetails();
     }
-    
+
     return null;
 }
 ```
@@ -271,6 +271,7 @@ protected function filterDetailsByRole($exception, $request): ?array
 ```
 
 **Rules:**
+
 - `success` always boolean
 - `data` always null on error
 - `error` always object with code, message, details
@@ -293,7 +294,7 @@ protected function filterDetailsByRole($exception, $request): ?array
 - [ ] Fallback 500 never exposes stack trace
 - [ ] RBAC filtering prevents detail leakage
 - [ ] Correlation ID included in logs
-- [ ] All error messages use __() translation function
+- [ ] All error messages use \_\_() translation function
 - [ ] Tests verify 100% coverage (7 exception types)
 
 ---

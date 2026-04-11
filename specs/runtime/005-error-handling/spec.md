@@ -12,6 +12,7 @@
 This specification establishes the error handling contract, structured logging foundation, and error boundary system for the entire Bunyan platform. Every API response, system exception, and client-side error must conform to this contract. The error handling layer is **not business logic** — it is **infrastructure**, and it is enforced before any domain code executes.
 
 **Key Principles:**
+
 - **Single Error Contract:** All API responses follow unified format with `success`, `data`, `error` fields
 - **Standardized Error Codes:** Globally unique error codes (VALIDATION_ERROR, UNAUTHORIZED, etc.) mapped to HTTP status codes
 - **Structured Logging:** All errors logged with correlation IDs, severity levels, and request context
@@ -40,6 +41,7 @@ All successful API responses follow this structure:
 ```
 
 **Fields:**
+
 - `success` (boolean): Always `true` for successful responses
 - `data` (object|array|null): Response payload (resource, collection, or null if no data)
 - `error` (null): Always `null` for success
@@ -66,6 +68,7 @@ All error responses follow this structure:
 ```
 
 **Fields:**
+
 - `success` (boolean): Always `false` for errors
 - `data` (null): Always `null` for errors
 - `error` (object):
@@ -181,22 +184,23 @@ All error responses follow this structure:
 
 All error codes must be globally unique and mapped to HTTP status codes and severity levels.
 
-| Code | HTTP | Severity | Description | Example |
-|------|------|----------|-------------|---------|
-| `VALIDATION_ERROR` | 422 | Warning | Input validation failed | Missing required fields, invalid format |
-| `AUTH_INVALID_CREDENTIALS` | 401 | Warning | Login credentials incorrect | Wrong password, user not found |
-| `AUTH_TOKEN_EXPIRED` | 401 | Warning | Authentication token expired | Session expired after 7 days |
-| `AUTH_UNAUTHORIZED` | 403 | Warning | User not authenticated | Missing `Authorization` header |
-| `RBAC_ROLE_DENIED` | 403 | Warning | User role not permitted | Customer attempting contractor action |
-| `RESOURCE_NOT_FOUND` | 404 | Warning | Requested resource doesn't exist | Project ID doesn't match any record |
-| `WORKFLOW_INVALID_TRANSITION` | 422 | Warning | Invalid state transition | Phase status cannot go backward |
-| `WORKFLOW_PREREQUISITES_UNMET` | 422 | Warning | Prerequisites not satisfied | Cannot complete phase without all tasks |
-| `PAYMENT_FAILED` | 422 | Error | Payment processing failed | Insufficient funds, card declined |
-| `RATE_LIMIT_EXCEEDED` | 429 | Warning | Too many requests | API rate limit hit |
-| `SERVER_ERROR` | 500 | Error | Internal server error | Unhandled exception, database connection |
-| `SERVICE_UNAVAILABLE` | 503 | Error | Service temporarily unavailable | Database offline, third-party API down |
+| Code                           | HTTP | Severity | Description                      | Example                                  |
+| ------------------------------ | ---- | -------- | -------------------------------- | ---------------------------------------- |
+| `VALIDATION_ERROR`             | 422  | Warning  | Input validation failed          | Missing required fields, invalid format  |
+| `AUTH_INVALID_CREDENTIALS`     | 401  | Warning  | Login credentials incorrect      | Wrong password, user not found           |
+| `AUTH_TOKEN_EXPIRED`           | 401  | Warning  | Authentication token expired     | Session expired after 7 days             |
+| `AUTH_UNAUTHORIZED`            | 403  | Warning  | User not authenticated           | Missing `Authorization` header           |
+| `RBAC_ROLE_DENIED`             | 403  | Warning  | User role not permitted          | Customer attempting contractor action    |
+| `RESOURCE_NOT_FOUND`           | 404  | Warning  | Requested resource doesn't exist | Project ID doesn't match any record      |
+| `WORKFLOW_INVALID_TRANSITION`  | 422  | Warning  | Invalid state transition         | Phase status cannot go backward          |
+| `WORKFLOW_PREREQUISITES_UNMET` | 422  | Warning  | Prerequisites not satisfied      | Cannot complete phase without all tasks  |
+| `PAYMENT_FAILED`               | 422  | Error    | Payment processing failed        | Insufficient funds, card declined        |
+| `RATE_LIMIT_EXCEEDED`          | 429  | Warning  | Too many requests                | API rate limit hit                       |
+| `SERVER_ERROR`                 | 500  | Error    | Internal server error            | Unhandled exception, database connection |
+| `SERVICE_UNAVAILABLE`          | 503  | Error    | Service temporarily unavailable  | Database offline, third-party API down   |
 
 **Notes:**
+
 - Error codes are **PascalCase_WITH_UNDERSCORES** for consistency and visibility
 - Each code has a **fixed HTTP status** (never varies)
 - **Severity** helps with logging and client-side retry strategies
@@ -410,7 +414,7 @@ class Handler extends ExceptionHandler
     protected function logError(Throwable $e, $request): void
     {
         $correlationId = $request->header('X-Correlation-ID', uniqid('err_'));
-        
+
         Log::error('Unhandled Exception', [
             'correlation_id' => $correlationId,
             'exception' => class_basename($e),
@@ -608,72 +612,72 @@ The API client composable intercepts all responses and handles errors:
 ```typescript
 // frontend/composables/useApi.ts
 
-import { useRuntimeConfig } from '#app'
-import { useAuthStore } from '~/stores/auth'
-import { useErrorNotification } from '~/composables/useErrorNotification'
+import { useRuntimeConfig } from "#app";
+import { useAuthStore } from "~/stores/auth";
+import { useErrorNotification } from "~/composables/useErrorNotification";
 
 export function useApi() {
-  const config = useRuntimeConfig()
-  const auth = useAuthStore()
-  const { showErrorNotification } = useErrorNotification()
+  const config = useRuntimeConfig();
+  const auth = useAuthStore();
+  const { showErrorNotification } = useErrorNotification();
 
   const apiFetch = $fetch.create({
     baseURL: config.public.apiBaseUrl,
     headers: {
-      Accept: 'application/json',
-      'Accept-Language': 'ar',
+      Accept: "application/json",
+      "Accept-Language": "ar",
     },
 
     onRequest({ options }) {
       if (auth.token) {
-        options.headers.set('Authorization', `Bearer ${auth.token}`)
+        options.headers.set("Authorization", `Bearer ${auth.token}`);
       }
 
       // Inject correlation ID
-      options.headers.set('X-Correlation-ID', generateCorrelationId())
+      options.headers.set("X-Correlation-ID", generateCorrelationId());
     },
 
     onResponseError({ response, request }) {
-      const data = response._data || {}
-      const error = data.error || {}
-      const errorCode = error.code || 'SERVER_ERROR'
+      const data = response._data || {};
+      const error = data.error || {};
+      const errorCode = error.code || "SERVER_ERROR";
 
       // Handle authentication errors
       if (response.status === 401) {
-        auth.logout()
-        if (errorCode !== 'AUTH_TOKEN_EXPIRED') {
-          navigateTo('/auth/login')
+        auth.logout();
+        if (errorCode !== "AUTH_TOKEN_EXPIRED") {
+          navigateTo("/auth/login");
         }
       }
 
       // Handle RBAC errors (403)
-      if (response.status === 403 && errorCode === 'RBAC_ROLE_DENIED') {
+      if (response.status === 403 && errorCode === "RBAC_ROLE_DENIED") {
         // Redirect to forbidden page or dashboard
-        navigateTo('/dashboard')
+        navigateTo("/dashboard");
       }
 
       // Show error notification
       showErrorNotification({
         code: errorCode,
-        message: error.message || 'حدث خطأ غير متوقع',
+        message: error.message || "حدث خطأ غير متوقع",
         details: error.details,
         statusCode: response.status,
-      })
+      });
 
       // Log for debugging
       console.error(`[${errorCode}] ${error.message}`, {
         status: response.status,
         details: error.details,
         url: request.url,
-      })
+      });
     },
-  })
+  });
 
-  return { apiFetch }
+  return { apiFetch };
 }
 
 function generateCorrelationId(): string {
-  return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 ```
 
@@ -684,72 +688,78 @@ Display error messages to users with retry logic:
 ```typescript
 // frontend/composables/useErrorNotification.ts
 
-import { ref } from 'vue'
-import { useToast } from '#ui/composables/useToast'
+import { ref } from "vue";
+import { useToast } from "#ui/composables/useToast";
 
 export interface ErrorNotificationPayload {
-  code: string
-  message: string
-  details?: Record<string, any>
-  statusCode?: number
-  retryable?: boolean
-  retryFn?: () => Promise<any>
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  statusCode?: number;
+  retryable?: boolean;
+  retryFn?: () => Promise<any>;
 }
 
 export function useErrorNotification() {
-  const toast = useToast()
-  const isRetrying = ref(false)
+  const toast = useToast();
+  const isRetrying = ref(false);
 
   const showErrorNotification = (payload: ErrorNotificationPayload) => {
-    const { code, message, statusCode, retryable, retryFn } = payload
+    const { code, message, statusCode, retryable, retryFn } = payload;
 
     // Severity mapping
-    const severity = getSeverityByCode(code, statusCode)
+    const severity = getSeverityByCode(code, statusCode);
 
     // Build toast actions
-    const actions: any[] = []
+    const actions: any[] = [];
 
     if (retryable && retryFn) {
       actions.push({
-        label: 'أعد المحاولة',
+        label: "أعد المحاولة",
         click: async () => {
-          isRetrying.value = true
+          isRetrying.value = true;
           try {
-            await retryFn()
-            toast.close()
+            await retryFn();
+            toast.close();
           } finally {
-            isRetrying.value = false
+            isRetrying.value = false;
           }
         },
-      })
+      });
     }
 
     toast.add({
       title: `${code}`,
       description: message,
-      color: severity === 'error' ? 'red' : 'yellow',
-      timeout: severity === 'error' ? 8000 : 5000,
+      color: severity === "error" ? "red" : "yellow",
+      timeout: severity === "error" ? 8000 : 5000,
       actions,
-    })
-  }
+    });
+  };
 
-  const getSeverityByCode = (code: string, statusCode?: number): 'error' | 'warning' => {
+  const getSeverityByCode = (
+    code: string,
+    statusCode?: number
+  ): "error" | "warning" => {
     const errorSeverities = {
-      SERVER_ERROR: 'error',
-      SERVICE_UNAVAILABLE: 'error',
-      PAYMENT_FAILED: 'error',
-      RATE_LIMIT_EXCEEDED: 'warning',
-      VALIDATION_ERROR: 'warning',
-      AUTH_INVALID_CREDENTIALS: 'warning',
-      AUTH_TOKEN_EXPIRED: 'warning',
-      RBAC_ROLE_DENIED: 'warning',
-      RESOURCE_NOT_FOUND: 'warning',
-    }
+      SERVER_ERROR: "error",
+      SERVICE_UNAVAILABLE: "error",
+      PAYMENT_FAILED: "error",
+      RATE_LIMIT_EXCEEDED: "warning",
+      VALIDATION_ERROR: "warning",
+      AUTH_INVALID_CREDENTIALS: "warning",
+      AUTH_TOKEN_EXPIRED: "warning",
+      RBAC_ROLE_DENIED: "warning",
+      RESOURCE_NOT_FOUND: "warning",
+    };
 
-    return (errorSeverities[code as keyof typeof errorSeverities] as any) || (statusCode && statusCode >= 500 ? 'error' : 'warning')
-  }
+    return (
+      (errorSeverities[code as keyof typeof errorSeverities] as any) ||
+      (statusCode && statusCode >= 500 ? "error" : "warning")
+    );
+  };
 
-  return { showErrorNotification }
+  return { showErrorNotification };
 }
 ```
 
@@ -761,47 +771,55 @@ Catch and display unhandled errors in the UI:
 <!-- frontend/components/common/AppErrorBoundary.vue -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
 interface ErrorState {
-  error: Error | null
-  hasError: boolean
-  errorCode: string
+  error: Error | null;
+  hasError: boolean;
+  errorCode: string;
 }
 
 const errorState = ref<ErrorState>({
   error: null,
   hasError: false,
-  errorCode: '',
-})
+  errorCode: "",
+});
 
 const resetError = () => {
   errorState.value = {
     error: null,
     hasError: false,
-    errorCode: '',
-  }
-}
+    errorCode: "",
+  };
+};
 
 onErrorCaptured((error) => {
   errorState.value = {
     error: error instanceof Error ? error : new Error(String(error)),
     hasError: true,
-    errorCode: 'CLIENT_ERROR',
-  }
+    errorCode: "CLIENT_ERROR",
+  };
 
   // Log to server for monitoring
-  console.error('Unhandled client error:', error)
+  console.error("Unhandled client error:", error);
 
-  return false // Prevent further propagation
-})
+  return false; // Prevent further propagation
+});
 </script>
 
 <template>
-  <div v-if="errorState.hasError" class="min-h-screen flex items-center justify-center bg-white">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] p-6 text-center">
+  <div
+    v-if="errorState.hasError"
+    class="min-h-screen flex items-center justify-center bg-white"
+  >
+    <div
+      class="max-w-md w-full bg-white rounded-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] p-6 text-center"
+    >
       <div class="mb-4">
-        <UIcon name="i-heroicons-exclamation-triangle" class="w-12 h-12 mx-auto text-red-500" />
+        <UIcon
+          name="i-heroicons-exclamation-triangle"
+          class="w-12 h-12 mx-auto text-red-500"
+        />
       </div>
 
       <h1 class="text-2xl font-semibold text-[#171717] mb-2">حدث خطأ</h1>
@@ -809,7 +827,13 @@ onErrorCaptured((error) => {
 
       <div class="space-y-2">
         <UButton color="black" block @click="resetError">العودة</UButton>
-        <UButton color="white" variant="outline" block @click="location.reload()">تحديث الصفحة</UButton>
+        <UButton
+          color="white"
+          variant="outline"
+          block
+          @click="location.reload()"
+          >تحديث الصفحة</UButton
+        >
       </div>
 
       <div class="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-500 text-left">
@@ -829,23 +853,31 @@ onErrorCaptured((error) => {
 ```vue
 <script setup lang="ts">
 definePageMeta({
-  layout: 'error',
-})
+  layout: "error",
+});
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-white px-4"
+  >
     <div class="text-center max-w-md">
       <div class="mb-6">
         <p class="text-9xl font-bold text-gray-200 tracking-tighter">404</p>
       </div>
 
-      <h1 class="text-3xl font-semibold text-[#171717] mb-2">الصفحة غير موجودة</h1>
-      <p class="text-gray-600 mb-6">عذرًا، الصفحة التي تبحث عنها غير موجودة أو تم حذفها.</p>
+      <h1 class="text-3xl font-semibold text-[#171717] mb-2">
+        الصفحة غير موجودة
+      </h1>
+      <p class="text-gray-600 mb-6">
+        عذرًا، الصفحة التي تبحث عنها غير موجودة أو تم حذفها.
+      </p>
 
       <div class="flex gap-3 justify-center">
         <UButton color="black" to="/dashboard">العودة إلى لوحة التحكم</UButton>
-        <UButton color="white" variant="outline" to="/">الصفحة الرئيسية</UButton>
+        <UButton color="white" variant="outline" to="/"
+          >الصفحة الرئيسية</UButton
+        >
       </div>
     </div>
   </div>
@@ -857,23 +889,29 @@ definePageMeta({
 ```vue
 <script setup lang="ts">
 definePageMeta({
-  layout: 'error',
-})
+  layout: "error",
+});
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-white px-4"
+  >
     <div class="text-center max-w-md">
       <div class="mb-6">
         <p class="text-9xl font-bold text-gray-200 tracking-tighter">500</p>
       </div>
 
       <h1 class="text-3xl font-semibold text-[#171717] mb-2">خطأ في الخادم</h1>
-      <p class="text-gray-600 mb-6">حدث خطأ غير متوقع. فريقنا يعمل على حل المشكلة. يرجى المحاولة لاحقًا.</p>
+      <p class="text-gray-600 mb-6">
+        حدث خطأ غير متوقع. فريقنا يعمل على حل المشكلة. يرجى المحاولة لاحقًا.
+      </p>
 
       <div class="flex gap-3 justify-center">
         <UButton color="black" @click="location.reload()">أعد المحاولة</UButton>
-        <UButton color="white" variant="outline" to="/dashboard">العودة</UButton>
+        <UButton color="white" variant="outline" to="/dashboard"
+          >العودة</UButton
+        >
       </div>
     </div>
   </div>
@@ -885,20 +923,25 @@ definePageMeta({
 ```vue
 <script setup lang="ts">
 definePageMeta({
-  layout: 'error',
-  middleware: ['auth'],
-})
+  layout: "error",
+  middleware: ["auth"],
+});
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-white px-4"
+  >
     <div class="text-center max-w-md">
       <div class="mb-6">
         <p class="text-9xl font-bold text-gray-200 tracking-tighter">403</p>
       </div>
 
       <h1 class="text-3xl font-semibold text-[#171717] mb-2">وصول مرفوض</h1>
-      <p class="text-gray-600 mb-6">ليس لديك صلاحيات للوصول إلى هذه الموارد. تواصل مع المسؤول إذا كنت تعتقد أن هذا خطأ.</p>
+      <p class="text-gray-600 mb-6">
+        ليس لديك صلاحيات للوصول إلى هذه الموارد. تواصل مع المسؤول إذا كنت تعتقد
+        أن هذا خطأ.
+      </p>
 
       <div class="flex gap-3 justify-center">
         <UButton color="black" to="/dashboard">العودة إلى لوحة التحكم</UButton>
@@ -914,16 +957,16 @@ definePageMeta({
 <!-- frontend/app.vue -->
 
 <script setup lang="ts">
-import { useErrorStore } from '~/stores/error'
+import { useErrorStore } from "~/stores/error";
 
-const error = useError()
-const errorStore = useErrorStore()
+const error = useError();
+const errorStore = useErrorStore();
 
 watch(error, (newError) => {
   if (newError) {
-    errorStore.setError(newError)
+    errorStore.setError(newError);
   }
-})
+});
 </script>
 
 <template>
@@ -940,38 +983,38 @@ watch(error, (newError) => {
 ```typescript
 // frontend/stores/error.ts
 
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export interface ClientError {
-  code: string
-  message: string
-  details?: Record<string, any>
-  timestamp: number
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: number;
 }
 
-export const useErrorStore = defineStore('error', () => {
-  const errors = ref<ClientError[]>([])
-  const lastError = ref<ClientError | null>(null)
+export const useErrorStore = defineStore("error", () => {
+  const errors = ref<ClientError[]>([]);
+  const lastError = ref<ClientError | null>(null);
 
   const setError = (error: ClientError) => {
-    errors.value.push(error)
-    lastError.value = error
+    errors.value.push(error);
+    lastError.value = error;
 
     // Auto-clear after 30s
     setTimeout(() => {
-      clearError(error.code)
-    }, 30000)
-  }
+      clearError(error.code);
+    }, 30000);
+  };
 
   const clearError = (code: string) => {
-    errors.value = errors.value.filter((e) => e.code !== code)
-  }
+    errors.value = errors.value.filter((e) => e.code !== code);
+  };
 
   const clearAll = () => {
-    errors.value = []
-    lastError.value = null
-  }
+    errors.value = [];
+    lastError.value = null;
+  };
 
   return {
     errors,
@@ -979,8 +1022,8 @@ export const useErrorStore = defineStore('error', () => {
     setError,
     clearError,
     clearAll,
-  }
-})
+  };
+});
 ```
 
 ---
@@ -1002,7 +1045,7 @@ All logs must include these fields:
     "user_id": 42,
     "order_id": 123,
     "payment_method": "credit_card",
-    "amount": 1500.00
+    "amount": 1500.0
   },
   "error": {
     "code": "PAYMENT_FAILED",
@@ -1014,17 +1057,18 @@ All logs must include these fields:
 
 ### 5.2 Log Levels
 
-| Level | Use Case | Retention | Alerts |
-|-------|----------|-----------|--------|
-| DEBUG | Development only, verbose tracing | 7 days | No |
-| INFO | Standard API requests, successful operations | 30 days | No |
-| WARNING | Recoverable errors, validation failures, auth failures | 60 days | Optional |
-| ERROR | Unrecoverable errors, payment failures | 90 days | Yes |
-| CRITICAL | System failures, database errors | 180 days | Yes (immediate) |
+| Level    | Use Case                                               | Retention | Alerts          |
+| -------- | ------------------------------------------------------ | --------- | --------------- |
+| DEBUG    | Development only, verbose tracing                      | 7 days    | No              |
+| INFO     | Standard API requests, successful operations           | 30 days   | No              |
+| WARNING  | Recoverable errors, validation failures, auth failures | 60 days   | Optional        |
+| ERROR    | Unrecoverable errors, payment failures                 | 90 days   | Yes             |
+| CRITICAL | System failures, database errors                       | 180 days  | Yes (immediate) |
 
 ### 5.3 Logging Best Practices
 
 **DO:**
+
 - Include correlation ID in all log entries
 - Log entry point and exit of services
 - Log business-critical decisions (approvals, payments, state transitions)
@@ -1032,6 +1076,7 @@ All logs must include these fields:
 - Use structured fields, not concatenated strings
 
 **DON'T:**
+
 - Log sensitive data (passwords, credit card numbers, SSNs)
 - Log stack traces in production (only in development/staging)
 - Log PII without encryption
@@ -1063,14 +1108,14 @@ All logs must include these fields:
 
 Error details are filtered by role:
 
-| Error Detail | Customer | Contractor | Architect | Field Engineer | Admin |
-|--------------|----------|-----------|-----------|---|---|
-| Error code | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Human message | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Validation details | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Stack trace | ✗ | ✗ | ✗ | ✗ | ✓ (dev only) |
-| Internal error cause | ✗ | ✗ | ✗ | ✗ | ✓ (dev only) |
-| Database error details | ✗ | ✗ | ✗ | ✗ | ✓ (dev only) |
+| Error Detail           | Customer | Contractor | Architect | Field Engineer | Admin        |
+| ---------------------- | -------- | ---------- | --------- | -------------- | ------------ |
+| Error code             | ✓        | ✓          | ✓         | ✓              | ✓            |
+| Human message          | ✓        | ✓          | ✓         | ✓              | ✓            |
+| Validation details     | ✓        | ✓          | ✓         | ✓              | ✓            |
+| Stack trace            | ✗        | ✗          | ✗         | ✗              | ✓ (dev only) |
+| Internal error cause   | ✗        | ✗          | ✗         | ✗              | ✓ (dev only) |
+| Database error details | ✗        | ✗          | ✗         | ✗              | ✓ (dev only) |
 
 **Implementation:**
 
@@ -1115,6 +1160,7 @@ public function messages(): array
 ## 7. IMPLEMENTATION SEQUENCE
 
 1. **Phase 1: Backend Foundation**
+
    - Create custom exception hierarchy
    - Implement exception handler with error contract
    - Add correlation ID middleware
@@ -1122,12 +1168,14 @@ public function messages(): array
    - Create API response helper trait
 
 2. **Phase 2: Error Registry & Logging**
+
    - Define all error codes
    - Configure structured logging (JSON formatter)
    - Add error code registry as reference
    - Test error code → HTTP status mapping
 
 3. **Phase 3: Frontend Implementation**
+
    - Create API interceptor (useApi composable)
    - Create error notification composable
    - Create error boundary component
@@ -1193,28 +1241,28 @@ public function test_authorization_error_response()
 **Test:** Error interceptor shows notification
 
 ```typescript
-import { describe, it, expect, vi } from 'vitest'
-import { useApi } from '~/composables/useApi'
-import { useErrorNotification } from '~/composables/useErrorNotification'
+import { describe, it, expect, vi } from "vitest";
+import { useApi } from "~/composables/useApi";
+import { useErrorNotification } from "~/composables/useErrorNotification";
 
-vi.mock('~/composables/useErrorNotification')
+vi.mock("~/composables/useErrorNotification");
 
-describe('useApi error interceptor', () => {
-  it('shows error notification on API error', async () => {
-    const { apiFetch } = useApi()
-    const { showErrorNotification } = useErrorNotification()
+describe("useApi error interceptor", () => {
+  it("shows error notification on API error", async () => {
+    const { apiFetch } = useApi();
+    const { showErrorNotification } = useErrorNotification();
 
-    vi.mocked(showErrorNotification).mockImplementation(vi.fn())
+    vi.mocked(showErrorNotification).mockImplementation(vi.fn());
 
     try {
-      await apiFetch('/api/v1/projects')
+      await apiFetch("/api/v1/projects");
     } catch (error) {
       // Error caught
     }
 
-    expect(showErrorNotification).toHaveBeenCalled()
-  })
-})
+    expect(showErrorNotification).toHaveBeenCalled();
+  });
+});
 ```
 
 ---
@@ -1227,6 +1275,7 @@ describe('useApi error interceptor', () => {
 **i18n Authority:** `.agents/skills/i18n-governance/SKILL.md`
 
 **Conflict Resolution Order:**
+
 1. ADRs (Architecture Decisions)
 2. AGENTS.md error contract
 3. error-handling-patterns skill
@@ -1253,6 +1302,7 @@ describe('useApi error interceptor', () => {
 12. ✓ Testing Strategy (backend & frontend)
 
 **Constraints Applied:**
+
 - Error contract enforced at exception handler level
 - Correlation ID on all requests for tracing
 - RBAC filtering on sensitive error details
@@ -1262,6 +1312,7 @@ describe('useApi error interceptor', () => {
 - Separate error pages for 404, 500, 403 with RTL layout
 
 **Key Governance Notes:**
+
 - Compliant with AGENTS.md error contract specification
 - Follows `error-handling-patterns` skill guidelines
 - Uses i18n governance for Arabic/RTL
@@ -1279,6 +1330,7 @@ describe('useApi error interceptor', () => {
 **Q1: Correlation ID Scope — Request vs. Session vs. User Tracing**
 
 **Question:** Should correlation IDs be:
+
 - **Option A (Current Spec):** Per-request only — each request gets a unique ID, no cross-request linking
 - **Option B:** Per-session — multiple requests in same browser session share a correlation ID
 - **Option C:** Per-user lifecycle — all requests from same user get same ID until logout
@@ -1297,6 +1349,7 @@ Status: AWAITING INPUT
 **Question:** Section 6.3 defines a role-based visibility matrix. However, for specific error types, what details are acceptable?
 
 Example ambiguities:
+
 - **VALIDATION_ERROR (422):** All roles see field names and validation messages. Should different roles see different field validation rules? (e.g., Admin sees "budget must be > 1000", Customer only sees "budget invalid")
 - **RESOURCE_NOT_FOUND (404):** Can non-admin see resource type (e.g., "Project 123 not found") or only generic message?
 - **WORKFLOW_INVALID_TRANSITION (422):** Should non-admin see allowed_transitions array or only the error message?
@@ -1314,6 +1367,7 @@ Status: AWAITING INPUT
 **Question:** Section 4.2 shows one error notification at a time. What happens when multiple errors occur?
 
 Current code (useErrorNotification.ts) calls `toast.add()` each time. This will:
+
 - **Option A (Queue):** Show one toast, queue others, show next after timeout
 - **Option B (Replace):** Show newest error, replace previous one immediately
 - **Option C (Stack):** Show multiple toasts simultaneously, stacked vertically
@@ -1321,6 +1375,7 @@ Current code (useErrorNotification.ts) calls `toast.add()` each time. This will:
 Example scenario: User submits form with 3 validation errors simultaneously, then network error happens before user can fix the form.
 
 Should they see:
+
 - All 3 field errors stacked, then network error adds below?
 - Or just the network error (replacement)?
 - Or 1 field error, wait 5s, then next field error (queue)?
@@ -1354,12 +1409,15 @@ Status: AWAITING INPUT
 **Question:** Section 4.2 (useErrorNotification) mentions retryable errors but doesn't define which ones or how retry should work.
 
 Ambiguities:
+
 - **Which errors are retryable?**
+
   - Currently: VALIDATION_ERROR, RATE_LIMIT_EXCEEDED (line 320)
   - Should also be retryable: PAYMENT_FAILED? SERVICE_UNAVAILABLE? Timeout errors (not in registry)?
   - Should NOT be retryable: RBAC_ROLE_DENIED, AUTH_UNAUTHORIZED, RESOURCE_NOT_FOUND (user can't fix)
 
 - **Retry strategy?**
+
   - Immediate retry?
   - Exponential backoff (1s, 2s, 4s)?
   - Max retries (3x, 5x)?

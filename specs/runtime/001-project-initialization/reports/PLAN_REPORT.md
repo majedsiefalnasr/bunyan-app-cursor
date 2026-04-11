@@ -24,6 +24,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** Detailed roadmap with timeline, phases, critical path, and risk mitigation  
 **Size:** ~60 pages  
 **Key Sections:**
+
 - 7-phase timeline (28 calendar days)
 - Critical path analysis (Phases 2-4)
 - Risk assessment (5 high-risk areas with mitigation)
@@ -40,6 +41,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** Technology selection rationale and best practices  
 **Size:** ~80 pages  
 **Key Sections:**
+
 - Laravel 11.x rationale (vs Symfony, alternatives)
 - Eloquent ORM patterns (relationships, scopes, casts)
 - Sanctum authentication flow
@@ -65,6 +67,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** Complete database schema with 13 migrations  
 **Size:** ~100 pages  
 **Key Sections:**
+
 - 13 migration specifications (users, projects, phases, tasks, reports, workflow_configurations, approval_rules, transactions, products, categories, orders, order_items, personal_access_tokens)
 - Eloquent model definitions for each entity
 - Foreign key strategy (cascade/restrict rules documented)
@@ -76,7 +79,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Entities:** 13 models  
 **Relationships:** 25+ (one-to-many, many-to-many, has-many-through, polymorphic)  
 **Constraints:** All foreign keys specified with cascade/restrict behavior  
-**Indexes:** All critical query paths indexed  
+**Indexes:** All critical query paths indexed
 
 **Status:** READY FOR IMPLEMENTATION  
 **Guardian Validation:** PASS (schema normalized, relationships correct, soft deletes included)
@@ -88,6 +91,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** 30-minute setup guide for new developers  
 **Size:** ~30 pages  
 **Key Sections:**
+
 - Prerequisites (Docker optional, local setup alternative)
 - Quick setup (Docker and local macOS variations)
 - Verification checklist (backend, frontend, API, database)
@@ -109,6 +113,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** Complete API specification with JSON schemas and examples  
 **Size:** ~50 pages  
 **Key Sections:**
+
 - Response contract (success/error format)
 - HTTP status codes (200, 201, 400, 401, 403, 404, 422, 500)
 - Authentication endpoints (register, login, logout)
@@ -133,6 +138,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 **Purpose:** Component patterns and conventions for Nuxt.js + Vue 3  
 **Size:** ~60 pages  
 **Key Sections:**
+
 - Component structure template (props, emits, lifecycle)
 - Layout components (default, auth layouts)
 - Form components (LoginForm, ProjectForm with examples)
@@ -163,6 +169,7 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 ### Architecture Guardian Verdict: ✅ PASS
 
 **Checks Performed:**
+
 - ✅ RBAC enforcement on all protected routes (documented in API contract)
 - ✅ Layering compliance (Controllers → Services → Repositories → Models)
 - ✅ Dependency injection patterns (no `new` keyword in services)
@@ -180,11 +187,12 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 ### API Designer Verdict: ✅ PASS
 
 **Checks Performed:**
+
 - ✅ All endpoints follow `/api/v1/` versioning
 - ✅ RESTful naming conventions (resources, HTTP methods)
 - ✅ Authentication via Bearer token (Sanctum)
 - ✅ Authorization policies documented (ProjectPolicy, PhasePolicy, etc.)
-- ✅ Error codes standardized (ERR_AUTH_*, ERR_FORBIDDEN_*, ERR_VALIDATION_*)
+- ✅ Error codes standardized (ERR*AUTH*_, ERR*FORBIDDEN*_, ERR*VALIDATION*\*)
 - ✅ Pagination support documented
 - ✅ Rate limiting specified (5 req/min on auth)
 - ✅ File upload handling documented (multipart/form-data)
@@ -198,26 +206,26 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 
 ### Entities & Coverage
 
-| Entity | Migrations | Models | Repositories | Tests | Status |
-|--------|-----------|--------|--------------|-------|--------|
-| Users | ✅ | ✅ | ✅ | Planned | Complete |
-| Projects | ✅ | ✅ | ✅ | Planned | Complete |
-| Phases | ✅ | ✅ | ✅ | Planned | Complete |
-| Tasks | ✅ | ✅ | ✅ | Planned | Complete |
-| Reports | ✅ | ✅ | ✅ | Planned | Complete |
-| Transactions | ✅ | ✅ | ✅ | Planned | Complete |
-| Products | ✅ | ✅ | ✅ | Planned | Complete |
-| Orders | ✅ | ✅ | ✅ | Planned | Complete |
-| WorkflowConfigurations | ✅ | ✅ | ✅ | Planned | Complete |
-| ApprovalRules | ✅ | ✅ | ✅ | Planned | Complete |
-| Categories | ✅ | ✅ | ✅ | Planned | Complete |
-| OrderItems (Pivot) | ✅ | ✅ | ✅ | Planned | Complete |
-| PersonalAccessTokens (Sanctum) | ✅ | ✅ | ✅ | Planned | Complete |
+| Entity                         | Migrations | Models | Repositories | Tests   | Status   |
+| ------------------------------ | ---------- | ------ | ------------ | ------- | -------- |
+| Users                          | ✅         | ✅     | ✅           | Planned | Complete |
+| Projects                       | ✅         | ✅     | ✅           | Planned | Complete |
+| Phases                         | ✅         | ✅     | ✅           | Planned | Complete |
+| Tasks                          | ✅         | ✅     | ✅           | Planned | Complete |
+| Reports                        | ✅         | ✅     | ✅           | Planned | Complete |
+| Transactions                   | ✅         | ✅     | ✅           | Planned | Complete |
+| Products                       | ✅         | ✅     | ✅           | Planned | Complete |
+| Orders                         | ✅         | ✅     | ✅           | Planned | Complete |
+| WorkflowConfigurations         | ✅         | ✅     | ✅           | Planned | Complete |
+| ApprovalRules                  | ✅         | ✅     | ✅           | Planned | Complete |
+| Categories                     | ✅         | ✅     | ✅           | Planned | Complete |
+| OrderItems (Pivot)             | ✅         | ✅     | ✅           | Planned | Complete |
+| PersonalAccessTokens (Sanctum) | ✅         | ✅     | ✅           | Planned | Complete |
 
 **Total Migrations:** 13 (forward-only, reversible)  
 **Total Models:** 13 (with relationships, scopes, accessors)  
 **Total Repositories:** 10+ (with query methods documented)  
-**Total Relationships:** 25+ (defined and mapped)  
+**Total Relationships:** 25+ (defined and mapped)
 
 **Status:** 100% COMPLETE
 
@@ -227,19 +235,19 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 
 ### Pages & Components
 
-| Category | Count | Status |
-|----------|-------|--------|
-| Layout Components | 3 | ✅ Designed |
-| Form Components | 8 | ✅ Documented |
-| Card Components | 6 | ✅ Documented |
-| Page Components | 15+ | ✅ Structure planned |
-| Pinia Stores | 6 | ✅ Documented |
-| Composables | 8+ | ✅ Documented |
-| i18n Keys | 100+ | ✅ Structure planned |
+| Category          | Count | Status               |
+| ----------------- | ----- | -------------------- |
+| Layout Components | 3     | ✅ Designed          |
+| Form Components   | 8     | ✅ Documented        |
+| Card Components   | 6     | ✅ Documented        |
+| Page Components   | 15+   | ✅ Structure planned |
+| Pinia Stores      | 6     | ✅ Documented        |
+| Composables       | 8+    | ✅ Documented        |
+| i18n Keys         | 100+  | ✅ Structure planned |
 
 **RTL Support:** ✅ Full (logical properties, auto-flip layouts)  
 **i18n Support:** ✅ Full (Arabic default, English fallback)  
-**Nuxt UI Integration:** ✅ 22+ components documented  
+**Nuxt UI Integration:** ✅ 22+ components documented
 
 **Status:** 100% COVERAGE
 
@@ -249,19 +257,19 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 
 ### Phase Breakdown
 
-| Phase | Duration | Effort (person-weeks) | Status |
-|-------|----------|----------------------|--------|
-| 1. Setup | 2 days | 1.0 | Planned |
-| 2. Database & Layering | 4 days | 2.0 | Planned |
-| 3. API Contracts | 4 days | 1.5 | Planned |
-| 4. Services & Business Logic | 5 days | 3.0 | Planned |
-| 5. Frontend Scaffolding | 5 days | 1.5 | Planned |
-| 6. Testing Integration | 4 days | 2.0 | Planned |
-| 7. Documentation | 4 days | 0.5 | Planned |
-| **Total** | **28 days** | **11.5 pw** | **Planned** |
+| Phase                        | Duration    | Effort (person-weeks) | Status      |
+| ---------------------------- | ----------- | --------------------- | ----------- |
+| 1. Setup                     | 2 days      | 1.0                   | Planned     |
+| 2. Database & Layering       | 4 days      | 2.0                   | Planned     |
+| 3. API Contracts             | 4 days      | 1.5                   | Planned     |
+| 4. Services & Business Logic | 5 days      | 3.0                   | Planned     |
+| 5. Frontend Scaffolding      | 5 days      | 1.5                   | Planned     |
+| 6. Testing Integration       | 4 days      | 2.0                   | Planned     |
+| 7. Documentation             | 4 days      | 0.5                   | Planned     |
+| **Total**                    | **28 days** | **11.5 pw**           | **Planned** |
 
 **Critical Path:** 15 days (Phases 2-4)  
-**Recommended Team:** 4-5 developers (implementation), 1 DevOps, 1 QA  
+**Recommended Team:** 4-5 developers (implementation), 1 DevOps, 1 QA
 
 ---
 
@@ -270,18 +278,22 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 ### High-Risk Areas (Identified & Mitigated)
 
 1. **Database Schema Complexity** (MEDIUM probability)
+
    - Mitigation: Early migration testing, schema diagram review
    - Owner: Backend Lead
 
 2. **API Contract Misalignment** (MEDIUM probability)
+
    - Mitigation: Review contract BEFORE coding, mock API server
    - Owner: API Architect
 
 3. **RBAC Enforcement Gaps** (HIGH probability)
+
    - Mitigation: Strict code review, policy test matrix, guardian validation
    - Owner: Security Lead
 
 4. **Frontend-Backend Integration Timing** (MEDIUM probability)
+
    - Mitigation: Mock API server for frontend, weekly sync meetings
    - Owner: Tech Lead
 
@@ -321,14 +333,14 @@ Phase 7: Documentation (final step)
 
 ### Document Review Status
 
-| Document | Reviewer | Status | Date |
-|----------|----------|--------|------|
-| plan.md | Architecture Guardian | ✅ PASS | 2026-04-10 |
-| research.md | Tech Lead | ✅ PASS | 2026-04-10 |
-| data-model.md | Database Architect | ✅ PASS | 2026-04-10 |
-| quickstart.md | PM/Tech Lead | ✅ PASS | 2026-04-10 |
-| api-contract.md | API Designer | ✅ PASS | 2026-04-10 |
-| component-contract.md | Frontend Lead | ✅ PASS | 2026-04-10 |
+| Document              | Reviewer              | Status  | Date       |
+| --------------------- | --------------------- | ------- | ---------- |
+| plan.md               | Architecture Guardian | ✅ PASS | 2026-04-10 |
+| research.md           | Tech Lead             | ✅ PASS | 2026-04-10 |
+| data-model.md         | Database Architect    | ✅ PASS | 2026-04-10 |
+| quickstart.md         | PM/Tech Lead          | ✅ PASS | 2026-04-10 |
+| api-contract.md       | API Designer          | ✅ PASS | 2026-04-10 |
+| component-contract.md | Frontend Lead         | ✅ PASS | 2026-04-10 |
 
 **Overall Status:** ✅ ALL DOCUMENTS APPROVED
 
@@ -371,17 +383,17 @@ specs/runtime/001-project-initialization/
 
 ## Key Metrics
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| Total Pages Generated | 450+ | ✅ Complete |
-| Total Specifications | 25+ | ✅ Complete |
-| API Endpoints Documented | 25+ | ✅ Complete |
-| Database Entities | 13 | ✅ Complete |
-| Database Relationships | 25+ | ✅ Complete |
-| Frontend Components | 30+ | ✅ Designed |
-| Estimated Project Duration | 28 days | ✅ Planned |
-| Risk Areas Identified | 5 | ✅ Mitigated |
-| Guardian Verdicts | 2 | ✅ PASS |
+| Metric                     | Value   | Status       |
+| -------------------------- | ------- | ------------ |
+| Total Pages Generated      | 450+    | ✅ Complete  |
+| Total Specifications       | 25+     | ✅ Complete  |
+| API Endpoints Documented   | 25+     | ✅ Complete  |
+| Database Entities          | 13      | ✅ Complete  |
+| Database Relationships     | 25+     | ✅ Complete  |
+| Frontend Components        | 30+     | ✅ Designed  |
+| Estimated Project Duration | 28 days | ✅ Planned   |
+| Risk Areas Identified      | 5       | ✅ Mitigated |
+| Guardian Verdicts          | 2       | ✅ PASS      |
 
 ---
 
@@ -392,6 +404,7 @@ specs/runtime/001-project-initialization/
 All required planning artifacts have been generated, documented, and validated by architectural guardians. The technical roadmap is comprehensive, realistic, and ready for implementation. The team can proceed immediately to the TASKS phase (Step 4).
 
 **Key Strengths:**
+
 - Clear critical path and timeline
 - Comprehensive risk mitigation strategies
 - Complete API and data model specifications

@@ -12,6 +12,7 @@
 This technical plan translates the STAGE_05_ERROR_HANDLING specification into actionable implementation tasks. It defines the exact data models, API contracts, middleware pipeline, file structure, and step-by-step implementation order with clear dependencies.
 
 **Key Deliverables:**
+
 1. Unified error response contract (all API responses)
 2. 12 standardized error codes with HTTP status mapping
 3. Custom exception hierarchy for business logic
@@ -120,25 +121,31 @@ REQUEST FLOW:
 Backend middleware **must** execute in this strict order:
 
 1. **InjectCorrelationId** — First (before any other processing)
+
    - Extract/generate correlation ID
    - Store in request attributes
    - Push to Log processor
 
 2. **(Auth Middleware — Laravel built-in)**
+
    - Authenticate user via Sanctum
 
 3. **(RBAC Middleware — per-route)**
+
    - Verify user has required role
 
 4. **LogApiActivity** — Before controller execution
+
    - Log request start
    - Record start time
 
 5. **Controller/Route Handler** — Request processing
+
    - Service calls
    - Exception throws
 
 6. **Exception Handler** — Catches all exceptions
+
    - Formats response
    - Logs error
 
@@ -172,7 +179,7 @@ enum ErrorCode: string
     case WORKFLOW_PREREQUISITES_UNMET = 'WORKFLOW_PREREQUISITES_UNMET';
     case PAYMENT_FAILED = 'PAYMENT_FAILED';
     case RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED';
-    
+
     // 5xx Server Errors
     case SERVER_ERROR = 'SERVER_ERROR';
     case SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE';
@@ -184,17 +191,17 @@ enum ErrorCode: string
             self::WORKFLOW_INVALID_TRANSITION,
             self::WORKFLOW_PREREQUISITES_UNMET,
             self::PAYMENT_FAILED => 422,
-            
+
             self::AUTH_INVALID_CREDENTIALS,
             self::AUTH_TOKEN_EXPIRED,
             self::AUTH_UNAUTHORIZED => 401,
-            
+
             self::RBAC_ROLE_DENIED => 403,
-            
+
             self::RESOURCE_NOT_FOUND => 404,
-            
+
             self::RATE_LIMIT_EXCEEDED => 429,
-            
+
             self::SERVER_ERROR => 500,
             self::SERVICE_UNAVAILABLE => 503,
         };
@@ -317,7 +324,7 @@ return new class extends Migration
             $table->longText('stack_trace')->nullable();
             $table->foreignIdFor(\App\Models\User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
-            
+
             $table->index('created_at');
             $table->index(['error_code', 'created_at']);
         });
@@ -495,6 +502,7 @@ X-Correlation-ID: req_1712844645000_9a8b7c6d
 ```
 
 If client doesn't provide, backend generates:
+
 - Format: `req_{timestamp}_{random}`
 - Returned in all error responses (optional in success)
 
@@ -713,15 +721,18 @@ frontend/
 **Dependency:** None (foundational)
 
 1. Create `ErrorCode` enum in `backend/app/Enums/ErrorCode.php`
+
    - All 12 error codes with status mapping
    - Severity and description methods
 
 2. Create exception hierarchy:
+
    - `DomainException` base class
    - All 7 specific exception classes
    - Each with `getErrorCode()`, `getHttpStatus()`, `getDetails()` methods
 
 3. Create `ApiResponse` trait in `backend/app/Http/Controllers/Api/`
+
    - `sendSuccess()` method
    - `sendError()` method
    - Both format to contract
@@ -741,21 +752,25 @@ frontend/
 **Dependency:** Phase 1
 
 1. Create `InjectCorrelationId` middleware
+
    - Extract/generate correlation ID
    - Store in request attributes
    - Push to Log processor
 
 2. Create `LogApiActivity` middleware
+
    - Log request entry
    - Calculate response duration
    - Log with structured fields
 
 3. Update `backend/config/logging.php`
+
    - Add `structured` channel with JsonFormatter
    - Configure retention policies
    - Set log levels
 
 4. Create `ErrorDetailFiltering` middleware (optional, advanced)
+
    - Filter details by user role
    - Admin sees stack traces in dev only
 
@@ -773,32 +788,38 @@ frontend/
 **Dependency:** Phase 1-2 (backend contracts finalized)
 
 1. Create `useApi()` composable in `frontend/composables/useApi.ts`
+
    - Initialize $fetch with base URL
    - Inject auth token from store
    - Generate correlation ID
    - Error interceptor logic (401, 403, 5xx routing)
 
 2. Create `useErrorNotification()` composable
+
    - Error code to message mapping
    - Severity detection
    - Toast display logic
    - Retry button support
 
 3. Create `AppErrorBoundary.vue` component
+
    - `onErrorCaptured()` lifecycle
    - Error card display
    - Recovery buttons
 
 4. Create error pages:
+
    - `404.vue` — Not found
    - `500.vue` — Server error
    - `403.vue` — Forbidden
 
 5. Create error layout:
+
    - `frontend/layouts/error.vue`
    - Minimal (no header/sidebar)
 
 6. Create error store:
+
    - `frontend/stores/error.ts` (Pinia)
    - `errors` ref, `lastError` ref
    - Auto-clear after 30s
@@ -815,11 +836,13 @@ frontend/
 **Dependency:** Phase 3
 
 1. Backend translations:
+
    - Create `backend/resources/lang/ar/errors.php`
    - Create `backend/resources/lang/en/errors.php`
    - Validation messages for all rules
 
 2. Frontend translations:
+
    - Update `frontend/locales/ar.json` with error messages
    - Update `frontend/locales/en.json`
    - Button labels, error page text
@@ -837,6 +860,7 @@ frontend/
 **Dependency:** Phase 1-4
 
 1. Backend feature tests:
+
    - Validation error flow (422)
    - Auth error flow (401)
    - RBAC error flow (403)
@@ -846,6 +870,7 @@ frontend/
    - Server error flow (500)
 
 2. Frontend integration tests:
+
    - Error interceptor → notification
    - Error page rendering
    - RTL layout verification
@@ -912,20 +937,20 @@ protected $routeMiddleware = [
 
 ## 8. ERROR CODE TO HTTP STATUS MAPPING TABLE
 
-| Error Code | HTTP Status | Severity | Use Case |
-|---|---|---|---|
-| `VALIDATION_ERROR` | 422 | Warning | Input validation failed |
-| `AUTH_INVALID_CREDENTIALS` | 401 | Warning | Wrong password/username |
-| `AUTH_TOKEN_EXPIRED` | 401 | Warning | Session expired |
-| `AUTH_UNAUTHORIZED` | 401 | Warning | Missing auth header |
-| `RBAC_ROLE_DENIED` | 403 | Warning | Insufficient role |
-| `RESOURCE_NOT_FOUND` | 404 | Warning | Resource doesn't exist |
-| `WORKFLOW_INVALID_TRANSITION` | 422 | Warning | Invalid state change |
-| `WORKFLOW_PREREQUISITES_UNMET` | 422 | Warning | Prerequisites not met |
-| `PAYMENT_FAILED` | 422 | Error | Payment declined |
-| `RATE_LIMIT_EXCEEDED` | 429 | Warning | Too many requests |
-| `SERVER_ERROR` | 500 | Error | Unhandled exception |
-| `SERVICE_UNAVAILABLE` | 503 | Error | Service down |
+| Error Code                     | HTTP Status | Severity | Use Case                |
+| ------------------------------ | ----------- | -------- | ----------------------- |
+| `VALIDATION_ERROR`             | 422         | Warning  | Input validation failed |
+| `AUTH_INVALID_CREDENTIALS`     | 401         | Warning  | Wrong password/username |
+| `AUTH_TOKEN_EXPIRED`           | 401         | Warning  | Session expired         |
+| `AUTH_UNAUTHORIZED`            | 401         | Warning  | Missing auth header     |
+| `RBAC_ROLE_DENIED`             | 403         | Warning  | Insufficient role       |
+| `RESOURCE_NOT_FOUND`           | 404         | Warning  | Resource doesn't exist  |
+| `WORKFLOW_INVALID_TRANSITION`  | 422         | Warning  | Invalid state change    |
+| `WORKFLOW_PREREQUISITES_UNMET` | 422         | Warning  | Prerequisites not met   |
+| `PAYMENT_FAILED`               | 422         | Error    | Payment declined        |
+| `RATE_LIMIT_EXCEEDED`          | 429         | Warning  | Too many requests       |
+| `SERVER_ERROR`                 | 500         | Error    | Unhandled exception     |
+| `SERVICE_UNAVAILABLE`          | 503         | Error    | Service down            |
 
 **Key Rule:** Error code → HTTP status is **immutable**. Never vary status for same code.
 
@@ -935,17 +960,17 @@ protected $routeMiddleware = [
 
 ### Visibility Matrix
 
-| Detail | Customer | Contractor | Architect | Field Engineer | Admin |
-|---|---|---|---|---|---|
-| Error code | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Message | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Validation details | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Workflow details | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Stack trace | ✗ | ✗ | ✗ | ✗ | ✓* |
-| DB error details | ✗ | ✗ | ✗ | ✗ | ✓* |
-| Internal cause | ✗ | ✗ | ✗ | ✗ | ✓* |
+| Detail             | Customer | Contractor | Architect | Field Engineer | Admin |
+| ------------------ | -------- | ---------- | --------- | -------------- | ----- |
+| Error code         | ✓        | ✓          | ✓         | ✓              | ✓     |
+| Message            | ✓        | ✓          | ✓         | ✓              | ✓     |
+| Validation details | ✓        | ✓          | ✓         | ✓              | ✓     |
+| Workflow details   | ✓        | ✓          | ✓         | ✓              | ✓     |
+| Stack trace        | ✗        | ✗          | ✗         | ✗              | ✓\*   |
+| DB error details   | ✗        | ✗          | ✗         | ✗              | ✓\*   |
+| Internal cause     | ✗        | ✗          | ✗         | ✗              | ✓\*   |
 
-*Admin sees stack traces **development/staging only**, never in production.
+\*Admin sees stack traces **development/staging only**, never in production.
 
 ### Implementation in Handler.php
 
@@ -956,12 +981,12 @@ protected function filterErrorDetails($e, $request): ?array
     if (!$request->user() || $request->user()->role !== UserRole::Admin) {
         return null;
     }
-    
+
     // Admin only sees details in development
     if (!app()->environment('local', 'testing')) {
         return null;
     }
-    
+
     // Return full details (stack trace, etc.)
     return [
         'exception' => class_basename($e),
@@ -1035,7 +1060,7 @@ class ExceptionHandlerTest extends TestCase
     {
         // Throw ValidationException, assert 422 response with field details
     }
-    
+
     public function test_unauthorized_exception_hides_details()
     {
         // Assert stack trace not in response for non-admin
@@ -1055,7 +1080,7 @@ class ValidationErrorResponseTest extends TestCase
         $response = $this->post('/api/v1/projects', [
             // Missing required fields
         ]);
-        
+
         $response->assertStatus(422);
         $response->assertJsonStructure([
             'success',
@@ -1072,23 +1097,23 @@ class ValidationErrorResponseTest extends TestCase
 **Location:** `frontend/tests/unit/composables/`
 
 ```typescript
-describe('useApi', () => {
-  it('injects correlation ID on all requests', () => {
-    const { apiFetch } = useApi()
+describe("useApi", () => {
+  it("injects correlation ID on all requests", () => {
+    const { apiFetch } = useApi();
     // Mock $fetch and verify X-Correlation-ID header
-  })
-  
-  it('handles 401 by logging out', () => {
-    // Simulate 401 response, verify logout called
-  })
-})
+  });
 
-describe('useErrorNotification', () => {
-  it('shows toast with correct severity', () => {
-    const { showErrorNotification } = useErrorNotification()
+  it("handles 401 by logging out", () => {
+    // Simulate 401 response, verify logout called
+  });
+});
+
+describe("useErrorNotification", () => {
+  it("shows toast with correct severity", () => {
+    const { showErrorNotification } = useErrorNotification();
     // Verify toast color/duration matches severity
-  })
-})
+  });
+});
 ```
 
 ### Integration Tests (Frontend)
@@ -1096,18 +1121,18 @@ describe('useErrorNotification', () => {
 **Location:** `frontend/tests/integration/errors/`
 
 ```typescript
-describe('Error handling flow', () => {
-  it('shows validation error notification on 422', () => {
+describe("Error handling flow", () => {
+  it("shows validation error notification on 422", () => {
     // Create form with missing fields
     // Submit form
     // Assert validation error toast appears with field details
-  })
-  
-  it('redirects to login on 401', () => {
+  });
+
+  it("redirects to login on 401", () => {
     // Attempt API call that returns 401
     // Assert redirect to /auth/login
-  })
-})
+  });
+});
 ```
 
 ---
@@ -1206,6 +1231,7 @@ describe('Error handling flow', () => {
 Use this checklist to track Phase 1-5 completion:
 
 **Phase 1: Backend Exception Infrastructure**
+
 - [ ] ErrorCode enum created
 - [ ] 7 custom exception classes created
 - [ ] ApiResponse trait created
@@ -1213,6 +1239,7 @@ Use this checklist to track Phase 1-5 completion:
 - [ ] Unit tests passing
 
 **Phase 2: Backend Middleware & Logging**
+
 - [ ] InjectCorrelationId middleware created
 - [ ] LogApiActivity middleware created
 - [ ] logging.php configured
@@ -1220,6 +1247,7 @@ Use this checklist to track Phase 1-5 completion:
 - [ ] Integration tests passing
 
 **Phase 3: Frontend Interceptor & Error Handling**
+
 - [ ] useApi() composable created
 - [ ] useErrorNotification() composable created
 - [ ] AppErrorBoundary.vue created
@@ -1229,12 +1257,14 @@ Use this checklist to track Phase 1-5 completion:
 - [ ] Unit tests passing
 
 **Phase 4: Localization**
+
 - [ ] Backend i18n files created
 - [ ] Frontend i18n files created
 - [ ] Form Request messages in Arabic
 - [ ] Smoke tests passing
 
 **Phase 5: Integration & E2E Testing**
+
 - [ ] All feature tests passing
 - [ ] All integration tests passing
 - [ ] E2E tests passing

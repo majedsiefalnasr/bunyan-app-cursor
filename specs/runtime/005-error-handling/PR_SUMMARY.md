@@ -13,7 +13,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 
 ### Key Features
 
-- **12 Standardized Error Codes** — VALIDATION_ERROR, AUTH_*, RBAC_*, WORKFLOW_*, PAYMENT_*, RATE_LIMIT_*, SERVER_*, SERVICE_UNAVAILABLE
+- **12 Standardized Error Codes** — VALIDATION*ERROR, AUTH*\_, RBAC\__, WORKFLOW*\*, PAYMENT*_, RATE*LIMIT*\_, SERVER\_\*, SERVICE_UNAVAILABLE
 - **Exception Hierarchy** — 7 custom exception classes for domain-specific errors
 - **Correlation ID Tracing** — Request-scoped tracing through entire pipeline
 - **Structured JSON Logging** — Request/response logging with contextual data
@@ -30,6 +30,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ### Backend (14 Files)
 
 **Exception Infrastructure (8 files):**
+
 ```
 ✅ app/Enums/ErrorCode.php                          [12 error codes]
 ✅ app/Exceptions/ExceptionContract.php             [Interface]
@@ -42,6 +43,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Middleware & Services (6 files):**
+
 ```
 ✅ app/Http/Middleware/InjectCorrelationId.php      [Inject correlation ID]
 ✅ app/Http/Middleware/LogApiActivity.php           [Structured logging]
@@ -52,6 +54,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Configuration & i18n (4+ files):**
+
 ```
 ✅ bootstrap/app.php                                [Middleware registration]
 ✅ config/logging.php                               [JSON channel]
@@ -62,12 +65,14 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Models & Migrations:**
+
 ```
 ✅ app/Models/ErrorLog.php                          [Optional error log model]
 ✅ database/migrations/create_error_logs_table.php  [Optional schema]
 ```
 
 **Tests (10+ files):**
+
 ```
 ✅ tests/Unit/Exceptions/*                          [100% coverage]
 ✅ tests/Feature/ErrorHandling/*                    [80+ scenarios]
@@ -78,6 +83,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ### Frontend (11 Files)
 
 **Composables & Store:**
+
 ```
 ✅ composables/useApi.ts                            [API interceptor]
 ✅ composables/useErrorNotification.ts              [Toast system]
@@ -86,6 +92,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Components:**
+
 ```
 ✅ components/common/AppErrorBoundary.vue           [Error boundary]
 ✅ components/ErrorToast.vue                        [Toast notification]
@@ -93,6 +100,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Pages & i18n:**
+
 ```
 ✅ pages/error/{404,403,500}.vue                    [Error pages + RTL]
 ✅ types/errors.ts                                  [TypeScript types]
@@ -101,6 +109,7 @@ Implements comprehensive error handling and structured logging infrastructure fo
 ```
 
 **Tests (6+ files):**
+
 ```
 ✅ __tests__/composables/*.test.ts                  [Composable tests]
 ✅ __tests__/stores/*.test.ts                       [Store tests]
@@ -115,21 +124,21 @@ Implements comprehensive error handling and structured logging infrastructure fo
 
 ### Backend
 
-| Category | Count | Coverage | Status |
-|----------|-------|----------|--------|
-| Unit Tests | 25+ | 100% exceptions | ✅ PASS |
-| Feature Tests | 50+ | All 12 error codes | ✅ PASS |
-| Integration Tests | 10+ | Full pipeline | ✅ PASS |
-| Security Tests | 5+ | RBAC, credentials | ✅ PASS |
+| Category          | Count | Coverage           | Status  |
+| ----------------- | ----- | ------------------ | ------- |
+| Unit Tests        | 25+   | 100% exceptions    | ✅ PASS |
+| Feature Tests     | 50+   | All 12 error codes | ✅ PASS |
+| Integration Tests | 10+   | Full pipeline      | ✅ PASS |
+| Security Tests    | 5+    | RBAC, credentials  | ✅ PASS |
 
 ### Frontend
 
-| Category | Count | Coverage | Status |
-|----------|-------|----------|--------|
-| Unit Tests | 15+ | Composables | ✅ PASS |
-| Component Tests | 10+ | UI components | ✅ PASS |
-| Page Tests | 5+ | Error pages | ✅ PASS |
-| A11y Tests | 5+ | WCAG AA | ✅ PASS |
+| Category        | Count | Coverage      | Status  |
+| --------------- | ----- | ------------- | ------- |
+| Unit Tests      | 15+   | Composables   | ✅ PASS |
+| Component Tests | 10+   | UI components | ✅ PASS |
+| Page Tests      | 5+    | Error pages   | ✅ PASS |
+| A11y Tests      | 5+    | WCAG AA       | ✅ PASS |
 
 **Total:** 125+ test cases, 95%+ coverage
 
@@ -188,14 +197,14 @@ All validation gates passed. Production ready.
 
 **Error details visibility by role:**
 
-| Role | Error Code | Message | Details | Stack Trace |
-|------|---|---|---|---|
-| Admin (dev) | ✅ | ✅ | ✅ Full | ✅ Yes |
-| Customer | ✅ | ✅ | ✅ Limited | ❌ No |
-| Contractor | ✅ | ✅ | ✅ Limited | ❌ No |
-| Architect | ✅ | ✅ | ✅ Limited | ❌ No |
-| Field Engineer | ✅ | ✅ | ✅ Minimal | ❌ No |
-| Anonymous | ✅ | ✅ Generic | ❌ Minimal | ❌ No |
+| Role           | Error Code | Message    | Details    | Stack Trace |
+| -------------- | ---------- | ---------- | ---------- | ----------- |
+| Admin (dev)    | ✅         | ✅         | ✅ Full    | ✅ Yes      |
+| Customer       | ✅         | ✅         | ✅ Limited | ❌ No       |
+| Contractor     | ✅         | ✅         | ✅ Limited | ❌ No       |
+| Architect      | ✅         | ✅         | ✅ Limited | ❌ No       |
+| Field Engineer | ✅         | ✅         | ✅ Minimal | ❌ No       |
+| Anonymous      | ✅         | ✅ Generic | ❌ Minimal | ❌ No       |
 
 Enforced via `ErrorDetailFilteringMiddleware` at HTTP level.
 
@@ -215,13 +224,13 @@ Enforced via `ErrorDetailFilteringMiddleware` at HTTP level.
 
 ## Performance Metrics
 
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| Exception handler latency | < 5ms | ~2ms | ✅ PASS |
-| Logging pipeline | < 2ms | ~1ms | ✅ PASS |
-| Middleware overhead | < 5ms | ~3ms | ✅ PASS |
-| Frontend interceptor | < 10ms | ~5ms | ✅ PASS |
-| Toast queue (5 errors) | < 100ms | ~50ms | ✅ PASS |
+| Metric                    | Target  | Actual | Status  |
+| ------------------------- | ------- | ------ | ------- |
+| Exception handler latency | < 5ms   | ~2ms   | ✅ PASS |
+| Logging pipeline          | < 2ms   | ~1ms   | ✅ PASS |
+| Middleware overhead       | < 5ms   | ~3ms   | ✅ PASS |
+| Frontend interceptor      | < 10ms  | ~5ms   | ✅ PASS |
+| Toast queue (5 errors)    | < 100ms | ~50ms  | ✅ PASS |
 
 No performance regressions. Error handling is lightweight.
 
@@ -240,6 +249,7 @@ None. Full backward compatibility maintained.
 ### For Backend Developers
 
 1. **Use ApiResponse trait in controllers:**
+
    ```php
    use ApiResponse;
    public function store() {
@@ -248,6 +258,7 @@ None. Full backward compatibility maintained.
    ```
 
 2. **Throw domain exceptions:**
+
    ```php
    throw new ValidationException(['email' => 'Invalid']);
    throw new ResourceNotFoundException('User', 123);
@@ -262,14 +273,16 @@ None. Full backward compatibility maintained.
 ### For Frontend Developers
 
 1. **Use useApi composable:**
+
    ```ts
-   const { data, error } = await useApi('/api/users');
+   const { data, error } = await useApi("/api/users");
    if (error.value) {
-       showErrorNotification(error.value);
+     showErrorNotification(error.value);
    }
    ```
 
 2. **Error notifications are automatic:**
+
    - Composable catches errors and dispatches to store
    - ErrorToast component renders from store
    - Toast queue managed automatically
@@ -334,12 +347,12 @@ All tests must pass before merge.
 
 **Overall Risk:** 🟢 LOW
 
-| Risk | Mitigation |
-|------|-----------|
-| RBAC filtering complex | Tests cover 24 role/detail combinations |
-| Correlation ID tracking | E2E test validates full pipeline |
-| Arabic/RTL rendering | Pages validated, components tested |
-| Performance regression | All benchmarks met, latency < 5ms |
+| Risk                    | Mitigation                              |
+| ----------------------- | --------------------------------------- |
+| RBAC filtering complex  | Tests cover 24 role/detail combinations |
+| Correlation ID tracking | E2E test validates full pipeline        |
+| Arabic/RTL rendering    | Pages validated, components tested      |
+| Performance regression  | All benchmarks met, latency < 5ms       |
 
 ---
 
@@ -360,12 +373,12 @@ All tests must pass before merge.
 
 ## Sign-Off
 
-| Role | Status | Date |
-|------|--------|------|
-| Architecture | ✅ APPROVED | 2026-04-11T16:05:00Z |
-| Security | ✅ APPROVED | 2026-04-11T18:05:00Z |
-| QA | ✅ APPROVED | 2026-04-11T18:09:00Z |
-| **Ready to Merge** | **✅ YES** | **2026-04-11T18:10:00Z** |
+| Role               | Status      | Date                     |
+| ------------------ | ----------- | ------------------------ |
+| Architecture       | ✅ APPROVED | 2026-04-11T16:05:00Z     |
+| Security           | ✅ APPROVED | 2026-04-11T18:05:00Z     |
+| QA                 | ✅ APPROVED | 2026-04-11T18:09:00Z     |
+| **Ready to Merge** | **✅ YES**  | **2026-04-11T18:10:00Z** |
 
 ---
 
@@ -381,6 +394,7 @@ All tests must pass before merge.
 ## Contact
 
 For questions about error handling implementation:
+
 - Review `specs/runtime/005-error-handling/` for full documentation
 - Check `IMPLEMENT_REPORT.md` for implementation details
 - Refer to error contract examples in `spec.md` section 1

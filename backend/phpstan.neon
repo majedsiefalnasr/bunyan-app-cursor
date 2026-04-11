@@ -11,8 +11,6 @@ parameters:
     - tests
   bootstrapFiles:
     - ./tests/bootstrap.php
-  checkMissingIterableValueType: false
-  checkGenericClassInNonGenericObjectType: false
   ignoreErrors:
     - '#Access to an undefined property App\\Http\\Resources\\Api\\V1\\.+Resource::\$#'
     - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder.*::(active|byRole|byStatus|byProject|byPhase|byTask|byUser|byType|byCustomer|byCategory|bySku|inStock|pending|completed|assigned|assignedTo|forUser|active|scopeOrdered|withTrashed)\(\)\.#'

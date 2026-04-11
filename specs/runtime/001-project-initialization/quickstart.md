@@ -16,16 +16,19 @@ This guide will get you from zero to running the Bunyan platform in **~30 minute
 ## Prerequisites
 
 **Required:**
+
 - macOS, Linux, or WSL2 (Windows Subsystem for Linux)
 - Git 2.37+
 - 2GB free disk space
 - Terminal/bash
 
 **Option A: Docker Setup (Recommended)**
+
 - Docker Desktop 4.0+
 - Docker Compose 2.0+
 
 **Option B: Local Setup**
+
 - PHP 8.3 or higher
 - Composer 2.x
 - Node.js 20.x
@@ -89,12 +92,14 @@ cd ..
 ### Step 6: Start Development Servers
 
 **Terminal 1 - Backend:**
+
 ```bash
 cd backend
 php artisan serve
 ```
 
 **Terminal 2 - Frontend:**
+
 ```bash
 cd frontend
 npm run dev
@@ -150,11 +155,13 @@ cd ..
 ### Step 6: Start Development Servers
 
 **Terminal 1:**
+
 ```bash
 cd backend && php artisan serve
 ```
 
 **Terminal 2:**
+
 ```bash
 cd frontend && npm run dev
 ```
@@ -245,6 +252,7 @@ mysql> SHOW TABLES;
 ### Login & Get Token
 
 **Step 1: Register user** (if not already done)
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/register \
   -H "Content-Type: application/json" \
@@ -259,6 +267,7 @@ curl -X POST http://localhost:8000/api/v1/auth/register \
 ```
 
 **Step 2: Login to get token**
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
@@ -280,6 +289,7 @@ curl -X POST http://localhost:8000/api/v1/auth/login \
 ```
 
 **Step 3: Use token to call API**
+
 ```bash
 # Save token
 TOKEN="1|abcdef123456..."
@@ -305,12 +315,14 @@ curl -X GET http://localhost:8000/api/v1/projects \
 **URL:** `http://localhost:3000/auth/login`
 
 1. **Login Form Page**
+
    - Arabic: "صفحة تسجيل الدخول"
    - Email field (with Arabic placeholder)
    - Password field (masked)
    - "Sign In" button
 
 2. **Submit Credentials**
+
    - Email: `contractor@bunyan.local`
    - Password: `SecurePassword123!`
    - Click "Sign In"
@@ -325,6 +337,7 @@ curl -X GET http://localhost:8000/api/v1/projects \
 **URL:** `http://localhost:3000/dashboard/projects/create` (after login)
 
 1. **Form Fields** (in Arabic)
+
    - Project Title (عنوان المشروع)
    - Description (الوصف)
    - Budget (الميزانية)
@@ -333,6 +346,7 @@ curl -X GET http://localhost:8000/api/v1/projects \
    - Supervising Architect (dropdown)
 
 2. **Fill & Submit**
+
    - Title: "مشروع البناء الحديث"
    - Budget: "250000"
    - Click "Save" (حفظ)
@@ -350,6 +364,7 @@ curl -X GET http://localhost:8000/api/v1/projects \
 
 **Problem:** Backend server not running  
 **Solution:**
+
 ```bash
 cd backend
 php artisan serve --host=127.0.0.1 --port=8000
@@ -359,6 +374,7 @@ php artisan serve --host=127.0.0.1 --port=8000
 
 **Problem:** SQLite used instead of MySQL  
 **Solution:** Ensure `.env` has:
+
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -371,6 +387,7 @@ DB_PASSWORD=root
 
 **Problem:** Node modules not installed  
 **Solution:**
+
 ```bash
 cd frontend
 npm install
@@ -381,6 +398,7 @@ npm run dev
 
 **Problem:** CORS or token encoding issue  
 **Solution:**
+
 ```bash
 # Check Laravel CORS config
 cat backend/config/cors.php
@@ -394,6 +412,7 @@ cat backend/config/cors.php
 
 **Problem:** Locale not set to Arabic  
 **Solution:**
+
 1. Check browser console: `useI18n().locale.value` should be `'ar'`
 2. Click locale switcher: "العربية" button (top right)
 3. Page should reload with `<html dir="rtl">`
@@ -402,6 +421,7 @@ cat backend/config/cors.php
 
 **Problem:** Docker daemon not running  
 **Solution:**
+
 ```bash
 # macOS
 open /Applications/Docker.app
@@ -414,6 +434,7 @@ sudo systemctl start docker
 
 **Problem:** MySQL already running from previous session  
 **Solution:**
+
 ```bash
 # Kill existing process
 lsof -i :3306
@@ -431,6 +452,7 @@ docker-compose up -d mysql
 ### Making Changes
 
 1. **Create feature branch**
+
    ```bash
    git checkout -b feature/add-project-listing
    ```
@@ -438,24 +460,27 @@ docker-compose up -d mysql
 2. **Make code changes** (backend or frontend)
 
 3. **Run tests**
+
    ```bash
    # Backend
    cd backend && composer run test
-   
+
    # Frontend
    cd frontend && npm run test
    ```
 
 4. **Run linting**
+
    ```bash
    # Backend
    cd backend && composer run lint
-   
+
    # Frontend
    cd frontend && npm run lint
    ```
 
 5. **Commit & push**
+
    ```bash
    git add .
    git commit -m "feat: add project listing page"

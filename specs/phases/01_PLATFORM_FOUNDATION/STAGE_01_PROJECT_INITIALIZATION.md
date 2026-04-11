@@ -10,7 +10,7 @@
 **Status:** PRODUCTION READY ✅  
 **Step:** stage_production_ready (closure_completed)  
 **Risk Level:** LOW  
-**Last Updated:** 2026-04-10T23:59:59Z  
+**Last Updated:** 2026-04-10T23:59:59Z
 
 **Scope Closed:**
 
@@ -86,10 +86,10 @@ Initialize the Bunyan project with Laravel backend and Nuxt.js 3 frontend. Confi
 
 #### Backend (Laravel)
 
-| Tool         | Purpose                      | Config File         | Command             |
-| ------------ | ---------------------------- | ------------------- | ------------------- |
-| Laravel Pint | PHP code style (Laravel preset + `pint.json`) | `pint.json` | `composer lint` / `composer lint:fix` |
-| PHPStan      | Static analysis              | `phpstan.neon`      | `composer analyze`  |
+| Tool         | Purpose                                       | Config File    | Command                               |
+| ------------ | --------------------------------------------- | -------------- | ------------------------------------- |
+| Laravel Pint | PHP code style (Laravel preset + `pint.json`) | `pint.json`    | `composer lint` / `composer lint:fix` |
+| PHPStan      | Static analysis                               | `phpstan.neon` | `composer analyze`                    |
 
 **Composer scripts** (`composer.json`):
 
@@ -163,7 +163,10 @@ npm run test
 
 ```json
 {
-  "backend/**/*.php": ["vendor/bin/pint", "vendor/bin/phpstan analyse --memory-limit=512M"],
+  "backend/**/*.php": [
+    "vendor/bin/pint",
+    "vendor/bin/phpstan analyse --memory-limit=512M"
+  ],
   "frontend/**/*.{vue,ts,js}": ["eslint --fix", "prettier --write"],
   "frontend/**/*.json": ["prettier --write"]
 }
@@ -229,13 +232,13 @@ cd frontend && npm run lint:fix && npm run format && npm run typecheck && npm ru
 
 #### Pre-Commit Validation (runs on PR)
 
-| Stage           | Backend                  | Frontend           | Fails On  |
-| --------------- | ------------------------ | ------------------ | --------- |
-| Linting         | `pint --test` | `eslint .`         | Any fix   |
-| Formatting      | —                        | `prettier --check` | Any diffs |
-| Static Analysis | `phpstan analyse`        | `nuxi typecheck`   | Errors    |
-| Unit Tests      | `php artisan test`       | `npm run test`     | Failures  |
-| E2E Tests       | —                        | `npm run test:e2e` | Failures  |
+| Stage           | Backend            | Frontend           | Fails On  |
+| --------------- | ------------------ | ------------------ | --------- |
+| Linting         | `pint --test`      | `eslint .`         | Any fix   |
+| Formatting      | —                  | `prettier --check` | Any diffs |
+| Static Analysis | `phpstan analyse`  | `nuxi typecheck`   | Errors    |
+| Unit Tests      | `php artisan test` | `npm run test`     | Failures  |
+| E2E Tests       | —                  | `npm run test:e2e` | Failures  |
 
 #### Validation Commands (Local)
 
@@ -264,14 +267,14 @@ npm run lint:fix && npm run format && composer lint:fix
 
 #### Backend (composer.json)
 
-| Package           | Type    | Purpose                    |
-| ----------------- | ------- | -------------------------- |
-| laravel/framework | Runtime | Core framework             |
-| laravel/sanctum   | Runtime | API authentication         |
+| Package           | Type    | Purpose                       |
+| ----------------- | ------- | ----------------------------- |
+| laravel/framework | Runtime | Core framework                |
+| laravel/sanctum   | Runtime | API authentication            |
 | laravel/pint      | Dev     | Code formatting (`pint.json`) |
-| phpstan/phpstan   | Dev     | Static analysis            |
-| phpunit/phpunit   | Dev     | Unit testing framework     |
-| pestphp/pest      | Dev     | Alternative test framework |
+| phpstan/phpstan   | Dev     | Static analysis               |
+| phpunit/phpunit   | Dev     | Unit testing framework        |
+| pestphp/pest      | Dev     | Alternative test framework    |
 
 #### Frontend (package.json)
 

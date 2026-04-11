@@ -81,32 +81,32 @@ frontend/
 
 ```typescript
 export const useApi = () => {
-  const config = useRuntimeConfig()
-  const auth = useAuthStore()
+  const config = useRuntimeConfig();
+  const auth = useAuthStore();
 
   const $fetch = useFetch.create({
     baseURL: config.public.apiBase,
     headers: {
       Authorization: `Bearer ${auth.token}`,
-      'Accept-Language': 'ar',
+      "Accept-Language": "ar",
     },
-  })
+  });
 
-  return {$fetch}
-}
+  return { $fetch };
+};
 ```
 
 ### RBAC Middleware
 
 ```typescript
-export default defineNuxtRouteMiddleware(to => {
-  const auth = useAuthStore()
-  const requiredRole = to.meta.role as string
+export default defineNuxtRouteMiddleware((to) => {
+  const auth = useAuthStore();
+  const requiredRole = to.meta.role as string;
 
   if (requiredRole && auth.user?.role !== requiredRole) {
-    return navigateTo('/unauthorized')
+    return navigateTo("/unauthorized");
   }
-})
+});
 ```
 
 ### Nuxt UI Setup
@@ -114,16 +114,16 @@ export default defineNuxtRouteMiddleware(to => {
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui', '@nuxtjs/i18n'],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n"],
   app: {
     head: {
-      htmlAttrs: {dir: 'rtl', lang: 'ar'},
+      htmlAttrs: { dir: "rtl", lang: "ar" },
     },
   },
   ui: {
     colorMode: true, // dark mode via useColorMode()
   },
-})
+});
 ```
 
 ### RTL Toggle (useDirection)
@@ -131,46 +131,46 @@ export default defineNuxtConfig({
 ```typescript
 // composables/useDirection.ts
 export const useDirection = () => {
-  const dir = ref<'rtl' | 'ltr'>('rtl')
-  const {locale} = useI18n()
+  const dir = ref<"rtl" | "ltr">("rtl");
+  const { locale } = useI18n();
 
   const toggle = () => {
-    dir.value = dir.value === 'rtl' ? 'ltr' : 'rtl'
-    useHead({htmlAttrs: {dir: dir.value}})
-  }
+    dir.value = dir.value === "rtl" ? "ltr" : "rtl";
+    useHead({ htmlAttrs: { dir: dir.value } });
+  };
 
   // auto-set from locale
   watch(
     locale,
-    lang => {
-      dir.value = lang === 'ar' ? 'rtl' : 'ltr'
-      useHead({htmlAttrs: {dir: dir.value}})
+    (lang) => {
+      dir.value = lang === "ar" ? "rtl" : "ltr";
+      useHead({ htmlAttrs: { dir: dir.value } });
     },
-    {immediate: true}
-  )
+    { immediate: true }
+  );
 
-  return {dir, toggle}
-}
+  return { dir, toggle };
+};
 ```
 
 ### Nuxt UI Form (VeeValidate + Zod)
 
 ```vue
 <script setup lang="ts">
-  import {z} from 'zod'
-  import type {FormSubmitEvent} from '@nuxt/ui'
+import { z } from "zod";
+import type { FormSubmitEvent } from "@nuxt/ui";
 
-  const schema = z.object({
-    email: z.string().email('بريد إلكتروني غير صالح'),
-    password: z.string().min(8, 'كلمة المرور قصيرة جداً'),
-  })
-  type Schema = z.output<typeof schema>
+const schema = z.object({
+  email: z.string().email("بريد إلكتروني غير صالح"),
+  password: z.string().min(8, "كلمة المرور قصيرة جداً"),
+});
+type Schema = z.output<typeof schema>;
 
-  const state = reactive<Partial<Schema>>({email: '', password: ''})
+const state = reactive<Partial<Schema>>({ email: "", password: "" });
 
-  async function onSubmit(event: FormSubmitEvent<Schema>) {
-    await $fetch('/api/auth/login', {method: 'POST', body: event.data})
-  }
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  await $fetch("/api/auth/login", { method: "POST", body: event.data });
+}
 </script>
 
 <template>
@@ -179,7 +179,11 @@ export const useDirection = () => {
       <UInput v-model="state.email" type="email" data-testid="email-input" />
     </UFormField>
     <UFormField label="كلمة المرور" name="password">
-      <UInput v-model="state.password" type="password" data-testid="password-input" />
+      <UInput
+        v-model="state.password"
+        type="password"
+        data-testid="password-input"
+      />
     </UFormField>
     <UButton type="submit" data-testid="login-button">دخول</UButton>
   </UForm>

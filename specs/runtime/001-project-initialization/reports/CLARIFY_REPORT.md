@@ -20,30 +20,35 @@ The CLARIFY step has been successfully executed for STAGE_01_PROJECT_INITIALIZAT
 All clarifications have been appended to **spec.md § 9. CLARIFICATIONS** with recommended decisions:
 
 #### Clarification 1: PHP Version & Laravel Version Specificity
+
 - **Ambiguity:** "Laravel 8.2+" is invalid (8.2 doesn't exist in Laravel versioning)
 - **Decision:** Use **Laravel 11.x with PHP 8.2+** for modern features
 - **Impact:** Affects Sanctum, migrations, dependency versions
 - **Location:** spec.md lines 959-968
 
 #### Clarification 2: Database Connection Pooling & Redis Strategy
+
 - **Ambiguity:** Unclear whether connection pooling, Redis requirement, and session handling are mandatory for STAGE_01
 - **Decision:** Redis required in docker-compose; no connection pooling for Phase 1; cookie-based sessions (stateless API)
 - **Impact:** docker-compose.yml, .env configuration, scaling readiness
 - **Location:** spec.md lines 972-986
 
 #### Clarification 3: RBAC Middleware Ordering & Priority
+
 - **Ambiguity:** Execution order of `auth:sanctum` and `can:` middleware unclear; error response precedence (401 vs 403) not specified
 - **Decision:** Middleware order: `['auth:sanctum', 'can:...']`; 401 first, then 403; policies mandatory
 - **Impact:** Security posture, error handling, developer experience
 - **Location:** spec.md lines 990-1003
 
 #### Clarification 4: Testing Coverage Thresholds
+
 - **Ambiguity:** ≥80%/≥70% coverage targets stated but unclear if hard gates or aspirational
 - **Decision:** Hard gates in CI; aggregate coverage; exclude migrations/config/seeders; per-package breakdown (Services ≥85%, Repos ≥80%, Controllers ≥70%)
 - **Impact:** CI/CD enforcement, time-to-merge, testing discipline
 - **Location:** spec.md lines 1007-1021
 
 #### Clarification 5: Docker Compose Redis vs. In-Memory Cache
+
 - **Ambiguity:** Redis mandatory or optional for local development; support for non-Docker setup unclear
 - **Decision:** Redis required in docker-compose; support `.env` variants (local: array cache, docker: Redis); graceful degradation (Phase 02)
 - **Impact:** Developer onboarding, docker-compose.yml design, resilience
@@ -56,9 +61,11 @@ All clarifications have been appended to **spec.md § 9. CLARIFICATIONS** with r
 ### 3 Comprehensive Specialist Checklists Created
 
 #### ✅ security.md (15 KB, 34 items)
+
 **Location:** `specs/runtime/001-project-initialization/checklists/security.md`
 
 **Coverage Areas:**
+
 1. Authentication & Session Security (5 items)
    - Sanctum configuration, password security, token hijacking, MFA placeholder
 2. Authorization & RBAC (4 items)
@@ -83,9 +90,11 @@ All clarifications have been appended to **spec.md § 9. CLARIFICATIONS** with r
 ---
 
 #### ✅ performance.md (13 KB, 33 items)
+
 **Location:** `specs/runtime/001-project-initialization/checklists/performance.md`
 
 **Coverage Areas:**
+
 1. Database Query Optimization (4 items)
    - Eager loading, indexing strategy, query patterns, connection management
 2. Caching Strategy (4 items)
@@ -106,6 +115,7 @@ All clarifications have been appended to **spec.md § 9. CLARIFICATIONS** with r
    - Performance testing, load test scenarios, profiling tools
 
 **Performance Targets:**
+
 - API response times: < 200ms (p95)
 - Frontend LCP: < 2.5 seconds
 - Database queries: < 100ms (p95)
@@ -114,9 +124,11 @@ All clarifications have been appended to **spec.md § 9. CLARIFICATIONS** with r
 ---
 
 #### ✅ accessibility.md (19 KB, 42 items)
+
 **Location:** `specs/runtime/001-project-initialization/checklists/accessibility.md`
 
 **Coverage Areas:**
+
 1. Perceivable Content (4 items)
    - Text alternatives, adaptable content, color contrast, audio/video
 2. Operable Interface (4 items)
@@ -176,14 +188,14 @@ Existing checklists (unchanged):
 
 ### Summary Statistics
 
-| Metric | Value |
-|--------|-------|
-| Clarifications Documented | 5 |
-| New Checklists Generated | 3 |
-| Total New Checklist Items | 109 |
-| spec.md Updated | ✅ Yes |
-| Total Spec Coverage | 400+ items (requirements + security + performance + accessibility) |
-| Compliance Standards Met | OWASP, GDPR, WCAG 2.1 AA, PCI-DSS (if applicable) |
+| Metric                    | Value                                                              |
+| ------------------------- | ------------------------------------------------------------------ |
+| Clarifications Documented | 5                                                                  |
+| New Checklists Generated  | 3                                                                  |
+| Total New Checklist Items | 109                                                                |
+| spec.md Updated           | ✅ Yes                                                             |
+| Total Spec Coverage       | 400+ items (requirements + security + performance + accessibility) |
+| Compliance Standards Met  | OWASP, GDPR, WCAG 2.1 AA, PCI-DSS (if applicable)                  |
 
 ---
 
@@ -192,26 +204,31 @@ Existing checklists (unchanged):
 Before proceeding to IMPLEMENT, the following decisions should be reviewed by a human decision-maker:
 
 ### 1. **PHP/Laravel Version Decision** (Clarification 1)
+
 - [ ] Approve: Laravel 11.x with PHP 8.2+
 - [ ] Alternative: Specify different versions
 - **Timeline:** Affects all backend scaffolding (1 hour decision)
 
 ### 2. **Redis & Caching Strategy** (Clarification 2)
+
 - [ ] Approve: Redis in docker-compose, separate `.env` files for local vs Docker
 - [ ] Alternative: Adjust pooling/session strategy
 - **Timeline:** Affects docker-compose.yml design (2 hours decision)
 
 ### 3. **RBAC Middleware Ordering** (Clarification 3)
+
 - [ ] Approve: `['auth:sanctum', 'can:...']` ordering with 401→403 precedence
 - [ ] Alternative: Adjust middleware strategy
 - **Timeline:** Affects API security patterns (1 hour decision)
 
 ### 4. **Coverage Thresholds (Hard Gate vs. Aspirational)** (Clarification 4)
+
 - [ ] Approve: Hard gates (fail builds below thresholds)
 - [ ] Alternative: Aspirational targets (warnings only)
 - **Timeline:** Affects CI/CD pipeline design (1 hour decision)
 
 ### 5. **Docker Redis Strategy** (Clarification 5)
+
 - [ ] Approve: `.env.example` (array cache) + `.env.docker` (Redis)
 - [ ] Alternative: Support non-Docker setup with graceful fallback
 - **Timeline:** Affects developer onboarding docs (1 hour decision)
@@ -242,13 +259,13 @@ Before proceeding to IMPLEMENT, the following decisions should be reviewed by a 
 
 ### Deliverables Checklist
 
-| Deliverable | Location | Status | Size |
-|---|---|---|---|
-| spec.md (updated) | `specs/runtime/001-project-initialization/spec.md` | ✅ Updated | +86 lines |
-| security.md | `specs/runtime/001-project-initialization/checklists/security.md` | ✅ Created | 15 KB |
-| performance.md | `specs/runtime/001-project-initialization/checklists/performance.md` | ✅ Created | 13 KB |
-| accessibility.md | `specs/runtime/001-project-initialization/checklists/accessibility.md` | ✅ Created | 19 KB |
-| requirements.md | `specs/runtime/001-project-initialization/checklists/requirements.md` | ✅ Existing | 46 KB |
+| Deliverable       | Location                                                               | Status      | Size      |
+| ----------------- | ---------------------------------------------------------------------- | ----------- | --------- |
+| spec.md (updated) | `specs/runtime/001-project-initialization/spec.md`                     | ✅ Updated  | +86 lines |
+| security.md       | `specs/runtime/001-project-initialization/checklists/security.md`      | ✅ Created  | 15 KB     |
+| performance.md    | `specs/runtime/001-project-initialization/checklists/performance.md`   | ✅ Created  | 13 KB     |
+| accessibility.md  | `specs/runtime/001-project-initialization/checklists/accessibility.md` | ✅ Created  | 19 KB     |
+| requirements.md   | `specs/runtime/001-project-initialization/checklists/requirements.md`  | ✅ Existing | 46 KB     |
 
 **Total Specification Package:** 109 + 86 new items documented
 

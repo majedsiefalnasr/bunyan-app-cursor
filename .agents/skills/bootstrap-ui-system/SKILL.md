@@ -16,13 +16,13 @@ npx nuxi@latest module add ui
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
+  modules: ["@nuxt/ui"],
   app: {
     head: {
-      htmlAttrs: {dir: 'rtl', lang: 'ar'},
+      htmlAttrs: { dir: "rtl", lang: "ar" },
     },
   },
-})
+});
 ```
 
 ## Design System Integration
@@ -45,11 +45,11 @@ Configure via `app.config.ts`:
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: 'neutral', // achromatic palette
-      neutral: 'neutral',
+      primary: "neutral", // achromatic palette
+      neutral: "neutral",
     },
   },
-})
+});
 ```
 
 Functional accents (workflow only):
@@ -67,7 +67,8 @@ Functional accents (workflow only):
     :ui="{
       root: 'shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]',
       body: 'bg-white',
-    }">
+    }"
+  >
     <template #header>
       <h3 class="text-[#171717] font-semibold tracking-tight">{{ title }}</h3>
     </template>
@@ -80,11 +81,16 @@ Functional accents (workflow only):
 
 ```vue
 <template>
-  <UButton label="إنشاء مشروع" color="neutral" class="rounded-[6px] text-sm font-medium" />
+  <UButton
+    label="إنشاء مشروع"
+    color="neutral"
+    class="rounded-[6px] text-sm font-medium"
+  />
   <UButton
     label="إلغاء"
     variant="outline"
-    class="rounded-[6px] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]" />
+    class="rounded-[6px] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
+  />
 </template>
 ```
 
@@ -92,21 +98,21 @@ Functional accents (workflow only):
 
 ```vue
 <script setup lang="ts">
-  import {z} from 'zod'
-  import type {FormSubmitEvent} from '#ui/types'
+import { z } from "zod";
+import type { FormSubmitEvent } from "#ui/types";
 
-  const schema = z.object({
-    name: z.string().min(1, 'اسم المشروع مطلوب'),
-    budget: z.number().min(0, 'الميزانية يجب أن تكون أكبر من صفر'),
-    location: z.string().min(1, 'الموقع مطلوب'),
-  })
+const schema = z.object({
+  name: z.string().min(1, "اسم المشروع مطلوب"),
+  budget: z.number().min(0, "الميزانية يجب أن تكون أكبر من صفر"),
+  location: z.string().min(1, "الموقع مطلوب"),
+});
 
-  type Schema = z.output<typeof schema>
-  const state = reactive<Partial<Schema>>({})
+type Schema = z.output<typeof schema>;
+const state = reactive<Partial<Schema>>({});
 
-  async function onSubmit(event: FormSubmitEvent<Schema>) {
-    // handle submit
-  }
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // handle submit
+}
 </script>
 
 <template>
@@ -130,14 +136,17 @@ Functional accents (workflow only):
     <UCard
       v-for="stat in stats"
       :key="stat.label"
-      class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]">
+      class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
+    >
       <div class="flex items-center gap-3">
         <div :class="['rounded-lg p-3', stat.bgClass]">
           <UIcon :name="stat.icon" class="text-xl" />
         </div>
         <div>
           <p class="text-sm text-[#666666]">{{ stat.label }}</p>
-          <p class="text-2xl font-semibold text-[#171717] tracking-tight">{{ stat.value }}</p>
+          <p class="text-2xl font-semibold text-[#171717] tracking-tight">
+            {{ stat.value }}
+          </p>
         </div>
       </div>
     </UCard>

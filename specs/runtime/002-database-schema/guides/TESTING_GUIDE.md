@@ -73,13 +73,13 @@ Covers all 10 PHP enums: case existence, backing values, Arabic labels, `values(
 php artisan test --filter "UserRoleTest|ProjectStatusTest|PhaseStatusTest|TaskStatusTest|OtherEnumsTest"
 ```
 
-| Test file | Cases tested |
-|---|---|
-| `UserRoleTest` | 5 cases, Arabic labels, values(), from(), tryFrom() |
-| `ProjectStatusTest` | 5 cases, Arabic labels, values(), from(), tryFrom() |
-| `PhaseStatusTest` | 5 cases, Arabic labels, values(), from(), tryFrom() |
-| `TaskStatusTest` | 5 cases, Arabic labels, values(), from(), tryFrom() |
-| `OtherEnumsTest` | OrderStatus, TransactionType, TransactionStatus, WorkflowType, ApprovalStatus, ReportType |
+| Test file           | Cases tested                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| `UserRoleTest`      | 5 cases, Arabic labels, values(), from(), tryFrom()                                       |
+| `ProjectStatusTest` | 5 cases, Arabic labels, values(), from(), tryFrom()                                       |
+| `PhaseStatusTest`   | 5 cases, Arabic labels, values(), from(), tryFrom()                                       |
+| `TaskStatusTest`    | 5 cases, Arabic labels, values(), from(), tryFrom()                                       |
+| `OtherEnumsTest`    | OrderStatus, TransactionType, TransactionStatus, WorkflowType, ApprovalStatus, ReportType |
 
 **Expected:** 31 unit tests pass
 
@@ -91,16 +91,16 @@ Tests `BaseRepository` generic CRUD via `UserRepository` as a concrete implement
 php artisan test --filter "BaseRepositoryTest"
 ```
 
-| Test | Assertion |
-|---|---|
-| `test_find_by_id_returns_model_when_found` | Returns correct model |
-| `test_find_by_id_returns_null_when_not_found` | Returns null for missing ID |
+| Test                                            | Assertion                       |
+| ----------------------------------------------- | ------------------------------- |
+| `test_find_by_id_returns_model_when_found`      | Returns correct model           |
+| `test_find_by_id_returns_null_when_not_found`   | Returns null for missing ID     |
 | `test_find_by_id_or_fail_throws_when_not_found` | Throws `ModelNotFoundException` |
-| `test_create_persists_model` | Record exists in DB |
-| `test_update_persists_changes` | DB record updated |
-| `test_delete_soft_deletes_model` | `deleted_at` set |
-| `test_restore_recovers_soft_deleted_model` | `deleted_at` null after restore |
-| `test_all_returns_paginated_results` | Correct `perPage` count |
+| `test_create_persists_model`                    | Record exists in DB             |
+| `test_update_persists_changes`                  | DB record updated               |
+| `test_delete_soft_deletes_model`                | `deleted_at` set                |
+| `test_restore_recovers_soft_deleted_model`      | `deleted_at` null after restore |
+| `test_all_returns_paginated_results`            | Correct `perPage` count         |
 
 ---
 
@@ -182,6 +182,7 @@ vendor/bin/phpstan analyse --memory-limit=512M
 **Expected:** `[OK] No errors`
 
 If errors appear:
+
 - Check `phpstan.neon` for existing `ignoreErrors` patterns
 - Eloquent scope methods on `Builder` are suppressed by pattern — this is intentional
 - `@phpstan-ignore-next-line` is used on `$model->restore()` in `BaseRepository`
@@ -216,11 +217,11 @@ vendor/bin/pint
 
 **Key style rules enforced by this stage:**
 
-| Rule | Applies to |
-|---|---|
-| `ordered_imports` | All PHP files — alphabetical by full namespace |
-| `class_attributes_separation` | Blank line required between `use Trait;` and first property |
-| `new_with_parentheses` (Laravel preset: `named_class: false`) | `new Foo()` → `new Foo` when no args |
+| Rule                                                          | Applies to                                                  |
+| ------------------------------------------------------------- | ----------------------------------------------------------- |
+| `ordered_imports`                                             | All PHP files — alphabetical by full namespace              |
+| `class_attributes_separation`                                 | Blank line required between `use Trait;` and first property |
+| `new_with_parentheses` (Laravel preset: `named_class: false`) | `new Foo()` → `new Foo` when no args                        |
 
 ---
 
@@ -333,6 +334,7 @@ cd backend && vendor/bin/phpstan analyse --memory-limit=512M && vendor/bin/pint 
 ```
 
 Expected output:
+
 ```
 [OK] No errors          ← PHPStan
 {"result":"pass"}       ← Pint

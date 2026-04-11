@@ -25,8 +25,16 @@
   },
   "parallel_task_groups": [
     { "phase": 1, "count": 12, "description": "Exception classes T001-T007" },
-    { "phase": 2, "count": 8, "description": "Middleware implementations T016-T018" },
-    { "phase": 3, "count": 11, "description": "Frontend composables & components" },
+    {
+      "phase": 2,
+      "count": 8,
+      "description": "Middleware implementations T016-T018"
+    },
+    {
+      "phase": 3,
+      "count": 11,
+      "description": "Frontend composables & components"
+    },
     { "phase": 4, "count": 4, "description": "Translations" },
     { "phase": 5, "count": 10, "description": "Integration & E2E tests" }
   ],
@@ -75,13 +83,21 @@
     },
     {
       "event": "specify_complete",
-      "files_generated": ["spec.md", "checklists/requirements.md", "reports/SPECIFY_REPORT.md"],
+      "files_generated": [
+        "spec.md",
+        "checklists/requirements.md",
+        "reports/SPECIFY_REPORT.md"
+      ],
       "requirements_count": 200,
       "timestamp": "2026-04-11T15:25:00Z"
     },
     {
       "event": "clarifications_locked",
-      "checklists_generated": ["security-checklist.md", "performance-checklist.md", "accessibility-checklist.md"],
+      "checklists_generated": [
+        "security-checklist.md",
+        "performance-checklist.md",
+        "accessibility-checklist.md"
+      ],
       "clarifications_count": 10,
       "resolved_count": 5,
       "awaiting_input_count": 5,
@@ -89,7 +105,13 @@
     },
     {
       "event": "plan_complete",
-      "files_generated": ["plan.md", "research.md", "data-model.md", "quickstart.md", "contracts/laravel-exception-handler.md"],
+      "files_generated": [
+        "plan.md",
+        "research.md",
+        "data-model.md",
+        "quickstart.md",
+        "contracts/laravel-exception-handler.md"
+      ],
       "data_models": 3,
       "api_contracts": 6,
       "file_structure_size": 25,

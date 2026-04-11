@@ -14,6 +14,7 @@ The STAGE_05_ERROR_HANDLING specification is comprehensive and well-structured. 
 All clarifications have been appended to `specs/runtime/005-error-handling/spec.md` (section 11: CLARIFICATIONS) with detailed reasoning and decision templates for stakeholder input.
 
 Three supplementary checklists have been generated to provide implementation guidance:
+
 1. **security-checklist.md** — RBAC filtering, data sanitization, credential protection
 2. **performance-checklist.md** — Logging performance, error response serialization, frontend performance
 3. **accessibility-checklist.md** — Error message clarity, Arabic/RTL support, screen reader compatibility
@@ -37,7 +38,7 @@ Three supplementary checklists have been generated to provide implementation gui
 
 **Current State:** General role-based visibility matrix defined (section 6.3)  
 **Status:** AWAITING INPUT  
-**Unclear:** Specific visibility rules for each error type (VALIDATION_ERROR, 404, WORKFLOW_*, PAYMENT_*)  
+**Unclear:** Specific visibility rules for each error type (VALIDATION*ERROR, 404, WORKFLOW*\_, PAYMENT\_\_)  
 **Decision Needed:** Define which error details visible to each role
 
 **Location in Spec:** Section 6.3 (matrix), section 1.3 (examples)
@@ -48,11 +49,12 @@ Three supplementary checklists have been generated to provide implementation gui
 
 **Current State:** Code implies queue or replace (not explicitly defined)  
 **Status:** AWAITING INPUT  
-**Options:** 
+**Options:**
+
 - Queue: One toast at a time, next after timeout
 - Replace: Latest error replaces previous
 - Stack: Multiple toasts visible simultaneously  
-**Decision Needed:** Define toast behavior when multiple errors occur
+  **Decision Needed:** Define toast behavior when multiple errors occur
 
 **Location in Spec:** Section 4.2 (useErrorNotification.ts code, lines 313-325)
 
@@ -74,10 +76,11 @@ Three supplementary checklists have been generated to provide implementation gui
 **Current State:** Retry mentioned but not fully specified  
 **Status:** AWAITING INPUT  
 **Unclear:**
+
 - Which errors retryable (only VALIDATION_ERROR, RATE_LIMIT_EXCEEDED?)
 - Retry strategy (immediate? exponential backoff? max retries?)
 - Correlation ID on retry (same or new?)  
-**Decision Needed:** Define comprehensive retry strategy
+  **Decision Needed:** Define comprehensive retry strategy
 
 **Location in Spec:** Section 4.2 (useErrorNotification code)
 
@@ -92,6 +95,7 @@ Three supplementary checklists have been generated to provide implementation gui
 The spec clearly defines at lines 1.2 and 1.3 that validation errors include a `details` object mapping field names to error messages. Exception handler maps Laravel validation errors to this structure.
 
 **Proof:** Section 1.3 (lines 89-93) shows example:
+
 ```json
 "details": {
   "name": ["حقل الاسم مطلوب"],
@@ -149,6 +153,7 @@ Section 2.0 (Error Code Registry) provides explicit table mapping each code to i
 **Purpose:** Validate RBAC filtering, data sanitization, credential protection
 
 **Sections:**
+
 - 1. RBAC Error Detail Filtering (role-based visibility validation)
 - 2. Data Sanitization in Error Responses (field names, HTML escaping)
 - 3. Token & Credential Protection (auth errors, logging safety)
@@ -169,6 +174,7 @@ Section 2.0 (Error Code Registry) provides explicit table mapping each code to i
 **Purpose:** Ensure error handling doesn't degrade API or frontend performance
 
 **Sections:**
+
 - 1. Backend Logging Performance (sync/async logging, latency thresholds)
 - 2. Error Response Serialization (payload size, validation optimization)
 - 3. Frontend Error Handling (interceptor, notification, boundary performance)
@@ -191,6 +197,7 @@ Section 2.0 (Error Code Registry) provides explicit table mapping each code to i
 **Purpose:** Ensure error components accessible to all users including those with disabilities
 
 **Sections:**
+
 - 1. Error Message Clarity & Readability (clear language, actionable messages, RTL format)
 - 2. Arabic/RTL Support (HTML direction, Tailwind logical properties, typography)
 - 3. Screen Reader Compatibility (semantic HTML, live regions, aria attributes)
@@ -214,6 +221,7 @@ Section 2.0 (Error Code Registry) provides explicit table mapping each code to i
 **File Modified:** `specs/runtime/005-error-handling/spec.md`
 
 **Changes:**
+
 - Added Section 11: CLARIFICATIONS with 10 structured Q&A entries
 - 5 questions marked [AWAITING INPUT] with decision options and reasoning
 - 5 questions marked [RESOLVED ✓] with proof from spec content
@@ -238,18 +246,21 @@ All clarifications and checklists follow Bunyan governance:
 ## Next Steps
 
 ### For Stakeholders:
+
 1. Review 5 questions marked [AWAITING INPUT] in spec.md section 11
 2. Provide decisions for each question (choose option or define custom)
 3. Document decision reasoning
 4. Update spec.md with stakeholder decisions
 
 ### For Implementation Team:
+
 1. Reference all three checklists during implementation
 2. Use security-checklist.md to validate RBAC and credential handling
 3. Use performance-checklist.md to benchmark and optimize
 4. Use accessibility-checklist.md to ensure WCAG AA compliance and Arabic/RTL support
 
 ### For QA/Testing:
+
 1. Develop tests based on all three checklists
 2. Run security tests from security-checklist.md
 3. Run performance benchmarks from performance-checklist.md
@@ -259,13 +270,13 @@ All clarifications and checklists follow Bunyan governance:
 
 ## Files Modified/Created
 
-| File | Status | Size | Purpose |
-|------|--------|------|---------|
-| `specs/runtime/005-error-handling/spec.md` | MODIFIED | +500 lines | Added Clarifications section 11 |
-| `specs/runtime/005-error-handling/checklists/security-checklist.md` | CREATED | 14 KB | RBAC, data sanitization, credential protection |
-| `specs/runtime/005-error-handling/checklists/performance-checklist.md` | CREATED | 13 KB | Logging, serialization, bundle size, metrics |
-| `specs/runtime/005-error-handling/checklists/accessibility-checklist.md` | CREATED | 19 KB | Message clarity, Arabic/RTL, screen readers, keyboard nav |
-| `specs/runtime/005-error-handling/CLARIFICATION_SUMMARY.md` | CREATED | This file | Summary of clarifications and checklists |
+| File                                                                     | Status   | Size       | Purpose                                                   |
+| ------------------------------------------------------------------------ | -------- | ---------- | --------------------------------------------------------- |
+| `specs/runtime/005-error-handling/spec.md`                               | MODIFIED | +500 lines | Added Clarifications section 11                           |
+| `specs/runtime/005-error-handling/checklists/security-checklist.md`      | CREATED  | 14 KB      | RBAC, data sanitization, credential protection            |
+| `specs/runtime/005-error-handling/checklists/performance-checklist.md`   | CREATED  | 13 KB      | Logging, serialization, bundle size, metrics              |
+| `specs/runtime/005-error-handling/checklists/accessibility-checklist.md` | CREATED  | 19 KB      | Message clarity, Arabic/RTL, screen readers, keyboard nav |
+| `specs/runtime/005-error-handling/CLARIFICATION_SUMMARY.md`              | CREATED  | This file  | Summary of clarifications and checklists                  |
 
 ---
 
@@ -287,11 +298,13 @@ All clarifications and checklists follow Bunyan governance:
 ## Success Metrics
 
 **Clarification Process:**
+
 - ✓ 100% of ambiguities identified and documented
 - ✓ 50% of ambiguities auto-resolved from spec content
 - ✓ 50% awaiting stakeholder input with clear options
 
 **Specification Quality:**
+
 - ✓ Comprehensive error handling contract (200+ requirements)
 - ✓ Clear implementation guidance (exception hierarchy, middleware, composables)
 - ✓ Arabic/RTL-first design
@@ -300,6 +313,7 @@ All clarifications and checklists follow Bunyan governance:
 - ✓ Testing strategy included
 
 **Implementation Guidance:**
+
 - ✓ 3 specialized checklists (security, performance, accessibility)
 - ✓ 150+ validation items across checklists
 - ✓ Testing commands and completion criteria
@@ -323,6 +337,7 @@ All clarifications and checklists follow Bunyan governance:
 - **Accessibility Checklist:** `/specs/runtime/005-error-handling/checklists/accessibility-checklist.md` ← NEW
 
 **Governance Authority:**
+
 - AGENTS.md: Error contract binding
 - DESIGN.md: Visual language (Vercel-inspired, shadow-as-border, RTL)
 - error-handling-patterns skill: Error code registry, exception handling

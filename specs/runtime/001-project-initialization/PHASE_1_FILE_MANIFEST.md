@@ -9,6 +9,7 @@
 ## Backend Files (22 total)
 
 ### Configuration & Build
+
 ```
 backend/
 ├── composer.json                  (Production + dev dependencies)
@@ -21,6 +22,7 @@ backend/
 ```
 
 ### Application Code
+
 ```
 backend/app/
 ├── Http/
@@ -39,6 +41,7 @@ backend/app/
 ```
 
 ### Database & Testing
+
 ```
 backend/
 ├── database/
@@ -56,6 +59,7 @@ backend/
 ## Frontend Files (31 total)
 
 ### Configuration & Build
+
 ```
 frontend/
 ├── package.json                   (Dependencies + npm scripts)
@@ -71,6 +75,7 @@ frontend/
 ```
 
 ### Assets & Styles
+
 ```
 frontend/assets/
 └── css/
@@ -78,6 +83,7 @@ frontend/assets/
 ```
 
 ### Layouts & Pages
+
 ```
 frontend/layouts/
 ├── default.vue                    (Main layout with RTL support)
@@ -93,6 +99,7 @@ frontend/pages/
 ```
 
 ### Components & Utilities
+
 ```
 frontend/
 ├── components/                    (Vue components - ready for Phase 2)
@@ -105,6 +112,7 @@ frontend/
 ```
 
 ### Testing
+
 ```
 frontend/tests/
 ├── unit/                          (Vitest unit tests - ready for Phase 2)
@@ -124,6 +132,7 @@ Root/
 ```
 
 ### Docker Services:
+
 - **MySQL 8.0** — Port 3306, persistent volume, health checks
 - **Redis 7** — Port 6379, Alpine base, health checks
 - **PHP-FPM** — Port 8000, Laravel Artisan server
@@ -170,6 +179,7 @@ Root/
 ```
 
 ### Root package.json Scripts:
+
 - `npm run install` — Install backend + frontend dependencies
 - `npm run install:backend/frontend` — Install specific deps
 - `npm run dev` — Start both servers concurrently
@@ -189,11 +199,13 @@ Root/
 ### Backend (Laravel 11.x)
 
 **Core:**
+
 - PHP 8.2+
 - Laravel Framework 11.0
 - Laravel Sanctum 4.0 (API auth)
 
 **Development:**
+
 - laravel/pint (Code formatting; `pint.json`)
 - PHPStan 1.10 (Static analysis)
 - PHPUnit 11.0 (Testing)
@@ -202,6 +214,7 @@ Root/
 ### Frontend (Nuxt 3)
 
 **Core:**
+
 - Node 20 LTS
 - Nuxt 3.12+
 - Vue 3 (Composition API)
@@ -210,10 +223,12 @@ Root/
 - Tailwind CSS v4
 
 **Internationalization:**
+
 - @nuxtjs/i18n 8.5+ (Arabic/English)
 - Full RTL support via Tailwind logical properties
 
 **Development:**
+
 - TypeScript 5.6 (Strict mode)
 - ESLint 9.11 + @nuxt/eslint
 - Prettier 3.3 (Code formatting)
@@ -223,16 +238,19 @@ Root/
 ### DevOps
 
 **Containerization:**
+
 - Docker 20.10+ (Container runtime)
 - Docker Compose 3.8 (Orchestration)
 - MySQL 8.0 (Database)
 - Redis 7 Alpine (Caching)
 
 **CI/CD:**
+
 - GitHub Actions (Workflow automation)
 - Codecov (Coverage tracking)
 
 **Pre-Commit:**
+
 - Husky 9.0 (Git hooks)
 - lint-staged 15.0 (Incremental validation)
 
@@ -303,6 +321,7 @@ bunyan-app-cursor/
 ### All Tasks Completed (25/25)
 
 **T001-T006: Laravel Backend** ✅
+
 - [ ] composer.json ✅
 - [ ] routes/api.php ✅
 - [ ] app/Http/Controllers/Api/V1/BaseController.php ✅
@@ -311,6 +330,7 @@ bunyan-app-cursor/
 - [ ] database/migrations/ & seeders/ structure ✅
 
 **T007-T011: Nuxt Frontend** ✅
+
 - [ ] package.json ✅
 - [ ] nuxt.config.ts ✅
 - [ ] i18n.config.ts ✅
@@ -318,6 +338,7 @@ bunyan-app-cursor/
 - [ ] pages/ (3 pages) ✅
 
 **T012-T016: Docker** ✅
+
 - [ ] docker-compose.yml ✅
 - [ ] Dockerfile.backend ✅
 - [ ] Dockerfile.frontend ✅
@@ -325,12 +346,14 @@ bunyan-app-cursor/
 - [ ] ci.env ✅
 
 **T017-T020: CI/CD** ✅
+
 - [ ] backend-ci.yml ✅
 - [ ] frontend-ci.yml ✅
 - [ ] pre-commit-guard.yml ✅
 - [ ] All workflows configured ✅
 
 **T021-T025: Pre-Commit** ✅
+
 - [ ] .husky/pre-commit ✅
 - [ ] .lintstagedrc.json ✅
 - [ ] root package.json ✅

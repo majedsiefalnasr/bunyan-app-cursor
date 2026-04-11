@@ -18,6 +18,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### Files Generated
 
 1. **spec.md** — 1,271 lines
+
    - Complete detailed specification
    - All functional and non-functional requirements
    - API contract with examples
@@ -40,6 +41,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### 1. API Error Contract ✅
 
 **Unified Response Format:**
+
 ```json
 {
   "success": true,
@@ -57,24 +59,25 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 
 **12 Standardized Error Codes:**
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `VALIDATION_ERROR` | 422 | Form/input validation failures |
-| `AUTH_INVALID_CREDENTIALS` | 401 | Login failed |
-| `AUTH_TOKEN_EXPIRED` | 401 | JWT/session expired |
-| `AUTH_UNAUTHORIZED` | 401 | Authentication required |
-| `RBAC_ROLE_DENIED` | 403 | Insufficient permissions |
-| `RESOURCE_NOT_FOUND` | 404 | Resource not found |
-| `WORKFLOW_INVALID_TRANSITION` | 422 | Invalid workflow state |
-| `WORKFLOW_PREREQUISITES_UNMET` | 422 | Prerequisites not met |
-| `PAYMENT_FAILED` | 422 | Payment processing failure |
-| `RATE_LIMIT_EXCEEDED` | 429 | Rate limit exceeded |
-| `SERVER_ERROR` | 500 | Internal server error |
-| `SERVICE_UNAVAILABLE` | 503 | Service temporarily unavailable |
+| Code                           | Status | Description                     |
+| ------------------------------ | ------ | ------------------------------- |
+| `VALIDATION_ERROR`             | 422    | Form/input validation failures  |
+| `AUTH_INVALID_CREDENTIALS`     | 401    | Login failed                    |
+| `AUTH_TOKEN_EXPIRED`           | 401    | JWT/session expired             |
+| `AUTH_UNAUTHORIZED`            | 401    | Authentication required         |
+| `RBAC_ROLE_DENIED`             | 403    | Insufficient permissions        |
+| `RESOURCE_NOT_FOUND`           | 404    | Resource not found              |
+| `WORKFLOW_INVALID_TRANSITION`  | 422    | Invalid workflow state          |
+| `WORKFLOW_PREREQUISITES_UNMET` | 422    | Prerequisites not met           |
+| `PAYMENT_FAILED`               | 422    | Payment processing failure      |
+| `RATE_LIMIT_EXCEEDED`          | 429    | Rate limit exceeded             |
+| `SERVER_ERROR`                 | 500    | Internal server error           |
+| `SERVICE_UNAVAILABLE`          | 503    | Service temporarily unavailable |
 
 ### 3. Backend Architecture ✅
 
 **Laravel Exception Handling:**
+
 - Custom exception hierarchy with `DomainException` base
 - Exception handler mapping errors to response contract
 - Correlation ID middleware for request tracing
@@ -84,6 +87,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 - RBAC-aware error detail filtering
 
 **Middleware Pipeline:**
+
 1. Correlation ID middleware (inject on request)
 2. Request logging middleware (capture request context)
 3. RBAC middleware (determine detail visibility)
@@ -93,6 +97,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### 4. Frontend Architecture ✅
 
 **Nuxt.js Error Handling:**
+
 - API interceptor composable (`useApi()`)
 - Error notification system (`useErrorNotification()`)
 - Global error boundary component
@@ -102,6 +107,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 - Toast notifications with Arabic support
 
 **Error Flow:**
+
 1. API request → interceptor
 2. Error caught → error store
 3. Notification triggered → toast
@@ -110,6 +116,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### 5. Structured Logging Standards ✅
 
 **Log Format:**
+
 ```json
 {
   "timestamp": "2026-04-11T15:24:00Z",
@@ -143,14 +150,14 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 
 ### 7. RBAC-Aware Error Filtering ✅
 
-| Role | Detail Level | Examples |
-|------|--------------|----------|
-| **Admin** | Full | Stack traces, detailed error context, debug info |
-| **Customer** | Medium | Error message, validation details, retry options |
-| **Contractor** | Medium | Error message, validation details, retry options |
-| **Supervising Architect** | Medium | Error message, validation details, retry options |
-| **Field Engineer** | Low | Error message, retry options only |
-| **Anonymous** | Minimal | Generic error message, no debug info |
+| Role                      | Detail Level | Examples                                         |
+| ------------------------- | ------------ | ------------------------------------------------ |
+| **Admin**                 | Full         | Stack traces, detailed error context, debug info |
+| **Customer**              | Medium       | Error message, validation details, retry options |
+| **Contractor**            | Medium       | Error message, validation details, retry options |
+| **Supervising Architect** | Medium       | Error message, validation details, retry options |
+| **Field Engineer**        | Low          | Error message, retry options only                |
+| **Anonymous**             | Minimal      | Generic error message, no debug info             |
 
 ---
 
@@ -194,6 +201,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### ✅ All Requirements Specified
 
 **200+ Requirements Captured:**
+
 - Error code definitions (12 codes)
 - API contract rules (10+ rules)
 - Backend architecture (15+ components)
@@ -206,6 +214,7 @@ The specification for STAGE_05 (Error Handling & Logging) has been successfully 
 ### ✅ No [NEEDS CLARIFICATION] Markers
 
 All specifications are:
+
 - Complete and actionable
 - Detailed with code examples
 - Cross-referenced to sections
@@ -224,6 +233,7 @@ All specifications are:
 ### Step 2: Clarify
 
 The Clarify step will:
+
 1. Review specification for ambiguities
 2. Validate against checklist
 3. Resolve any clarification needs
@@ -245,17 +255,17 @@ The Clarify step will:
 
 ## Specification Summary Table
 
-| Area | Status | Coverage |
-|------|--------|----------|
-| Error Contract | ✅ Complete | 100% |
-| Error Codes | ✅ Complete | 12 codes |
-| Backend Architecture | ✅ Complete | 15+ components |
-| Frontend Architecture | ✅ Complete | 10+ components |
-| Logging Standards | ✅ Complete | Full spec |
-| RBAC Filtering | ✅ Complete | 6 roles × 4 levels |
-| Arabic/RTL Support | ✅ Complete | All pages |
-| Testing Strategy | ✅ Complete | 50+ scenarios |
-| Governance Compliance | ✅ Complete | All rules |
+| Area                  | Status      | Coverage           |
+| --------------------- | ----------- | ------------------ |
+| Error Contract        | ✅ Complete | 100%               |
+| Error Codes           | ✅ Complete | 12 codes           |
+| Backend Architecture  | ✅ Complete | 15+ components     |
+| Frontend Architecture | ✅ Complete | 10+ components     |
+| Logging Standards     | ✅ Complete | Full spec          |
+| RBAC Filtering        | ✅ Complete | 6 roles × 4 levels |
+| Arabic/RTL Support    | ✅ Complete | All pages          |
+| Testing Strategy      | ✅ Complete | 50+ scenarios      |
+| Governance Compliance | ✅ Complete | All rules          |
 
 ---
 

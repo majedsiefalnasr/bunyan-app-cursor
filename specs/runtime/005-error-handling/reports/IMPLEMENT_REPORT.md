@@ -10,46 +10,46 @@ The platform now uses a unified JSON error contract for API routes: `success`, `
 
 ## Backend Deliverables
 
-| Area | Path / artifact |
-| --- | --- |
-| Error codes | `backend/app/Enums/ErrorCode.php` |
-| Exception contract | `backend/app/Exceptions/ExceptionContract.php` |
-| Domain hierarchy | `backend/app/Exceptions/DomainException.php`, `ValidationException.php`, `InvalidStateTransitionException.php`, `ResourceNotFoundException.php`, `PaymentFailedException.php`, `WorkflowPrerequisiteException.php` |
-| Renderer | `backend/app/Exceptions/ApiExceptionRenderer.php`, `ApiErrorResponse.php` |
-| Registry | `backend/app/Services/ErrorCodeRegistry.php` |
-| Controller trait | `backend/app/Http/Controllers/Api/ApiResponse.php` |
-| Base controller | `backend/app/Http/Controllers/Api/V1/BaseController.php` (contract-aligned helpers) |
-| Handler | `backend/app/Exceptions/Handler.php` |
-| Bootstrap wiring | `backend/bootstrap/app.php` (middleware + exception render) |
-| Middleware | `InjectCorrelationId`, `LogApiActivity`, `ErrorDetailFiltering` |
-| Logging | `backend/config/logging.php` (`structured` JSON channel), `LoggingService`, `ErrorLoggingService`, optional `error_logs` migration + `ErrorLog` model |
-| Translations | `backend/resources/lang/ar/errors.php`, `en/errors.php`, `ar/validation.php`, `en/validation.php` |
-| Test-only routes | `backend/routes/api.php` + `ErrorHandlingTestController` (PHPUnit only) |
+| Area               | Path / artifact                                                                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Error codes        | `backend/app/Enums/ErrorCode.php`                                                                                                                                                                                  |
+| Exception contract | `backend/app/Exceptions/ExceptionContract.php`                                                                                                                                                                     |
+| Domain hierarchy   | `backend/app/Exceptions/DomainException.php`, `ValidationException.php`, `InvalidStateTransitionException.php`, `ResourceNotFoundException.php`, `PaymentFailedException.php`, `WorkflowPrerequisiteException.php` |
+| Renderer           | `backend/app/Exceptions/ApiExceptionRenderer.php`, `ApiErrorResponse.php`                                                                                                                                          |
+| Registry           | `backend/app/Services/ErrorCodeRegistry.php`                                                                                                                                                                       |
+| Controller trait   | `backend/app/Http/Controllers/Api/ApiResponse.php`                                                                                                                                                                 |
+| Base controller    | `backend/app/Http/Controllers/Api/V1/BaseController.php` (contract-aligned helpers)                                                                                                                                |
+| Handler            | `backend/app/Exceptions/Handler.php`                                                                                                                                                                               |
+| Bootstrap wiring   | `backend/bootstrap/app.php` (middleware + exception render)                                                                                                                                                        |
+| Middleware         | `InjectCorrelationId`, `LogApiActivity`, `ErrorDetailFiltering`                                                                                                                                                    |
+| Logging            | `backend/config/logging.php` (`structured` JSON channel), `LoggingService`, `ErrorLoggingService`, optional `error_logs` migration + `ErrorLog` model                                                              |
+| Translations       | `backend/resources/lang/ar/errors.php`, `en/errors.php`, `ar/validation.php`, `en/validation.php`                                                                                                                  |
+| Test-only routes   | `backend/routes/api.php` + `ErrorHandlingTestController` (PHPUnit only)                                                                                                                                            |
 
 ## Frontend Deliverables
 
-| Area | Path |
-| --- | --- |
-| Root shell | `frontend/app.vue` + `AppErrorBoundary` |
-| API client | `frontend/composables/useApi.ts` |
-| Notifications | `frontend/composables/useErrorNotification.ts` (i18n-aware) |
-| State | `frontend/stores/error.ts`, `frontend/stores/auth.ts` |
-| Types | `frontend/types/errors.ts` |
-| UI | `components/common/AppErrorBoundary.vue`, `ErrorToast.vue` |
-| Pages / layout | `pages/error/{404,403,500}.vue`, `layouts/error.vue` |
-| i18n | `frontend/locales/ar.json`, `en.json`, `nuxt.config.ts`, `i18n.config.ts` |
-| Middleware stub | `frontend/middleware/errorHandler.ts` |
-| Tests | `frontend/tests/**` (+ Vitest `#app` shim, `definePageMeta` stub) |
+| Area            | Path                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| Root shell      | `frontend/app.vue` + `AppErrorBoundary`                                   |
+| API client      | `frontend/composables/useApi.ts`                                          |
+| Notifications   | `frontend/composables/useErrorNotification.ts` (i18n-aware)               |
+| State           | `frontend/stores/error.ts`, `frontend/stores/auth.ts`                     |
+| Types           | `frontend/types/errors.ts`                                                |
+| UI              | `components/common/AppErrorBoundary.vue`, `ErrorToast.vue`                |
+| Pages / layout  | `pages/error/{404,403,500}.vue`, `layouts/error.vue`                      |
+| i18n            | `frontend/locales/ar.json`, `en.json`, `nuxt.config.ts`, `i18n.config.ts` |
+| Middleware stub | `frontend/middleware/errorHandler.ts`                                     |
+| Tests           | `frontend/tests/**` (+ Vitest `#app` shim, `definePageMeta` stub)         |
 
 ## Validation
 
-| Command | Result |
-| --- | --- |
-| `cd backend && composer run lint` | Pass (Laravel Pint) |
-| `cd backend && php artisan test` | Pass (full suite including new `tests/Feature/ErrorHandling/*`) |
-| `cd frontend && npm run lint` | Pass (ESLint) |
-| `cd frontend && npm run typecheck` | Pass (`nuxi typecheck`) |
-| `cd frontend && npm run test` | Pass (Vitest) |
+| Command                            | Result                                                          |
+| ---------------------------------- | --------------------------------------------------------------- |
+| `cd backend && composer run lint`  | Pass (Laravel Pint)                                             |
+| `cd backend && php artisan test`   | Pass (full suite including new `tests/Feature/ErrorHandling/*`) |
+| `cd frontend && npm run lint`      | Pass (ESLint)                                                   |
+| `cd frontend && npm run typecheck` | Pass (`nuxi typecheck`)                                         |
+| `cd frontend && npm run test`      | Pass (Vitest)                                                   |
 
 ## Notes / Deviations
 

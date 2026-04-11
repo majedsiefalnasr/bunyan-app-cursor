@@ -18,12 +18,14 @@ This research document provides deep dives into the core technologies selected f
 ### 1.1 Why Laravel 11.x?
 
 **Laravel Version Selection:**
+
 - ✅ **Laravel 11.x** (Latest as of 2026): Modern features, PHP 8.3 native types, improved bootstrapping
 - ✅ **Long-Term Support (LTS):** Laravel 10 reached EOL in 2024; Laravel 11 is current stable
 - ⚠️ **PHP 8.2+ Requirement:** Laravel 11 requires PHP 8.2+ (we'll use PHP 8.3)
 - ✅ **Sanctum Authentication:** Built-in, no external dependencies
 
 **Alternative Considered:** Symfony 7.x
+
 - More modular but steeper learning curve
 - Overkill for this project scope
 - Laravel's ORM (Eloquent) faster to develop with
@@ -48,13 +50,13 @@ if ($role == 'customer') { ... }
 
 #### Relationship Performance
 
-| Relationship Type | Use Case | N+1 Risk? | Solution |
-|------|----------|-----------|----------|
-| `belongsTo()` | Child → Parent | Yes | Use `with('parent')` eager loading |
-| `hasMany()` | Parent → Many children | Yes | Use `with('children')` eager loading |
-| `belongsToMany()` | Many-to-many via pivot | Yes | Use `with('related')` + pivot loading |
-| `hasManyThrough()` | Nested relationships | Yes | Use `with('through.related')` |
-| Polymorphic | Entity types | Highest | Cache entity types, use separate queries |
+| Relationship Type  | Use Case               | N+1 Risk? | Solution                                 |
+| ------------------ | ---------------------- | --------- | ---------------------------------------- |
+| `belongsTo()`      | Child → Parent         | Yes       | Use `with('parent')` eager loading       |
+| `hasMany()`        | Parent → Many children | Yes       | Use `with('children')` eager loading     |
+| `belongsToMany()`  | Many-to-many via pivot | Yes       | Use `with('related')` + pivot loading    |
+| `hasManyThrough()` | Nested relationships   | Yes       | Use `with('through.related')`            |
+| Polymorphic        | Entity types           | Highest   | Cache entity types, use separate queries |
 
 **Critical Pattern:** Always use `with()` in controllers/services to prevent N+1 queries.
 
@@ -130,6 +132,7 @@ return [
 #### Requirements
 
 1. **Constructor Injection Only**
+
    ```php
    class ProjectService {
        public function __construct(
@@ -140,6 +143,7 @@ return [
    ```
 
 2. **No Eloquent Direct Queries**
+
    ```php
    // ❌ WRONG
    public function create($data) {
@@ -153,6 +157,7 @@ return [
    ```
 
 3. **Database Transactions for Multi-Step Operations**
+
    ```php
    public function createProjectWithPhase($projectData, $phaseData) {
        return DB::transaction(function () use ($projectData, $phaseData) {
@@ -216,12 +221,12 @@ class ProjectPolicy {
         if ($user->role === UserRole::Customer) {
             return $user->id === $project->customer_id;
         }
-        
+
         // Admin can update any project
         if ($user->role === UserRole::Admin) {
             return true;
         }
-        
+
         return false;
     }
 }
@@ -240,17 +245,17 @@ class ProjectPolicyTest extends TestCase {
     public function test_customer_can_update_own_project() {
         $customer = User::factory()->customer()->create();
         $project = Project::factory()->customer($customer)->create();
-        
+
         $this->assertTrue(
             (new ProjectPolicy())->update($customer, $project)
         );
     }
-    
+
     public function test_contractor_cannot_update_customer_project() {
         $customer = User::factory()->customer()->create();
         $contractor = User::factory()->contractor()->create();
         $project = Project::factory()->customer($customer)->create();
-        
+
         $this->assertFalse(
             (new ProjectPolicy())->update($contractor, $project)
         );
@@ -262,14 +267,14 @@ class ProjectPolicyTest extends TestCase {
 
 #### PHPUnit vs. Pest
 
-| Feature | PHPUnit | Pest |
-|---------|---------|------|
-| Syntax | OOP class-based | DSL-based, fluent |
-| Learning Curve | Moderate | Low |
+| Feature          | PHPUnit               | Pest                       |
+| ---------------- | --------------------- | -------------------------- |
+| Syntax           | OOP class-based       | DSL-based, fluent          |
+| Learning Curve   | Moderate              | Low                        |
 | Test Readability | Higher (more verbose) | Higher (DSL is expressive) |
-| Fixtures | setUp/tearDown | Closures + datasets |
-| Assertion Count | Large | Smaller, more readable |
-| Community | Larger | Growing, modern |
+| Fixtures         | setUp/tearDown        | Closures + datasets        |
+| Assertion Count  | Large                 | Smaller, more readable     |
+| Community        | Larger                | Growing, modern            |
 
 **Decision:** Use **PHPUnit 11.x** (Laravel default) for familiarity and stability. Pest can be added later if preferred.
 
@@ -285,10 +290,10 @@ class ProjectServiceTest extends TestCase {
     public function test_create_sets_workflow_config() {
         $repo = Mockery::mock(ProjectRepository::class);
         $repo->shouldReceive('create')->andReturn(new Project());
-        
+
         $service = new ProjectService($repo, ...);
         $project = $service->create($data);
-        
+
         $this->assertNotNull($project->workflow_config_id);
     }
 }
@@ -297,13 +302,13 @@ class ProjectServiceTest extends TestCase {
 class CreateProjectTest extends TestCase {
     public function test_customer_can_create_project() {
         $customer = User::factory()->customer()->create();
-        
+
         $response = $this->actingAs($customer)
             ->postJson('/api/v1/projects', [
                 'title' => 'New Project',
                 'budget' => 50000,
             ]);
-        
+
         $response->assertStatus(201);
         $response->assertJsonPath('data.title', 'New Project');
     }
@@ -324,6 +329,7 @@ class CreateProjectTest extends TestCase {
 ### 2.1 Why Nuxt.js 3?
 
 **Nuxt 3 Advantages:**
+
 - ✅ **Vue 3 Composition API:** Modern, reactive, composable logic
 - ✅ **File-based Routing:** Automatic route generation from pages/
 - ✅ **Built-in i18n Integration:** @nuxtjs/i18n module
@@ -332,6 +338,7 @@ class CreateProjectTest extends TestCase {
 - ✅ **TypeScript Native:** First-class TS support
 
 **Alternative Considered:** Vite + Vue 3 (SPA only)
+
 - More lightweight but more boilerplate
 - No routing, state management, i18n out of box
 - Nuxt abstracts these concerns away
@@ -359,7 +366,7 @@ const projectCount = computed(() => projects.value.length);
 onMounted(async () => {
   loading.value = true;
   try {
-    projects.value = await $fetch('/api/v1/projects');
+    projects.value = await $fetch("/api/v1/projects");
   } catch (e) {
     error.value = e.message;
   } finally {
@@ -397,7 +404,7 @@ export const useProjects = () => {
   const fetchProjects = async () => {
     loading.value = true;
     try {
-      projects.value = await $fetch('/api/v1/projects');
+      projects.value = await $fetch("/api/v1/projects");
     } catch (e) {
       error.value = e.message;
     } finally {
@@ -429,7 +436,7 @@ onMounted(() => fetchProjects());
 
 ```typescript
 // stores/project.ts
-export const useProjectStore = defineStore('project', () => {
+export const useProjectStore = defineStore("project", () => {
   // State
   const projects = ref<Project[]>([]);
   const activeProject = ref<Project | null>(null);
@@ -440,9 +447,7 @@ export const useProjectStore = defineStore('project', () => {
 
   // Getters (computed)
   const projectCount = computed(() => projects.value.length);
-  const activeProjectPhases = computed(() => 
-    activeProject.value?.phases || []
-  );
+  const activeProjectPhases = computed(() => activeProject.value?.phases || []);
 
   // Actions
   const setProjects = (data: Project[]) => {
@@ -455,8 +460,8 @@ export const useProjectStore = defineStore('project', () => {
 
   const createProject = async (data: CreateProjectRequest) => {
     const { $fetch } = useNuxtApp();
-    const project = await $fetch('/api/v1/projects', {
-      method: 'POST',
+    const project = await $fetch("/api/v1/projects", {
+      method: "POST",
       body: data,
     });
     projects.value.push(project);
@@ -506,11 +511,13 @@ const phaseCount = computed(() => activeProject.value?.phases.length ?? 0);
 #### Available Components
 
 **Layout Components:**
+
 - `UContainer` — Max-width container with responsive padding
 - `UHeader`, `UFooter` — Layout sections
 - `UNav` — Navigation menu
 
 **Form Components:**
+
 - `UForm` — Form wrapper with validation
 - `UInput` — Text/email/password input
 - `USelect` — Dropdown select
@@ -518,11 +525,13 @@ const phaseCount = computed(() => activeProject.value?.phases.length ?? 0);
 - `UTextarea` — Multi-line text
 
 **Data Components:**
+
 - `UTable` — Data table with sorting, pagination
 - `UPagination` — Pagination control
 - `UBadge` — Status/tag badges
 
 **Feedback Components:**
+
 - `UAlert` — Info, warning, error alerts
 - `UCard` — Container card
 - `UButton` — Call-to-action buttons
@@ -536,11 +545,11 @@ const phaseCount = computed(() => activeProject.value?.phases.length ?? 0);
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
+  modules: ["@nuxt/ui"],
   ui: {
     colors: {
-      primary: 'slate',  // Primary action color
-      gray: 'slate',     // Neutral color
+      primary: "slate", // Primary action color
+      gray: "slate", // Neutral color
     },
     theme: {
       // Override defaults
@@ -554,8 +563,8 @@ export default defineNuxtConfig({
         extend: {
           colors: {
             // Vercel-inspired
-            'geist-black': '#171717',
-            'geist-white': '#ffffff',
+            "geist-black": "#171717",
+            "geist-white": "#ffffff",
           },
         },
       },
@@ -571,25 +580,25 @@ export default defineNuxtConfig({
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/i18n'],
+  modules: ["@nuxtjs/i18n"],
   i18n: {
     locales: [
       {
-        code: 'ar',
-        name: 'العربية',
-        dir: 'rtl',
-        file: 'locales/ar.json',
+        code: "ar",
+        name: "العربية",
+        dir: "rtl",
+        file: "locales/ar.json",
       },
       {
-        code: 'en',
-        name: 'English',
-        dir: 'ltr',
-        file: 'locales/en.json',
+        code: "en",
+        name: "English",
+        dir: "ltr",
+        file: "locales/en.json",
       },
     ],
-    defaultLocale: 'ar',
-    strategy: 'prefix_except_default',  // URLs: /en/... (not /ar/...)
-    fallbackLocale: 'ar',
+    defaultLocale: "ar",
+    strategy: "prefix_except_default", // URLs: /en/... (not /ar/...)
+    fallbackLocale: "ar",
   },
 });
 ```
@@ -623,7 +632,7 @@ const { t, locale } = useI18n();
 const router = useRouter();
 
 const switchLocale = async (newLocale: string) => {
-  await router.push(localePath('/', newLocale));
+  await router.push(localePath("/", newLocale));
 };
 </script>
 
@@ -631,9 +640,9 @@ const switchLocale = async (newLocale: string) => {
   <div :dir="locale === 'ar' ? 'rtl' : 'ltr'">
     <button @click="switchLocale('en')">English</button>
     <button @click="switchLocale('ar')">العربية</button>
-    
-    <h1>{{ t('common.welcome') }}</h1>
-    <UButton>{{ t('common.save') }}</UButton>
+
+    <h1>{{ t("common.welcome") }}</h1>
+    <UButton>{{ t("common.save") }}</UButton>
   </div>
 </template>
 ```
@@ -642,20 +651,20 @@ const switchLocale = async (newLocale: string) => {
 
 Instead of directional classes (ml, mr, pl, pr), use logical properties:
 
-| Directional | Logical | Behavior |
-|-----------|---------|----------|
-| `ml-4` | `ms-4` (margin-inline-start) | LTR: left, RTL: right |
-| `mr-4` | `me-4` (margin-inline-end) | LTR: right, RTL: left |
-| `pl-6` | `ps-6` (padding-inline-start) | LTR: left, RTL: right |
-| `pr-6` | `pe-6` (padding-inline-end) | LTR: right, RTL: left |
-| `left-0` | `start-0` (inset-inline-start) | LTR: left, RTL: right |
-| `right-0` | `end-0` (inset-inline-end) | LTR: right, RTL: left |
+| Directional | Logical                        | Behavior              |
+| ----------- | ------------------------------ | --------------------- |
+| `ml-4`      | `ms-4` (margin-inline-start)   | LTR: left, RTL: right |
+| `mr-4`      | `me-4` (margin-inline-end)     | LTR: right, RTL: left |
+| `pl-6`      | `ps-6` (padding-inline-start)  | LTR: left, RTL: right |
+| `pr-6`      | `pe-6` (padding-inline-end)    | LTR: right, RTL: left |
+| `left-0`    | `start-0` (inset-inline-start) | LTR: left, RTL: right |
+| `right-0`   | `end-0` (inset-inline-end)     | LTR: right, RTL: left |
 
 ```vue
 <template>
   <!-- ❌ WRONG: Will not flip in RTL -->
   <div class="ml-4 mr-8 pl-6">Content</div>
-  
+
   <!-- ✅ CORRECT: Will flip automatically -->
   <div class="ms-4 me-8 ps-6">Content</div>
 </template>
@@ -667,21 +676,19 @@ Instead of directional classes (ml, mr, pl, pr), use logical properties:
 
 ```typescript
 // tests/unit/composables/useProjects.test.ts
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useProjects } from '~/composables/useProjects';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { useProjects } from "~/composables/useProjects";
 
-describe('useProjects', () => {
-  it('should fetch projects', async () => {
+describe("useProjects", () => {
+  it("should fetch projects", async () => {
     const { $fetch } = useNuxtApp();
-    vi.mocked($fetch).mockResolvedValue([
-      { id: 1, title: 'Project 1' },
-    ]);
+    vi.mocked($fetch).mockResolvedValue([{ id: 1, title: "Project 1" }]);
 
     const { projects, fetchProjects } = useProjects();
     await fetchProjects();
 
     expect(projects.value).toHaveLength(1);
-    expect(projects.value[0].title).toBe('Project 1');
+    expect(projects.value[0].title).toBe("Project 1");
   });
 });
 ```
@@ -690,29 +697,31 @@ describe('useProjects', () => {
 
 ```typescript
 // tests/components/LoginForm.test.ts
-import { describe, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import LoginForm from '~/components/LoginForm.vue';
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
+import LoginForm from "~/components/LoginForm.vue";
 
-describe('LoginForm', () => {
-  it('renders email and password inputs', () => {
+describe("LoginForm", () => {
+  it("renders email and password inputs", () => {
     const wrapper = mount(LoginForm);
     expect(wrapper.find('input[type="email"]').exists()).toBe(true);
     expect(wrapper.find('input[type="password"]').exists()).toBe(true);
   });
 
-  it('disables submit button when form empty', () => {
+  it("disables submit button when form empty", () => {
     const wrapper = mount(LoginForm);
-    expect(wrapper.find('button[type="submit"]').attributes('disabled')).toBeDefined();
+    expect(
+      wrapper.find('button[type="submit"]').attributes("disabled")
+    ).toBeDefined();
   });
 
-  it('emits submit event with form data', async () => {
+  it("emits submit event with form data", async () => {
     const wrapper = mount(LoginForm);
-    await wrapper.find('input[type="email"]').setValue('test@example.com');
-    await wrapper.find('input[type="password"]').setValue('password');
-    await wrapper.find('form').trigger('submit');
+    await wrapper.find('input[type="email"]').setValue("test@example.com");
+    await wrapper.find('input[type="password"]').setValue("password");
+    await wrapper.find("form").trigger("submit");
 
-    expect(wrapper.emitted('submit')).toBeTruthy();
+    expect(wrapper.emitted("submit")).toBeTruthy();
   });
 });
 ```
@@ -723,34 +732,35 @@ describe('LoginForm', () => {
 
 ### 3.1 Backend: PHPUnit vs. Pest
 
-| Factor | PHPUnit | Pest |
-|--------|---------|------|
-| **Syntax** | OOP: `$this->assert*(...)` | DSL: `expect(...)->toBe(...)` |
-| **Test Discovery** | By convention | By convention |
-| **Fixtures** | setUp/tearDown | Closures, global setup |
-| **Parallel Testing** | Via plugin | Built-in |
-| **Laravel Integration** | Native (Laravel default) | Wrapper around PHPUnit |
-| **Community** | Larger, mature | Growing, modern |
-| **Setup for Bunyan** | Lower (already in Laravel) | Higher (wrapper) |
+| Factor                  | PHPUnit                    | Pest                          |
+| ----------------------- | -------------------------- | ----------------------------- |
+| **Syntax**              | OOP: `$this->assert*(...)` | DSL: `expect(...)->toBe(...)` |
+| **Test Discovery**      | By convention              | By convention                 |
+| **Fixtures**            | setUp/tearDown             | Closures, global setup        |
+| **Parallel Testing**    | Via plugin                 | Built-in                      |
+| **Laravel Integration** | Native (Laravel default)   | Wrapper around PHPUnit        |
+| **Community**           | Larger, mature             | Growing, modern               |
+| **Setup for Bunyan**    | Lower (already in Laravel) | Higher (wrapper)              |
 
 **Decision:** **PHPUnit 11.x** (default in Laravel 11) — No setup cost, mature ecosystem
 
 ### 3.2 Frontend: Vitest vs. Jest
 
-| Factor | Vitest | Jest |
-|--------|--------|------|
-| **Speed** | Very fast (Vite-native) | Moderate (slower startup) |
-| **Config** | Minimal (Vite reuses config) | More setup required |
-| **Vue Support** | Native (Vite ecosystem) | Requires setup |
-| **ESM Support** | Full native | Via workarounds |
-| **Community** | Growing | Mature, larger |
-| **Coverage** | Via c8 | Built-in |
+| Factor          | Vitest                       | Jest                      |
+| --------------- | ---------------------------- | ------------------------- |
+| **Speed**       | Very fast (Vite-native)      | Moderate (slower startup) |
+| **Config**      | Minimal (Vite reuses config) | More setup required       |
+| **Vue Support** | Native (Vite ecosystem)      | Requires setup            |
+| **ESM Support** | Full native                  | Via workarounds           |
+| **Community**   | Growing                      | Mature, larger            |
+| **Coverage**    | Via c8                       | Built-in                  |
 
 **Decision:** **Vitest** (faster, Vite-native, less config)
 
 ### 3.3 E2E Testing: Playwright
 
 **Why Playwright?**
+
 - ✅ **Modern API:** Async/await, easy readability
 - ✅ **Multi-browser:** Chromium, Firefox, WebKit
 - ✅ **Parallel Execution:** Built-in
@@ -758,19 +768,20 @@ describe('LoginForm', () => {
 - ✅ **Network Control:** Mock API responses
 
 **Configuration:**
+
 ```typescript
 // playwright.config.ts
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: "html",
   use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    baseURL: "http://localhost:3000",
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
 });
 ```
@@ -782,6 +793,7 @@ export default defineConfig({
 ### 4.1 Why GitHub Actions?
 
 **Advantages:**
+
 - ✅ **Free for Public Repos:** No per-minute costs
 - ✅ **Native to GitHub:** Repo-integrated, no external setup
 - ✅ **Matrix Builds:** Test across multiple Node/PHP versions
@@ -789,6 +801,7 @@ export default defineConfig({
 - ✅ **Secrets Management:** Environment variables encrypted
 
 **Alternative Considered:** GitLab CI, CircleCI
+
 - GitLab CI: Good but overkill for this project
 - CircleCI: Paid, unnecessary for open source
 
@@ -812,7 +825,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
       - run: composer install --no-interaction --no-progress
       - run: ./vendor/bin/pint --test
 
@@ -822,7 +835,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
       - run: composer install --no-interaction --no-progress
       - run: ./vendor/bin/phpstan analyse --memory-limit=512M
 
@@ -843,7 +856,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
       - run: cp backend/ci.env backend/.env
       - run: cd backend && composer install
       - run: cd backend && php artisan migrate
@@ -855,7 +868,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - run: cd frontend && npm install
       - run: cd frontend && npm run lint
 
@@ -865,7 +878,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - run: cd frontend && npm install
       - run: cd frontend && npm run typecheck
 
@@ -875,7 +888,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - run: cd frontend && npm install
       - run: cd frontend && npm run test
 
@@ -891,10 +904,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
       - run: cd backend && composer install && php artisan migrate
       - run: cd frontend && npm install
       - run: cd backend && php artisan serve &
@@ -906,6 +919,7 @@ jobs:
 ### 4.3 Artifact & Caching Strategy
 
 **Cache Dependencies:**
+
 ```yaml
 - uses: actions/cache@v4
   with:
@@ -916,6 +930,7 @@ jobs:
 ```
 
 **Upload Coverage Reports:**
+
 ```yaml
 - name: Upload coverage to Codecov
   uses: codecov/codecov-action@v3
@@ -932,7 +947,7 @@ jobs:
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
   mysql:
@@ -965,6 +980,7 @@ volumes:
 ### 5.2 Development Workflow
 
 **With Docker:**
+
 ```bash
 # Start services
 docker-compose up -d
@@ -980,6 +996,7 @@ docker-compose exec php php artisan migrate
 ```
 
 **Without Docker (Local Setup):**
+
 ```bash
 # Install MySQL locally
 brew install mysql@8.0
@@ -1004,29 +1021,29 @@ npm run dev
 
 ### Backend (Laravel 11.x)
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `laravel/framework` | ^11.0 | Core framework |
-| `laravel/sanctum` | ^4.0 | API authentication |
-| `laravel/tinker` | ^2.0 | REPL |
-| `phpunit/phpunit` | ^11.0 | Testing |
-| `phpstan/phpstan` | ^1.0 | Static analysis |
-| `laravel/pint` | ^1.14 | Code formatting (Laravel preset; `pint.json`) |
-| `laravel/pint` | ^1.0 | Code styling |
+| Package             | Version | Purpose                                       |
+| ------------------- | ------- | --------------------------------------------- |
+| `laravel/framework` | ^11.0   | Core framework                                |
+| `laravel/sanctum`   | ^4.0    | API authentication                            |
+| `laravel/tinker`    | ^2.0    | REPL                                          |
+| `phpunit/phpunit`   | ^11.0   | Testing                                       |
+| `phpstan/phpstan`   | ^1.0    | Static analysis                               |
+| `laravel/pint`      | ^1.14   | Code formatting (Laravel preset; `pint.json`) |
+| `laravel/pint`      | ^1.0    | Code styling                                  |
 
 ### Frontend (Nuxt 3)
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `nuxt` | ^3.12 | Core framework |
-| `vue` | ^3.0 | Reactive framework |
-| `@nuxt/ui` | ^2.0 | Component library |
-| `@nuxtjs/i18n` | ^8.0 | Internationalization |
-| `pinia` | ^2.0 | State management |
-| `tailwindcss` | ^4.0 | Utility CSS |
-| `vitest` | ^1.0 | Testing framework |
-| `@vue/test-utils` | ^2.0 | Component testing |
-| `@playwright/test` | ^1.0 | E2E testing |
+| Package            | Version | Purpose              |
+| ------------------ | ------- | -------------------- |
+| `nuxt`             | ^3.12   | Core framework       |
+| `vue`              | ^3.0    | Reactive framework   |
+| `@nuxt/ui`         | ^2.0    | Component library    |
+| `@nuxtjs/i18n`     | ^8.0    | Internationalization |
+| `pinia`            | ^2.0    | State management     |
+| `tailwindcss`      | ^4.0    | Utility CSS          |
+| `vitest`           | ^1.0    | Testing framework    |
+| `@vue/test-utils`  | ^2.0    | Component testing    |
+| `@playwright/test` | ^1.0    | E2E testing          |
 
 ---
 
@@ -1059,21 +1076,21 @@ npm run dev
 
 ### Backend Targets
 
-| Metric | Target | Current Baseline |
-|--------|--------|------------------|
-| API response time (GET /api/v1/projects) | <200ms | TBD |
-| Auth endpoint (POST /api/v1/auth/login) | <300ms | TBD |
-| Database query time (N+1 fixed) | <50ms | TBD |
-| Test suite duration (full) | <3 min | TBD |
+| Metric                                   | Target | Current Baseline |
+| ---------------------------------------- | ------ | ---------------- |
+| API response time (GET /api/v1/projects) | <200ms | TBD              |
+| Auth endpoint (POST /api/v1/auth/login)  | <300ms | TBD              |
+| Database query time (N+1 fixed)          | <50ms  | TBD              |
+| Test suite duration (full)               | <3 min | TBD              |
 
 ### Frontend Targets
 
-| Metric | Target | Current Baseline |
-|--------|--------|------------------|
-| First Paint | <1.5s | TBD |
-| Time to Interactive | <3s | TBD |
-| Bundle size (gzipped) | <200KB | TBD |
-| Test suite duration | <1 min | TBD |
+| Metric                | Target | Current Baseline |
+| --------------------- | ------ | ---------------- |
+| First Paint           | <1.5s  | TBD              |
+| Time to Interactive   | <3s    | TBD              |
+| Bundle size (gzipped) | <200KB | TBD              |
+| Test suite duration   | <1 min | TBD              |
 
 ---
 

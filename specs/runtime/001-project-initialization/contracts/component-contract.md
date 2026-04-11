@@ -11,6 +11,7 @@
 ## Overview
 
 This document defines the contract for all frontend components built in Bunyan. All components use:
+
 - **Vue 3 Composition API** (`<script setup>` syntax)
 - **TypeScript** for type safety
 - **Nuxt UI** (@nuxt/ui) components for consistency
@@ -25,7 +26,7 @@ This document defines the contract for all frontend components built in Bunyan. 
 
 ```vue
 <script setup lang="ts">
-import type { Project } from '~/types/models';
+import type { Project } from "~/types/models";
 
 // Props with TypeScript
 interface Props {
@@ -55,12 +56,12 @@ const isOpen = ref(false);
 
 // Methods
 const handleEdit = () => {
-  emit('edit', props.project.id);
+  emit("edit", props.project.id);
 };
 
 const handleDelete = () => {
-  if (confirm(t('common.confirmDelete'))) {
-    emit('delete', props.project.id);
+  if (confirm(t("common.confirmDelete"))) {
+    emit("delete", props.project.id);
   }
 };
 </script>
@@ -97,7 +98,7 @@ const handleDelete = () => {
             icon="i-heroicons-pencil"
             @click="handleEdit"
           >
-            {{ t('common.edit') }}
+            {{ t("common.edit") }}
           </UButton>
           <UButton
             color="red"
@@ -105,7 +106,7 @@ const handleDelete = () => {
             icon="i-heroicons-trash"
             @click="handleDelete"
           >
-            {{ t('common.delete') }}
+            {{ t("common.delete") }}
           </UButton>
         </div>
       </div>
@@ -125,12 +126,15 @@ const handleDelete = () => {
 **Purpose:** Main app layout (authenticated users)
 
 **Structure:**
+
 ```vue
 <template>
   <div class="min-h-screen bg-white">
     <!-- Header -->
     <header class="border-b border-gray-100 shadow-sm">
-      <div class="container mx-auto flex items-center justify-between ps-4 pe-4 py-4">
+      <div
+        class="container mx-auto flex items-center justify-between ps-4 pe-4 py-4"
+      >
         <div class="text-2xl font-semibold">Bunyan</div>
         <nav class="flex items-center gap-4">
           <LocaleSwitcher />
@@ -151,6 +155,7 @@ const handleDelete = () => {
 ```
 
 **Components Included:**
+
 - `LocaleSwitcher` — Toggle Arabic/English
 - `UserMenu` — Profile, logout
 - `Notifications` — Toast messages
@@ -162,13 +167,14 @@ const handleDelete = () => {
 **Purpose:** Login/register pages (unauthenticated users)
 
 **Structure:**
+
 ```vue
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-50">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold">{{ t('common.bunyan') }}</h1>
-        <p class="text-gray-600">{{ t('common.tagline') }}</p>
+        <h1 class="text-3xl font-bold">{{ t("common.bunyan") }}</h1>
+        <p class="text-gray-600">{{ t("common.tagline") }}</p>
       </div>
 
       <slot />
@@ -193,6 +199,7 @@ const handleDelete = () => {
 **Emits:** `submit(credentials: LoginRequest)`
 
 **Example:**
+
 ```vue
 <script setup lang="ts">
 const router = useRouter();
@@ -202,27 +209,27 @@ const authStore = useAuthStore();
 
 const loading = ref(false);
 const form = reactive({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 });
 
 const schema = z.object({
-  email: z.string().email(t('validation.emailInvalid')),
-  password: z.string().min(8, t('validation.passwordMinLength')),
+  email: z.string().email(t("validation.emailInvalid")),
+  password: z.string().min(8, t("validation.passwordMinLength")),
 });
 
 const handleSubmit = async (data: any) => {
   loading.value = true;
   try {
-    const response = await $fetch('/api/v1/auth/login', {
-      method: 'POST',
+    const response = await $fetch("/api/v1/auth/login", {
+      method: "POST",
       body: data,
     });
-    
+
     authStore.setUser(response.data.user);
     authStore.setToken(response.data.access_token);
-    
-    await router.push('/dashboard');
+
+    await router.push("/dashboard");
   } catch (error) {
     // Error handled by global error middleware
   } finally {
@@ -252,7 +259,7 @@ const handleSubmit = async (data: any) => {
     </UFormGroup>
 
     <UButton type="submit" :loading="loading" block size="lg">
-      {{ t('auth.login') }}
+      {{ t("auth.login") }}
     </UButton>
   </UForm>
 </template>
@@ -263,6 +270,7 @@ const handleSubmit = async (data: any) => {
 **File:** `frontend/components/Forms/ProjectForm.vue`
 
 **Props:**
+
 ```typescript
 interface Props {
   project?: Project | null;
@@ -273,6 +281,7 @@ interface Props {
 **Emits:** `submit(data: CreateProjectRequest)`
 
 **Structure:**
+
 ```vue
 <template>
   <UForm :schema="schema" @submit="handleSubmit">
@@ -298,7 +307,7 @@ interface Props {
     </UFormGroup>
 
     <UButton type="submit" :loading="loading">
-      {{ t('common.save') }}
+      {{ t("common.save") }}
     </UButton>
   </UForm>
 </template>
@@ -313,6 +322,7 @@ interface Props {
 **File:** `frontend/components/Cards/ProjectCard.vue`
 
 **Props:**
+
 ```typescript
 interface Props {
   project: Project;
@@ -320,6 +330,7 @@ interface Props {
 ```
 
 **Example:**
+
 ```vue
 <template>
   <NuxtLink :to="`/dashboard/projects/${project.id}`">
@@ -330,10 +341,7 @@ interface Props {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold">{{ project.title }}</h3>
-          <UBadge
-            :color="statusColor(project.status)"
-            variant="subtle"
-          >
+          <UBadge :color="statusColor(project.status)" variant="subtle">
             {{ t(`project.status.${project.status}`) }}
           </UBadge>
         </div>
@@ -342,8 +350,10 @@ interface Props {
       <div class="space-y-2">
         <p class="text-sm text-gray-600">{{ project.description }}</p>
         <div class="flex items-center justify-between">
-          <span class="text-sm text-gray-500">{{ t('projects.budget') }}</span>
-          <span class="font-semibold">{{ formatCurrency(project.budget) }}</span>
+          <span class="text-sm text-gray-500">{{ t("projects.budget") }}</span>
+          <span class="font-semibold">{{
+            formatCurrency(project.budget)
+          }}</span>
         </div>
       </div>
 
@@ -366,10 +376,11 @@ interface Props {
 **File:** `frontend/pages/dashboard/index.vue`
 
 **Structure:**
+
 ```vue
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'auth', // Require authentication
+  middleware: "auth", // Require authentication
 });
 
 const { t } = useI18n();
@@ -391,7 +402,7 @@ const roleLabel = computed(() => {
     <!-- Hero -->
     <section class="mb-12">
       <h1 class="text-4xl font-bold mb-2">
-        {{ t('dashboard.welcome') }}
+        {{ t("dashboard.welcome") }}
       </h1>
       <p class="text-gray-600">{{ roleLabel }}</p>
     </section>
@@ -400,7 +411,7 @@ const roleLabel = computed(() => {
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <UCard>
         <div class="text-center">
-          <p class="text-gray-600">{{ t('dashboard.activeProjects') }}</p>
+          <p class="text-gray-600">{{ t("dashboard.activeProjects") }}</p>
           <p class="text-3xl font-bold">{{ projects.length }}</p>
         </div>
       </UCard>
@@ -409,10 +420,10 @@ const roleLabel = computed(() => {
     <!-- Projects List -->
     <section>
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold">{{ t('dashboard.projects') }}</h2>
+        <h2 class="text-2xl font-bold">{{ t("dashboard.projects") }}</h2>
         <NuxtLink to="/dashboard/projects/create">
           <UButton icon="i-heroicons-plus">
-            {{ t('projects.createNew') }}
+            {{ t("projects.createNew") }}
           </UButton>
         </NuxtLink>
       </div>
@@ -422,11 +433,15 @@ const roleLabel = computed(() => {
       </div>
 
       <div v-else-if="projects.length === 0" class="text-center py-12">
-        <p class="text-gray-600">{{ t('projects.empty') }}</p>
+        <p class="text-gray-600">{{ t("projects.empty") }}</p>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+        <ProjectCard
+          v-for="project in projects"
+          :key="project.id"
+          :project="project"
+        />
       </div>
     </section>
   </div>
@@ -438,10 +453,11 @@ const roleLabel = computed(() => {
 **File:** `frontend/pages/dashboard/projects/create.vue`
 
 **Structure:**
+
 ```vue
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'auth',
+  middleware: "auth",
 });
 
 const router = useRouter();
@@ -449,13 +465,13 @@ const projectStore = useProjectStore();
 
 const handleSubmit = async (data: CreateProjectRequest) => {
   await projectStore.createProject(data);
-  await router.push('/dashboard/projects');
+  await router.push("/dashboard/projects");
 };
 </script>
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold mb-8">{{ t('projects.createNew') }}</h1>
+    <h1 class="text-3xl font-bold mb-8">{{ t("projects.createNew") }}</h1>
     <div class="max-w-2xl">
       <ProjectForm @submit="handleSubmit" />
     </div>
@@ -478,31 +494,31 @@ export const useAuth = () => {
   const { $fetch } = useNuxtApp();
 
   const login = async (email: string, password: string) => {
-    const response = await $fetch('/api/v1/auth/login', {
-      method: 'POST',
+    const response = await $fetch("/api/v1/auth/login", {
+      method: "POST",
       body: { email, password },
     });
-    
+
     authStore.setUser(response.data.user);
     authStore.setToken(response.data.access_token);
-    await router.push('/dashboard');
+    await router.push("/dashboard");
   };
 
   const register = async (data: RegisterRequest) => {
-    const response = await $fetch('/api/v1/auth/register', {
-      method: 'POST',
+    const response = await $fetch("/api/v1/auth/register", {
+      method: "POST",
       body: data,
     });
-    
+
     authStore.setUser(response.data.user);
     authStore.setToken(response.data.access_token);
-    await router.push('/dashboard');
+    await router.push("/dashboard");
   };
 
   const logout = async () => {
-    await $fetch('/api/v1/auth/logout', { method: 'POST' });
+    await $fetch("/api/v1/auth/logout", { method: "POST" });
     authStore.clearAuth();
-    await router.push('/auth/login');
+    await router.push("/auth/login");
   };
 
   return {
@@ -527,7 +543,7 @@ export const useProjects = () => {
   const fetchProjects = async () => {
     loading.value = true;
     try {
-      const response = await $fetch('/api/v1/projects');
+      const response = await $fetch("/api/v1/projects");
       projects.value = response.data;
     } catch (e) {
       error.value = e.message;
@@ -537,8 +553,8 @@ export const useProjects = () => {
   };
 
   const createProject = async (data: CreateProjectRequest) => {
-    const response = await $fetch('/api/v1/projects', {
-      method: 'POST',
+    const response = await $fetch("/api/v1/projects", {
+      method: "POST",
       body: data,
     });
     projects.value.push(response.data);
@@ -547,10 +563,10 @@ export const useProjects = () => {
 
   const updateProject = async (id: number, data: Partial<Project>) => {
     const response = await $fetch(`/api/v1/projects/${id}`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: data,
     });
-    const index = projects.value.findIndex(p => p.id === id);
+    const index = projects.value.findIndex((p) => p.id === id);
     if (index !== -1) {
       projects.value[index] = response.data;
     }
@@ -631,7 +647,7 @@ export const useProjects = () => {
     "bunyan": "Bunyan",
     "tagline": "Unified Construction Platform",
     "save": "Save",
-    "cancel": "Cancel",
+    "cancel": "Cancel"
     // ... (mirror structure)
   }
 }
@@ -644,6 +660,7 @@ export const useProjects = () => {
 ### Logical Properties Example
 
 **❌ WRONG (directional):**
+
 ```vue
 <template>
   <div class="ml-4 mr-8 pl-6 pr-6">
@@ -653,6 +670,7 @@ export const useProjects = () => {
 ```
 
 **✅ CORRECT (logical):**
+
 ```vue
 <template>
   <div class="ms-4 me-8 ps-6 pe-6">
@@ -667,8 +685,8 @@ export const useProjects = () => {
 <template>
   <!-- Auto-flips flex direction in RTL -->
   <div class="flex items-center justify-between">
-    <span>{{ t('common.label') }}</span>
-    <UButton>{{ t('common.action') }}</UButton>
+    <span>{{ t("common.label") }}</span>
+    <UButton>{{ t("common.action") }}</UButton>
   </div>
 </template>
 ```
@@ -681,42 +699,46 @@ export const useProjects = () => {
 
 ```typescript
 // components/ProjectCard.test.ts
-import { describe, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import ProjectCard from '~/components/Cards/ProjectCard.vue';
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
+import ProjectCard from "~/components/Cards/ProjectCard.vue";
 
-describe('ProjectCard', () => {
-  it('renders project title', () => {
+describe("ProjectCard", () => {
+  it("renders project title", () => {
     const project = {
       id: 1,
-      title: 'Test Project',
-      description: 'Test description',
+      title: "Test Project",
+      description: "Test description",
       budget: 10000,
-      status: 'pending',
-      created_at: '2026-04-10T12:00:00Z',
+      status: "pending",
+      created_at: "2026-04-10T12:00:00Z",
     };
 
     const wrapper = mount(ProjectCard, {
       props: { project },
     });
 
-    expect(wrapper.text()).toContain('Test Project');
+    expect(wrapper.text()).toContain("Test Project");
   });
 
-  it('navigates to project detail on click', async () => {
+  it("navigates to project detail on click", async () => {
     const wrapper = mount(ProjectCard, {
-      props: { /* ... */ },
+      props: {
+        /* ... */
+      },
       global: {
         stubs: { NuxtLink: true },
       },
     });
 
-    expect(wrapper.find('a').attributes('href')).toBe('/dashboard/projects/1');
+    expect(wrapper.find("a").attributes("href")).toBe("/dashboard/projects/1");
   });
 
-  it('displays status badge', () => {
+  it("displays status badge", () => {
     const wrapper = mount(ProjectCard, {
-      props: { /* ... */ },
+      props: {
+        /* ... */
+      },
     });
 
     expect(wrapper.find('[class*="badge"]').exists()).toBe(true);
@@ -731,6 +753,7 @@ describe('ProjectCard', () => {
 All components must include:
 
 1. **ARIA Labels:** `aria-label`, `aria-describedby`
+
    ```vue
    <UButton aria-label="Delete project">×</UButton>
    ```
