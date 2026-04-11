@@ -30,7 +30,7 @@ abstract class BaseRepository
         $model = $this->findById($id);
 
         if ($model === null) {
-            throw (new ModelNotFoundException)->setModel($this->model(), $id);
+            throw (new ModelNotFoundException())->setModel($this->model(), $id);
         }
 
         return $model;
@@ -65,7 +65,7 @@ abstract class BaseRepository
             ->find($id);
 
         if ($model === null) {
-            throw (new ModelNotFoundException)->setModel($this->model(), $id);
+            throw (new ModelNotFoundException())->setModel($this->model(), $id);
         }
 
         /** @phpstan-ignore-next-line */
