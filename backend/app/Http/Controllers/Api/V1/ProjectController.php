@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ProjectStatus;
+use App\Enums\UserRole;
 use App\Http\Requests\Api\V1\CreateProjectRequest;
 use App\Http\Requests\Api\V1\UpdateProjectRequest;
 use App\Http\Resources\Api\V1\ProjectResource;
@@ -15,7 +17,7 @@ class ProjectController extends BaseController
     {
         $query = Project::query();
 
-        if ($request->user()->role !== 'admin') {
+        if ($request->user()->role !== UserRole::Admin) {
             $query->forUser($request->user());
         }
 
@@ -47,7 +49,7 @@ class ProjectController extends BaseController
             'name' => $request->name,
             'description' => $request->description,
             'customer_id' => $request->user()->id,
-            'status' => 'draft',
+            'status' => ProjectStatus::Pending->value,
             'budget' => $request->budget,
             'location' => $request->location,
             'start_date' => $request->start_date,

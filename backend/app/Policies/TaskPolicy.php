@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Task;
 use App\Models\User;
 
@@ -14,16 +15,12 @@ class TaskPolicy
 
     public function view(User $user, Task $task): bool
     {
-        // Admin can view any task
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Get the phase to check cross-tenant isolation
-        $phase = $task->phase;
-        $project = $phase->project;
+        $project = $task->phase->project;
 
-        // Project stakeholders and assigned user can view
         return $project->customer_id === $user->id
             || $project->contractor_id === $user->id
             || $project->supervising_architect_id === $user->id
@@ -32,21 +29,17 @@ class TaskPolicy
 
     public function create(User $user): bool
     {
-        // Contractors and supervisors can create tasks
-        return in_array($user->role, ['contractor', 'supervising_architect', 'admin']);
+        return in_array($user->role, [UserRole::Contractor, UserRole::SupervisingArchitect, UserRole::Admin]);
     }
 
     public function update(User $user, Task $task): bool
     {
-        // Admin can update any task
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        $phase = $task->phase;
-        $project = $phase->project;
+        $project = $task->phase->project;
 
-        // Project contractor/supervisor and assigned user can update
         return $project->contractor_id === $user->id
             || $project->supervising_architect_id === $user->id
             || $task->assigned_to === $user->id;
@@ -54,16 +47,11 @@ class TaskPolicy
 
     public function delete(User $user, Task $task): bool
     {
-        // Admin can delete any task
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        $phase = $task->phase;
-        $project = $phase->project;
-
-        // Only project contractor can delete tasks
-        return $project->contractor_id === $user->id;
+        return $task->phase->project->contractor_id === $user->id;
     }
 
     public function restore(User $user, Task $task): bool
@@ -73,6 +61,6 @@ class TaskPolicy
 
     public function forceDelete(User $user, Task $task): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 }

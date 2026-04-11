@@ -4,39 +4,41 @@ namespace App\Repositories;
 
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class TransactionRepository
+class TransactionRepository extends BaseRepository
 {
-    public function __construct(
-        private readonly Transaction $model,
-    ) {
+    protected function model(): string
+    {
+        return Transaction::class;
     }
 
-    public function findById(int $id): ?Transaction
+    public function findById(int $id): ?Model
     {
-        return $this->model->with(['user', 'project', 'order'])->find($id);
+        return $this->newQuery()->with(['user', 'project', 'order'])->find($id);
     }
 
-    public function findByIdOrFail(int $id): Transaction
+    public function findByIdOrFail(int $id): Model
     {
-        return $this->model->with(['user', 'project', 'order'])->findOrFail($id);
+        return $this->newQuery()->with(['user', 'project', 'order'])->findOrFail($id);
     }
 
     public function allByUser(int $userId, array $filters = []): LengthAwarePaginator
     {
-        return $this->model
+        return $this->newQuery()
             ->byUser($userId)
             ->with(['project', 'order'])
             ->when($filters['type'] ?? null, fn ($q, $type) => $q->byType($type))
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
             ->orderByDesc('created_at')
-            ->paginate($filters['per_page'] ?? 15);
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 
     public function allByProject(int $projectId, array $filters = []): Collection
     {
-        return $this->model
+        /** @var Collection<int, Transaction> */
+        return $this->newQuery()
             ->where('project_id', $projectId)
             ->with(['user', 'order'])
             ->when($filters['type'] ?? null, fn ($q, $type) => $q->byType($type))
@@ -47,23 +49,12 @@ class TransactionRepository
 
     public function allCompleted(array $filters = []): Collection
     {
-        return $this->model
+        /** @var Collection<int, Transaction> */
+        return $this->newQuery()
             ->completed()
             ->with(['user', 'project'])
             ->when($filters['type'] ?? null, fn ($q, $type) => $q->byType($type))
             ->orderByDesc('created_at')
             ->get();
-    }
-
-    public function create(array $data): Transaction
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(Transaction $transaction, array $data): Transaction
-    {
-        $transaction->update($data);
-
-        return $transaction->fresh(['user', 'project']);
     }
 }

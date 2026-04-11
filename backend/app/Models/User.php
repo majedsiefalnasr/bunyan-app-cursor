@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
+use App\Models\Concerns\HasBaseModelBehavior;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
+    use HasBaseModelBehavior;
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
@@ -35,9 +39,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'active' => 'boolean',
+        'role' => UserRole::class,
     ];
 
-    // Relationships
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class, 'customer_id');
@@ -73,7 +77,13 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'customer_id');
     }
 
-    // Scopes
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user')
+            ->withPivot(['assigned_at', 'assigned_by'])
+            ->withTimestamps();
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true);

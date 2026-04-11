@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Product;
 use App\Models\User;
 
@@ -14,35 +15,31 @@ class ProductPolicy
 
     public function view(User $user, Product $product): bool
     {
-        // Anyone can view active products
-        return $product->active || $user->role === 'admin';
+        return $product->active || $user->role === UserRole::Admin;
     }
 
     public function create(User $user): bool
     {
-        // Only admin can create products
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 
     public function update(User $user, Product $product): bool
     {
-        // Only admin can update products
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 
     public function delete(User $user, Product $product): bool
     {
-        // Only admin can delete products
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 
     public function restore(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 
     public function forceDelete(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 }

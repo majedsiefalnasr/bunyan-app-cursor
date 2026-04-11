@@ -5,18 +5,19 @@ namespace App\Repositories;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class ProjectRepository
+class ProjectRepository extends BaseRepository
 {
-    public function __construct(
-        private readonly Project $model,
-    ) {
+    protected function model(): string
+    {
+        return Project::class;
     }
 
-    public function findById(int $id): ?Project
+    public function findById(int $id): ?Model
     {
-        return $this->model->with([
+        return $this->newQuery()->with([
             'customer',
             'contractor',
             'supervisingArchitect',
@@ -24,9 +25,9 @@ class ProjectRepository
         ])->find($id);
     }
 
-    public function findByIdOrFail(int $id): Project
+    public function findByIdOrFail(int $id): Model
     {
-        return $this->model->with([
+        return $this->newQuery()->with([
             'customer',
             'contractor',
             'supervisingArchitect',
@@ -36,18 +37,19 @@ class ProjectRepository
 
     public function listForUser(User $user, array $filters = []): LengthAwarePaginator
     {
-        return $this->model
+        return $this->newQuery()
             ->forUser($user)
             ->with(['customer', 'contractor', 'supervisingArchitect'])
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
             ->when($filters['search'] ?? null, fn ($q, $search) => $q->where('name', 'like', "%{$search}%"))
             ->orderByDesc('created_at')
-            ->paginate($filters['per_page'] ?? 15);
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 
     public function allActive(array $filters = []): Collection
     {
-        return $this->model
+        /** @var Collection<int, Project> */
+        return $this->newQuery()
             ->active()
             ->with(['customer', 'contractor', 'supervisingArchitect', 'phases'])
             ->when($filters['search'] ?? null, fn ($q, $search) => $q->where('name', 'like', "%{$search}%"))
@@ -56,43 +58,21 @@ class ProjectRepository
 
     public function allByCustomer(int $customerId, array $filters = []): LengthAwarePaginator
     {
-        return $this->model
+        return $this->newQuery()
             ->where('customer_id', $customerId)
             ->with(['contractor', 'supervisingArchitect', 'phases'])
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
             ->orderByDesc('created_at')
-            ->paginate($filters['per_page'] ?? 15);
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 
     public function allByContractor(int $contractorId, array $filters = []): LengthAwarePaginator
     {
-        return $this->model
+        return $this->newQuery()
             ->where('contractor_id', $contractorId)
             ->with(['customer', 'supervisingArchitect', 'phases'])
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
             ->orderByDesc('created_at')
-            ->paginate($filters['per_page'] ?? 15);
-    }
-
-    public function create(array $data): Project
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(Project $project, array $data): Project
-    {
-        $project->update($data);
-
-        return $project->fresh(['customer', 'contractor', 'supervisingArchitect']);
-    }
-
-    public function delete(Project $project): bool
-    {
-        return $project->delete();
-    }
-
-    public function restore(int $projectId): bool
-    {
-        return $this->model->withTrashed()->findOrFail($projectId)->restore();
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 }

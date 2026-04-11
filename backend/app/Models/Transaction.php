@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Transaction extends Model
+class Transaction extends BaseModel
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'project_id',
@@ -25,9 +23,10 @@ class Transaction extends Model
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'type' => TransactionType::class,
+        'status' => TransactionStatus::class,
     ];
 
-    // Relationships
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -43,7 +42,6 @@ class Transaction extends Model
         return $this->belongsTo(Order::class)->withTrashed();
     }
 
-    // Scopes
     public function scopeByUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
@@ -61,6 +59,6 @@ class Transaction extends Model
 
     public function scopeCompleted(Builder $query): Builder
     {
-        return $query->where('status', 'completed');
+        return $query->where('status', TransactionStatus::Completed->value);
     }
 }

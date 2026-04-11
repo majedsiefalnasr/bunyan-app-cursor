@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Order extends Model
+class Order extends BaseModel
 {
-    use HasFactory;
     use SoftDeletes;
-
     protected $fillable = [
         'customer_id',
         'project_id',
@@ -28,9 +25,9 @@ class Order extends Model
     protected $casts = [
         'total_amount' => 'decimal:2',
         'delivery_date' => 'date',
+        'status' => OrderStatus::class,
     ];
 
-    // Relationships
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
@@ -51,7 +48,6 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    // Scopes
     public function scopeByCustomer(Builder $query, int $customerId): Builder
     {
         return $query->where('customer_id', $customerId);
@@ -69,11 +65,11 @@ class Order extends Model
 
     public function scopePending(Builder $query): Builder
     {
-        return $query->where('status', 'pending');
+        return $query->where('status', OrderStatus::Pending->value);
     }
 
     public function scopeCompleted(Builder $query): Builder
     {
-        return $query->where('status', 'delivered');
+        return $query->where('status', OrderStatus::Delivered->value);
     }
 }

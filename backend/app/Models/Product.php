@@ -3,16 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Product extends BaseModel
 {
-    use HasFactory;
     use SoftDeletes;
-
     protected $fillable = [
         'name',
         'description',
@@ -32,13 +28,11 @@ class Product extends Model
         'active' => 'boolean',
     ];
 
-    // Relationships
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // Scopes
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true);

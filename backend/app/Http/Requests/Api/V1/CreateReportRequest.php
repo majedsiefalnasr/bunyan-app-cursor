@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateReportRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->role === 'field_engineer' || $this->user()->role === 'admin';
+        return $this->user()->role === UserRole::FieldEngineer || $this->user()->role === UserRole::Admin;
     }
 
     public function rules(): array

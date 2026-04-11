@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Project;
 use App\Models\User;
 
@@ -14,12 +15,10 @@ class ProjectPolicy
 
     public function view(User $user, Project $project): bool
     {
-        // Admin can view any project
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Cross-tenant isolation: User can only view their projects
         return $project->customer_id === $user->id
             || $project->contractor_id === $user->id
             || $project->supervising_architect_id === $user->id;
@@ -27,37 +26,31 @@ class ProjectPolicy
 
     public function create(User $user): bool
     {
-        // Only customers can create projects
-        return $user->role === 'customer' || $user->role === 'admin';
+        return $user->role === UserRole::Customer || $user->role === UserRole::Admin;
     }
 
     public function update(User $user, Project $project): bool
     {
-        // Admin can update any project
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Only the customer who owns the project can update it
         return $project->customer_id === $user->id;
     }
 
     public function delete(User $user, Project $project): bool
     {
-        // Admin can delete any project
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Only the customer owner can delete
         return $project->customer_id === $user->id;
     }
 
     public function approve(User $user, Project $project): bool
     {
-        // Only supervising architects and admins can approve projects
-        return in_array($user->role, ['supervising_architect', 'admin'])
-            && (in_array($user->id, [$project->supervising_architect_id]) || $user->role === 'admin');
+        return in_array($user->role, [UserRole::SupervisingArchitect, UserRole::Admin])
+            && ($project->supervising_architect_id === $user->id || $user->role === UserRole::Admin);
     }
 
     public function restore(User $user, Project $project): bool
@@ -67,6 +60,6 @@ class ProjectPolicy
 
     public function forceDelete(User $user, Project $project): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 }

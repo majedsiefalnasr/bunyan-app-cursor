@@ -4,27 +4,29 @@ namespace App\Repositories;
 
 use App\Models\ApprovalRule;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
-class ApprovalRuleRepository
+class ApprovalRuleRepository extends BaseRepository
 {
-    public function __construct(
-        private readonly ApprovalRule $model,
-    ) {
+    protected function model(): string
+    {
+        return ApprovalRule::class;
     }
 
-    public function findById(int $id): ?ApprovalRule
+    public function findById(int $id): ?Model
     {
-        return $this->model->with(['workflowConfiguration'])->find($id);
+        return $this->newQuery()->with(['workflowConfiguration'])->find($id);
     }
 
-    public function findByIdOrFail(int $id): ApprovalRule
+    public function findByIdOrFail(int $id): Model
     {
-        return $this->model->with(['workflowConfiguration'])->findOrFail($id);
+        return $this->newQuery()->with(['workflowConfiguration'])->findOrFail($id);
     }
 
     public function allByWorkflowConfiguration(int $configId): Collection
     {
-        return $this->model
+        /** @var Collection<int, ApprovalRule> */
+        return $this->newQuery()
             ->where('workflow_configuration_id', $configId)
             ->orderBy('entity_type')
             ->orderBy('status_from')
@@ -33,28 +35,12 @@ class ApprovalRuleRepository
 
     public function findRuleFor(int $configId, string $entityType, string $statusFrom, string $statusTo): ?ApprovalRule
     {
-        return $this->model
+        /** @var ApprovalRule|null */
+        return $this->newQuery()
             ->where('workflow_configuration_id', $configId)
             ->where('entity_type', $entityType)
             ->where('status_from', $statusFrom)
             ->where('status_to', $statusTo)
             ->first();
-    }
-
-    public function create(array $data): ApprovalRule
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(ApprovalRule $rule, array $data): ApprovalRule
-    {
-        $rule->update($data);
-
-        return $rule->fresh();
-    }
-
-    public function delete(ApprovalRule $rule): bool
-    {
-        return $rule->delete();
     }
 }

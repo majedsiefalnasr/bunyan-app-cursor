@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Resources\Api\V1\TransactionResource;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +14,7 @@ class TransactionController extends BaseController
     {
         $query = Transaction::query();
 
-        if ($request->user()->role !== 'admin') {
+        if ($request->user()->role !== UserRole::Admin) {
             $query->where('user_id', $request->user()->id);
         }
 
@@ -36,7 +37,7 @@ class TransactionController extends BaseController
 
     public function show(Transaction $transaction): JsonResponse
     {
-        if ($transaction->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+        if ($transaction->user_id !== auth()->id() && auth()->user()?->role !== UserRole::Admin) {
             return $this->sendError('غير مصرح', [], 403);
         }
 

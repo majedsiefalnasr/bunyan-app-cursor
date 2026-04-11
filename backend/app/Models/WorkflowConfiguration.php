@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\WorkflowType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class WorkflowConfiguration extends Model
+class WorkflowConfiguration extends BaseModel
 {
-    use HasFactory;
-
     protected $fillable = [
         'project_id',
         'name',
         'description',
+        'type',
         'status_transitions',
         'approval_requirements',
         'is_global',
@@ -24,9 +22,9 @@ class WorkflowConfiguration extends Model
         'status_transitions' => 'json',
         'approval_requirements' => 'json',
         'is_global' => 'boolean',
+        'type' => WorkflowType::class,
     ];
 
-    // Relationships
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class)->withTrashed();
