@@ -43,7 +43,7 @@ This PR completes **STAGE_01: Project Initialization** of the Bunyan platform. A
 backend/
 ├── composer.json                    # Dependencies + npm scripts
 ├── .env.example & ci.env           # Environment templates (CI: `cp ci.env .env`)
-├── .php-cs-fixer.php               # PHP formatting rules (PSR-12)
+├── pint.json                       # Laravel Pint rules
 ├── phpstan.neon                    # Static analysis (level 5)
 ├── phpunit.xml                     # Test configuration
 ├── .gitignore                      # Git exclusions
@@ -181,7 +181,7 @@ frontend/
 ```
 .github/workflows/
 ├── backend-ci.yml               # Backend pipeline
-│   ├── Lint (PHP-CS-Fixer)
+│   ├── Lint (Laravel Pint)
 │   ├── Analyze (PHPStan)
 │   ├── Test (PHPUnit)
 │   └── Coverage (Codecov)
@@ -266,7 +266,7 @@ cd backend && php artisan test
 vendor/bin/phpstan analyse --memory-limit=512M
 
 # Code formatting
-php-cs-fixer fix --dry-run
+vendor/bin/pint --test
 
 # Coverage report
 php artisan test --coverage --min=80

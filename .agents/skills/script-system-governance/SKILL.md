@@ -10,8 +10,8 @@ description: Script consistency and validation
 ```json
 {
   "scripts": {
-    "lint": "php-cs-fixer fix --dry-run --diff",
-    "lint:fix": "php-cs-fixer fix",
+    "lint": "pint --test",
+    "lint:fix": "pint",
     "analyze": "phpstan analyse",
     "test": "php artisan test",
     "test:coverage": "php artisan test --coverage",

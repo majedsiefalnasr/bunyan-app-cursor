@@ -1606,7 +1606,7 @@ Run and record all of the following:
 
 - Unit tests (PHPUnit for backend, Vitest for frontend)
 - Integration tests for API flows
-- Lint (PHP CS Fixer / Pint for backend, ESLint for frontend)
+- Lint (Laravel Pint for backend, ESLint for frontend)
 - Type check (PHPStan for backend, `npx nuxi typecheck` for frontend)
 - Migration validation (`php artisan migrate --pretend`)
 

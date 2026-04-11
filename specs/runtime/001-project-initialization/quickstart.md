@@ -482,7 +482,7 @@ cd frontend && npm run test:e2e
 
 ```bash
 # PHP linting
-cd backend && php-cs-fixer fix --dry-run
+cd backend && vendor/bin/pint --test
 
 # PHP static analysis
 cd backend && phpstan analyse
@@ -557,7 +557,7 @@ php artisan serve --port=8000    # Start dev server
 php artisan queue:work           # Start queue listener
 
 # Code quality
-php-cs-fixer fix                 # Auto-fix code style
+vendor/bin/pint                  # Auto-fix code style (or `composer lint:fix`)
 phpstan analyse                  # Static analysis
 ```
 

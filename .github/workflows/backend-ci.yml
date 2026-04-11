@@ -44,9 +44,9 @@ jobs:
         working-directory: backend
         run: composer install --no-interaction --prefer-dist
 
-      - name: Run PHP-CS-Fixer
+      - name: Run Laravel Pint
         working-directory: backend
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+        run: vendor/bin/pint --test
 
   analyze:
     runs-on: ubuntu-latest

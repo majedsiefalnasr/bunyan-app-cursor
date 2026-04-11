@@ -14,7 +14,7 @@ backend/
 ├── composer.json                  (Production + dev dependencies)
 ├── .env.example                   (Local development environment template)
 ├── ci.env                         (CI/CD environment template → `cp ci.env .env` in CI)
-├── .php-cs-fixer.php              (PHP code formatting rules - PSR-12)
+├── pint.json                      (Laravel Pint — PHP code style)
 ├── phpstan.neon                   (Static analysis configuration - Level 5)
 ├── phpunit.xml                    (Unit & feature test configuration)
 └── .gitignore                     (Backend-specific git exclusions)
@@ -136,7 +136,7 @@ Root/
 ```
 .github/workflows/
 ├── backend-ci.yml
-│   ├── Job: Lint (PHP-CS-Fixer --dry-run)
+│   ├── Job: Lint (`pint --test`)
 │   ├── Job: Analyze (PHPStan --level=5)
 │   └── Job: Test (PHPUnit with MySQL 8.0 service)
 │
@@ -194,7 +194,7 @@ Root/
 - Laravel Sanctum 4.0 (API auth)
 
 **Development:**
-- php-cs-fixer 3.60 (Code formatting)
+- laravel/pint (Code formatting; `pint.json`)
 - PHPStan 1.10 (Static analysis)
 - PHPUnit 11.0 (Testing)
 - Laravel Pint 1.14 (PSR-12 linter)
@@ -251,7 +251,7 @@ bunyan-app-cursor/
 │   ├── composer.json
 │   ├── phpunit.xml
 │   ├── phpstan.neon
-│   ├── .php-cs-fixer.php
+│   ├── pint.json
 │   ├── .env.example
 │   ├── ci.env
 │   └── .gitignore

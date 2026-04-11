@@ -112,8 +112,8 @@
 
 ## Phase K — Validation Gate
 
-- [ ] T056 Run `cd backend && vendor/bin/php-cs-fixer fix --dry-run --diff` — must report 0 violations
-- [ ] T057 Run `cd backend && vendor/bin/php-cs-fixer fix` — auto-fix any style issues
+- [ ] T056 Run `cd backend && vendor/bin/pint --test` — must report 0 violations
+- [ ] T057 Run `cd backend && vendor/bin/pint` — auto-fix any style issues
 - [ ] T058 Run `cd backend && vendor/bin/phpstan analyse --memory-limit=512M` — must report 0 errors at level 8
 - [ ] T059 Run `cd backend && php artisan test --filter EnumTest` — all enum unit tests pass
 - [ ] T060 Run `cd backend && php artisan test --filter DatabaseSchemaTest` — schema assertions pass

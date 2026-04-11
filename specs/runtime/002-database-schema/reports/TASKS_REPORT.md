@@ -27,8 +27,8 @@ None — this stage is purely additive. No existing migrations are modified. No 
 | --- | ----------- | ----------- |
 | T037 | Create role_user migration | FK ordering must be correct; requires users + roles tables to exist |
 | T038 | Validate migration with `--pretend` | DB connection required in test environment |
-| T056 | PHP CS Fixer dry-run | Modified models may have style violations |
-| T057 | PHP CS Fixer fix | Auto-fixes could change formatting in existing files |
+| T056 | Laravel Pint `--test` | Modified models may have style violations |
+| T057 | Laravel Pint (fix) | Auto-fixes could change formatting in existing files |
 | T058 | PHPStan analyse level 8 | Enum casts require proper type annotations; existing models may fail |
 
 ### 🟢 LOW Risk Tasks

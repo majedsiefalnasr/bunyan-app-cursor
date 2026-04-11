@@ -43,7 +43,7 @@ composer run lint && composer run test && npm run lint && npm run typecheck && n
 
 ## Pre-commit Hooks
 
-- PHP CS Fixer (formatting)
+- Laravel Pint (formatting)
 - PHPStan (static analysis)
 - ESLint + TypeScript check
 - `--no-verify` is FORBIDDEN

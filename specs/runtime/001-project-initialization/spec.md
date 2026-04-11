@@ -24,7 +24,7 @@ Establish a production-ready Laravel application with:
 - Service + Repository layering
 - PHPUnit + Pest testing
 - Static analysis (PHPStan)
-- Code formatting (PHP-CS-Fixer)
+- Code formatting (Laravel Pint)
 
 ### 1.2 Scope
 
@@ -258,7 +258,7 @@ class CreateProjectTest extends TestCase {
 | `backend/config/app.php` | (Laravel default) |
 | `backend/phpunit.xml` | PHPUnit test config |
 | `backend/phpstan.neon` | PHPStan static analysis |
-| `backend/.php-cs-fixer.php` | PHP-CS-Fixer config |
+| `backend/pint.json` | Laravel Pint config |
 | `backend/pint.json` | Laravel Pint config (optional) |
 
 #### 1.3.2 Application Code
@@ -296,8 +296,8 @@ class CreateProjectTest extends TestCase {
 ```json
 {
   "scripts": {
-    "lint": "php-cs-fixer fix --dry-run --diff",
-    "lint:fix": "php-cs-fixer fix",
+    "lint": "pint --test",
+    "lint:fix": "pint",
     "analyze": "phpstan analyse --memory-limit=512M",
     "test": "php artisan test",
     "test:coverage": "php artisan test --coverage",
@@ -774,7 +774,7 @@ class CreateProjectTest extends TestCase {
 **File:** `.github/workflows/pre-commit-guard.yml`
 
 **Jobs:**
-1. **Backend Lint** — `php-cs-fixer --dry-run` (fail on violations)
+1. **Backend Lint** — `vendor/bin/pint --test` (fail on violations)
 2. **Backend Static Analysis** — `phpstan analyse` (fail on errors)
 3. **Backend Tests** — `php artisan test` (fail on failures)
 4. **Frontend Lint** — `eslint .` (fail on violations)
@@ -1076,7 +1076,7 @@ npm run lint && npm run typecheck && npm run test
 
 ### 10.3 Code Quality Gates
 
-- **Linting:** Zero violations (php-cs-fixer, eslint)
+- **Linting:** Zero violations (Laravel Pint, eslint)
 - **Static Analysis:** Zero errors (phpstan, typescript)
 - **Testing:** ≥80% backend coverage, ≥70% frontend coverage
 - **E2E:** Critical flows pass 100% (playwright)

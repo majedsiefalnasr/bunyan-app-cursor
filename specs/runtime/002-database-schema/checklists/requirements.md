@@ -90,7 +90,7 @@
 - [ ] Feature test: SoftDeleteTest (User, Project, Phase, Task)
 - [ ] Feature test: EnumCastTest (enum casting works end-to-end)
 - [ ] All tests pass: `cd backend && php artisan test`
-- [ ] Lint passes: `cd backend && vendor/bin/php-cs-fixer fix --dry-run`
+- [ ] Lint passes: `cd backend && vendor/bin/pint --test`
 - [ ] PHPStan passes: `cd backend && vendor/bin/phpstan analyse`
 
 ### RBAC

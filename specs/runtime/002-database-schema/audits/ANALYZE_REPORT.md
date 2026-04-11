@@ -90,7 +90,7 @@ All spec items have corresponding plan items and tasks. ✅ Zero drift.
 
 - Unit tests: 6 files covering all 10 enums + BaseRepository contract
 - Feature tests: 5 files covering schema integrity, migration rollback, seeder data, soft delete behavior, enum casting E2E
-- Validation gate (Phase K): PHPStan, PHP CS Fixer, full test suite
+- Validation gate (Phase K): PHPStan, Laravel Pint, full test suite
 - RBAC matrix tested in STAGE_04 (not this stage)
 - `RefreshDatabase` trait used in all feature tests
 

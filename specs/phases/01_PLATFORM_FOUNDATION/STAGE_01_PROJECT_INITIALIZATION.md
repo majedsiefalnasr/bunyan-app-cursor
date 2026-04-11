@@ -88,17 +88,16 @@ Initialize the Bunyan project with Laravel backend and Nuxt.js 3 frontend. Confi
 
 | Tool         | Purpose                      | Config File         | Command             |
 | ------------ | ---------------------------- | ------------------- | ------------------- |
-| PHP-CS-Fixer | Code formatting (PHP)        | `.php-cs-fixer.php` | `composer lint:fix` |
+| Laravel Pint | PHP code style (Laravel preset + `pint.json`) | `pint.json` | `composer lint` / `composer lint:fix` |
 | PHPStan      | Static analysis              | `phpstan.neon`      | `composer analyze`  |
-| Laravel Pint | PSR-12 compliance (optional) | `pint.json`         | `vendor/bin/pint`   |
 
 **Composer scripts** (`composer.json`):
 
 ```json
 {
   "scripts": {
-    "lint": "php-cs-fixer fix --dry-run --diff",
-    "lint:fix": "php-cs-fixer fix",
+    "lint": "pint --test",
+    "lint:fix": "pint",
     "analyze": "phpstan analyse --memory-limit=512M",
     "test": "php artisan test",
     "test:coverage": "php artisan test --coverage",
@@ -144,7 +143,7 @@ Initialize the Bunyan project with Laravel backend and Nuxt.js 3 frontend. Confi
 ```bash
 #!/bin/sh
 cd backend && \
-php-cs-fixer fix --dry-run --diff && \
+vendor/bin/pint --test && \
 vendor/bin/phpstan analyse --memory-limit=512M && \
 php artisan test --parallel
 ```
@@ -164,7 +163,7 @@ npm run test
 
 ```json
 {
-  "backend/app/**/*.php": ["php-cs-fixer fix", "phpstan analyse"],
+  "backend/**/*.php": ["vendor/bin/pint", "vendor/bin/phpstan analyse --memory-limit=512M"],
   "frontend/**/*.{vue,ts,js}": ["eslint --fix", "prettier --write"],
   "frontend/**/*.json": ["prettier --write"]
 }
@@ -176,7 +175,7 @@ npm run test
 
 This workflow runs before merge to catch any commits that bypass local hooks:
 
-- PHP-CS-Fixer validation (no changes allowed)
+- Laravel Pint validation (no changes allowed; use `pint --test` in CI)
 - PHPStan static analysis (zero tolerance)
 - ESLint linting (no warnings in production code)
 - Prettier formatting check
@@ -232,7 +231,7 @@ cd frontend && npm run lint:fix && npm run format && npm run typecheck && npm ru
 
 | Stage           | Backend                  | Frontend           | Fails On  |
 | --------------- | ------------------------ | ------------------ | --------- |
-| Linting         | `php-cs-fixer --dry-run` | `eslint .`         | Any fix   |
+| Linting         | `pint --test` | `eslint .`         | Any fix   |
 | Formatting      | —                        | `prettier --check` | Any diffs |
 | Static Analysis | `phpstan analyse`        | `nuxi typecheck`   | Errors    |
 | Unit Tests      | `php artisan test`       | `npm run test`     | Failures  |
@@ -269,9 +268,8 @@ npm run lint:fix && npm run format && composer lint:fix
 | ----------------- | ------- | -------------------------- |
 | laravel/framework | Runtime | Core framework             |
 | laravel/sanctum   | Runtime | API authentication         |
-| php-cs-fixer      | Dev     | Code formatting            |
+| laravel/pint      | Dev     | Code formatting (`pint.json`) |
 | phpstan/phpstan   | Dev     | Static analysis            |
-| laravel/pint      | Dev     | PSR-12 compliance checking |
 | phpunit/phpunit   | Dev     | Unit testing framework     |
 | pestphp/pest      | Dev     | Alternative test framework |
 
@@ -367,7 +365,7 @@ These scripts CANNOT be bypassed:
 
 ### Configuration Files
 
-- `.php-cs-fixer.php` — PHP formatting rules
+- `pint.json` — Laravel Pint config (preset + rules; source of truth for PHP style)
 - `phpstan.neon` — PHPStan static analysis config
 - `.eslintrc.json` — ESLint rules
 - `.prettierrc.json` — Prettier formatting config

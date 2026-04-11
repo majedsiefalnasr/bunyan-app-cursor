@@ -62,7 +62,7 @@ refactor(frontend): extract project card component
 
 ```
 lint-staged:
-  - PHP: php-cs-fixer, phpstan
+  - PHP: pint, phpstan
   - JS/TS: eslint, prettier
   - Migrations: filename validation
 ```

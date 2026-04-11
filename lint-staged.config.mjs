@@ -1,6 +1,6 @@
 /**
  * Staged-file checks for pre-commit. Paths are relative to the repo root.
- * Backend PHP: PHP CS Fixer (dry-run), then PHPStan on staged files only.
+ * Backend PHP: Laravel Pint (fix staged files), then PHPStan on staged files only.
  * @param {string[]} filenames
  */
 function toFrontendPaths(filenames) {
@@ -41,7 +41,7 @@ export default {
         const rel = toBackendPaths(filenames);
         const quoted = shellQuote(rel);
         return [
-            `cd backend && vendor/bin/php-cs-fixer fix --dry-run --diff ${quoted}`,
+            `cd backend && vendor/bin/pint ${quoted}`,
             `cd backend && vendor/bin/phpstan analyse --memory-limit=512M ${quoted}`,
         ];
     },

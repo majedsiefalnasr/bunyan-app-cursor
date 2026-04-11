@@ -107,12 +107,16 @@ bunyan-app/
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Prerequisites (minimum local setup)
 
-- Node.js 20 LTS or higher
-- PHP 8.2 or higher
-- Composer 2.6 or higher
-- Docker 20.10+ (optional)
+| Requirement | Notes |
+|-------------|--------|
+| **Node.js** | 20 LTS (matches CI) |
+| **PHP** | 8.2+ with typical extensions: `pdo`, `pdo_mysql`, `mbstring`, `xml`, `bcmath`, `tokenizer`, `json`; **Redis** extension optional if you adjust cache/session for local-only work |
+| **Composer** | 2.6+ |
+| **Git** | 2.30+ |
+| **MySQL / Redis** | Required for full API + Docker workflows; PHPUnit often uses **SQLite in memory** (see `backend/phpunit.xml`) |
+| **Docker** | 20.10+ optional (`npm run docker:up`) |
 
 ### Installation
 
@@ -134,9 +138,10 @@ cd backend
 php artisan key:generate
 cd ..
 
-# 5. Initialize pre-commit hooks
-npx husky install
+# 5. Git hooks — `npm run install` runs `prepare` → Husky. If hooks are missing: `npm run prepare`
 ```
+
+When you add or rename **backend** env vars, update **`backend/.env.example`** and **`backend/ci.env`** together so CI and new clones stay in sync.
 
 ### Development
 
@@ -162,21 +167,23 @@ npm run docker:logs
 npm run docker:down
 ```
 
-### Quick Verification
+### Quick verification
 
 ```bash
-# Verify setup
-npm run validate        # Runs: lint + typecheck + test
+# Full monorepo bar (lint, format check, typecheck, analyze, tests)
+npm run validate
 
-# Backend only
-cd backend && php artisan test
+# Backend bar (match CI style gate before a PHP PR)
+cd backend && composer run lint && composer run analyze && php artisan test
 
 # Frontend only
 cd frontend && npm run test
 
-# E2E tests
+# E2E
 cd frontend && npm run test:e2e
 ```
+
+Use **`php artisan test`** for everyday local runs. **`php artisan test --parallel`** with **coverage** needs **Xdebug** or **PCOV**; without them PHP may report “No code coverage driver” — that is an environment limitation, not necessarily a failing test suite. CI installs coverage where required.
 
 ---
 
@@ -185,7 +192,7 @@ cd frontend && npm run test:e2e
 | Document | Purpose | Location |
 |----------|---------|----------|
 | **Setup Guide** | Local development environment setup | `docs/SETUP.md` |
-| **Testing Guide** | Comprehensive testing instructions | `guides/TESTING_GUIDE.md` |
+| **Testing Guide** | Comprehensive testing instructions | `specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md` |
 | **API Contract** | RESTful API specifications | `specs/runtime/001-project-initialization/contracts/api-contract.md` |
 | **Architecture** | System design and ADRs | `docs/architecture/` |
 | **Contributing** | Development workflow | `CONTRIBUTING.md` |
@@ -226,7 +233,7 @@ cd frontend && npm run test:e2e
 - ✅ Docker Compose (MySQL, Redis, PHP, Node)
 - ✅ GitHub Actions CI/CD pipelines
 - ✅ Pre-commit hooks (Husky + lint-staged)
-- ✅ Code quality enforcement (PHPStan, ESLint, Prettier)
+- ✅ Code quality enforcement (Laravel Pint, PHPStan, ESLint, Prettier)
 - ✅ Automated testing (PHPUnit, Vitest, Playwright)
 - ✅ Code coverage tracking
 
@@ -242,14 +249,16 @@ cd backend
 # Unit tests
 php artisan test
 
-# With coverage
+# With coverage (requires Xdebug or PCOV on your PHP)
 php artisan test --coverage --min=80
 
 # Static analysis
 vendor/bin/phpstan analyse --memory-limit=512M
 
-# Code formatting
-php-cs-fixer fix --dry-run
+# Code formatting (Laravel Pint — source of truth: pint.json)
+vendor/bin/pint --test
+# Auto-fix style
+vendor/bin/pint
 ```
 
 ### Frontend Testing
@@ -352,14 +361,12 @@ git push origin feature/your-feature
 # Request review from maintainers
 ```
 
-### Pre-Commit Hooks
+### Pre-commit and pre-push
 
-Automatically enforces:
-- PHP formatting (PSR-12)
-- JavaScript/Vue formatting (Prettier)
-- TypeScript compilation
-- ESLint linting
-- PHPStan static analysis
+- **pre-commit** (lint-staged): staged PHP gets **Laravel Pint** (fix) + **PHPStan**; frontend gets Prettier + ESLint, etc.
+- **pre-push**: `npm run check` (full lint, format check, typecheck, PHPStan).
+
+Prefer fixing issues over **`--no-verify`**. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### CI/CD Pipeline
 
@@ -398,7 +405,7 @@ docker-compose down -v
 docker-compose up -d --build
 ```
 
-### Tests Failing
+### Tests failing
 
 ```bash
 # Backend
@@ -411,7 +418,11 @@ cd frontend && npm run test -- --reporter=verbose
 cd frontend && npm run test:e2e -- --headed
 ```
 
-See `guides/TESTING_GUIDE.md` for comprehensive troubleshooting.
+### Backend: “No code coverage driver” / parallel + coverage
+
+Parallel runs or `--coverage` need PHP to load **Xdebug** or **PCOV**. If that extension is missing, use `php artisan test` without coverage for local checks, or install PCOV/Xdebug for your PHP version. GitHub Actions uses a PHP image configured for CI.
+
+See [specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md](specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md) for deeper troubleshooting.
 
 ---
 
@@ -429,14 +440,14 @@ See `guides/TESTING_GUIDE.md` for comprehensive troubleshooting.
 
 ### Documentation
 
-- **Setup:** See `docs/SETUP.md`
-- **Testing:** See `guides/TESTING_GUIDE.md`
+- **Setup:** See [docs/SETUP.md](docs/SETUP.md)
+- **Testing:** See [specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md](specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md)
 - **API:** See `specs/runtime/001-project-initialization/contracts/api-contract.md`
 - **Architecture:** See `docs/architecture/`
 
-### Common Issues
+### Common issues
 
-- See `guides/TESTING_GUIDE.md` → Troubleshooting section
+- See [TESTING_GUIDE.md](specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md) → Troubleshooting
 
 ---
 
@@ -486,5 +497,5 @@ Built with:
 
 ---
 
-For detailed setup instructions, see [SETUP.md](docs/SETUP.md)  
-For testing instructions, see [TESTING_GUIDE.md](guides/TESTING_GUIDE.md)
+For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md)  
+For testing instructions, see [TESTING_GUIDE.md](specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md)

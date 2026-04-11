@@ -9,8 +9,8 @@ description: Pre-commit/pre-push failure diagnostics
 
 ### Backend (PHP)
 ```bash
-# PHP CS Fixer — formatting
-php-cs-fixer fix --dry-run --diff
+# Laravel Pint — formatting
+vendor/bin/pint --test
 
 # PHPStan — static analysis
 phpstan analyse
@@ -33,9 +33,9 @@ vitest run
 
 ## Common Failures & Fixes
 
-### PHP CS Fixer
-- **Fix**: Run `composer run lint:fix` to auto-format
-- **Prevention**: Configure IDE to format on save
+### Laravel Pint
+- **Fix**: Run `composer run lint:fix` (or `vendor/bin/pint`) to auto-format
+- **Prevention**: Configure IDE to format on save; `pint.json` is the source of truth
 
 ### PHPStan Level Errors
 - **Fix**: Add proper type annotations, fix return types

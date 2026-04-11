@@ -960,7 +960,7 @@
   - [ ] Safe defaults (no real credentials)
   - [ ] Clear comments for each variable
 
-- [ ] `backend/.php-cs-fixer.php`
+- [ ] `backend/pint.json`
   - [ ] PSR-12 ruleset
   - [ ] Exclude vendor, storage, bootstrap, tests (optional)
   - [ ] Rules: single_quote, no_trailing_comma_in_list_call
@@ -1036,12 +1036,12 @@
 ### 7.3 Git & Pre-Commit Setup
 
 - [ ] `.husky/pre-commit` script:
-  - [ ] Backend: `cd backend && php-cs-fixer fix --dry-run --diff && phpstan analyse --memory-limit=512M`
+  - [ ] Backend: `cd backend && vendor/bin/pint --test && vendor/bin/phpstan analyse --memory-limit=512M`
   - [ ] Frontend: `cd frontend && npm run lint:fix && npx prettier --write .`
   - [ ] Exit if any fails
 
 - [ ] `.lintstagedrc.json`:
-  - [ ] `backend/app/**/*.php`: [`php-cs-fixer fix`, `phpstan analyse`]
+  - [ ] `backend/**/*.php` (lint-staged): [`vendor/bin/pint`, `vendor/bin/phpstan analyse --memory-limit=512M`]
   - [ ] `frontend/**/*.{vue,ts,js}`: [`eslint --fix`, `prettier --write`]
   - [ ] `frontend/**/*.json`: [`prettier --write`]
 
@@ -1055,7 +1055,7 @@
 - [ ] `.github/workflows/pre-commit-guard.yml`:
   - [ ] Trigger: on pull_request, push to develop/main
   - [ ] Jobs:
-    - [ ] backend-lint: `php-cs-fixer --dry-run`
+    - [ ] backend-lint: `vendor/bin/pint --test`
     - [ ] backend-analyze: `phpstan analyse`
     - [ ] backend-test: `php artisan test`
     - [ ] frontend-lint: `npm run lint`

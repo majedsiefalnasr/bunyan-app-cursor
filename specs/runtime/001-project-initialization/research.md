@@ -814,7 +814,7 @@ jobs:
         with:
           php-version: '8.3'
       - run: composer install --no-interaction --no-progress
-      - run: ./vendor/bin/php-cs-fixer fix --dry-run --diff
+      - run: ./vendor/bin/pint --test
 
   backend-analyze:
     runs-on: ubuntu-latest
@@ -1011,7 +1011,7 @@ npm run dev
 | `laravel/tinker` | ^2.0 | REPL |
 | `phpunit/phpunit` | ^11.0 | Testing |
 | `phpstan/phpstan` | ^1.0 | Static analysis |
-| `friendsofphp/php-cs-fixer` | ^3.0 | Code formatting |
+| `laravel/pint` | ^1.14 | Code formatting (Laravel preset; `pint.json`) |
 | `laravel/pint` | ^1.0 | Code styling |
 
 ### Frontend (Nuxt 3)

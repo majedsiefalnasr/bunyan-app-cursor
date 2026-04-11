@@ -202,16 +202,16 @@ vendor/bin/pint --test
 vendor/bin/pint
 ```
 
-### PHP CS Fixer
+### Laravel Pint
 
 ```bash
 cd backend
 
 # Dry run (what would change)
-vendor/bin/php-cs-fixer fix --dry-run --diff
+vendor/bin/pint --test
 
 # Apply fixes
-vendor/bin/php-cs-fixer fix
+vendor/bin/pint
 ```
 
 **Key style rules enforced by this stage:**
