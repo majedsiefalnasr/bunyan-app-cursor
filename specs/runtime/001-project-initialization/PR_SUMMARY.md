@@ -85,6 +85,7 @@ backend/
 ```
 
 **Key Features:**
+
 - Laravel Sanctum authentication configured
 - Standardized API response format: `{ success, data, message, errors }`
 - PSR-12 code formatting enforced
@@ -143,6 +144,7 @@ frontend/
 ```
 
 **Key Features:**
+
 - Nuxt 3 with Vue 3 Composition API
 - Nuxt UI (@nuxt/ui) component library
 - Full RTL (Arabic) support with Tailwind logical properties
@@ -165,6 +167,7 @@ frontend/
 ```
 
 **Services Configured:**
+
 - **MySQL 8.0** (port 3306) — Database with persistence
 - **Redis 7-alpine** (port 6379) — Cache layer
 - **PHP 8.2-FPM** (port 8000) — Laravel backend
@@ -198,7 +201,7 @@ frontend/
     └── PHPStan analysis
 ```
 
-**Triggers:** On every PR to develop/main, every push to spec/* branches
+**Triggers:** On every PR to develop/main, every push to spec/\* branches
 
 **Status Checks:** All workflows block merge if checks fail
 
@@ -218,6 +221,7 @@ frontend/
 ```
 
 **Root npm Scripts:**
+
 ```json
 {
   "scripts": {
@@ -251,6 +255,7 @@ npm run dev
 ```
 
 **Verify:**
+
 - Backend at http://localhost:8000
 - Frontend at http://localhost:3000
 - MySQL at localhost:3306
@@ -300,6 +305,7 @@ npm run test:e2e
 ```
 
 **Scenarios Covered:**
+
 - ✅ User authentication (login, register, logout)
 - ✅ Project creation and management
 - ✅ Phase status transitions
@@ -329,6 +335,7 @@ git commit -m "test"  # Should trigger lint validation
 ### 7. **CI/CD Pipeline Verification**
 
 Push to PR and observe GitHub Actions:
+
 - ✅ backend-ci runs (lint, analyze, test)
 - ✅ frontend-ci runs (lint, typecheck, test, e2e)
 - ✅ pre-commit-guard runs (PR validation)
@@ -339,15 +346,15 @@ Push to PR and observe GitHub Actions:
 
 ## Changed Files Summary
 
-| Category | Files | Status |
-|----------|-------|--------|
-| Backend | 22 files | ✅ New |
-| Frontend | 31 files | ✅ New |
-| Docker | 4 files | ✅ New |
-| CI/CD | 3 files | ✅ New |
-| Root Config | 6 files | ✅ New |
-| Documentation | 5+ files | ✅ New |
-| **Total** | **70+** | **✅ New** |
+| Category      | Files    | Status     |
+| ------------- | -------- | ---------- |
+| Backend       | 22 files | ✅ New     |
+| Frontend      | 31 files | ✅ New     |
+| Docker        | 4 files  | ✅ New     |
+| CI/CD         | 3 files  | ✅ New     |
+| Root Config   | 6 files  | ✅ New     |
+| Documentation | 5+ files | ✅ New     |
+| **Total**     | **70+**  | **✅ New** |
 
 ---
 
@@ -355,12 +362,12 @@ Push to PR and observe GitHub Actions:
 
 ### Guardian Verdicts
 
-| Guardian | Status | Notes |
-|----------|--------|-------|
-| **Architecture** | ✅ PASS | Clean layering, import boundaries enforced, RBAC governance verified |
-| **Security** | ✅ PASS | Sanctum auth, server-side RBAC, no hardcoded secrets, error contract safe |
-| **Code Review** | ✅ PASS | PSR-12 formatting, PHPStan level 5, ESLint, TypeScript strict, pre-commit enforced |
-| **DevOps** | ✅ PASS | Docker stack healthy, CI/CD ready, health checks configured, environments templated |
+| Guardian         | Status  | Notes                                                                               |
+| ---------------- | ------- | ----------------------------------------------------------------------------------- |
+| **Architecture** | ✅ PASS | Clean layering, import boundaries enforced, RBAC governance verified                |
+| **Security**     | ✅ PASS | Sanctum auth, server-side RBAC, no hardcoded secrets, error contract safe           |
+| **Code Review**  | ✅ PASS | PSR-12 formatting, PHPStan level 5, ESLint, TypeScript strict, pre-commit enforced  |
+| **DevOps**       | ✅ PASS | Docker stack healthy, CI/CD ready, health checks configured, environments templated |
 
 ---
 
@@ -400,6 +407,7 @@ Push to PR and observe GitHub Actions:
 ### Rollback Plan
 
 If needed, simply revert this commit:
+
 ```bash
 git revert <commit-hash>
 ```

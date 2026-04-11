@@ -16,7 +16,7 @@ class TaskController extends BaseController
     public function index(Project $project, Phase $phase, Request $request): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
-            return $this->sendError('المرحلة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $tasks = $phase->tasks()->paginate($request->per_page ?? 15);
@@ -31,7 +31,7 @@ class TaskController extends BaseController
     public function show(Project $project, Phase $phase, Task $task): JsonResponse
     {
         if ($phase->project_id !== $project->id || $task->phase_id !== $phase->id) {
-            return $this->sendError('المهمة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         return $this->sendSuccess(
@@ -44,7 +44,7 @@ class TaskController extends BaseController
     public function store(Project $project, Phase $phase, CreateTaskRequest $request): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
-            return $this->sendError('المرحلة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $this->authorize('create', [Task::class, $phase]);
@@ -70,7 +70,7 @@ class TaskController extends BaseController
     public function update(Project $project, Phase $phase, Task $task, UpdateTaskRequest $request): JsonResponse
     {
         if ($phase->project_id !== $project->id || $task->phase_id !== $phase->id) {
-            return $this->sendError('المهمة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $this->authorize('update', $task);
@@ -87,7 +87,7 @@ class TaskController extends BaseController
     public function destroy(Project $project, Phase $phase, Task $task, Request $request): JsonResponse
     {
         if ($phase->project_id !== $project->id || $task->phase_id !== $phase->id) {
-            return $this->sendError('المهمة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $this->authorize('delete', $task);

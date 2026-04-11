@@ -10,37 +10,37 @@
 
 ## Delivery Checklist
 
-| Item | Status |
-|---|---|
-| Spec locked and scope defined | ✅ |
-| Clarifications resolved | ✅ |
-| Technical plan approved | ✅ |
-| 72 atomic tasks generated | ✅ |
-| Structural drift audit: 12/12 PASS | ✅ |
-| Guardian verdicts: Security, Performance, QA, Code Reviewer all PASS | ✅ |
-| 10 PHP Enums implemented | ✅ |
-| BaseModel + HasBaseModelBehavior trait | ✅ |
-| BaseRepository (abstract generic CRUD) | ✅ |
-| Enum casts on all 13 models | ✅ |
-| 10 repositories refactored to extend BaseRepository | ✅ |
-| `role_user` pivot migration (forward + rollback) | ✅ |
-| Factory states (User, Project, Phase, Task) | ✅ |
-| RolePermissionSeeder created | ✅ |
-| DatabaseSeeder ordering correct | ✅ |
-| 31 tests written and passing | ✅ |
-| PHPStan Level 5: 0 errors | ✅ |
-| All policies/requests/controllers updated for UserRole enum | ✅ |
-| Implementation committed to branch | ✅ |
+| Item                                                                 | Status |
+| -------------------------------------------------------------------- | ------ |
+| Spec locked and scope defined                                        | ✅     |
+| Clarifications resolved                                              | ✅     |
+| Technical plan approved                                              | ✅     |
+| 72 atomic tasks generated                                            | ✅     |
+| Structural drift audit: 12/12 PASS                                   | ✅     |
+| Guardian verdicts: Security, Performance, QA, Code Reviewer all PASS | ✅     |
+| 10 PHP Enums implemented                                             | ✅     |
+| BaseModel + HasBaseModelBehavior trait                               | ✅     |
+| BaseRepository (abstract generic CRUD)                               | ✅     |
+| Enum casts on all 13 models                                          | ✅     |
+| 10 repositories refactored to extend BaseRepository                  | ✅     |
+| `role_user` pivot migration (forward + rollback)                     | ✅     |
+| Factory states (User, Project, Phase, Task)                          | ✅     |
+| RolePermissionSeeder created                                         | ✅     |
+| DatabaseSeeder ordering correct                                      | ✅     |
+| 31 tests written and passing                                         | ✅     |
+| PHPStan Level 5: 0 errors                                            | ✅     |
+| All policies/requests/controllers updated for UserRole enum          | ✅     |
+| Implementation committed to branch                                   | ✅     |
 
 ---
 
 ## Quality Gates
 
-| Gate | Result |
-|---|---|
+| Gate                          | Result        |
+| ----------------------------- | ------------- |
 | `php artisan test` (31 tests) | ✅ 0 failures |
-| `vendor/bin/phpstan analyse` | ✅ 0 errors |
-| Architecture guardian | ✅ PASS |
+| `vendor/bin/phpstan analyse`  | ✅ 0 errors   |
+| Architecture guardian         | ✅ PASS       |
 
 ---
 

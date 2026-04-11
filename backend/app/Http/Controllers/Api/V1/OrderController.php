@@ -35,7 +35,7 @@ class OrderController extends BaseController
     public function show(Order $order): JsonResponse
     {
         if ($order->customer_id !== auth()->id() && auth()->user()?->role !== UserRole::Admin) {
-            return $this->sendError('غير مصرح', [], 403);
+            return $this->forbidden();
         }
 
         return $this->sendSuccess(

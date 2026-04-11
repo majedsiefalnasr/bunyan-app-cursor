@@ -5,15 +5,15 @@
 
 ## Task Summary
 
-| Metric | Value |
-| -------------- | --------------- |
-| Total Tasks | 72 |
-| Parallelizable | 10 (T001–T010, Phase A enums) |
-| Sequential | 62 |
-| HIGH Risk | 0 |
-| MEDIUM Risk | 5 (T037, T038, T056–T058 — migration + linting) |
-| LOW Risk | 67 |
-| External Dependencies | 0 (no new npm/composer packages required) |
+| Metric                | Value                                           |
+| --------------------- | ----------------------------------------------- |
+| Total Tasks           | 72                                              |
+| Parallelizable        | 10 (T001–T010, Phase A enums)                   |
+| Sequential            | 62                                              |
+| HIGH Risk             | 0                                               |
+| MEDIUM Risk           | 5 (T037, T038, T056–T058 — migration + linting) |
+| LOW Risk              | 67                                              |
+| External Dependencies | 0 (no new npm/composer packages required)       |
 
 ## Risk-Ranked Task View
 
@@ -23,13 +23,13 @@ None — this stage is purely additive. No existing migrations are modified. No 
 
 ### 🟡 MEDIUM Risk Tasks
 
-| ID | Description | Risk Factor |
-| --- | ----------- | ----------- |
-| T037 | Create role_user migration | FK ordering must be correct; requires users + roles tables to exist |
-| T038 | Validate migration with `--pretend` | DB connection required in test environment |
-| T056 | Laravel Pint `--test` | Modified models may have style violations |
-| T057 | Laravel Pint (fix) | Auto-fixes could change formatting in existing files |
-| T058 | PHPStan analyse level 8 | Enum casts require proper type annotations; existing models may fail |
+| ID   | Description                         | Risk Factor                                                          |
+| ---- | ----------------------------------- | -------------------------------------------------------------------- |
+| T037 | Create role_user migration          | FK ordering must be correct; requires users + roles tables to exist  |
+| T038 | Validate migration with `--pretend` | DB connection required in test environment                           |
+| T056 | Laravel Pint `--test`               | Modified models may have style violations                            |
+| T057 | Laravel Pint (fix)                  | Auto-fixes could change formatting in existing files                 |
+| T058 | PHPStan analyse level 8             | Enum casts require proper type annotations; existing models may fail |
 
 ### 🟢 LOW Risk Tasks
 
@@ -37,24 +37,24 @@ All remaining 67 tasks (T001–T036, T039–T055, T059–T072) are low risk — 
 
 ## External Dependencies
 
-| Task ID | Package/Library | Version | Purpose |
-| ------- | --------------- | ------- | ------- |
-| T001–T010 | PHP 8.1+ | Already installed | Native enum support |
-| T045–T055 | PHPUnit/Pest | Already installed | Test framework |
-| All | Laravel 11 | Already installed | Eloquent ORM, migrations |
+| Task ID   | Package/Library | Version           | Purpose                  |
+| --------- | --------------- | ----------------- | ------------------------ |
+| T001–T010 | PHP 8.1+        | Already installed | Native enum support      |
+| T045–T055 | PHPUnit/Pest    | Already installed | Test framework           |
+| All       | Laravel 11      | Already installed | Eloquent ORM, migrations |
 
 No new packages required.
 
 ## High-Downstream-Impact Tasks
 
-| Task ID | Description | Downstream Impact |
-| ------- | ----------- | ----------------- |
-| T001 | `UserRole` enum | All models, factories, seeders, tests that reference user roles |
-| T012 | `BaseModel` | All 13 concrete models inherit from it |
-| T013 | `BaseRepository` | All 10 repositories depend on it |
-| T026 | `User` model update | Auth system (STAGE_03) will use UserRole enum for role checks |
-| T037 | `role_user` migration | STAGE_04 RBAC may activate multi-role via this pivot |
-| T043 | `RolePermissionSeeder` | STAGE_04 RBAC policy system depends on seeded permissions |
+| Task ID | Description            | Downstream Impact                                               |
+| ------- | ---------------------- | --------------------------------------------------------------- |
+| T001    | `UserRole` enum        | All models, factories, seeders, tests that reference user roles |
+| T012    | `BaseModel`            | All 13 concrete models inherit from it                          |
+| T013    | `BaseRepository`       | All 10 repositories depend on it                                |
+| T026    | `User` model update    | Auth system (STAGE_03) will use UserRole enum for role checks   |
+| T037    | `role_user` migration  | STAGE_04 RBAC may activate multi-role via this pivot            |
+| T043    | `RolePermissionSeeder` | STAGE_04 RBAC policy system depends on seeded permissions       |
 
 ## Phase Dependency Map
 

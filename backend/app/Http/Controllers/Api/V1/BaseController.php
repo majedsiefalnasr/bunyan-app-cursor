@@ -2,51 +2,54 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ErrorCode;
+use App\Http\Controllers\Api\ApiResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
+    use ApiResponse;
     use AuthorizesRequests;
-
-    public function sendSuccess($data = null, $message = 'Operation successful', $statusCode = 200): JsonResponse
-    {
-        return response()->json([
-            'success' => true,
-            'data' => $data,
-            'message' => $message,
-            'errors' => [],
-        ], $statusCode);
-    }
-
-    public function sendError($message = 'Error occurred', $errors = [], $statusCode = 400): JsonResponse
-    {
-        return response()->json([
-            'success' => false,
-            'data' => null,
-            'message' => $message,
-            'errors' => $errors,
-        ], $statusCode);
-    }
 
     public function notFound(): JsonResponse
     {
-        return $this->sendError('المورد المطلوب غير موجود', [], 404);
+        return $this->sendError(
+            ErrorCode::RESOURCE_NOT_FOUND->value,
+            __('errors.codes.'.ErrorCode::RESOURCE_NOT_FOUND->value.'.message', [], 'ar'),
+            null,
+            ErrorCode::RESOURCE_NOT_FOUND->httpStatus(),
+        );
     }
 
     public function unauthorized(): JsonResponse
     {
-        return $this->sendError('غير مصرح', [], 401);
+        return $this->sendError(
+            ErrorCode::AUTH_UNAUTHORIZED->value,
+            __('errors.codes.'.ErrorCode::AUTH_UNAUTHORIZED->value.'.message', [], 'ar'),
+            null,
+            ErrorCode::AUTH_UNAUTHORIZED->httpStatus(),
+        );
     }
 
     public function forbidden(): JsonResponse
     {
-        return $this->sendError('لا توجد صلاحيات كافية', [], 403);
+        return $this->sendError(
+            ErrorCode::RBAC_ROLE_DENIED->value,
+            __('errors.codes.'.ErrorCode::RBAC_ROLE_DENIED->value.'.message', [], 'ar'),
+            null,
+            ErrorCode::RBAC_ROLE_DENIED->httpStatus(),
+        );
     }
 
     public function validationError($errors = []): JsonResponse
     {
-        return $this->sendError('خطأ في التحقق من البيانات', $errors, 422);
+        return $this->sendError(
+            ErrorCode::VALIDATION_ERROR->value,
+            __('errors.codes.'.ErrorCode::VALIDATION_ERROR->value.'.message', [], 'ar'),
+            is_array($errors) ? $errors : [],
+            ErrorCode::VALIDATION_ERROR->httpStatus(),
+        );
     }
 }

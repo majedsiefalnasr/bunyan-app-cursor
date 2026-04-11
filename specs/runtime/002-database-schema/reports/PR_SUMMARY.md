@@ -19,18 +19,18 @@ This PR delivers the **Database Schema Foundation** for the Bunyan platform. It 
 
 10 string-backed enums covering all domain status and type values:
 
-| Enum | Cases | Arabic Labels |
-|---|---|---|
-| `UserRole` | customer, contractor, supervising_architect, field_engineer, admin | ✅ |
-| `ProjectStatus` | pending, active, on_hold, completed, cancelled | ✅ |
-| `PhaseStatus` | pending, in_progress, on_hold, completed, cancelled | ✅ |
-| `TaskStatus` | pending, in_progress, on_hold, completed, cancelled | ✅ |
-| `OrderStatus` | pending, confirmed, processing, shipped, delivered, cancelled | ✅ |
-| `TransactionType` | payment, withdrawal, refund, commission | ✅ |
-| `TransactionStatus` | pending, completed, failed, reversed | ✅ |
-| `WorkflowType` | sequential, parallel, approval_required | ✅ |
-| `ApprovalStatus` | pending, approved, rejected | ✅ |
-| `ReportType` | progress, issue, inspection, completion | ✅ |
+| Enum                | Cases                                                              | Arabic Labels |
+| ------------------- | ------------------------------------------------------------------ | ------------- |
+| `UserRole`          | customer, contractor, supervising_architect, field_engineer, admin | ✅            |
+| `ProjectStatus`     | pending, active, on_hold, completed, cancelled                     | ✅            |
+| `PhaseStatus`       | pending, in_progress, on_hold, completed, cancelled                | ✅            |
+| `TaskStatus`        | pending, in_progress, on_hold, completed, cancelled                | ✅            |
+| `OrderStatus`       | pending, confirmed, processing, shipped, delivered, cancelled      | ✅            |
+| `TransactionType`   | payment, withdrawal, refund, commission                            | ✅            |
+| `TransactionStatus` | pending, completed, failed, reversed                               | ✅            |
+| `WorkflowType`      | sequential, parallel, approval_required                            | ✅            |
+| `ApprovalStatus`    | pending, approved, rejected                                        | ✅            |
+| `ReportType`        | progress, issue, inspection, completion                            | ✅            |
 
 Each enum provides: `label(): string` (Arabic), `values(): array`.
 
@@ -53,6 +53,7 @@ newQuery()   model(): string (abstract)
 ### New: Migration — `role_user` Pivot
 
 Additive migration `2026_04_11_120000_create_role_user_table.php`:
+
 - `user_id` → FK to `users` (cascade delete)
 - `role_id` → FK to `roles` (cascade delete)
 - `assigned_by` → nullable FK to `users` (null on delete) — audit trail
@@ -78,6 +79,7 @@ All extend `BaseRepository` and implement `model(): string`. Domain-specific que
 ### Cross-Cutting: Enum-aware Role Checks
 
 Stage 01 files updated to use `UserRole::Case` instead of string literals, required by the new enum cast on `User.role`:
+
 - 8 Policy files
 - 4 Form Request files
 - 4 Controller files (including `ProjectController::store()` corrected from `'draft'` → `ProjectStatus::Pending`)
@@ -86,29 +88,29 @@ Stage 01 files updated to use `UserRole::Case` instead of string literals, requi
 
 ## Test Coverage
 
-| Suite | Tests | Assertions | Result |
-|---|---|---|---|
-| Unit — Enums (5 files) | 31 | 95 | ✅ Pass |
-| Unit — BaseRepositoryTest | included above | included | ✅ Pass |
-| Feature — DatabaseSchemaTest | included above | included | ✅ Pass |
-| Feature — EnumCastTest | included above | included | ✅ Pass |
-| Feature — SeederTest | included above | included | ✅ Pass |
-| Feature — SoftDeleteTest | included above | included | ✅ Pass |
-| Feature — MigrationRollbackTest | included above | included | ✅ Pass |
-| **Total** | **31** | **278** | **✅ 0 failures** |
+| Suite                           | Tests          | Assertions | Result            |
+| ------------------------------- | -------------- | ---------- | ----------------- |
+| Unit — Enums (5 files)          | 31             | 95         | ✅ Pass           |
+| Unit — BaseRepositoryTest       | included above | included   | ✅ Pass           |
+| Feature — DatabaseSchemaTest    | included above | included   | ✅ Pass           |
+| Feature — EnumCastTest          | included above | included   | ✅ Pass           |
+| Feature — SeederTest            | included above | included   | ✅ Pass           |
+| Feature — SoftDeleteTest        | included above | included   | ✅ Pass           |
+| Feature — MigrationRollbackTest | included above | included   | ✅ Pass           |
+| **Total**                       | **31**         | **278**    | **✅ 0 failures** |
 
 ---
 
 ## Quality Gates
 
-| Gate | Result |
-|---|---|
-| PHPStan Level 5 (`vendor/bin/phpstan analyse`) | ✅ 0 errors |
-| `php artisan test` | ✅ 31 passed, 0 failed |
-| Architecture Guardian | ✅ PASS |
-| Security Auditor | ✅ PASS |
-| Performance Optimizer | ✅ PASS |
-| Code Reviewer | ✅ PASS |
+| Gate                                           | Result                 |
+| ---------------------------------------------- | ---------------------- |
+| PHPStan Level 5 (`vendor/bin/phpstan analyse`) | ✅ 0 errors            |
+| `php artisan test`                             | ✅ 31 passed, 0 failed |
+| Architecture Guardian                          | ✅ PASS                |
+| Security Auditor                               | ✅ PASS                |
+| Performance Optimizer                          | ✅ PASS                |
+| Code Reviewer                                  | ✅ PASS                |
 
 ---
 
@@ -140,6 +142,7 @@ php artisan db:seed          # Seeds RolePermissionSeeder
 ```
 
 Rollback safe:
+
 ```bash
 php artisan migrate:rollback # Drops role_user table cleanly
 ```

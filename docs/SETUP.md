@@ -4,13 +4,13 @@ Monorepo root drives installs, Git hooks, and aggregate scripts (`package.json`)
 
 ## Requirements
 
-| Tool | Version | Notes |
-|------|---------|--------|
-| PHP | 8.2+ | Extensions used in CI: `pdo`, `pdo_mysql`, `mbstring`, `xml`, `bcmath`, `tokenizer`, `json`, `redis` (optional locally if you stub drivers) |
-| Composer | 2.6+ | |
-| Node.js | 20 LTS | Matches GitHub Actions |
-| npm | 10+ | |
-| Git | 2.30+ | |
+| Tool     | Version | Notes                                                                                                                                       |
+| -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| PHP      | 8.2+    | Extensions used in CI: `pdo`, `pdo_mysql`, `mbstring`, `xml`, `bcmath`, `tokenizer`, `json`, `redis` (optional locally if you stub drivers) |
+| Composer | 2.6+    |                                                                                                                                             |
+| Node.js  | 20 LTS  | Matches GitHub Actions                                                                                                                      |
+| npm      | 10+     |                                                                                                                                             |
+| Git      | 2.30+   |                                                                                                                                             |
 
 **Databases:** MySQL 8 and Redis 7 are expected for full-stack runs (`docker-compose` or local installs). PHPUnit uses SQLite in memory by default for tests; see `backend/phpunit.xml`.
 

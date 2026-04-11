@@ -58,16 +58,16 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 
 ## HTTP Status Codes
 
-| Code | Meaning | Scenario |
-|------|---------|----------|
-| 200 | OK | Successful GET, PATCH |
-| 201 | Created | Successful POST (resource created) |
-| 400 | Bad Request | Validation failed |
-| 401 | Unauthorized | Missing/invalid token |
-| 403 | Forbidden | Authenticated but no permission (policy fails) |
-| 404 | Not Found | Resource doesn't exist |
-| 422 | Unprocessable Entity | Validation failed (same as 400) |
-| 500 | Internal Server Error | Server error |
+| Code | Meaning               | Scenario                                       |
+| ---- | --------------------- | ---------------------------------------------- |
+| 200  | OK                    | Successful GET, PATCH                          |
+| 201  | Created               | Successful POST (resource created)             |
+| 400  | Bad Request           | Validation failed                              |
+| 401  | Unauthorized          | Missing/invalid token                          |
+| 403  | Forbidden             | Authenticated but no permission (policy fails) |
+| 404  | Not Found             | Resource doesn't exist                         |
+| 422  | Unprocessable Entity  | Validation failed (same as 400)                |
+| 500  | Internal Server Error | Server error                                   |
 
 ---
 
@@ -79,6 +79,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Auth:** Public (no token required)
 
 **Request Body:**
+
 ```json
 {
   "name": "احمد محمد",
@@ -91,6 +92,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
@@ -111,6 +113,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (422 Validation Failed):**
+
 ```json
 {
   "success": false,
@@ -131,6 +134,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Auth:** Public
 
 **Request Body:**
+
 ```json
 {
   "email": "ahmad@bunyan.local",
@@ -139,6 +143,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -157,6 +162,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (401 Unauthorized):**
+
 ```json
 {
   "success": false,
@@ -174,6 +180,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Auth:** Required (Bearer token)
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -193,6 +200,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Query Params:** `page=1`, `status=pending`, `search=query`
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -201,7 +209,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
       "id": 1,
       "title": "مشروع البناء الحديث",
       "description": "مشروع تشييد مبنى سكني حديث",
-      "budget": 500000.00,
+      "budget": 500000.0,
       "status": "in_progress",
       "customer_id": 1,
       "contractor_id": 2,
@@ -225,6 +233,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** ProjectPolicy@create
 
 **Request Body:**
+
 ```json
 {
   "title": "مشروع البناء الحديث",
@@ -238,13 +247,14 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
   "data": {
     "id": 1,
     "title": "مشروع البناء الحديث",
-    "budget": 500000.00,
+    "budget": 500000.0,
     "status": "pending",
     "customer_id": 1,
     "workflow_config_id": 1,
@@ -263,6 +273,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** ProjectPolicy@view
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -270,7 +281,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
     "id": 1,
     "title": "مشروع البناء الحديث",
     "description": "...",
-    "budget": 500000.00,
+    "budget": 500000.0,
     "status": "in_progress",
     "customer": {
       "id": 1,
@@ -288,7 +299,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
       {
         "id": 1,
         "name": "مرحلة الأساس",
-        "budget": 150000.00,
+        "budget": 150000.0,
         "status": "complete",
         "tasks": [
           {
@@ -315,7 +326,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
     "transactions": [
       {
         "id": 1,
-        "amount": 100000.00,
+        "amount": 100000.0,
         "type": "payment",
         "status": "completed",
         "created_at": "2026-04-10T12:00:00Z"
@@ -335,6 +346,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** ProjectPolicy@update
 
 **Request Body:**
+
 ```json
 {
   "title": "مشروع البناء المتقدم",
@@ -345,13 +357,14 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
   "data": {
     "id": 1,
     "title": "مشروع البناء المتقدم",
-    "budget": 600000.00,
+    "budget": 600000.0,
     "status": "in_progress"
   },
   "message": "Project updated successfully"
@@ -367,6 +380,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** ProjectPolicy@delete
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -386,6 +400,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** PhasePolicy@create
 
 **Request Body:**
+
 ```json
 {
   "name": "مرحلة الأساس",
@@ -398,6 +413,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
@@ -405,7 +421,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
     "id": 1,
     "project_id": 1,
     "name": "مرحلة الأساس",
-    "budget": 150000.00,
+    "budget": 150000.0,
     "status": "pending",
     "order": 1,
     "created_at": "2026-04-10T12:00:00Z"
@@ -425,6 +441,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** TaskPolicy@create
 
 **Request Body:**
+
 ```json
 {
   "name": "حفر الأساس",
@@ -446,6 +463,7 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Policy:** TaskPolicy@complete
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -470,11 +488,13 @@ All API responses follow a standardized **JSON contract** with fields: `success`
 **Content-Type:** `multipart/form-data`
 
 **Request Body:**
+
 ```
 text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<file2.jpg>&videos=<video1.mp4>
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
@@ -486,9 +506,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
       "https://storage.bunyan.local/reports/photo-1.jpg",
       "https://storage.bunyan.local/reports/photo-2.jpg"
     ],
-    "videos": [
-      "https://storage.bunyan.local/reports/video-1.mp4"
-    ],
+    "videos": ["https://storage.bunyan.local/reports/video-1.mp4"],
     "created_at": "2026-04-15T15:30:00Z"
   },
   "message": "Report created successfully"
@@ -506,6 +524,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 **Policy:** TransactionPolicy@create
 
 **Request Body:**
+
 ```json
 {
   "amount": 100000,
@@ -515,13 +534,14 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
   "data": {
     "id": 1,
     "project_id": 1,
-    "amount": 100000.00,
+    "amount": 100000.0,
     "type": "payment",
     "status": "pending",
     "payment_method": "bank_transfer",
@@ -543,6 +563,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 **Query Params:** `category=cement`, `search=keyword`, `page=1`
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -550,7 +571,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
     {
       "id": 1,
       "name": "الاسمنت البورتلاندي",
-      "price": 150.00,
+      "price": 150.0,
       "sku": "CEMENT-001",
       "stock_quantity": 1000,
       "category": {
@@ -572,6 +593,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 **Auth:** Required (Customer only)
 
 **Request Body:**
+
 ```json
 {
   "items": [
@@ -590,6 +612,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "success": true,
@@ -597,14 +620,14 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
     "id": 1,
     "order_number": "ORD-2026-0001",
     "customer_id": 1,
-    "total_amount": 12500.00,
+    "total_amount": 12500.0,
     "status": "pending",
     "items": [
       {
         "product_id": 1,
         "product_name": "الاسمنت البورتلاندي",
         "quantity": 100,
-        "unit_price": 150.00
+        "unit_price": 150.0
       }
     ],
     "created_at": "2026-04-10T12:00:00Z"
@@ -617,16 +640,16 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 
 ## Error Codes Reference
 
-| Error Code | HTTP | Meaning | Solution |
-|-----------|------|---------|----------|
-| ERR_AUTH_INVALID_CREDENTIALS | 401 | Email/password incorrect | Verify credentials |
-| ERR_AUTH_TOKEN_EXPIRED | 401 | Token expired (>7 days) | Re-login to get new token |
-| ERR_AUTH_MISSING_TOKEN | 401 | Authorization header missing | Add: `Authorization: Bearer <token>` |
-| ERR_FORBIDDEN_POLICY | 403 | User lacks permission | Check role/ownership |
-| ERR_VALIDATION_FAILED | 422 | Input validation failed | Check errors field for details |
-| ERR_RESOURCE_NOT_FOUND | 404 | Resource doesn't exist | Verify ID exists |
-| ERR_CONFLICT_BUDGET | 422 | Phase/task budget exceeds project | Adjust budgets |
-| ERR_WORKFLOW_INVALID_TRANSITION | 422 | Status change not allowed | Check workflow rules |
+| Error Code                      | HTTP | Meaning                           | Solution                             |
+| ------------------------------- | ---- | --------------------------------- | ------------------------------------ |
+| ERR_AUTH_INVALID_CREDENTIALS    | 401  | Email/password incorrect          | Verify credentials                   |
+| ERR_AUTH_TOKEN_EXPIRED          | 401  | Token expired (>7 days)           | Re-login to get new token            |
+| ERR_AUTH_MISSING_TOKEN          | 401  | Authorization header missing      | Add: `Authorization: Bearer <token>` |
+| ERR_FORBIDDEN_POLICY            | 403  | User lacks permission             | Check role/ownership                 |
+| ERR_VALIDATION_FAILED           | 422  | Input validation failed           | Check errors field for details       |
+| ERR_RESOURCE_NOT_FOUND          | 404  | Resource doesn't exist            | Verify ID exists                     |
+| ERR_CONFLICT_BUDGET             | 422  | Phase/task budget exceeds project | Adjust budgets                       |
+| ERR_WORKFLOW_INVALID_TRANSITION | 422  | Status change not allowed         | Check workflow rules                 |
 
 ---
 
@@ -635,6 +658,7 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 **Applied to:** Auth endpoints (login, register, refresh)  
 **Limit:** 5 requests per minute per IP  
 **Response (429 Too Many Requests):**
+
 ```json
 {
   "success": false,
@@ -650,10 +674,12 @@ text=تم إكمال حفر الأساس بنجاح&photos=<file1.jpg>&photos=<f
 Endpoints that return lists support pagination:
 
 **Query Params:**
+
 - `page=1` (default: 1)
 - `per_page=15` (default: 15, max: 100)
 
 **Response Structure:**
+
 ```json
 {
   "success": true,

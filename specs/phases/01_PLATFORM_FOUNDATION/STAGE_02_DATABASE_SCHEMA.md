@@ -16,6 +16,7 @@ Completed: 2026-04-11T12:30:00Z
 PR: https://github.com/majedsiefalnasr/bunyan-app-cursor/pull/2
 
 Quality Gates:
+
 - PHPStan Level 5: PASS (0 errors)
 - Tests: 31 passed / 0 failed (278 assertions)
 - Architecture Guardian: PASS
@@ -24,6 +25,7 @@ Quality Gates:
 - Code Reviewer: PASS
 
 Deliverables:
+
 - 10 PHP Enums (UserRole, ProjectStatus, PhaseStatus, TaskStatus, OrderStatus, TransactionType, TransactionStatus, WorkflowType, ApprovalStatus, ReportType)
 - BaseModel abstract class with opt-in SoftDeletes + scopeOrdered
 - HasBaseModelBehavior trait for User model composition
@@ -35,11 +37,13 @@ Deliverables:
 - 11 test files (5 unit, 5 feature, 1 repository)
 
 Deferred Scope:
+
 - Auth/RBAC logic (STAGE_03/04)
 - API controllers (STAGE_03+)
 - Frontend (later phases)
 
 Architecture Governance Compliance:
+
 - All ADRs followed
 - No invention of architecture
 - RBAC enforced server-side

@@ -24,18 +24,18 @@ CREATE TABLE `role_user` (
 
 ## Enum Backing Values (DB Storage)
 
-| Enum | Column | Table | Possible Values |
-|---|---|---|---|
-| UserRole | role | users | customer, contractor, supervising_architect, field_engineer, admin |
-| ProjectStatus | status | projects | pending, active, on_hold, completed, cancelled |
-| PhaseStatus | status | phases | pending, in_progress, completed, approved, rejected |
-| TaskStatus | status | tasks | pending, in_progress, completed, approved, rejected |
-| OrderStatus | status | orders | pending, processing, shipped, delivered, cancelled, refunded |
-| TransactionType | type | transactions | payment, withdrawal, refund, commission |
-| TransactionStatus | status | transactions | pending, completed, failed, cancelled |
-| WorkflowType | type | workflow_configurations | project, phase, task |
-| ApprovalStatus | status | approval_rules | pending, approved, rejected |
-| ReportType | type | reports | progress, inspection, incident, completion |
+| Enum              | Column | Table                   | Possible Values                                                    |
+| ----------------- | ------ | ----------------------- | ------------------------------------------------------------------ |
+| UserRole          | role   | users                   | customer, contractor, supervising_architect, field_engineer, admin |
+| ProjectStatus     | status | projects                | pending, active, on_hold, completed, cancelled                     |
+| PhaseStatus       | status | phases                  | pending, in_progress, completed, approved, rejected                |
+| TaskStatus        | status | tasks                   | pending, in_progress, completed, approved, rejected                |
+| OrderStatus       | status | orders                  | pending, processing, shipped, delivered, cancelled, refunded       |
+| TransactionType   | type   | transactions            | payment, withdrawal, refund, commission                            |
+| TransactionStatus | status | transactions            | pending, completed, failed, cancelled                              |
+| WorkflowType      | type   | workflow_configurations | project, phase, task                                               |
+| ApprovalStatus    | status | approval_rules          | pending, approved, rejected                                        |
+| ReportType        | type   | reports                 | progress, inspection, incident, completion                         |
 
 ## Class Hierarchy
 
@@ -76,64 +76,64 @@ App\Repositories\BaseRepository (abstract)
 
 ### New Files
 
-| Path | Type | Description |
-|---|---|---|
-| `backend/app/Enums/UserRole.php` | Enum | User role enum |
-| `backend/app/Enums/ProjectStatus.php` | Enum | Project status |
-| `backend/app/Enums/PhaseStatus.php` | Enum | Phase status |
-| `backend/app/Enums/TaskStatus.php` | Enum | Task status |
-| `backend/app/Enums/OrderStatus.php` | Enum | Order status |
-| `backend/app/Enums/TransactionType.php` | Enum | Transaction type |
-| `backend/app/Enums/TransactionStatus.php` | Enum | Transaction status |
-| `backend/app/Enums/WorkflowType.php` | Enum | Workflow type |
-| `backend/app/Enums/ApprovalStatus.php` | Enum | Approval status |
-| `backend/app/Enums/ReportType.php` | Enum | Report type |
-| `backend/app/Models/BaseModel.php` | Class | Abstract base model |
-| `backend/app/Models/Concerns/HasBaseModelBehavior.php` | Trait | Shared model behavior for User |
-| `backend/app/Repositories/BaseRepository.php` | Class | Abstract base repository |
-| `backend/database/migrations/2026_04_11_120000_create_role_user_table.php` | Migration | role_user pivot |
-| `backend/database/seeders/RolePermissionSeeder.php` | Seeder | Role-permission assignments |
-| `backend/tests/Unit/Enums/UserRoleTest.php` | Test | UserRole enum test |
-| `backend/tests/Unit/Enums/ProjectStatusTest.php` | Test | ProjectStatus enum test |
-| `backend/tests/Unit/Enums/PhaseStatusTest.php` | Test | PhaseStatus enum test |
-| `backend/tests/Unit/Enums/TaskStatusTest.php` | Test | TaskStatus enum test |
-| `backend/tests/Unit/Enums/OtherEnumsTest.php` | Test | Remaining 6 enums |
-| `backend/tests/Unit/Repositories/BaseRepositoryTest.php` | Test | BaseRepository contract |
-| `backend/tests/Feature/Database/DatabaseSchemaTest.php` | Test | Table/column assertions |
-| `backend/tests/Feature/Database/MigrationRollbackTest.php` | Test | Rollback integrity |
-| `backend/tests/Feature/Database/SeederTest.php` | Test | Seeder data validation |
-| `backend/tests/Feature/Database/SoftDeleteTest.php` | Test | Soft delete behavior |
-| `backend/tests/Feature/Database/EnumCastTest.php` | Test | Enum casting E2E |
+| Path                                                                       | Type      | Description                    |
+| -------------------------------------------------------------------------- | --------- | ------------------------------ |
+| `backend/app/Enums/UserRole.php`                                           | Enum      | User role enum                 |
+| `backend/app/Enums/ProjectStatus.php`                                      | Enum      | Project status                 |
+| `backend/app/Enums/PhaseStatus.php`                                        | Enum      | Phase status                   |
+| `backend/app/Enums/TaskStatus.php`                                         | Enum      | Task status                    |
+| `backend/app/Enums/OrderStatus.php`                                        | Enum      | Order status                   |
+| `backend/app/Enums/TransactionType.php`                                    | Enum      | Transaction type               |
+| `backend/app/Enums/TransactionStatus.php`                                  | Enum      | Transaction status             |
+| `backend/app/Enums/WorkflowType.php`                                       | Enum      | Workflow type                  |
+| `backend/app/Enums/ApprovalStatus.php`                                     | Enum      | Approval status                |
+| `backend/app/Enums/ReportType.php`                                         | Enum      | Report type                    |
+| `backend/app/Models/BaseModel.php`                                         | Class     | Abstract base model            |
+| `backend/app/Models/Concerns/HasBaseModelBehavior.php`                     | Trait     | Shared model behavior for User |
+| `backend/app/Repositories/BaseRepository.php`                              | Class     | Abstract base repository       |
+| `backend/database/migrations/2026_04_11_120000_create_role_user_table.php` | Migration | role_user pivot                |
+| `backend/database/seeders/RolePermissionSeeder.php`                        | Seeder    | Role-permission assignments    |
+| `backend/tests/Unit/Enums/UserRoleTest.php`                                | Test      | UserRole enum test             |
+| `backend/tests/Unit/Enums/ProjectStatusTest.php`                           | Test      | ProjectStatus enum test        |
+| `backend/tests/Unit/Enums/PhaseStatusTest.php`                             | Test      | PhaseStatus enum test          |
+| `backend/tests/Unit/Enums/TaskStatusTest.php`                              | Test      | TaskStatus enum test           |
+| `backend/tests/Unit/Enums/OtherEnumsTest.php`                              | Test      | Remaining 6 enums              |
+| `backend/tests/Unit/Repositories/BaseRepositoryTest.php`                   | Test      | BaseRepository contract        |
+| `backend/tests/Feature/Database/DatabaseSchemaTest.php`                    | Test      | Table/column assertions        |
+| `backend/tests/Feature/Database/MigrationRollbackTest.php`                 | Test      | Rollback integrity             |
+| `backend/tests/Feature/Database/SeederTest.php`                            | Test      | Seeder data validation         |
+| `backend/tests/Feature/Database/SoftDeleteTest.php`                        | Test      | Soft delete behavior           |
+| `backend/tests/Feature/Database/EnumCastTest.php`                          | Test      | Enum casting E2E               |
 
 ### Modified Files
 
-| Path | Change |
-|---|---|
-| `backend/app/Models/User.php` | Add `HasBaseModelBehavior` trait, cast `role` to `UserRole` |
-| `backend/app/Models/Project.php` | Extend `BaseModel`, cast `status` to `ProjectStatus` |
-| `backend/app/Models/Phase.php` | Extend `BaseModel`, cast `status` to `PhaseStatus` |
-| `backend/app/Models/Task.php` | Extend `BaseModel`, cast `status` to `TaskStatus` |
-| `backend/app/Models/Order.php` | Extend `BaseModel`, cast `status` to `OrderStatus` |
-| `backend/app/Models/Transaction.php` | Extend `BaseModel`, cast `type` to `TransactionType`, `status` to `TransactionStatus` |
-| `backend/app/Models/WorkflowConfiguration.php` | Extend `BaseModel`, cast `type` to `WorkflowType` |
-| `backend/app/Models/ApprovalRule.php` | Extend `BaseModel`, cast `status` to `ApprovalStatus` |
-| `backend/app/Models/Report.php` | Extend `BaseModel`, cast `type` to `ReportType` |
-| `backend/app/Models/Role.php` | Extend `BaseModel` |
-| `backend/app/Models/Permission.php` | Extend `BaseModel` |
-| `backend/app/Models/OrderItem.php` | Extend `BaseModel` |
-| `backend/app/Models/Product.php` | Extend `BaseModel` |
-| `backend/app/Repositories/UserRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/ProjectRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/PhaseRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/TaskRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/ReportRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/ApprovalRuleRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/WorkflowConfigurationRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/OrderRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/ProductRepository.php` | Extend `BaseRepository` |
-| `backend/app/Repositories/TransactionRepository.php` | Extend `BaseRepository` |
-| `backend/database/factories/UserFactory.php` | Add role states + inactive state |
-| `backend/database/factories/ProjectFactory.php` | Add status states |
-| `backend/database/factories/PhaseFactory.php` | Add status states |
-| `backend/database/factories/TaskFactory.php` | Add status states |
-| `backend/database/seeders/DatabaseSeeder.php` | Add RolePermissionSeeder, correct ordering |
+| Path                                                           | Change                                                                                |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `backend/app/Models/User.php`                                  | Add `HasBaseModelBehavior` trait, cast `role` to `UserRole`                           |
+| `backend/app/Models/Project.php`                               | Extend `BaseModel`, cast `status` to `ProjectStatus`                                  |
+| `backend/app/Models/Phase.php`                                 | Extend `BaseModel`, cast `status` to `PhaseStatus`                                    |
+| `backend/app/Models/Task.php`                                  | Extend `BaseModel`, cast `status` to `TaskStatus`                                     |
+| `backend/app/Models/Order.php`                                 | Extend `BaseModel`, cast `status` to `OrderStatus`                                    |
+| `backend/app/Models/Transaction.php`                           | Extend `BaseModel`, cast `type` to `TransactionType`, `status` to `TransactionStatus` |
+| `backend/app/Models/WorkflowConfiguration.php`                 | Extend `BaseModel`, cast `type` to `WorkflowType`                                     |
+| `backend/app/Models/ApprovalRule.php`                          | Extend `BaseModel`, cast `status` to `ApprovalStatus`                                 |
+| `backend/app/Models/Report.php`                                | Extend `BaseModel`, cast `type` to `ReportType`                                       |
+| `backend/app/Models/Role.php`                                  | Extend `BaseModel`                                                                    |
+| `backend/app/Models/Permission.php`                            | Extend `BaseModel`                                                                    |
+| `backend/app/Models/OrderItem.php`                             | Extend `BaseModel`                                                                    |
+| `backend/app/Models/Product.php`                               | Extend `BaseModel`                                                                    |
+| `backend/app/Repositories/UserRepository.php`                  | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/ProjectRepository.php`               | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/PhaseRepository.php`                 | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/TaskRepository.php`                  | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/ReportRepository.php`                | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/ApprovalRuleRepository.php`          | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/WorkflowConfigurationRepository.php` | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/OrderRepository.php`                 | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/ProductRepository.php`               | Extend `BaseRepository`                                                               |
+| `backend/app/Repositories/TransactionRepository.php`           | Extend `BaseRepository`                                                               |
+| `backend/database/factories/UserFactory.php`                   | Add role states + inactive state                                                      |
+| `backend/database/factories/ProjectFactory.php`                | Add status states                                                                     |
+| `backend/database/factories/PhaseFactory.php`                  | Add status states                                                                     |
+| `backend/database/factories/TaskFactory.php`                   | Add status states                                                                     |
+| `backend/database/seeders/DatabaseSeeder.php`                  | Add RolePermissionSeeder, correct ordering                                            |

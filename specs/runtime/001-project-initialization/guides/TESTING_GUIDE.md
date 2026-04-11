@@ -121,14 +121,14 @@ npx husky install
 
 ### Quick reference (this repository)
 
-| Goal | Command |
-|------|---------|
-| Run all automated tests | `cd backend && composer test` or `cd backend && php artisan test` |
-| Feature / API tests only | `cd backend && php artisan test tests/Feature` |
-| PHP style (dry-run) | `cd backend && composer run lint` |
-| PHP style (apply fixes) | `cd backend && composer run lint:fix` |
-| PHPStan | `cd backend && composer run analyze` |
-| PHPUnit directly (debug) | `cd backend && ./vendor/bin/phpunit` |
+| Goal                     | Command                                                           |
+| ------------------------ | ----------------------------------------------------------------- |
+| Run all automated tests  | `cd backend && composer test` or `cd backend && php artisan test` |
+| Feature / API tests only | `cd backend && php artisan test tests/Feature`                    |
+| PHP style (dry-run)      | `cd backend && composer run lint`                                 |
+| PHP style (apply fixes)  | `cd backend && composer run lint:fix`                             |
+| PHPStan                  | `cd backend && composer run analyze`                              |
+| PHPUnit directly (debug) | `cd backend && ./vendor/bin/phpunit`                              |
 
 **Database for tests:** `backend/phpunit.xml` sets **`DB_CONNECTION=sqlite`** and **`DB_DATABASE=:memory:`** under `<php><env>`. You do **not** need MySQL running for `php artisan test`.
 
@@ -201,6 +201,7 @@ npx nuxi prepare
 ### Unit tests (Vitest)
 
 **Command:**
+
 ```bash
 cd frontend
 npm run test
@@ -208,7 +209,7 @@ npm run test
 
 **Layout:**
 
-- Specs are discovered from **`tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`** (see `vitest.config.ts`).
+- Specs are discovered from **`tests/**/\*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`** (see `vitest.config.ts`).
 - A minimal **`tests/unit/smoke.spec.ts`** keeps the pipeline green until more suites land.
 - **`passWithNoTests: true`** avoids failing when no files match (useful on sparse branches).
 
@@ -247,21 +248,23 @@ npm run typecheck
 
 ### Warnings you may see (often non-fatal)
 
-| Warning | Meaning |
-|--------|---------|
+| Warning                                                                                         | Meaning                                                                                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Tailwind / Nuxt UI** — `Failed to load .nuxt/nuxtui-tailwind.config.mjs` … `defaultExtractor` | **Tailwind v4** exports do not match what **@nuxt/ui** + **@nuxtjs/tailwindcss** expect yet. Build/typecheck may still succeed; fix = upgrade **@nuxt/ui** / Tailwind stack when upstream releases align. |
-| **i18n** — `iso` property deprecated | `@nuxtjs/i18n` v9+ will prefer `language` instead of `iso` on locale entries. |
-| **npm `EBADENGINE`** | Some ESLint-related packages declare Node **20.19+ / 22.13+ / 24+**; use **Node 20 LTS** in CI for the fewest warnings. |
+| **i18n** — `iso` property deprecated                                                            | `@nuxtjs/i18n` v9+ will prefer `language` instead of `iso` on locale entries.                                                                                                                             |
+| **npm `EBADENGINE`**                                                                            | Some ESLint-related packages declare Node **20.19+ / 22.13+ / 24+**; use **Node 20 LTS** in CI for the fewest warnings.                                                                                   |
 
 ### ESLint (ESLint 9 flat config)
 
 **Check:**
+
 ```bash
 cd frontend
 npm run lint
 ```
 
 **Auto-fix:**
+
 ```bash
 cd frontend
 npm run lint:fix
@@ -301,6 +304,7 @@ npx playwright install
 - **`playwright.config.ts`** defines a **`webServer`** that runs **`npm run dev`** when **`CI`** is unset, targeting **`http://localhost:3000`**. Free port **3000** or change **`baseURL` / `webServer`** in config.
 
 **Run all E2E tests:**
+
 ```bash
 cd frontend
 npm run test:e2e
@@ -377,6 +381,7 @@ npm run test:e2e -- --update-snapshots
 10. Verify redirect to login page
 
 **Expected Behavior:**
+
 - ✅ Registration form validates input
 - ✅ Duplicate email prevented
 - ✅ Login succeeds with correct credentials
@@ -393,6 +398,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify customer can create a project with phases
 
 **Prerequisites:**
+
 - Customer account created and logged in
 - Backend running on http://localhost:8000
 
@@ -416,6 +422,7 @@ npm run test:e2e -- --update-snapshots
 9. Verify phase appears in project detail
 
 **Expected Behavior:**
+
 - ✅ Form validates budget (must be number, > 0)
 - ✅ Form validates dates (end date > start date)
 - ✅ Project created and persisted to database
@@ -431,6 +438,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify role-based access control prevents unauthorized access
 
 **Prerequisites:**
+
 - Customer account logged in
 - Browser dev tools open
 
@@ -443,6 +451,7 @@ npm run test:e2e -- --update-snapshots
 5. Verify response includes error message about insufficient permissions
 
 **Expected Behavior:**
+
 - ✅ No redirect to admin page occurs
 - ✅ API returns 403 status code
 - ✅ Error message displayed (or redirect silently)
@@ -457,6 +466,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify phase status changes follow workflow rules
 
 **Prerequisites:**
+
 - Project with phases created
 - Supervising Architect or Admin role
 - Backend running
@@ -472,6 +482,7 @@ npm run test:e2e -- --update-snapshots
 7. Verify error message if workflow prevents transition
 
 **Expected Behavior:**
+
 - ✅ Valid transitions allowed
 - ✅ Invalid transitions blocked with error
 - ✅ Status persisted to database
@@ -486,6 +497,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify field engineer can submit reports with media
 
 **Prerequisites:**
+
 - Field Engineer account logged in
 - Project with active phase
 
@@ -501,6 +513,7 @@ npm run test:e2e -- --update-snapshots
 6. Verify media thumbnail displays
 
 **Expected Behavior:**
+
 - ✅ Form validates text required
 - ✅ Media upload accepts images/videos
 - ✅ Report persisted with timestamp
@@ -516,6 +529,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify customer can initiate payments
 
 **Prerequisites:**
+
 - Customer account with active projects
 - Transactions enabled
 
@@ -532,6 +546,7 @@ npm run test:e2e -- --update-snapshots
 7. Verify balance updated
 
 **Expected Behavior:**
+
 - ✅ Form validates amount (> 0, ≤ balance)
 - ✅ Payment processed securely
 - ✅ Transaction recorded to database
@@ -547,6 +562,7 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify Arabic RTL layout and translations
 
 **Prerequisites:**
+
 - Frontend running
 
 **Steps:**
@@ -563,6 +579,7 @@ npm run test:e2e -- --update-snapshots
 7. Verify layout flips to LTR
 
 **Expected Behavior:**
+
 - ✅ All text translated to Arabic/English
 - ✅ Layout flips correctly (no broken elements)
 - ✅ Form direction changes
@@ -578,12 +595,14 @@ npm run test:e2e -- --update-snapshots
 **Objective:** Verify API returns consistent error format
 
 **Prerequisites:**
+
 - Backend running
 - API client (Postman, curl, or browser dev tools)
 
 **Steps:**
 
 1. Make invalid API request (e.g., login with bad password):
+
    ```bash
    curl -X POST http://localhost:8000/api/v1/auth/login \
      -H "Content-Type: application/json" \
@@ -591,6 +610,7 @@ npm run test:e2e -- --update-snapshots
    ```
 
 2. Verify response format (Bunyan envelope; **message** / **errors** may be **Arabic** strings from the API):
+
    ```json
    {
      "success": false,
@@ -601,6 +621,7 @@ npm run test:e2e -- --update-snapshots
    ```
 
 3. Try unauthorized request (without token):
+
    ```bash
    curl -X GET http://localhost:8000/api/v1/projects
    ```
@@ -608,6 +629,7 @@ npm run test:e2e -- --update-snapshots
 4. Verify 401 Unauthorized response
 
 5. Try with invalid token:
+
    ```bash
    curl -X GET http://localhost:8000/api/v1/projects \
      -H "Authorization: Bearer invalid_token"
@@ -616,6 +638,7 @@ npm run test:e2e -- --update-snapshots
 6. Verify **401** for missing/invalid bearer token (and **403** when authenticated but forbidden, depending on route)
 
 **Expected Behavior:**
+
 - ✅ All errors follow standard format
 - ✅ Appropriate HTTP status codes (400, 401, 403, 404, 500)
 - ✅ No stack traces exposed in production
@@ -638,6 +661,7 @@ npm run test:e2e -- --update-snapshots
    ```
 3. List tables: `SHOW TABLES;`
 4. Verify all expected tables exist (adjust for your migration set):
+
    - ✅ users
    - ✅ personal_access_tokens (Laravel Sanctum)
    - ✅ roles
@@ -655,6 +679,7 @@ npm run test:e2e -- --update-snapshots
    - ✅ transactions
 
 5. Inspect table structure:
+
    ```bash
    DESCRIBE users;
    ```
@@ -662,6 +687,7 @@ npm run test:e2e -- --update-snapshots
 6. Verify columns: e.g. `id`, `name`, `email`, `password`, **`role`** (string), `created_at`, `updated_at` — use `DESCRIBE users;` as truth
 
 **Expected Behavior:**
+
 - ✅ All migrations run successfully
 - ✅ All tables created with correct schema
 - ✅ Indexes created for performance
@@ -679,11 +705,13 @@ npm run test:e2e -- --update-snapshots
 **Steps:**
 
 1. Create a test file with formatting issues:
+
    ```bash
    echo "echo 'test';" > backend/test-bad.php
    ```
 
 2. Stage and attempt to commit:
+
    ```bash
    git add backend/test-bad.php
    git commit -m "test commit"
@@ -692,6 +720,7 @@ npm run test:e2e -- --update-snapshots
 3. Verify pre-commit hook runs automatically
 4. Verify commit blocked if linting fails
 5. Fix file manually:
+
    ```bash
    cd backend && vendor/bin/pint app/Models/User.php
    ```
@@ -700,6 +729,7 @@ npm run test:e2e -- --update-snapshots
 7. Clean up: `git reset HEAD backend/test-bad.php && rm backend/test-bad.php`
 
 **Expected Behavior:**
+
 - ✅ Pre-commit hook runs automatically
 - ✅ Linting violations block commit
 - ✅ Fixed files pass validation
@@ -789,6 +819,7 @@ npm run test:e2e -- --update-snapshots
 **Symptom:** `Failed to download laravel/framework from dist`
 
 **Solution:**
+
 ```bash
 cd backend
 composer clearcache
@@ -800,6 +831,7 @@ composer install
 **Symptom:** `App key already exists`
 
 **Solution:**
+
 - Check `.env` file exists: `ls -la .env`
 - Check `APP_KEY` is set: `grep APP_KEY .env`
 - If missing, manually add: `echo "APP_KEY=" >> .env && php artisan key:generate`
@@ -809,6 +841,7 @@ composer install
 **Symptom:** `SQLSTATE[42S01]: Table 'users' already exists`
 
 **Solution:**
+
 ```bash
 cd backend
 php artisan migrate:reset        # Reset all migrations
@@ -826,6 +859,7 @@ php artisan migrate              # Re-run migrations
 #### Issue: PHPStan fails with "memory limit exceeded"
 
 **Solution:** Increase memory limit
+
 ```bash
 cd backend
 vendor/bin/phpstan analyse --memory-limit=1G
@@ -876,6 +910,7 @@ npx nuxi prepare
 **Symptom:** `Port 3000 already in use`
 
 **Solution:**
+
 ```bash
 # Option 1: Kill process on port 3000
 lsof -i :3000
@@ -905,6 +940,7 @@ Ensure **`tsconfig.json`** contains **`"extends": "./.nuxt/tsconfig.json"`**. Ap
 **Symptom:** `Error: Browsers are not installed. Run npx playwright install`
 
 **Solution:**
+
 ```bash
 cd frontend
 npx playwright install
@@ -920,6 +956,7 @@ npx playwright install-deps
 **Symptom:** `error during connect: This error may indicate that the docker daemon is not running`
 
 **Solution:**
+
 ```bash
 # Ensure Docker daemon is running
 docker ps
@@ -935,6 +972,7 @@ docker ps
 **Symptom:** `bind: address already in use`
 
 **Solution:**
+
 ```bash
 # Find what's using the port
 lsof -i :3306  # MySQL
@@ -954,6 +992,7 @@ kill -9 <PID>
 **Symptom:** `docker-compose: MySQL container exits immediately`
 
 **Solution:**
+
 ```bash
 docker-compose down -v              # Remove volumes
 docker-compose up -d                # Start fresh
@@ -967,6 +1006,7 @@ docker-compose logs mysql           # Check logs
 #### Issue: `php artisan test` reports "No tests found"
 
 **Solution:**
+
 ```bash
 cd backend
 ls tests/Feature/
@@ -994,6 +1034,7 @@ Ensure **`phpunit.xml`** declares the **Feature** / **Unit** test suites (see re
 #### Issue: `npm run test` fails with timeout
 
 **Solution:**
+
 ```bash
 cd frontend
 npm run test -- --reporter=verbose
@@ -1003,6 +1044,7 @@ npm run test tests/unit/smoke.spec.ts
 #### Issue: E2E tests fail with "Browser not found"
 
 **Solution:**
+
 ```bash
 cd frontend
 npx playwright install          # Install browsers

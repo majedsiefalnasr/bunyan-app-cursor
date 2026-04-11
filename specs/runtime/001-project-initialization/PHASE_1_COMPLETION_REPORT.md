@@ -55,6 +55,7 @@ backend/
 ```
 
 **Key Features:**
+
 - Laravel 11.x configured with Sanctum authentication
 - Error contract standardized with BaseController
 - PHP style enforced via Laravel Pint (`pint.json`)
@@ -106,6 +107,7 @@ frontend/
 ```
 
 **Key Features:**
+
 - Nuxt 3 with @nuxt/ui component library
 - Full RTL support via Nuxt UI and Tailwind logical properties
 - i18n configured for Arabic (default) and English
@@ -135,22 +137,24 @@ Root Level:
 
 **Docker Compose Services:**
 
-| Service | Image | Port | Health Check |
-|---------|-------|------|--------------|
-| MySQL | 8.0 | 3306 | mysqladmin ping |
-| Redis | 7-alpine | 6379 | redis-cli ping |
-| PHP | 8.2-FPM | 8000 | Laravel serve |
-| Node | 20-alpine | 3000 | npm run dev |
+| Service | Image     | Port | Health Check    |
+| ------- | --------- | ---- | --------------- |
+| MySQL   | 8.0       | 3306 | mysqladmin ping |
+| Redis   | 7-alpine  | 6379 | redis-cli ping  |
+| PHP     | 8.2-FPM   | 8000 | Laravel serve   |
+| Node    | 20-alpine | 3000 | npm run dev     |
 
 **Network:** bunyan-network (bridge)
 
 **Volumes:**
+
 - mysql_data: MySQL database persistence
 - redis_data: Redis data persistence
 - ./backend:/app/backend: Backend code volume
 - ./frontend:/app/frontend: Frontend code volume
 
 **Environment Configuration:**
+
 - `.env.example`: Local development (MySQL on localhost:3306)
 - `backend/ci.env`: CI/CD template for GitHub Actions (`cp ci.env .env`; MySQL + Redis per workflow services)
 
@@ -186,12 +190,14 @@ Root Level:
 **Pipeline Details:**
 
 **Backend CI (backend-ci.yml):**
+
 - ✅ Lint: `pint --test`, fails on formatting violations
 - ✅ Analyze: PHPStan level 5, zero tolerance for errors
 - ✅ Test: PHPUnit with MySQL 8.0 service, coverage reporting
 - ✅ Codecov integration for coverage tracking
 
 **Frontend CI (frontend-ci.yml):**
+
 - ✅ Lint: ESLint strict mode
 - ✅ TypeCheck: Nuxt typecheck with TypeScript 5.6
 - ✅ Test: Vitest with happy-dom environment
@@ -199,6 +205,7 @@ Root Level:
 - ✅ Artifact upload: HTML test reports
 
 **Pre-Commit Guard (pre-commit-guard.yml):**
+
 - ✅ Runs on all PRs to main/develop
 - ✅ Validates both backend and frontend in parallel
 - ✅ Zero-tolerance lint checks
@@ -222,28 +229,23 @@ Root Level:
 ```
 
 **Pre-Commit Hook (.husky/pre-commit):**
+
 - Executes lint-staged configuration
 - Validates staged files before commit
 - Blocks commits with violations
 
 **lint-staged Configuration (.lintstagedrc.json):**
+
 ```json
 {
-  "backend/app/**/*.php": [
-    "vendor/bin/pint",
-    "phpstan analyse"
-  ],
-  "frontend/**/*.{vue,ts,js}": [
-    "eslint --fix",
-    "prettier --write"
-  ],
-  "frontend/**/*.ts": [
-    "typecheck"
-  ]
+  "backend/app/**/*.php": ["vendor/bin/pint", "phpstan analyse"],
+  "frontend/**/*.{vue,ts,js}": ["eslint --fix", "prettier --write"],
+  "frontend/**/*.ts": ["typecheck"]
 }
 ```
 
 **Root package.json Scripts:**
+
 - `npm run install` — Install both backend & frontend deps
 - `npm run lint` — Lint backend & frontend
 - `npm run lint:fix` — Auto-fix lint violations
@@ -253,6 +255,7 @@ Root Level:
 - `npm run dev` — Start both servers concurrently
 
 **Git Configuration:**
+
 - `.gitignore`: Node, PHP, cache, IDE exclusions
 - All pre-commit hooks properly configured
 
@@ -261,6 +264,7 @@ Root Level:
 ## File Inventory
 
 ### Backend Files Created: 22
+
 - 1 composer.json
 - 2 backend env templates (`.env.example`, `ci.env`)
 - 4 configuration files (pint.json, phpstan.neon, phpunit.xml, .gitignore)
@@ -271,6 +275,7 @@ Root Level:
 - 10 placeholder directories with .gitkeep
 
 ### Frontend Files Created: 31
+
 - 1 package.json
 - 5 configuration files (nuxt.config.ts, i18n.config.ts, tailwind.config.ts, tsconfig.json)
 - 4 tooling configs (.eslintrc.json, .prettierrc.json, vitest.config.ts, playwright.config.ts)
@@ -283,16 +288,19 @@ Root Level:
 - 10 placeholder directories with .gitkeep
 
 ### Docker Files: 4
+
 - 1 docker-compose.yml
 - 2 Dockerfiles (backend, frontend)
 - 1 .dockerignore
 
 ### CI/CD Files: 3
+
 - backend-ci.yml
 - frontend-ci.yml
 - pre-commit-guard.yml
 
 ### Root Configuration: 6
+
 - docker-compose.yml
 - 2 backend env templates (`.env.example`, `ci.env`)
 - 3 pre-commit setup files (.husky/pre-commit, .lintstagedrc.json, package.json)
@@ -359,6 +367,7 @@ Root Level:
 ## Ready for Phase 2
 
 ✅ **Backend can be initialized** with:
+
 ```bash
 cd backend
 composer install
@@ -367,6 +376,7 @@ php artisan key:generate
 ```
 
 ✅ **Frontend can be initialized** with:
+
 ```bash
 cd frontend
 npm install
@@ -374,11 +384,13 @@ npm run dev
 ```
 
 ✅ **Docker stack can start** with:
+
 ```bash
 docker-compose up -d
 ```
 
 ✅ **Pre-commit hooks ready** with:
+
 ```bash
 npm install
 npx husky install

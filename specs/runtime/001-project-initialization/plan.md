@@ -14,6 +14,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Critical Path:** Backend scaffolding → Migrations → API contracts → Frontend integration → Testing integration → CI/CD
 
 **Key Dependencies:**
+
 - Backend database schema must exist before services can be implemented
 - API contracts must be finalized before frontend integration begins
 - Testing configuration must be in place before any code can merge
@@ -25,12 +26,14 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 1: Infrastructure & Setup (Days 1-2, ~8-10 hours)
 
 **Objectives:**
+
 - Initialize Laravel and Nuxt.js projects with correct versions and dependencies
 - Set up Docker Compose for local development
 - Configure all dev tools (linters, formatters, test runners)
 - Establish project structure and Git workflow
 
 **Deliverables:**
+
 - Monorepo structure created (backend/, frontend/, docs/, specs/)
 - `docker-compose.yml` with MySQL 8.0, Redis 7, PHP 8.3, Node 20
 - All npm and composer dependencies installed and verified
@@ -38,6 +41,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Pre-commit hooks setup (.husky/, .lintstagedrc.json)
 
 **Parallel Work Tracks:**
+
 - Backend: Laravel project creation, composer scaffolding
 - Frontend: Nuxt project creation, npm scaffolding
 - DevOps: Docker Compose, GitHub Actions templates
@@ -46,6 +50,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Version incompatibilities (Laravel 11 + PHP 8.3, Nuxt 3 + Node 20) → Mitigation: Use tested LTS versions
 
 **Success Criteria:**
+
 - ✅ `npm run dev:backend` and `npm run dev:frontend` both start without errors
 - ✅ Docker Compose services (MySQL, Redis) accessible on specified ports
 - ✅ Pre-commit hooks block commits with linting violations
@@ -55,6 +60,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 2: Backend Database & Layering (Days 3-6, ~16-20 hours)
 
 **Objectives:**
+
 - Create all 13 database migrations with correct relationships and indexes
 - Implement Eloquent models with scopes, accessors, and relationships
 - Create 10 repository classes with query methods
@@ -62,6 +68,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Implement RBAC policies (8 policies)
 
 **Deliverables:**
+
 - 13 migrations (users, roles, projects, phases, tasks, reports, transactions, products, categories, orders, order_items, workflow_configs, approval_rules)
 - 10 Eloquent models with full relationships graph
 - 10 repository classes (UserRepository, ProjectRepository, PhaseRepository, TaskRepository, ReportRepository, WorkflowConfigRepository, ApprovalRuleRepository, TransactionRepository, ProductRepository, OrderRepository)
@@ -69,6 +76,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - BaseController and error handling foundation
 
 **Parallel Work Tracks:**
+
 - Migrations and models (single developer)
 - Repositories implementation (single developer)
 - Policies and authorization (single developer)
@@ -78,6 +86,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Complex relationships (many-to-many, polymorphic) → Mitigation: Use Eloquent relationship testing early
 
 **Success Criteria:**
+
 - ✅ All migrations run forward and rollback without errors: `php artisan migrate`
 - ✅ All models load and relationships hydrate correctly
 - ✅ 10 repositories 100% tested (unit tests pass)
@@ -88,6 +97,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 3: Backend API Contracts & Controllers (Days 7-10, ~12-16 hours)
 
 **Objectives:**
+
 - Define and document complete API contract (OpenAPI spec or similar)
 - Create 8 API controller classes with thin implementations
 - Create 15 Form Request validation classes
@@ -96,6 +106,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Create authentication endpoints (login, register, logout, refresh)
 
 **Deliverables:**
+
 - Complete API contract document (endpoints, schemas, auth, error codes)
 - 8 controller classes (Auth, Project, Phase, Task, Report, Transaction, Product, Order)
 - 15 Form Request classes with comprehensive validation rules
@@ -104,6 +115,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Authentication service with Sanctum token management
 
 **Parallel Work Tracks:**
+
 - Controllers and Form Requests (single developer)
 - API Resources (single developer)
 - Authentication service (single developer)
@@ -112,6 +124,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Validation rules complexity (nested arrays, file uploads) → Mitigation: Create validation helper utilities
 
 **Success Criteria:**
+
 - ✅ API contract document complete and reviewed by PM
 - ✅ `POST /api/v1/auth/login` returns correct response structure
 - ✅ All Form Requests validate input correctly and return contract-compliant errors
@@ -122,6 +135,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 4: Backend Services & Business Logic (Days 11-15, ~20-24 hours)
 
 **Objectives:**
+
 - Implement 10 service classes with dependency injection
 - Create 8 service test suites (unit tests, ≥80% coverage)
 - Implement workflow state machine (WorkflowService)
@@ -129,6 +143,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Implement comprehensive error handling and logging
 
 **Deliverables:**
+
 - 10 service classes (AuthService, ProjectService, PhaseService, TaskService, ReportService, WorkflowService, TransactionService, ProductService, OrderService, NotificationService)
 - 50+ PHPUnit unit tests with ≥80% coverage
 - Domain event classes (PhaseApproved, PhaseCompleted, StatusTransitioned, etc.)
@@ -136,6 +151,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Custom exception classes with error codes
 
 **Parallel Work Tracks:**
+
 - Services implementation (multiple developers, each owns 2-3 services)
 - Unit tests (paired with service implementation)
 - Event/listener infrastructure (single developer)
@@ -144,6 +160,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Services interdependency issues → Mitigation: Use contracts (interfaces) to define dependencies early
 
 **Success Criteria:**
+
 - ✅ `composer run test` passes with ≥80% coverage
 - ✅ All services resolve dependencies via constructor injection
 - ✅ WorkflowService correctly validates state transitions
@@ -154,6 +171,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 5: Frontend Scaffolding & Integration (Days 16-20, ~12-16 hours)
 
 **Objectives:**
+
 - Initialize Nuxt 3 with Nuxt UI, Pinia, i18n modules
 - Create layout structure (default, auth, admin layouts)
 - Implement 6 Pinia stores (auth, project, phase, task, ui, notification)
@@ -162,6 +180,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Create base components for reuse (layouts, forms, cards)
 
 **Deliverables:**
+
 - Nuxt 3 project structure complete
 - 3 layout components (default, auth, admin)
 - 6 Pinia stores with getters/setters/actions
@@ -172,6 +191,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - RTL-aware component structure
 
 **Parallel Work Tracks:**
+
 - Project setup and configuration (single developer)
 - Pinia stores (single developer)
 - Composables and utilities (single developer)
@@ -181,6 +201,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** i18n + RTL complexity → Mitigation: Use existing Vercel/Geist patterns, test early with Arabic text
 
 **Success Criteria:**
+
 - ✅ `npm run dev` runs without errors on localhost:3000
 - ✅ All pages render with Nuxt UI components visible
 - ✅ i18n configured with Arabic (default) and English
@@ -192,6 +213,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 6: Testing Integration (Days 21-24, ~16-20 hours)
 
 **Objectives:**
+
 - Set up test infrastructure (PHPUnit, Vitest, Playwright)
 - Create 30+ backend feature tests (API integration tests)
 - Create 20+ frontend component/unit tests
@@ -200,6 +222,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Integrate tests into CI/CD pipeline
 
 **Deliverables:**
+
 - Backend feature test suite (30+ tests, endpoints + RBAC + policies)
 - Frontend unit/component test suite (20+ tests)
 - E2E test suite (10+ critical flows: login, project creation, report submission)
@@ -208,6 +231,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Test data factories and seeders
 
 **Parallel Work Tracks:**
+
 - Backend tests (multiple developers)
 - Frontend tests (single developer)
 - E2E tests (single developer)
@@ -216,6 +240,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Test environment setup (database, API mocking) → Mitigation: Use TestCase base classes, database transactions for isolation
 
 **Success Criteria:**
+
 - ✅ `composer run test` passes with ≥80% backend coverage
 - ✅ `npm run test` passes with ≥70% frontend coverage
 - ✅ `npm run test:e2e` passes all critical flows
@@ -226,6 +251,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 ### Phase 7: Documentation & Finalization (Days 25-28, ~8-10 hours)
 
 **Objectives:**
+
 - Complete developer onboarding guide (quickstart.md)
 - Write API documentation (contracts, examples)
 - Create architecture documentation (ADRs, module map)
@@ -233,6 +259,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 - Prepare for handoff to IMPLEMENT phase
 
 **Deliverables:**
+
 - quickstart.md (setup instructions, verification, troubleshooting)
 - api-contract.md (OpenAPI spec or detailed endpoint docs)
 - Architecture documentation (module map, layer diagram)
@@ -245,6 +272,7 @@ This document provides a detailed technical roadmap for initializing the Bunyan 
 **Risk:** Documentation drift from implementation → Mitigation: Document as you build, use auto-generated docs
 
 **Success Criteria:**
+
 - ✅ New developer can follow quickstart.md to run project in <30 min
 - ✅ API contract document matches actual endpoints
 - ✅ All README links are valid
@@ -273,11 +301,13 @@ Phase 7 (Documentation)
 **Total Duration:** 28 days (4 weeks)
 
 **Critical Dependencies:**
+
 1. Database schema (Phase 2) blocks all service development (Phase 4)
 2. API contracts (Phase 3) block frontend integration (Phase 5)
 3. Backend tests (Phase 6) must pass before frontend tests can validate end-to-end flows
 
 **Non-Critical Phases (Can Start Earlier):**
+
 - Phase 1 (Setup) happens in parallel with project kickoff
 - Phase 5 (Frontend) can start after Phase 3 API contracts finalized
 
@@ -288,15 +318,18 @@ Phase 7 (Documentation)
 ### High-Risk Areas
 
 #### Risk 1: Database Schema Complexity
+
 **Severity:** HIGH  
 **Probability:** MEDIUM
 
 **Details:**
+
 - 13 migrations with complex relationships (many-to-many, polymorphic)
 - Foreign key constraints and cascading deletes
 - Workflow engine requires polymorphic relationships (entity_type + entity_id)
 
 **Mitigation:**
+
 - Start with migration tests early (Phase 2)
 - Document schema diagram before coding
 - Review migrations in code review before Phase 3 starts
@@ -305,15 +338,18 @@ Phase 7 (Documentation)
 **Owner:** Backend Lead
 
 #### Risk 2: API Contract Misalignment
+
 **Severity:** HIGH  
 **Probability:** MEDIUM
 
 **Details:**
+
 - Frontend and backend teams may have different expectations for response format
 - RBAC validation can cause inconsistent error codes (401 vs 403 vs 422)
 - Pagination, filtering, sorting standards not defined
 
 **Mitigation:**
+
 - Create comprehensive API contract document BEFORE Phase 3 coding starts
 - Include JSON schema examples for every endpoint
 - Document error codes mapping (400, 401, 403, 422, 500)
@@ -322,15 +358,18 @@ Phase 7 (Documentation)
 **Owner:** API Architect
 
 #### Risk 3: RBAC Enforcement Gaps
+
 **Severity:** CRITICAL  
 **Probability:** HIGH
 
 **Details:**
+
 - Easy to miss policy checks on certain endpoints
 - Complex nested authorization (task access through project through customer)
 - Admin bypass logic can introduce security holes
 
 **Mitigation:**
+
 - Use strict code review for all policy implementations
 - Create policy test matrix (every role × every action)
 - Use architecture guardian validation (automated checks)
@@ -339,15 +378,18 @@ Phase 7 (Documentation)
 **Owner:** Security Lead
 
 #### Risk 4: Frontend-Backend Integration Timing
+
 **Severity:** MEDIUM  
 **Probability:** MEDIUM
 
 **Details:**
+
 - Frontend development can't fully proceed without stable API
 - Changes to API during Phase 4 (services) can break frontend
 - CORS, authentication token handling, error mapping issues
 
 **Mitigation:**
+
 - Create mock API server for frontend before Phase 4 finalized
 - Use API contract stubs (return fake but valid JSON)
 - Coordinate frontend-backend integration meetings weekly
@@ -356,15 +398,18 @@ Phase 7 (Documentation)
 **Owner:** Tech Lead
 
 #### Risk 5: Testing Coverage Gaps
+
 **Severity:** MEDIUM  
 **Probability:** MEDIUM
 
 **Details:**
+
 - 80% backend coverage target is strict
 - Complex workflows (multi-step approvals, state transitions) hard to test
 - E2E tests flaky if database not properly seeded
 
 **Mitigation:**
+
 - Set up test factory infrastructure early (Phase 2)
 - Use database transactions to isolate tests
 - Create test scenarios document (all flows that need E2E coverage)
@@ -430,14 +475,14 @@ Phase 7 (Documentation)
 
 **Total:** 4-5 developers + 1 DevOps engineer + 1 QA lead
 
-| Role | Phase | Weeks |
-|------|-------|-------|
-| Backend Lead | 1-7 | 4 |
-| Frontend Lead | 1, 5-7 | 3 |
-| DevOps Engineer | 1, 6-7 | 1.5 |
-| Backend Developer 2 | 2-4, 6 | 3 |
-| Backend Developer 3 | 2-4, 6 | 3 |
-| QA Lead | 1, 6-7 | 2 |
+| Role                | Phase  | Weeks |
+| ------------------- | ------ | ----- |
+| Backend Lead        | 1-7    | 4     |
+| Frontend Lead       | 1, 5-7 | 3     |
+| DevOps Engineer     | 1, 6-7 | 1.5   |
+| Backend Developer 2 | 2-4, 6 | 3     |
+| Backend Developer 3 | 2-4, 6 | 3     |
+| QA Lead             | 1, 6-7 | 2     |
 
 ### Effort Distribution (in person-weeks)
 
@@ -458,36 +503,43 @@ Phase 7 (Documentation)
 ### Phase-by-Phase Gates
 
 **Phase 1 Complete When:**
+
 - ✅ `npm run dev:backend` and `npm run dev:frontend` both run error-free
 - ✅ Docker Compose services all healthy (`docker-compose ps`)
 - ✅ First commit pushed to feature branch with clean CI
 
 **Phase 2 Complete When:**
+
 - ✅ All 13 migrations apply and rollback without errors
 - ✅ All models load correctly with `php artisan tinker`
 - ✅ All repositories have 10+ test cases passing
 
 **Phase 3 Complete When:**
+
 - ✅ API contract document reviewed and approved by PM
 - ✅ `POST /api/v1/auth/login` returns correct structure
 - ✅ All endpoints return consistent error format
 
 **Phase 4 Complete When:**
+
 - ✅ `composer run test` passes with ≥80% coverage
 - ✅ All services use constructor injection (no `new` keyword)
 - ✅ WorkflowService correctly validates state transitions
 
 **Phase 5 Complete When:**
+
 - ✅ `npm run dev` runs without errors
 - ✅ All pages render with Nuxt UI visible
 - ✅ `npm run typecheck` passes with zero errors
 
 **Phase 6 Complete When:**
+
 - ✅ `npm run test` passes with ≥70% coverage
 - ✅ `npm run test:e2e` passes 10/10 critical flows
 - ✅ GitHub Actions CI/CD green on main branch
 
 **Phase 7 Complete When:**
+
 - ✅ quickstart.md tested (new dev follows it successfully)
 - ✅ API contract matches actual endpoints
 - ✅ All README links valid
@@ -499,26 +551,32 @@ Phase 7 (Documentation)
 ### If Phase Cannot Complete
 
 **Phase 1 Fails:**
+
 - Roll back all commits, restart infrastructure from scratch
 - Re-evaluate tool versions and dependencies
 
 **Phase 2 Fails:**
+
 - Roll back all migrations: `php artisan migrate:rollback`
 - Review schema design, consult with architect
 
 **Phase 3 Fails:**
+
 - Keep migrations (Phase 2), roll back controllers/requests
 - Review API contract, get approval before re-implementing
 
 **Phase 4 Fails:**
+
 - Keep migrations + controllers (Phase 2-3), roll back services
 - Review test cases, identify failing test scenarios
 
 **Phase 5 Fails:**
+
 - Keep backend (Phase 1-4), roll back frontend scaffolding
 - Review i18n + RTL implementation, try simpler approach
 
 **Phase 6 Fails:**
+
 - Keep all code, focus on test infrastructure
 - Don't merge code without test coverage
 
@@ -527,15 +585,18 @@ Phase 7 (Documentation)
 ## 8. Communication Plan
 
 ### Weekly Standup (Every Monday)
+
 - Phase lead reports: % complete, blockers, risks
 - All phase leads attend (30 min)
 
 ### Phase Gate Meetings (End of each phase)
+
 - Phase lead presents deliverables
 - Architecture review: Does it meet spec?
 - Go/No-Go decision before proceeding
 
 ### Escalation Path
+
 1. Task → Phase Lead (1 hour decision window)
 2. Phase Lead → Tech Lead (4 hour decision window)
 3. Tech Lead → Project Manager (same day)

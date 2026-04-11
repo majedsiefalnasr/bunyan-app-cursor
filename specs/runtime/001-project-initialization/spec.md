@@ -18,6 +18,7 @@ This specification details the complete initialization of the Bunyan platform: a
 ### 1.1 Objective
 
 Establish a production-ready Laravel application with:
+
 - RESTful API foundation (`/api/v1/`)
 - Laravel Sanctum authentication
 - Role-based access control (RBAC) middleware
@@ -30,18 +31,19 @@ Establish a production-ready Laravel application with:
 
 #### 1.2.1 Project Structure & Configuration
 
-| Item | Path | Description |
-|------|------|-------------|
-| Laravel app | `backend/` | Monorepo subdirectory |
-| App namespace | `backend/app/` | All application code |
-| Routes | `backend/routes/api.php` | Versioned API routes |
-| Env template | `backend/.env.example` | Development template |
-| CI env | `backend/ci.env` | GitHub Actions environment (committed; not named `.env.*` so global gitignore does not block it) |
-| Config | `backend/config/` | Laravel configurations |
+| Item          | Path                     | Description                                                                                      |
+| ------------- | ------------------------ | ------------------------------------------------------------------------------------------------ |
+| Laravel app   | `backend/`               | Monorepo subdirectory                                                                            |
+| App namespace | `backend/app/`           | All application code                                                                             |
+| Routes        | `backend/routes/api.php` | Versioned API routes                                                                             |
+| Env template  | `backend/.env.example`   | Development template                                                                             |
+| CI env        | `backend/ci.env`         | GitHub Actions environment (committed; not named `.env.*` so global gitignore does not block it) |
+| Config        | `backend/config/`        | Laravel configurations                                                                           |
 
 #### 1.2.2 Eloquent Models & Database Layer
 
 **Models (Database Entities):**
+
 - User (multi-role)
 - Role (enum-based: customer, contractor, supervising_architect, field_engineer, admin)
 - Project
@@ -55,12 +57,14 @@ Establish a production-ready Laravel application with:
 - Order
 
 **Repositories (Data Access Layer):**
+
 - Each model has a repository in `backend/app/Repositories/`
 - Example: `UserRepository`, `ProjectRepository`, `PhaseRepository`
 - All database queries go through repositories (no direct Eloquent in controllers)
 - Repositories use Eloquent scopes and relationships
 
 **Migrations (Forward-Only):**
+
 - Location: `backend/database/migrations/`
 - Naming: `YYYY_MM_DD_HHMMSS_create_<table>_table.php`
 - Must include rollback (`down()` method)
@@ -70,6 +74,7 @@ Establish a production-ready Laravel application with:
 #### 1.2.3 API Controllers & HTTP Layer
 
 **Structure:**
+
 ```
 backend/app/Http/
 ├── Controllers/
@@ -104,6 +109,7 @@ backend/app/Http/
 ```
 
 **BaseController Pattern:**
+
 - All API controllers extend `BaseController`
 - BaseController provides `sendSuccess()` and `sendError()` methods
 - All responses follow error contract
@@ -111,6 +117,7 @@ backend/app/Http/
 #### 1.2.4 Services & Business Logic Layer
 
 **Structure:**
+
 ```
 backend/app/Services/
 ├── AuthService.php
@@ -124,6 +131,7 @@ backend/app/Services/
 ```
 
 **Rules:**
+
 - Services contain all business logic
 - Services use repositories for data access (dependency injection)
 - Services handle events and jobs
@@ -134,11 +142,13 @@ backend/app/Services/
 #### 1.2.5 Authentication & Authorization
 
 **Sanctum Configuration:**
+
 - File: `backend/config/sanctum.php`
 - Token expiration: 7 days (configurable)
 - Middleware: `auth:sanctum` on all protected routes
 
 **Policies (Authorization):**
+
 ```
 backend/app/Policies/
 ├── ProjectPolicy.php (viewAny, view, create, update, delete, approve)
@@ -149,6 +159,7 @@ backend/app/Policies/
 ```
 
 **Routes Protection:**
+
 - All protected routes use `auth:sanctum` middleware
 - All routes that modify data also use `can:` policy check
 - RBAC enforced on all endpoints (no exceptions)
@@ -163,11 +174,13 @@ backend/app/Policies/
 #### 1.2.6 Error Handling & Response Contract
 
 **Global Exception Handler:**
+
 - File: `backend/app/Exceptions/Handler.php`
 - All exceptions render to JSON with contract
 - Error codes mapped in `backend/app/Enums/ErrorCode.php`
 
 **Response Contract (All Endpoints):**
+
 ```json
 {
   "success": true,
@@ -178,6 +191,7 @@ backend/app/Policies/
 ```
 
 **Error Response:**
+
 ```json
 {
   "success": false,
@@ -192,6 +206,7 @@ backend/app/Policies/
 #### 1.2.7 Form Requests (Validation)
 
 **Structure:**
+
 ```
 backend/app/Http/Requests/
 ├── Auth/
@@ -205,6 +220,7 @@ backend/app/Http/Requests/
 ```
 
 **Anticipated Form Requests:**
+
 - `Auth\LoginRequest` — email, password
 - `Auth\RegisterRequest` — name, email, password, password_confirmation, phone, role
 - `Project\StoreProjectRequest` — title, description, budget, customer_id, contractor_id
@@ -219,18 +235,21 @@ backend/app/Http/Requests/
 #### 1.2.8 Testing Configuration
 
 **Unit Tests:**
+
 - Location: `backend/tests/Unit/`
 - Tool: PHPUnit
 - Coverage: ≥80% for new code
 - Scope: Services, repositories, utility functions
 
 **Feature Tests:**
+
 - Location: `backend/tests/Feature/`
 - Tool: PHPUnit with Laravel test traits
 - Scope: API endpoints, RBAC enforcement, database transactions
 - Patterns: Test each controller action with auth + policy checks
 
 **Test Example Structure:**
+
 ```php
 // tests/Feature/Projects/CreateProjectTest.php
 class CreateProjectTest extends TestCase {
@@ -242,6 +261,7 @@ class CreateProjectTest extends TestCase {
 ```
 
 **Database Seeding for Tests:**
+
 - File: `backend/database/seeders/DatabaseSeeder.php`
 - Seeders for: users (multi-role), projects, phases, tasks
 - Use factories for randomized test data
@@ -250,46 +270,46 @@ class CreateProjectTest extends TestCase {
 
 #### 1.3.1 Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `backend/.env.example` | Development env template |
-| `backend/ci.env` | CI environment variables (template; workflows run `cp ci.env .env` in `backend/`) |
-| `backend/config/sanctum.php` | Sanctum auth config |
-| `backend/config/app.php` | (Laravel default) |
-| `backend/phpunit.xml` | PHPUnit test config |
-| `backend/phpstan.neon` | PHPStan static analysis |
-| `backend/pint.json` | Laravel Pint config |
-| `backend/pint.json` | Laravel Pint config (optional) |
+| File                         | Purpose                                                                           |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| `backend/.env.example`       | Development env template                                                          |
+| `backend/ci.env`             | CI environment variables (template; workflows run `cp ci.env .env` in `backend/`) |
+| `backend/config/sanctum.php` | Sanctum auth config                                                               |
+| `backend/config/app.php`     | (Laravel default)                                                                 |
+| `backend/phpunit.xml`        | PHPUnit test config                                                               |
+| `backend/phpstan.neon`       | PHPStan static analysis                                                           |
+| `backend/pint.json`          | Laravel Pint config                                                               |
+| `backend/pint.json`          | Laravel Pint config (optional)                                                    |
 
 #### 1.3.2 Application Code
 
-| Item | Count | Location |
-|------|-------|----------|
-| Eloquent Models | 10 | `backend/app/Models/` |
-| Repositories | 10 | `backend/app/Repositories/` |
-| Services | 8 | `backend/app/Services/` |
-| Controllers | 8 | `backend/app/Http/Controllers/Api/V1/` |
-| Form Requests | 15 | `backend/app/Http/Requests/` |
-| Resources (API) | 10 | `backend/app/Http/Resources/` |
-| Policies | 8 | `backend/app/Policies/` |
-| Exceptions | 3 | `backend/app/Exceptions/` |
-| Enums | 5 | `backend/app/Enums/` |
+| Item            | Count | Location                               |
+| --------------- | ----- | -------------------------------------- |
+| Eloquent Models | 10    | `backend/app/Models/`                  |
+| Repositories    | 10    | `backend/app/Repositories/`            |
+| Services        | 8     | `backend/app/Services/`                |
+| Controllers     | 8     | `backend/app/Http/Controllers/Api/V1/` |
+| Form Requests   | 15    | `backend/app/Http/Requests/`           |
+| Resources (API) | 10    | `backend/app/Http/Resources/`          |
+| Policies        | 8     | `backend/app/Policies/`                |
+| Exceptions      | 3     | `backend/app/Exceptions/`              |
+| Enums           | 5     | `backend/app/Enums/`                   |
 
 #### 1.3.3 Migrations & Database
 
-| Item | Files |
-|------|-------|
+| Item       | Files                                                                                                                            |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Migrations | 12 (users, roles, projects, phases, tasks, reports, transactions, products, orders, workflow configs, approval rules, audit log) |
-| Seeders | 2 (DatabaseSeeder, RoleSeeder) |
-| Factories | 10 (User, Project, Phase, Task, Report, Transaction, Product, Order) |
+| Seeders    | 2 (DatabaseSeeder, RoleSeeder)                                                                                                   |
+| Factories  | 10 (User, Project, Phase, Task, Report, Transaction, Product, Order)                                                             |
 
 #### 1.3.4 Tests
 
-| Test Suite | Count | Tool |
-|------------|-------|------|
-| Unit tests | 20+ | PHPUnit |
-| Feature tests | 30+ | PHPUnit Feature |
-| Total coverage target | ≥80% | |
+| Test Suite            | Count | Tool            |
+| --------------------- | ----- | --------------- |
+| Unit tests            | 20+   | PHPUnit         |
+| Feature tests         | 30+   | PHPUnit Feature |
+| Total coverage target | ≥80%  |                 |
 
 #### 1.3.5 Scripts (composer.json)
 
@@ -331,6 +351,7 @@ class CreateProjectTest extends TestCase {
 ### 2.1 Objective
 
 Establish a production-ready Nuxt.js 3 frontend with:
+
 - Nuxt UI component library (`@nuxt/ui`)
 - Tailwind CSS v4 with RTL support
 - Pinia state management
@@ -433,6 +454,7 @@ frontend/
 #### 2.2.2 Nuxt UI Components & Design System
 
 **Theme Configuration:**
+
 - Vercel-inspired design system (DESIGN.md compliance)
 - Geist fonts (primary), Geist Mono (code)
 - Shadow-as-border technique: `box-shadow 0px 0px 0px 1px`
@@ -440,6 +462,7 @@ frontend/
 - RTL support via Tailwind logical properties + `dir="rtl"` on `<html>`
 
 **Anticipated Nuxt UI Components:**
+
 - `UButton` — primary actions
 - `UCard` — feature sections, data containers
 - `UForm` — form wrapper with validation
@@ -459,6 +482,7 @@ frontend/
 #### 2.2.3 State Management (Pinia)
 
 **Stores:**
+
 ```
 frontend/stores/
 ├── auth.ts          # User, token, role
@@ -470,11 +494,12 @@ frontend/stores/
 ```
 
 **Store Pattern (Composition API):**
+
 ```typescript
 // stores/auth.ts
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
   const token = ref<string | null>(null);
   const role = ref<UserRole | null>(null);
@@ -492,18 +517,21 @@ export const useAuthStore = defineStore('auth', () => {
 #### 2.2.4 API Client Integration
 
 **Composable:**
+
 ```
 frontend/composables/useApi.ts
 ```
 
 **Usage:**
+
 ```typescript
 // Inside component
 const { $api } = useNuxtApp();
-const projects = await $api.get('/api/v1/projects');
+const projects = await $api.get("/api/v1/projects");
 ```
 
 **Patterns:**
+
 - Error handling: catch API errors and display toasts
 - Auth: auto-attach Sanctum token to headers
 - Retry logic: retry failed requests with exponential backoff
@@ -512,6 +540,7 @@ const projects = await $api.get('/api/v1/projects');
 #### 2.2.5 Forms & Validation
 
 **Validation Libraries:**
+
 - VeeValidate + Zod for schema validation
 - Example:
   ```typescript
@@ -522,6 +551,7 @@ const projects = await $api.get('/api/v1/projects');
   ```
 
 **Form Component Pattern:**
+
 ```vue
 <template>
   <UForm :schema="schema" @submit="onSubmit">
@@ -536,12 +566,14 @@ const projects = await $api.get('/api/v1/projects');
 #### 2.2.6 Internationalization (i18n)
 
 **Setup:**
+
 - Module: `@nuxtjs/i18n`
 - Locales: Arabic (`ar`) + English (`en`)
 - Default locale: Arabic (Arabic-first platform)
 - RTL: Automatic via `<html dir="rtl">` for Arabic
 
 **Translation Keys:**
+
 ```json
 {
   "common": {
@@ -557,20 +589,23 @@ const projects = await $api.get('/api/v1/projects');
 ```
 
 **Usage in Components:**
+
 ```vue
 <template>
-  <button>{{ $t('common.save') }}</button>
+  <button>{{ $t("common.save") }}</button>
 </template>
 ```
 
 #### 2.2.7 RTL Support & Layouts
 
 **CSS Logical Properties:**
+
 - Use `ms` (margin-inline-start) instead of `ml` (margin-left)
 - Use `pe` (padding-inline-end) instead of `pr` (padding-right)
 - Tailwind v4 supports logical properties natively
 
 **HTML Structure:**
+
 ```html
 <html dir="rtl" lang="ar">
   <body class="bg-white text-gray-900">
@@ -580,6 +615,7 @@ const projects = await $api.get('/api/v1/projects');
 ```
 
 **Component Patterns:**
+
 - Nuxt UI handles RTL automatically
 - Flex and grid layouts respond to `dir` attribute
 - Test both LTR (English) and RTL (Arabic) renders
@@ -587,37 +623,41 @@ const projects = await $api.get('/api/v1/projects');
 #### 2.2.8 Testing Configuration
 
 **Unit Tests (Vitest):**
+
 - Location: `frontend/tests/unit/`
 - Tool: Vitest + Vue Test Utils
 - Scope: Composables, utilities, store logic
 
 **Component Tests (Vitest + Vue Test Utils):**
+
 - Location: `frontend/tests/components/`
 - Scope: Component rendering, user interactions, prop changes
 
 **E2E Tests (Playwright):**
+
 - Location: `frontend/tests/e2e/`
 - Tool: Playwright + `@nuxt/test-utils`
 - Scope: Critical user journeys (login, create project, submit report)
 
 **Test Examples:**
+
 ```typescript
 // tests/unit/composables/useAuth.test.ts
-describe('useAuth', () => {
-  it('should store token on login', async () => {
+describe("useAuth", () => {
+  it("should store token on login", async () => {
     const { login } = useAuth();
-    await login('test@example.com', 'password');
+    await login("test@example.com", "password");
     expect(useAuthStore().token).toBeTruthy();
   });
 });
 
 // tests/e2e/auth.spec.ts
-test('user can login', async ({ page }) => {
-  await page.goto('/auth/login');
-  await page.fill('input[name="email"]', 'test@example.com');
-  await page.fill('input[name="password"]', 'password');
+test("user can login", async ({ page }) => {
+  await page.goto("/auth/login");
+  await page.fill('input[name="email"]', "test@example.com");
+  await page.fill('input[name="password"]', "password");
   await page.click('button[type="submit"]');
-  await expect(page).toHaveURL('/dashboard');
+  await expect(page).toHaveURL("/dashboard");
 });
 ```
 
@@ -625,54 +665,54 @@ test('user can login', async ({ page }) => {
 
 #### 2.3.1 Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `frontend/nuxt.config.ts` | Nuxt.js main config |
-| `frontend/tsconfig.json` | TypeScript config |
-| `frontend/tailwind.config.js` | Tailwind CSS v4 config |
-| `frontend/.eslintrc.js` | ESLint config |
-| `frontend/.prettierrc.json` | Prettier config |
-| `frontend/vitest.config.ts` | Vitest test config |
+| File                            | Purpose                |
+| ------------------------------- | ---------------------- |
+| `frontend/nuxt.config.ts`       | Nuxt.js main config    |
+| `frontend/tsconfig.json`        | TypeScript config      |
+| `frontend/tailwind.config.js`   | Tailwind CSS v4 config |
+| `frontend/.eslintrc.js`         | ESLint config          |
+| `frontend/.prettierrc.json`     | Prettier config        |
+| `frontend/vitest.config.ts`     | Vitest test config     |
 | `frontend/playwright.config.ts` | Playwright test config |
 
 #### 2.3.2 Components & Pages
 
-| Item | Count | Location |
-|------|-------|----------|
-| Layout components | 3 | `frontend/components/Layout/` |
-| Form components | 8 | `frontend/components/Forms/` |
-| Card components | 6 | `frontend/components/Cards/` |
-| Common components | 5 | `frontend/components/Common/` |
-| Pages | 15+ | `frontend/pages/` |
-| Layouts | 3 | `frontend/layouts/` |
+| Item              | Count | Location                      |
+| ----------------- | ----- | ----------------------------- |
+| Layout components | 3     | `frontend/components/Layout/` |
+| Form components   | 8     | `frontend/components/Forms/`  |
+| Card components   | 6     | `frontend/components/Cards/`  |
+| Common components | 5     | `frontend/components/Common/` |
+| Pages             | 15+   | `frontend/pages/`             |
+| Layouts           | 3     | `frontend/layouts/`           |
 
 #### 2.3.3 State & Logic
 
-| Item | Count | Location |
-|------|-------|----------|
-| Pinia stores | 6 | `frontend/stores/` |
-| Composables | 8 | `frontend/composables/` |
-| Middleware | 3 | `frontend/middleware/` |
-| Plugins | 3 | `frontend/plugins/` |
-| Utilities | 5 | `frontend/utils/` |
-| Types | 3 | `frontend/types/` |
+| Item         | Count | Location                |
+| ------------ | ----- | ----------------------- |
+| Pinia stores | 6     | `frontend/stores/`      |
+| Composables  | 8     | `frontend/composables/` |
+| Middleware   | 3     | `frontend/middleware/`  |
+| Plugins      | 3     | `frontend/plugins/`     |
+| Utilities    | 5     | `frontend/utils/`       |
+| Types        | 3     | `frontend/types/`       |
 
 #### 2.3.4 Tests
 
-| Test Suite | Count | Tool |
-|------------|-------|------|
-| Unit tests (composables) | 15+ | Vitest |
-| Component tests | 20+ | Vitest + Vue Test Utils |
-| E2E tests | 10+ | Playwright |
-| Total coverage target | ≥70% | |
+| Test Suite               | Count | Tool                    |
+| ------------------------ | ----- | ----------------------- |
+| Unit tests (composables) | 15+   | Vitest                  |
+| Component tests          | 20+   | Vitest + Vue Test Utils |
+| E2E tests                | 10+   | Playwright              |
+| Total coverage target    | ≥70%  |                         |
 
 #### 2.3.5 Localization
 
-| Item | Files |
-|------|-------|
-| Arabic translations | 1 | `frontend/locales/ar.json` |
-| English translations | 1 | `frontend/locales/en.json` |
-| Translation keys | 100+ | Split across pages/components |
+| Item                 | Files |
+| -------------------- | ----- | ----------------------------- |
+| Arabic translations  | 1     | `frontend/locales/ar.json`    |
+| English translations | 1     | `frontend/locales/en.json`    |
+| Translation keys     | 100+  | Split across pages/components |
 
 #### 2.3.6 Scripts (package.json)
 
@@ -723,11 +763,13 @@ test('user can login', async ({ page }) => {
 ### 3.1 Backend Testing (PHPUnit + Pest)
 
 **Configuration:**
+
 - File: `backend/phpunit.xml`
 - Database: SQLite in-memory for tests
 - Traits: `RefreshDatabase`, `WithFaker`, `ActingAs` (user impersonation)
 
 **Test Structure:**
+
 ```php
 namespace Tests\Feature\Projects;
 
@@ -751,19 +793,20 @@ class CreateProjectTest extends TestCase {
 ### 3.2 Frontend Testing (Vitest + Playwright)
 
 **Configuration:**
+
 - File: `frontend/vitest.config.ts`
 - File: `frontend/playwright.config.ts`
 - Headless: true for CI, headed mode for local development
 
 ### 3.3 Coverage Requirements
 
-| Layer | Minimum Coverage | Tool |
-|-------|------------------|------|
-| Backend services | 80% | PHPUnit |
-| Backend controllers | 70% | PHPUnit Feature |
-| Frontend composables | 70% | Vitest |
-| Frontend components | 60% | Vitest + VTU |
-| E2E critical flows | 90% pass rate | Playwright |
+| Layer                | Minimum Coverage | Tool            |
+| -------------------- | ---------------- | --------------- |
+| Backend services     | 80%              | PHPUnit         |
+| Backend controllers  | 70%              | PHPUnit Feature |
+| Frontend composables | 70%              | Vitest          |
+| Frontend components  | 60%              | Vitest + VTU    |
+| E2E critical flows   | 90% pass rate    | Playwright      |
 
 ---
 
@@ -774,6 +817,7 @@ class CreateProjectTest extends TestCase {
 **File:** `.github/workflows/pre-commit-guard.yml`
 
 **Jobs:**
+
 1. **Backend Lint** — `vendor/bin/pint --test` (fail on violations)
 2. **Backend Static Analysis** — `phpstan analyse` (fail on errors)
 3. **Backend Tests** — `php artisan test` (fail on failures)
@@ -784,6 +828,7 @@ class CreateProjectTest extends TestCase {
 8. **E2E Tests** — `npm run test:e2e` (fail on failures)
 
 **Triggers:**
+
 - On pull request to `develop`
 - On push to `develop` or `main`
 - Manual trigger
@@ -791,10 +836,12 @@ class CreateProjectTest extends TestCase {
 ### 4.2 Local Pre-Commit Hooks
 
 **Files:**
+
 - `.husky/pre-commit` — Runs linting and tests before commit
 - `.lintstagedrc.json` — Incremental validation (changed files only)
 
 **Enforcement:**
+
 - Pre-commit hooks block commits if violations found
 - CI repeats checks (defense in depth)
 - No force-push to `main` or `develop` (branch protection)
@@ -902,12 +949,14 @@ bunyan-app-cursor/
 **File:** `docker-compose.yml`
 
 **Services:**
+
 - **MySQL 8.0** — Database (port 3306)
 - **Redis 7** — Cache & queue (port 6379)
 - **Node 20** — Frontend dev watcher (port 3000)
 - **PHP 8.2-fpm** — Backend runtime (port 8000 via Laravel Artisan)
 
 **Volumes:**
+
 - `backend/` mounted to `/app/backend`
 - `frontend/` mounted to `/app/frontend`
 - Database persistence: `mysql_data` volume
@@ -918,37 +967,37 @@ bunyan-app-cursor/
 
 ### 8.1 Backend Deliverables
 
-| Category | Count | Files |
-|----------|-------|-------|
-| Models | 10 | `backend/app/Models/` |
-| Repositories | 10 | `backend/app/Repositories/` |
-| Services | 8 | `backend/app/Services/` |
-| Controllers | 8 | `backend/app/Http/Controllers/Api/V1/` |
-| Form Requests | 15 | `backend/app/Http/Requests/` |
-| Migrations | 12 | `backend/database/migrations/` |
-| Tests (Unit + Feature) | 50+ | `backend/tests/` |
-| Config Files | 8 | `backend/` root + `backend/config/` |
+| Category               | Count | Files                                  |
+| ---------------------- | ----- | -------------------------------------- |
+| Models                 | 10    | `backend/app/Models/`                  |
+| Repositories           | 10    | `backend/app/Repositories/`            |
+| Services               | 8     | `backend/app/Services/`                |
+| Controllers            | 8     | `backend/app/Http/Controllers/Api/V1/` |
+| Form Requests          | 15    | `backend/app/Http/Requests/`           |
+| Migrations             | 12    | `backend/database/migrations/`         |
+| Tests (Unit + Feature) | 50+   | `backend/tests/`                       |
+| Config Files           | 8     | `backend/` root + `backend/config/`    |
 
 ### 8.2 Frontend Deliverables
 
-| Category | Count | Files |
-|----------|-------|-------|
-| Pages | 15+ | `frontend/pages/` |
-| Components | 22+ | `frontend/components/` |
-| Stores (Pinia) | 6 | `frontend/stores/` |
-| Composables | 8 | `frontend/composables/` |
-| Tests (Unit + Component + E2E) | 45+ | `frontend/tests/` |
-| Config Files | 7 | `frontend/` root |
-| Locales | 2 | `frontend/locales/` |
+| Category                       | Count | Files                   |
+| ------------------------------ | ----- | ----------------------- |
+| Pages                          | 15+   | `frontend/pages/`       |
+| Components                     | 22+   | `frontend/components/`  |
+| Stores (Pinia)                 | 6     | `frontend/stores/`      |
+| Composables                    | 8     | `frontend/composables/` |
+| Tests (Unit + Component + E2E) | 45+   | `frontend/tests/`       |
+| Config Files                   | 7     | `frontend/` root        |
+| Locales                        | 2     | `frontend/locales/`     |
 
 ### 8.3 Infrastructure Deliverables
 
-| Item | Files |
-|------|-------|
-| GitHub Actions workflows | 1 | `.github/workflows/pre-commit-guard.yml` |
-| Pre-commit hooks | 2 | `.husky/pre-commit`, `.lintstagedrc.json` |
-| Docker Compose | 1 | `docker-compose.yml` |
-| Configuration | 2 | `.env.example`, `ci.env` |
+| Item                     | Files |
+| ------------------------ | ----- | ----------------------------------------- |
+| GitHub Actions workflows | 1     | `.github/workflows/pre-commit-guard.yml`  |
+| Pre-commit hooks         | 2     | `.husky/pre-commit`, `.lintstagedrc.json` |
+| Docker Compose           | 1     | `docker-compose.yml`                      |
+| Configuration            | 2     | `.env.example`, `ci.env`                  |
 
 ---
 
@@ -959,6 +1008,7 @@ bunyan-app-cursor/
 #### 1. PHP Version & Laravel Version Specificity
 
 **Question:** Section 1.1 states "Laravel 8.2+" but Laravel 8.2 doesn't exist. Did you mean:
+
 - [ ] Laravel 8.x (latest 8.x) with PHP 8.2+?
 - [ ] Laravel 10.x (current LTS) with PHP 8.1+?
 - [ ] Laravel 11.x (latest) with PHP 8.2+?
@@ -972,6 +1022,7 @@ bunyan-app-cursor/
 #### 2. Database Connection Pooling & Redis Caching Strategy
 
 **Question:** Section 5.1 specifies Redis for CACHE_DRIVER and QUEUE_CONNECTION, but doesn't clarify:
+
 - [ ] Should we implement connection pooling for MySQL?
 - [ ] Is Redis required for local development (docker-compose.yml), or fallback to in-memory?
 - [ ] What's the expected load? (Affects pool size: 5-10 dev, 20-50 production)
@@ -979,7 +1030,8 @@ bunyan-app-cursor/
 
 **Impact:** Affects docker-compose.yml services, .env configuration, memory usage, and horizontal scaling readiness.
 
-**Recommended Decision:** 
+**Recommended Decision:**
+
 - Use **Redis for cache + queue** (production-ready, required in docker-compose)
 - Use **no connection pooling** for MySQL in initial phase (Eloquent connection pooling can be added in Phase 02 if needed)
 - Use **cookie-based sessions** (stateless API, Sanctum tokens)
@@ -990,6 +1042,7 @@ bunyan-app-cursor/
 #### 3. RBAC Middleware Ordering & Priority Conflicts
 
 **Question:** Section 1.2.5 applies both `auth:sanctum` and `can:` middleware on routes. What's the execution order?
+
 - [ ] Should `auth:sanctum` fail first (401) if token invalid, **then** check `can:` (403)?
 - [ ] Are there conflicts if a route has `can:create,App\Models\Project` but policy doesn't exist?
 - [ ] Should there be a global `CheckRole` middleware to catch missing `can:` checks?
@@ -997,6 +1050,7 @@ bunyan-app-cursor/
 **Impact:** Affects error responses (401 vs 403 ordering), security posture, and developer experience.
 
 **Recommended Decision:**
+
 - Use **middleware ordering: `['auth:sanctum', 'can:action,resource']`** (auth first, then policy)
 - Return **401 Unauthorized** if token missing/invalid
 - Return **403 Forbidden** if authenticated user lacks permission
@@ -1007,6 +1061,7 @@ bunyan-app-cursor/
 #### 4. Testing Coverage Thresholds — Exact vs. Aspirational?
 
 **Question:** Section 3.3 specifies coverage as "minimum" but acceptance criteria (1.4, 2.4) state "≥80% backend / ≥70% frontend". Are these:
+
 - [ ] Hard gates (PR blocked if not met)?
 - [ ] Aspirational targets (warn but allow)?
 - [ ] Per-file or aggregate coverage?
@@ -1015,6 +1070,7 @@ bunyan-app-cursor/
 **Impact:** Affects CI/CD (phpunit.xml phpstan neon threshold), time-to-merge, and testing discipline.
 
 **Recommended Decision:**
+
 - Use **aggregate coverage thresholds: ≥80% backend / ≥70% frontend**
 - **Hard gate in CI** (fail builds below threshold)
 - Exclude: `migrations/`, `config/`, `resources/`, database `seeders/` from coverage
@@ -1025,6 +1081,7 @@ bunyan-app-cursor/
 #### 5. Docker Compose Redis vs. In-Memory Cache for Local Development
 
 **Question:** Section 7 specifies Redis in docker-compose.yml, but:
+
 - [ ] Should we support local development without Docker? (In-memory fallback?)
 - [ ] Is Redis mandatory or optional for SPECIFY phase (STAGE_01)?
 - [ ] Should we generate `.env.docker` for docker-compose users vs. `.env.example` for local?
@@ -1033,6 +1090,7 @@ bunyan-app-cursor/
 **Impact:** Affects developer onboarding, docker-compose.yml design, .env strategy, and resilience.
 
 **Recommended Decision:**
+
 - **Redis is required** in docker-compose.yml (production-like setup)
 - Generate **two env files**: `.env.example` (for local setup with array cache), `.env.docker` (for Docker with Redis)
 - Support **both**: Local dev with `CACHE_DRIVER=array`, Docker dev with `CACHE_DRIVER=redis`
@@ -1043,8 +1101,9 @@ bunyan-app-cursor/
 ## 10. CONFIRMATION: Clarifications Documented
 
 All 5 clarifications have been appended to **Section 9 (Clarifications)** with:
+
 - Question statement
-- Impact analysis  
+- Impact analysis
 - Recommended decision
 
 These clarifications will be addressed in the **PLAN step** where a human decision-maker chooses the path forward. The IMPLEMENT step will proceed with recommended decisions as defaults, unless overridden.

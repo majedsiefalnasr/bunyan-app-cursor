@@ -34,12 +34,30 @@
   "session_started_at": "2026-04-11T00:00:00Z",
   "last_updated": "2026-04-11T12:00:00Z",
   "step_timings": {
-    "specify": { "started_at": "2026-04-11T00:00:00Z", "completed_at": "2026-04-11T00:10:00Z" },
-    "clarify": { "started_at": "2026-04-11T00:10:00Z", "completed_at": "2026-04-11T00:12:00Z" },
-    "plan": { "started_at": "2026-04-11T00:12:00Z", "completed_at": "2026-04-11T00:20:00Z" },
-    "tasks": { "started_at": "2026-04-11T00:20:00Z", "completed_at": "2026-04-11T00:25:00Z" },
-    "analyze": { "started_at": "2026-04-11T00:25:00Z", "completed_at": "2026-04-11T00:30:00Z" },
-    "implement": { "started_at": "2026-04-11T00:30:00Z", "completed_at": "2026-04-11T12:00:00Z" }
+    "specify": {
+      "started_at": "2026-04-11T00:00:00Z",
+      "completed_at": "2026-04-11T00:10:00Z"
+    },
+    "clarify": {
+      "started_at": "2026-04-11T00:10:00Z",
+      "completed_at": "2026-04-11T00:12:00Z"
+    },
+    "plan": {
+      "started_at": "2026-04-11T00:12:00Z",
+      "completed_at": "2026-04-11T00:20:00Z"
+    },
+    "tasks": {
+      "started_at": "2026-04-11T00:20:00Z",
+      "completed_at": "2026-04-11T00:25:00Z"
+    },
+    "analyze": {
+      "started_at": "2026-04-11T00:25:00Z",
+      "completed_at": "2026-04-11T00:30:00Z"
+    },
+    "implement": {
+      "started_at": "2026-04-11T00:30:00Z",
+      "completed_at": "2026-04-11T12:00:00Z"
+    }
   },
   "history": [
     {
@@ -71,7 +89,7 @@
     },
     {
       "event": "implement_complete",
-      "phases": ["A","B","C","D","E","F","G","H","I","J","K","L"],
+      "phases": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
       "tasks_completed": 72,
       "phpstan": "PASS",
       "tests_passed": 31,

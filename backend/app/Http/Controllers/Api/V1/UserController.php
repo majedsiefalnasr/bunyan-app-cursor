@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ErrorCode;
 use App\Http\Requests\Api\V1\LoginRequest;
 use App\Http\Requests\Api\V1\RegisterRequest;
 use App\Http\Requests\Api\V1\UpdateProfileRequest;
@@ -18,7 +19,14 @@ class UserController extends BaseController
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return $this->sendError('بيانات دخول غير صحيحة', ['email' => ['بيانات اعتماد غير صحيحة']], 401);
+            $message = __('errors.codes.'.ErrorCode::AUTH_INVALID_CREDENTIALS->value.'.message', [], 'ar');
+
+            return $this->sendError(
+                ErrorCode::AUTH_INVALID_CREDENTIALS->value,
+                $message,
+                ['email' => [$message]],
+                ErrorCode::AUTH_INVALID_CREDENTIALS->httpStatus(),
+            );
         }
 
         $token = $user->createToken('api_token')->plainTextToken;

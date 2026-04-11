@@ -8,6 +8,7 @@ description: Pre-commit/pre-push failure diagnostics
 ## Pre-commit Hooks
 
 ### Backend (PHP)
+
 ```bash
 # Laravel Pint — formatting
 vendor/bin/pint --test
@@ -20,6 +21,7 @@ php artisan test --parallel
 ```
 
 ### Frontend (JS/TS)
+
 ```bash
 # ESLint
 eslint --fix .
@@ -34,18 +36,22 @@ vitest run
 ## Common Failures & Fixes
 
 ### Laravel Pint
+
 - **Fix**: Run `composer run lint:fix` (or `vendor/bin/pint`) to auto-format
 - **Prevention**: Configure IDE to format on save; `pint.json` is the source of truth
 
 ### PHPStan Level Errors
+
 - **Fix**: Add proper type annotations, fix return types
 - **Prevention**: Use strict types (`declare(strict_types=1)`)
 
 ### ESLint
+
 - **Fix**: Run `npm run lint:fix` for auto-fixable issues
 - **Prevention**: Configure IDE ESLint integration
 
 ### TypeScript Errors
+
 - **Fix**: Add missing types, fix type mismatches
 - **Prevention**: Enable strict mode in tsconfig
 
