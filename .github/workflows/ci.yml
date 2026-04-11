@@ -198,13 +198,13 @@ jobs:
       - name: Wait for Laravel API
         run: |
           for _ in $(seq 1 30); do
-            if curl -fsS "http://127.0.0.1:8000/up" >/dev/null; then
+            if curl -fsS "http://127.0.0.1:8000/__ci_ready" >/dev/null; then
               echo "Laravel is ready"
               exit 0
             fi
             sleep 2
           done
-          echo "Timed out waiting for Laravel on http://127.0.0.1:8000/up"
+          echo "Timed out waiting for Laravel on http://127.0.0.1:8000/__ci_ready"
           exit 1
 
       - name: Setup Node.js
@@ -218,8 +218,10 @@ jobs:
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium
+        run: npx playwright install --with-deps chromium
         working-directory: frontend
+        env:
+          DEBIAN_FRONTEND: noninteractive
 
       - name: Run Playwright E2E tests
         run: npm run test:e2e
