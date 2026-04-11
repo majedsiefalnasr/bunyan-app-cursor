@@ -19,19 +19,19 @@ export const navigationItems: NavItem[] = [
         labelKey: 'nav.dashboard',
         to: '/dashboard',
         icon: 'i-heroicons-squares-2x2',
-        roles: ['customer', 'contractor', 'architect', 'engineer', 'admin'],
+        roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
     },
     {
         labelKey: 'nav.projects',
         to: '/projects',
         icon: 'i-heroicons-building-office',
-        roles: ['customer', 'contractor', 'architect', 'engineer', 'admin'],
+        roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
     },
     {
         labelKey: 'nav.reports',
         to: '/reports',
         icon: 'i-heroicons-document-text',
-        roles: ['contractor', 'engineer', 'admin'],
+        roles: ['contractor', 'field_engineer', 'admin'],
     },
     {
         labelKey: 'nav.products',

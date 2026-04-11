@@ -56,7 +56,7 @@
 
         <template v-if="isEmailVerified">
             <UAlert
-                color="success"
+                color="green"
                 variant="subtle"
                 :title="$t('auth.email_verified')"
                 class="mb-4"
@@ -76,13 +76,13 @@
 
             <UAlert
                 v-if="success"
-                color="success"
+                color="green"
                 variant="subtle"
                 :title="$t('auth.verification_sent')"
                 class="mb-4"
             />
 
-            <UAlert v-if="error" color="error" variant="subtle" :title="error" class="mb-4" />
+            <UAlert v-if="error" color="red" variant="subtle" :title="error" class="mb-4" />
 
             <UButton
                 block

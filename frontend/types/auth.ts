@@ -10,6 +10,8 @@ export interface UserProfile {
     name: string;
     email: string;
     role: UserRole;
+    /** Optional avatar URL when the API returns one */
+    avatar?: string | null;
     phone: string | null;
     active: boolean;
     email_verified_at: string | null;

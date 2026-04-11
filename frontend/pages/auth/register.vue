@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { z } from 'zod';
-    import type { FormSubmitEvent } from '@nuxt/ui';
+    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
 
     definePageMeta({
         layout: 'auth',
@@ -34,7 +34,7 @@
     const loading = ref(false);
     const error = ref<string | null>(null);
 
-    async function onSubmit(event: FormSubmitEvent<RegisterSchema>) {
+    async function onSubmit(event: NuxtUiFormSubmitEvent<RegisterSchema>) {
         loading.value = true;
         error.value = null;
 
@@ -63,11 +63,11 @@
 
         <UAlert
             v-if="error"
-            color="error"
+            color="red"
             variant="subtle"
             :title="error"
             class="mb-4"
-            :close-button="{ onClick: () => (error = null) }"
+            @close="error = null"
         />
 
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">

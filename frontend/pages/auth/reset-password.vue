@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { z } from 'zod';
-    import type { FormSubmitEvent } from '@nuxt/ui';
+    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
 
     definePageMeta({
         layout: 'auth',
@@ -33,7 +33,7 @@
     const token = computed(() => (route.query.token as string) || '');
     const email = computed(() => (route.query.email as string) || '');
 
-    async function onSubmit(event: FormSubmitEvent<ResetSchema>) {
+    async function onSubmit(event: NuxtUiFormSubmitEvent<ResetSchema>) {
         loading.value = true;
         error.value = null;
 
@@ -68,7 +68,7 @@
 
         <UAlert
             v-if="success"
-            color="success"
+            color="green"
             variant="subtle"
             :title="$t('auth.password_reset_success')"
             :description="$t('auth.redirecting_to_login')"
@@ -77,11 +77,11 @@
 
         <UAlert
             v-if="error"
-            color="error"
+            color="red"
             variant="subtle"
             :title="error"
             class="mb-4"
-            :close-button="{ onClick: () => (error = null) }"
+            @close="error = null"
         />
 
         <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { z } from 'zod';
-    import type { FormSubmitEvent } from '@nuxt/ui';
+    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
 
     definePageMeta({
         layout: 'auth',
@@ -22,7 +22,7 @@
     const success = ref(false);
     const error = ref<string | null>(null);
 
-    async function onSubmit(event: FormSubmitEvent<ForgotSchema>) {
+    async function onSubmit(event: NuxtUiFormSubmitEvent<ForgotSchema>) {
         loading.value = true;
         error.value = null;
 
@@ -52,7 +52,7 @@
 
         <UAlert
             v-if="success"
-            color="success"
+            color="green"
             variant="subtle"
             :title="$t('auth.reset_link_sent')"
             class="mb-4"
@@ -60,11 +60,11 @@
 
         <UAlert
             v-if="error"
-            color="error"
+            color="red"
             variant="subtle"
             :title="error"
             class="mb-4"
-            :close-button="{ onClick: () => (error = null) }"
+            @close="error = null"
         />
 
         <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
