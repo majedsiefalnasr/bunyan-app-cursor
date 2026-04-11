@@ -1,0 +1,6 @@
+{
+  "backend/app/**/*.php": ["cd backend && vendor/bin/php-cs-fixer fix", "cd backend && vendor/bin/phpstan analyse --memory-limit=512M"],
+  "frontend/**/*.{vue,ts,js}": ["cd frontend && npm run lint:fix"],
+  "frontend/**/*.{vue,ts,js,json,css}": ["cd frontend && npx prettier --write"],
+  "frontend/**/*.ts": ["cd frontend && npm run typecheck"]
+}

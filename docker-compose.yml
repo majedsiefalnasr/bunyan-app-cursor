@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bunyan-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bunyan
+      MYSQL_USER: bunyan
+      MYSQL_PASSWORD: bunyan
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - bunyan-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: bunyan-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - bunyan-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      timeout: 5s
+      retries: 10
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: bunyan-php
+    working_dir: /app/backend
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: bunyan
+      DB_USERNAME: bunyan
+      DB_PASSWORD: bunyan
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - bunyan-network
+
+  node:
+    image: node:20-alpine
+    container_name: bunyan-node
+    working_dir: /app/frontend
+    environment:
+      NODE_ENV: development
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+    volumes:
+      - ./frontend:/app/frontend
+    networks:
+      - bunyan-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  bunyan-network:
+    driver: bridge
