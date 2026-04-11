@@ -1,5 +1,7 @@
+import { useCookie } from '#app';
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
+import { useApi } from '~/composables/useApi';
 import type {
     AuthResponse,
     LoginPayload,
