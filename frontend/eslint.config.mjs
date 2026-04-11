@@ -21,4 +21,8 @@ export default createConfigForNuxt(
             'vue/no-multiple-template-root': 'off',
         },
     }
-).append(eslintConfigPrettier);
+)
+    .prepend({
+        ignores: ['playwright-report/**', 'test-results/**'],
+    })
+    .append(eslintConfigPrettier);

@@ -146,7 +146,7 @@ export const useDirection = () => {
       dir.value = lang === "ar" ? "rtl" : "ltr";
       useHead({ htmlAttrs: { dir: dir.value } });
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return { dir, toggle };

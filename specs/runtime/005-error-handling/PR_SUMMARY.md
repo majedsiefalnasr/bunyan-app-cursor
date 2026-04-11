@@ -282,7 +282,6 @@ None. Full backward compatibility maintained.
    ```
 
 2. **Error notifications are automatic:**
-
    - Composable catches errors and dispatches to store
    - ErrorToast component renders from store
    - Toast queue managed automatically

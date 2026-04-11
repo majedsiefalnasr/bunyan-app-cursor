@@ -661,7 +661,6 @@ npm run test:e2e -- --update-snapshots
    ```
 3. List tables: `SHOW TABLES;`
 4. Verify all expected tables exist (adjust for your migration set):
-
    - ✅ users
    - ✅ personal_access_tokens (Laravel Sanctum)
    - ✅ roles

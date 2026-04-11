@@ -121,31 +121,25 @@ REQUEST FLOW:
 Backend middleware **must** execute in this strict order:
 
 1. **InjectCorrelationId** — First (before any other processing)
-
    - Extract/generate correlation ID
    - Store in request attributes
    - Push to Log processor
 
 2. **(Auth Middleware — Laravel built-in)**
-
    - Authenticate user via Sanctum
 
 3. **(RBAC Middleware — per-route)**
-
    - Verify user has required role
 
 4. **LogApiActivity** — Before controller execution
-
    - Log request start
    - Record start time
 
 5. **Controller/Route Handler** — Request processing
-
    - Service calls
    - Exception throws
 
 6. **Exception Handler** — Catches all exceptions
-
    - Formats response
    - Logs error
 
@@ -721,18 +715,15 @@ frontend/
 **Dependency:** None (foundational)
 
 1. Create `ErrorCode` enum in `backend/app/Enums/ErrorCode.php`
-
    - All 12 error codes with status mapping
    - Severity and description methods
 
 2. Create exception hierarchy:
-
    - `DomainException` base class
    - All 7 specific exception classes
    - Each with `getErrorCode()`, `getHttpStatus()`, `getDetails()` methods
 
 3. Create `ApiResponse` trait in `backend/app/Http/Controllers/Api/`
-
    - `sendSuccess()` method
    - `sendError()` method
    - Both format to contract
@@ -752,25 +743,21 @@ frontend/
 **Dependency:** Phase 1
 
 1. Create `InjectCorrelationId` middleware
-
    - Extract/generate correlation ID
    - Store in request attributes
    - Push to Log processor
 
 2. Create `LogApiActivity` middleware
-
    - Log request entry
    - Calculate response duration
    - Log with structured fields
 
 3. Update `backend/config/logging.php`
-
    - Add `structured` channel with JsonFormatter
    - Configure retention policies
    - Set log levels
 
 4. Create `ErrorDetailFiltering` middleware (optional, advanced)
-
    - Filter details by user role
    - Admin sees stack traces in dev only
 
@@ -788,38 +775,32 @@ frontend/
 **Dependency:** Phase 1-2 (backend contracts finalized)
 
 1. Create `useApi()` composable in `frontend/composables/useApi.ts`
-
    - Initialize $fetch with base URL
    - Inject auth token from store
    - Generate correlation ID
    - Error interceptor logic (401, 403, 5xx routing)
 
 2. Create `useErrorNotification()` composable
-
    - Error code to message mapping
    - Severity detection
    - Toast display logic
    - Retry button support
 
 3. Create `AppErrorBoundary.vue` component
-
    - `onErrorCaptured()` lifecycle
    - Error card display
    - Recovery buttons
 
 4. Create error pages:
-
    - `404.vue` — Not found
    - `500.vue` — Server error
    - `403.vue` — Forbidden
 
 5. Create error layout:
-
    - `frontend/layouts/error.vue`
    - Minimal (no header/sidebar)
 
 6. Create error store:
-
    - `frontend/stores/error.ts` (Pinia)
    - `errors` ref, `lastError` ref
    - Auto-clear after 30s
@@ -836,13 +817,11 @@ frontend/
 **Dependency:** Phase 3
 
 1. Backend translations:
-
    - Create `backend/resources/lang/ar/errors.php`
    - Create `backend/resources/lang/en/errors.php`
    - Validation messages for all rules
 
 2. Frontend translations:
-
    - Update `frontend/locales/ar.json` with error messages
    - Update `frontend/locales/en.json`
    - Button labels, error page text
@@ -860,7 +839,6 @@ frontend/
 **Dependency:** Phase 1-4
 
 1. Backend feature tests:
-
    - Validation error flow (422)
    - Auth error flow (401)
    - RBAC error flow (403)
@@ -870,7 +848,6 @@ frontend/
    - Server error flow (500)
 
 2. Frontend integration tests:
-
    - Error interceptor → notification
    - Error page rendering
    - RTL layout verification

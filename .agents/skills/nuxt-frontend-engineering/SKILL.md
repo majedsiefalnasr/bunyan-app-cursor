@@ -117,7 +117,7 @@ definePageMeta({
 
 const { apiFetch } = useApi();
 const { data: projects, status } = await useAsyncData("projects", () =>
-  apiFetch("/api/v1/projects")
+  apiFetch("/api/v1/projects"),
 );
 </script>
 
@@ -174,7 +174,7 @@ export const useAuthStore = defineStore(
   },
   {
     persist: true,
-  }
+  },
 );
 ```
 

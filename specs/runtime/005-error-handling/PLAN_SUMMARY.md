@@ -375,21 +375,18 @@ docs/runtime/005-error-handling/TROUBLESHOOTING.md
 ## Next Steps for Implementation
 
 1. **Create Backend Foundation** (Day 1–2)
-
    - Error code enum
    - Custom exception classes
    - Exception handler
    - Middleware (correlation ID + logging)
 
 2. **Create Frontend Components** (Day 3–4)
-
    - API interceptor (useApi)
    - Error notifications (useErrorNotification)
    - Error boundary (AppErrorBoundary)
    - Error pages (404, 500, 403)
 
 3. **Test & Validate** (Day 5–6)
-
    - Integration tests
    - Security tests
    - Performance tests

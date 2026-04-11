@@ -20,22 +20,18 @@ The specification for STAGE_05 has been comprehensively clarified. 10 ambiguitie
 **5 Awaiting Stakeholder Input:**
 
 1. **Correlation ID Scope** — Request-only vs. Session vs. User lifecycle tracking
-
    - Decision impact: Tracing strategy, database schema for logging
    - Status: **AWAITING INPUT**
 
 2. **RBAC Error Detail Visibility** — Role-specific filtering rules
-
    - Decision impact: Error response payload size, security posture
    - Status: **AWAITING INPUT**
 
 3. **Toast Notification Behavior** — Queue vs. Replace vs. Stack
-
    - Decision impact: UX for multiple errors, component complexity
    - Status: **AWAITING INPUT**
 
 4. **Logging Destination** — File vs. Stdout vs. External service
-
    - Decision impact: Infrastructure, monitoring, log aggregation
    - Status: **AWAITING INPUT**
 
@@ -230,12 +226,10 @@ The specification for STAGE_05 has been comprehensively clarified. 10 ambiguitie
 ### Checklists Generated
 
 1. **security-checklist.md** — 14 KB
-
    - 50+ security validation items
    - RBAC filtering, credentials, sensitive data, audit
 
 2. **performance-checklist.md** — 13 KB
-
    - 40+ performance benchmarking items
    - Logging latency, serialization, bundle size, throughput
 

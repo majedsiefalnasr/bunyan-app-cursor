@@ -74,7 +74,6 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 ### 2.2 Entity Cache Warming
 
 - [ ] **High-traffic entities cached on creation/update:**
-
   - [ ] User profiles: 30 minute TTL
   - [ ] Project details: 15 minute TTL
   - [ ] Product catalog: 30 minute TTL
@@ -88,7 +87,6 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 ### 2.3 Query Result Caching
 
 - [ ] Frequently-accessed queries cached:
-
   - [ ] `User::whereRole('contractor')->count()` — admin dashboard widget (1 hour TTL)
   - [ ] `Project::active()->count()` — statistics (1 hour TTL)
   - [ ] `Category::all()` — product filters (2 hour TTL)
@@ -150,7 +148,6 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 
 - [ ] Each page route lazy-loaded: `defineAsyncComponent(() => import('~/pages/dashboard.vue'))`
 - [ ] Heavy components lazy-loaded (modals, tables, charts):
-
   - [ ] ProjectTable (lazy-loaded on dashboard)
   - [ ] ReportForm (lazy-loaded in task detail page)
   - [ ] ProductCatalog (lazy-loaded in store)
@@ -161,14 +158,12 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 ### 4.3 Asset Optimization
 
 - [ ] Images optimized:
-
   - [ ] PNG: max 500 KB (pre-compressed)
   - [ ] JPEG: max 250 KB (quality 80)
   - [ ] WebP format: primary, fallback to JPEG
   - [ ] Use `nuxt-image` component for responsive images
 
 - [ ] CSS optimization:
-
   - [ ] Tailwind v4 used (pruned in production)
   - [ ] Unused CSS removed by Tailwind
   - [ ] Global CSS < 100 KB
@@ -215,7 +210,6 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 ### 6.1 Queue Configuration
 
 - [ ] Heavy operations offloaded to queues:
-
   - [ ] Report file processing (image resizing, video encoding)
   - [ ] Email notifications
   - [ ] PDF generation (invoices, reports)
@@ -241,7 +235,6 @@ This checklist ensures Bunyan Platform meets performance targets from Day 1 thro
 ### 6.4 API Optimization Patterns
 
 - [ ] Batch API endpoints to reduce requests:
-
   - [ ] `POST /api/v1/projects/batch` (create multiple projects)
   - [ ] `PATCH /api/v1/projects/batch` (update multiple)
 

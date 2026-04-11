@@ -99,7 +99,7 @@ test("admin can approve a pending supplier", async ({ page }) => {
   await page.click('[data-testid="supplier-approve-btn"]:first-child');
   await page.click('[data-testid="confirm-approve"]');
   await expect(
-    page.locator('[data-testid="supplier-status"]:first-child')
+    page.locator('[data-testid="supplier-status"]:first-child'),
   ).toContainText("Verified");
 });
 ```

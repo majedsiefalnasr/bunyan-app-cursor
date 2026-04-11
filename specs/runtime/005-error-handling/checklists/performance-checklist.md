@@ -14,14 +14,12 @@
 ### 1.1 Synchronous Logging (Fast Path)
 
 - [ ] Correlation ID middleware injection:
-
   - [ ] Middleware registered first in `Kernel.php` → early injection
   - [ ] UUID/ID generation < 1ms
   - [ ] Test: Measure middleware time `microtime(true)` before/after
   - [ ] Threshold: < 0.5ms per request for ID generation
 
 - [ ] Request/response logging middleware:
-
   - [ ] Duration calculation using `microtime(true)`
   - [ ] No database queries in logging middleware
   - [ ] No external API calls in logging middleware
@@ -37,7 +35,6 @@
 ### 1.2 Asynchronous Logging (Batch Path)
 
 - [ ] Error log writing delegated to queue (if high volume):
-
   - [ ] Database error logs written async via Job
   - [ ] Don't await logging in exception handler
   - [ ] Use `Log::info()` → writes to stack channel (file + structured)
@@ -52,13 +49,11 @@
 ## 1.3 Exception Handler Performance
 
 - [ ] Exception handler response time:
-
   - [ ] Catch exception, format error, return JSON < 5ms
   - [ ] No database queries in exception handler (only in services)
   - [ ] No external API calls in exception handler
 
 - [ ] Stack trace generation:
-
   - [ ] Stack traces disabled in production (no `getTraceAsString()`)
   - [ ] Even in dev, stack trace generation < 10ms
   - [ ] Test: Trigger exception, measure handler response time
@@ -77,13 +72,11 @@
 ### 2.1 JSON Payload Size
 
 - [ ] Success response payload:
-
   - [ ] Minimal success structure (success, data, error fields)
   - [ ] No extra metadata unless needed
   - [ ] Test: Empty success response < 50 bytes
 
 - [ ] Error response payload:
-
   - [ ] Minimal error structure (code, message, details)
   - [ ] Validation errors: field details compressed
   - [ ] Test: Validation error with 10 field errors < 500 bytes
@@ -95,7 +88,6 @@
 ### 2.2 Validation Error Details Optimization
 
 - [ ] Field details array efficiency:
-
   - [ ] Each field maps to error message list
   - [ ] No duplicate error messages
   - [ ] Test: 20 validation errors < 1KB response
@@ -114,13 +106,11 @@
 ### 3.1 Error Interceptor (useApi) Performance
 
 - [ ] Response error handling:
-
   - [ ] Error interceptor processes < 10ms
   - [ ] No blocking operations on main thread
   - [ ] Error details parsed, mapped, cached
 
 - [ ] Correlation ID generation:
-
   - [ ] Client-side ID generation < 1ms (Date.now() + random)
   - [ ] No external API calls
   - [ ] Cached in request header
@@ -133,13 +123,11 @@
 ### 3.2 Error Notification Composable Performance
 
 - [ ] Toast display:
-
   - [ ] `useErrorNotification()` call < 5ms
   - [ ] Toast rendering doesn't block main thread
   - [ ] Severity mapping (object lookup) < 1ms
 
 - [ ] Retry logic:
-
   - [ ] Retry function stored (not executed on notification)
   - [ ] Retry button click handler < 2ms to setup
   - [ ] Actual retry execution separate from UI update
@@ -152,13 +140,11 @@
 ### 3.3 Error Boundary Component Performance
 
 - [ ] Error capture:
-
   - [ ] `onErrorCaptured()` hook < 2ms
   - [ ] Error object creation < 1ms
   - [ ] No heavy operations in error capture
 
 - [ ] Error rendering:
-
   - [ ] Error card render < 50ms (Vue 3 fast)
   - [ ] Icon rendering (UIcon) < 10ms
   - [ ] No re-renders on state changes
@@ -177,7 +163,6 @@
 ### 4.1 Toast Queue Implementation
 
 - [ ] Single toast at a time (no stack):
-
   - [ ] Only one error toast visible
   - [ ] Queue next error after timeout
   - [ ] Test: Trigger 5 errors simultaneously → show 1st, queue others
@@ -190,7 +175,6 @@
 ### 4.2 Error Debouncing (Optional)
 
 - [ ] Duplicate error suppression:
-
   - [ ] If same error code within 1s window → don't show duplicate
   - [ ] Only increment error count (if shown)
   - [ ] Test: Trigger same validation error 10x → show once
@@ -209,20 +193,17 @@
 ### 5.1 Load Test Scenarios
 
 - [ ] Baseline load (100 req/s):
-
   - [ ] No error conditions
   - [ ] Measure average response time
   - [ ] Establish baseline latency
 
 - [ ] With logging enabled (100 req/s):
-
   - [ ] Correlation ID middleware active
   - [ ] Request/response logging active
   - [ ] Measure latency impact
   - [ ] Threshold: < 5% latency increase
 
 - [ ] With structured logging (100 req/s):
-
   - [ ] JSON formatter active
   - [ ] Multiple log channels
   - [ ] Measure latency impact
@@ -237,13 +218,11 @@
 ### 5.2 Disk I/O Optimization
 
 - [ ] Log file writes buffered:
-
   - [ ] Monolog uses buffering (StreamHandler)
   - [ ] Doesn't fsync() on every write
   - [ ] Batch writes every 100ms or at completion
 
 - [ ] Log file rotation:
-
   - [ ] Daily rotation configured (section 3.6)
   - [ ] Old logs archived/deleted per retention
   - [ ] No full disk scenarios
@@ -262,19 +241,16 @@
 ### 6.1 Component Size
 
 - [ ] AppErrorBoundary component:
-
   - [ ] < 2KB minified
   - [ ] < 1KB gzipped
   - [ ] Minimal dependencies (no lodash, etc.)
 
 - [ ] useApi composable:
-
   - [ ] < 3KB minified
   - [ ] < 1KB gzipped
   - [ ] Uses $fetch (bundled with Nuxt)
 
 - [ ] useErrorNotification composable:
-
   - [ ] < 2KB minified
   - [ ] < 1KB gzipped
   - [ ] Depends on Nuxt UI toast (already bundled)
@@ -287,7 +263,6 @@
 ### 6.2 Dependency Analysis
 
 - [ ] No duplicate error handling libraries:
-
   - [ ] Check if Sentry/Bugsnag auto-included
   - [ ] Remove if not needed for stage
   - [ ] Defer to later stages if needed
@@ -306,7 +281,6 @@
 ### 7.1 ID Generation
 
 - [ ] Client-side generation (frontend):
-
   - [ ] `Date.now() + random` < 1ms
   - [ ] No UUID library (would add ~1KB)
   - [ ] String concatenation efficient
@@ -319,7 +293,6 @@
 ### 7.2 Correlation ID Propagation
 
 - [ ] Header injection:
-
   - [ ] Frontend injects `X-Correlation-ID` header < 1ms
   - [ ] Backend extracts header < 0.5ms
   - [ ] Correlation ID stored in request context (not database)
@@ -338,7 +311,6 @@
 ### 8.1 Exception Handler Memory
 
 - [ ] Exception object cleanup:
-
   - [ ] Exception logged, then garbage collected
   - [ ] No exception references held in closures
   - [ ] Stack trace (if generated) released after logging
@@ -351,7 +323,6 @@
 ### 8.2 Toast Notification Memory
 
 - [ ] Toast queue memory:
-
   - [ ] Maximum 10 queued errors (not unlimited)
   - [ ] Old errors discarded when limit reached
   - [ ] Test: Trigger 1000 errors → memory stable, not growing
@@ -370,7 +341,6 @@
 ### 9.1 Error Message Caching
 
 - [ ] i18n message cache:
-
   - [ ] Error messages cached after first lookup
   - [ ] No re-parsing on each error
   - [ ] Test: 1000 errors of same type → reuse cached message
@@ -396,7 +366,6 @@
 ### 10.1 Latency Metrics
 
 - [ ] Measure error response time:
-
   - [ ] Record time from exception → response JSON
   - [ ] Target: < 10ms for most errors
   - [ ] Alert if > 50ms
@@ -409,7 +378,6 @@
 ### 10.2 Log Performance Metrics
 
 - [ ] Log write latency:
-
   - [ ] Time from `Log::info()` call → disk write
   - [ ] Target: < 2ms for async
   - [ ] Alert if > 10ms

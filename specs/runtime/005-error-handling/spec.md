@@ -739,7 +739,7 @@ export function useErrorNotification() {
 
   const getSeverityByCode = (
     code: string,
-    statusCode?: number
+    statusCode?: number,
   ): "error" | "warning" => {
     const errorSeverities = {
       SERVER_ERROR: "error",
@@ -1160,7 +1160,6 @@ public function messages(): array
 ## 7. IMPLEMENTATION SEQUENCE
 
 1. **Phase 1: Backend Foundation**
-
    - Create custom exception hierarchy
    - Implement exception handler with error contract
    - Add correlation ID middleware
@@ -1168,14 +1167,12 @@ public function messages(): array
    - Create API response helper trait
 
 2. **Phase 2: Error Registry & Logging**
-
    - Define all error codes
    - Configure structured logging (JSON formatter)
    - Add error code registry as reference
    - Test error code → HTTP status mapping
 
 3. **Phase 3: Frontend Implementation**
-
    - Create API interceptor (useApi composable)
    - Create error notification composable
    - Create error boundary component
@@ -1411,13 +1408,11 @@ Status: AWAITING INPUT
 Ambiguities:
 
 - **Which errors are retryable?**
-
   - Currently: VALIDATION_ERROR, RATE_LIMIT_EXCEEDED (line 320)
   - Should also be retryable: PAYMENT_FAILED? SERVICE_UNAVAILABLE? Timeout errors (not in registry)?
   - Should NOT be retryable: RBAC_ROLE_DENIED, AUTH_UNAUTHORIZED, RESOURCE_NOT_FOUND (user can't fix)
 
 - **Retry strategy?**
-
   - Immediate retry?
   - Exponential backoff (1s, 2s, 4s)?
   - Max retries (3x, 5x)?

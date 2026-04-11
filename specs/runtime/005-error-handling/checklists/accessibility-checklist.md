@@ -14,19 +14,16 @@
 ### 1.1 Message Clarity Standards
 
 - [ ] Error messages avoid jargon:
-
   - [ ] "VALIDATION_ERROR" → user sees "البيانات غير صحيحة" (clear, not technical)
   - [ ] "RBAC_ROLE_DENIED" → user sees "غير مصرح لك بهذا الإجراء" (explain, don't code)
   - [ ] No error codes shown to users (only shown in console for debugging)
 
 - [ ] Messages are actionable:
-
   - [ ] Not: "An error occurred"
   - [ ] Yes: "حقل الاسم مطلوب. يرجى إدخال الاسم" (field name required. please enter name)
   - [ ] Validation errors show which field failed and why
 
 - [ ] Messages avoid blame:
-
   - [ ] Not: "You didn't fill the form correctly"
   - [ ] Yes: "البيانات التالية مفقودة: [fields]" (the following data is missing)
 
@@ -38,7 +35,6 @@
 ### 1.2 Message Format for Accessibility
 
 - [ ] Structured validation errors:
-
   - [ ] Each field error listed separately
   - [ ] Not: "Fields name, email, budget invalid"
   - [ ] Yes: List format with each field on new line or bullet
@@ -58,7 +54,6 @@
 ### 2.1 HTML Direction & Language
 
 - [ ] HTML language and direction:
-
   - [ ] `<html dir="rtl" lang="ar">` set in nuxt.config.ts (section 9.3, line 447)
   - [ ] Test: Inspect page source → `dir="rtl"` present
   - [ ] Test: Page displays RTL layout
@@ -71,7 +66,6 @@
 ### 2.2 Tailwind RTL Support
 
 - [ ] Logical properties instead of physical:
-
   - [ ] Use `text-start` (left in LTR, right in RTL) not `text-left`
   - [ ] Use `me-4` (margin-end) not `mr-4` (margin-right)
   - [ ] Use `ps-4` (padding-start) not `pl-4` (padding-left)
@@ -79,7 +73,6 @@
   - [ ] Test: Error pages display correct alignment
 
 - [ ] Text alignment in error components:
-
   - [ ] Error card text centered or start-aligned
   - [ ] Button text centered
   - [ ] Descriptions right-aligned (start in RTL)
@@ -92,14 +85,12 @@
 ### 2.3 Arabic-Specific Typography
 
 - [ ] Arabic font rendering:
-
   - [ ] Geist Sans supports Arabic (or fallback like Segoe UI)
   - [ ] Arabic text renders smoothly without broken characters
   - [ ] Diacritical marks (tashkeel) display correctly
   - [ ] Test: Error message with diacriticals displays correctly
 
 - [ ] Text direction with numbers/English:
-
   - [ ] Mixed Arabic-English text handles bidirectional flow
   - [ ] Example: "خطأ 500" (error 500) displays correctly
   - [ ] Number '123' doesn't break RTL text flow
@@ -118,14 +109,12 @@
 ### 3.1 Error Boundary Component
 
 - [ ] Semantic HTML structure:
-
   - [ ] Error card uses `<div role="alert">` or `<section>`
   - [ ] Heading uses `<h1>` (not styled div)
   - [ ] Description uses `<p>` (not div)
   - [ ] Buttons are actual `<button>` elements
 
 - [ ] Screen reader announcements:
-
   - [ ] Error title announced first ("حدث خطأ")
   - [ ] Then description
   - [ ] Then available actions (button labels)
@@ -139,14 +128,12 @@
 ### 3.2 Toast Notifications
 
 - [ ] Toast role and region:
-
   - [ ] Toast container has `role="region"` or `role="alert"`
   - [ ] Toast has `aria-live="polite"` (announces when added)
   - [ ] Toast has `aria-label` describing the message
   - [ ] Test: Screen reader announces toast immediately
 
 - [ ] Toast content clarity:
-
   - [ ] Toast title: error code (or friendly name)
   - [ ] Toast description: full error message
   - [ ] Toast actions labeled clearly (e.g., "أعد المحاولة")
@@ -159,13 +146,11 @@
 ### 3.3 Error Pages (404, 500, 403)
 
 - [ ] Page heading hierarchy:
-
   - [ ] Page title in `<h1>` (not h2 or styled div)
   - [ ] Example: `<h1>الصفحة غير موجودة</h1>` (Page not found)
   - [ ] Subheading in `<h2>` if present
 
 - [ ] Page structure:
-
   - [ ] Use `<main>` for primary content
   - [ ] Descriptive text in `<p>` tags
   - [ ] Links and buttons properly labeled
@@ -185,14 +170,12 @@
 ### 4.1 Keyboard Focus Management
 
 - [ ] Error boundary component:
-
   - [ ] Error card is in natural tab order
   - [ ] Buttons are focusable (`<button>` elements)
   - [ ] Focus trap optional (or allow escape to parent)
   - [ ] Test: Tab through error card, all buttons reachable
 
 - [ ] Error pages (404, 500, 403):
-
   - [ ] Page loads with focus on main heading or first action
   - [ ] Tab order follows visual order (LTR/RTL)
   - [ ] Tab cycles back to start after last element
@@ -207,14 +190,12 @@
 ### 4.2 Focus Indicators
 
 - [ ] Focus ring visibility:
-
   - [ ] All interactive elements show focus ring when tabbed
   - [ ] Focus ring color: `hsla(212, 100%, 48%, 1)` (blue, from DESIGN.md)
   - [ ] Focus ring at least 2px width
   - [ ] Test: Tab through page, see blue focus ring on each button
 
 - [ ] Focus ring contrast:
-
   - [ ] Focus ring contrasts with background
   - [ ] Not: blue ring on blue background
   - [ ] Test: Focus ring visible on light and dark backgrounds
@@ -227,12 +208,10 @@
 ### 4.3 Keyboard Shortcuts in Error UI
 
 - [ ] Button keyboard equivalents:
-
   - [ ] Enter/Space activates buttons
   - [ ] Test: Focus on "أعد المحاولة" button, press Enter → retries
 
 - [ ] Escape key handling:
-
   - [ ] Escape closes error boundary (if modal)
   - [ ] Escape closes toast (if dismissible)
   - [ ] Escape doesn't silently fail
@@ -251,20 +230,17 @@
 ### 5.1 Text Contrast
 
 - [ ] Error message text contrast:
-
   - [ ] Body text (16px+): min 4.5:1 ratio (WCAG AA)
   - [ ] Large text (18px+ or 14px bold+): min 3:1 ratio
   - [ ] Test: Use color contrast checker (WebAIM)
 
 - [ ] Toast notification contrast:
-
   - [ ] Toast title contrast: 4.5:1
   - [ ] Toast description contrast: 4.5:1
   - [ ] Toast background + text: sufficient contrast
   - [ ] Example: red text on white bg, or white text on red bg
 
 - [ ] Error page contrast:
-
   - [ ] Heading contrast: 4.5:1
   - [ ] Body text contrast: 4.5:1
   - [ ] Test error pages:
@@ -280,13 +256,11 @@
 ### 5.2 Color Not Sole Indicator
 
 - [ ] Error severity indication:
-
   - [ ] Not: red background only = error
   - [ ] Yes: red background + "خطأ" label + icon
   - [ ] Toast uses color (red) + text ("Error") + icon
 
 - [ ] Validation error indication:
-
   - [ ] Not: red outline on field only
   - [ ] Yes: red outline + error text + icon (if needed)
   - [ ] Error message explicitly states problem
@@ -339,7 +313,6 @@
 ### 6.2 Error Details Display
 
 - [ ] Error details optional:
-
   - [ ] Error code shown in small section
   - [ ] Example: `<p class="text-xs"><strong>كود الخطأ:</strong> {{ errorState.errorCode }}</p>`
   - [ ] Not prominently displayed (noise to screen readers)
@@ -358,14 +331,12 @@
 ### 7.1 Page Structure & Headings
 
 - [ ] Page hierarchy:
-
   - [ ] Main heading in `<h1>` describing error (e.g., "الصفحة غير موجودة")
   - [ ] No skipped heading levels (no h3 before h2)
   - [ ] Descriptive text in `<p>` tags
   - [ ] Test: Headings list in screen reader shows correct hierarchy
 
 - [ ] Large error numbers:
-
   - [ ] "404", "500", "403" displayed as large visual text
   - [ ] But marked as decorative (not screen reader content)
   - [ ] Example: `<p class="text-9xl" aria-hidden="true">404</p>`
@@ -378,14 +349,12 @@
 ### 7.2 Error Page Links & Buttons
 
 - [ ] Button labels clear:
-
   - [ ] "العودة إلى لوحة التحكم" (Go to Dashboard) - descriptive
   - [ ] "الصفحة الرئيسية" (Home) - descriptive
   - [ ] "أعد المحاولة" (Retry) - descriptive
   - [ ] Not: "Click here" or generic buttons
 
 - [ ] Link purpose clear:
-
   - [ ] `to="/dashboard"` button labeled "العودة إلى لوحة التحكم"
   - [ ] `to="/"` button labeled "الصفحة الرئيسية"
   - [ ] Screen reader user knows where link goes
@@ -404,13 +373,11 @@
 ### 8.1 Toast Announcements
 
 - [ ] Live region configuration:
-
   - [ ] Toast container has `aria-live="polite"` (announce, don't interrupt)
   - [ ] `aria-atomic="true"` (announce whole toast, not just change)
   - [ ] Test: Screen reader announces toast when appears
 
 - [ ] Toast content structure:
-
   - [ ] Title: error code name
   - [ ] Description: error message
   - [ ] Actions: buttons (if any)
@@ -424,14 +391,12 @@
 ### 8.2 Toast Actions Accessibility
 
 - [ ] Retry button:
-
   - [ ] Label: "أعد المحاولة" (Retry)
   - [ ] Focused and keyboard-accessible
   - [ ] Announces loading state if retrying
   - [ ] Example: `aria-busy="true"` during retry
 
 - [ ] Close button:
-
   - [ ] Visible close button (not click-anywhere)
   - [ ] Label: "إغلاق" (Close) or "✕" with `aria-label`
   - [ ] Easily reachable (not hidden by other elements)
@@ -450,14 +415,12 @@
 ### 9.1 Field Error Association
 
 - [ ] Field labels associated with errors:
-
   - [ ] Each field has `<label for="field_id">الاسم</label>`
   - [ ] Error message has `id="field_id_error"`
   - [ ] Field has `aria-describedby="field_id_error"`
   - [ ] Screen reader: "Name, edit text, required, [error message]"
 
 - [ ] Error message structure:
-
   - [ ] Clear which field has error
   - [ ] Clear what's wrong
   - [ ] Clear how to fix (if possible)
@@ -471,7 +434,6 @@
 ### 9.2 Form Submission Feedback
 
 - [ ] Submission failure notification:
-
   - [ ] Toast or alert announces submission failed
   - [ ] Error summary provided
   - [ ] First field error focused (or error summary)
@@ -491,13 +453,11 @@
 ### 10.1 Arabic-Specific Accessibility Issues
 
 - [ ] Diacritical marks:
-
   - [ ] Tashkeel (diacritics) display correctly
   - [ ] Screen readers pronounce correctly with diacritics
   - [ ] Example: "اسم" vs "أسْم" (different pronunciation)
 
 - [ ] Arabic abbreviations:
-
   - [ ] Error codes ("VALIDATION_ERROR") always in English
   - [ ] Messages in Arabic, not abbreviated
   - [ ] Example: not "خ.خ" for خطأ خادم, always "خطأ في الخادم"
@@ -510,7 +470,6 @@
 ### 10.2 Localization Accessibility
 
 - [ ] Language switching:
-
   - [ ] Switch from Arabic to English updates error messages
   - [ ] Screen reader announcements in current language
   - [ ] Error pages in both languages available
@@ -529,14 +488,12 @@
 ### 11.1 Automated Testing
 
 - [ ] axe Accessibility Checker:
-
   - [ ] Run on error pages (404, 500, 403)
   - [ ] Run on error boundary component
   - [ ] Run on toast notifications
   - [ ] Zero critical/serious violations
 
 - [ ] Lighthouse accessibility audit:
-
   - [ ] Error pages score 90+ on accessibility
   - [ ] Errors detailed in Lighthouse report
 
@@ -547,21 +504,18 @@
 ### 11.2 Manual Testing
 
 - [ ] Screen reader testing (NVDA/JAWS on Windows, VoiceOver on Mac):
-
   - [ ] Error boundary: Heading announced, error message read, buttons labeled
   - [ ] Toast: Toast announcement, title + description + actions
   - [ ] Error pages: Full page structure readable
   - [ ] Validation errors: Each field error associated
 
 - [ ] Keyboard navigation (Tab, Shift+Tab, Enter, Escape):
-
   - [ ] All buttons reachable via Tab
   - [ ] Focus indicator visible
   - [ ] Buttons activatable with Enter/Space
   - [ ] Escape closes modal/toast (if applicable)
 
 - [ ] RTL/Arabic testing:
-
   - [ ] Error pages display RTL correctly
   - [ ] Arabic text renders without broken characters
   - [ ] Buttons aligned correctly in RTL

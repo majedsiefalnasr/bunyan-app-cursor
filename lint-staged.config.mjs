@@ -1,110 +1,52 @@
 /**
- * Staged-file checks for pre-commit. Paths are normalized to repo-relative POSIX paths.
+ * lint-staged configuration for Bunyan.
  *
- * 1) Root Prettier — same extensions as root package.json "format" (js, mjs, cjs, ts, vue,
- *    css, scss, json, md across the repo), on all staged files except under frontend/.
- *    Under frontend/, the frontend toolchain (Prettier 3 + ESLint) runs instead.
- * 2) Frontend — ESLint --fix on code-like extensions, then Prettier --write (must be last).
- * 3) Backend — Pint + PHPStan on staged PHP files.
+ * Strategy:
+ * - Prettier: single root `prettier` ^3 (same major as `frontend/`); per-file config from nearest `.prettierrc`
+ * - Frontend ESLint: `cd frontend` + flat config (must not run ESLint from repo root)
+ * - Backend: Pint + PHPStan on full `backend/` when any PHP is staged (reliable analysis)
+ * - SKILL.md: optional size validation when `scripts/ci/validate-skill-sizes.sh` exists
  *
- * @param {string[]} filenames
+ * Notes:
+ * - lint-staged v10+ re-stages formatter output automatically — do not run `git add`.
+ * - Avoid `bash -c "…"` with string commands for matched files: extra argv would attach to bash, not Pint.
+ *
+ * @type {import('lint-staged').Config}
  */
-import path from "node:path";
-import process from "node:process";
+export default {
+  // Prettier — Markdown outside `frontend/` (must not use `!(frontend/**/*.md)` — that matches almost all files)
+  "./*.md": ["prettier --write"],
+  "!(frontend)/**/*.md": ["prettier --write"],
+  "*.{yml,yaml}": ["prettier --write"],
 
-/** Keep in sync with root `package.json` → `format` / `format:check` glob extensions. */
-const ROOT_FORMAT_EXT = /\.(js|mjs|cjs|ts|vue|css|scss|json|md)$/i;
+  // Prettier — `.mdc` outside `frontend/`
+  "!(frontend)/**/*.mdc": ["prettier --write"],
+  "./*.mdc": ["prettier --write"],
 
-/** Paths under .gitignore that `git add` will reject (e.g. tracked legacy paths). */
-function isGitignoredPath(relPath) {
-  const p = relPath.replace(/\\/g, "/");
-  return p === ".cursor" || p.startsWith(".cursor/");
-}
+  // Root-only JSON / scripts (slash in pattern disables matchBase so we do not hit `frontend/package.json`)
+  "./*.json": ["prettier --write"],
+  "./*.{js,mjs,cjs,ts}": ["prettier --write"],
 
-function normalizeStagedPaths(filenames) {
-  const cwd = process.cwd();
-  return filenames.map((f) => {
-    const resolved = path.isAbsolute(f) ? f : path.join(cwd, f);
-    const rel = path.relative(cwd, path.resolve(resolved));
-    return rel.split(path.sep).join("/");
-  });
-}
+  // SKILL.md validation — runs when script is executable; otherwise no-op
+  "**/SKILL.md": [
+    'bash -c "test -x scripts/ci/validate-skill-sizes.sh && scripts/ci/validate-skill-sizes.sh || true"',
+  ],
 
-function toFrontendPaths(filenames) {
-  return filenames.map((f) => f.replace(/^frontend\//, ""));
-}
+  // Frontend — declarative / docs (root Prettier ^3; resolves `frontend/.prettierrc.json`)
+  "frontend/**/*.{json,css,md,mdc}": ["prettier --write"],
 
-function toBackendPaths(filenames) {
-  return filenames.map((f) => f.replace(/^backend\//, ""));
-}
+  // Frontend — code (Prettier from repo root; ESLint must run with `frontend/` as cwd for flat config)
+  "frontend/**/*.{vue,ts,js,mjs,cjs}": [
+    "prettier --write",
+    (files) =>
+      `bash -lc 'cd frontend && npx eslint --max-warnings=0 --fix ${files
+        .map((f) => JSON.stringify(f))
+        .join(" ")}'`,
+  ],
 
-/** Paths under frontend/ that ESLint should fix (json/css are Prettier-only here). */
-function isFrontendEslintTarget(repoPath) {
-  return /^frontend\/.*\.(vue|ts|js|mjs|cjs|md|mdc)$/i.test(repoPath);
-}
-
-function shellQuote(paths) {
-  return paths.map((p) => JSON.stringify(p)).join(" ");
-}
-
-function gitAddStagedPaths(filenames) {
-  if (filenames.length === 0) {
-    return [];
-  }
-  return `git add -- ${shellQuote(filenames)}`;
-}
-
-/**
- * @param {string[]} allStagedFiles
- * @returns {string | string[]}
- */
-export default function lintStaged(allStagedFiles) {
-  const files = normalizeStagedPaths(allStagedFiles);
-  /** @type {string[]} */
-  const commands = [];
-
-  // --- Root-style Prettier (mirrors root package.json "format"), excluding frontend/ ---
-  const rootPrettierTargets = files.filter(
-    (f) =>
-      !f.startsWith("frontend/") &&
-      !isGitignoredPath(f) &&
-      ROOT_FORMAT_EXT.test(f)
-  );
-  if (rootPrettierTargets.length > 0) {
-    commands.push(`npx prettier --write ${shellQuote(rootPrettierTargets)}`);
-    commands.push(gitAddStagedPaths(rootPrettierTargets));
-  }
-
-  // --- Frontend (Prettier + ESLint from frontend/) ---
-  const frontendPattern =
-    /^frontend\/.*\.(vue|ts|js|mjs|cjs|json|css|md|mdc)$/i;
-  const frontendFiles = files.filter((f) => frontendPattern.test(f));
-  if (frontendFiles.length > 0) {
-    const relAll = toFrontendPaths(frontendFiles);
-    const eslintFilenames = frontendFiles.filter(isFrontendEslintTarget);
-    const relEslint = toFrontendPaths(eslintFilenames);
-    if (relEslint.length > 0) {
-      commands.push(
-        `cd frontend && npx eslint --max-warnings=0 --fix ${shellQuote(
-          relEslint
-        )}`
-      );
-    }
-    commands.push(`cd frontend && npx prettier --write ${shellQuote(relAll)}`);
-    commands.push(gitAddStagedPaths(frontendFiles));
-  }
-
-  // --- Backend PHP ---
-  const backendPhp = files.filter((f) => /^backend\/.*\.php$/i.test(f));
-  if (backendPhp.length > 0) {
-    const rel = toBackendPaths(backendPhp);
-    const quoted = shellQuote(rel);
-    commands.push(`cd backend && vendor/bin/pint ${quoted}`);
-    commands.push(
-      `cd backend && vendor/bin/phpstan analyse --memory-limit=512M ${quoted}`
-    );
-    commands.push(gitAddStagedPaths(backendPhp));
-  }
-
-  return commands;
-}
+  // Backend — function form so file paths are not appended after `bash -lc` (full tree run)
+  "backend/**/*.php": () => [
+    'bash -lc "cd backend && vendor/bin/pint"',
+    'bash -lc "cd backend && vendor/bin/phpstan analyse --memory-limit=512M"',
+  ],
+};

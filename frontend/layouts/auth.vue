@@ -1,7 +1,17 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-        <div class="w-full max-w-md p-8 bg-white dark:bg-slate-800 rounded-lg shadow-md">
-            <slot />
+    <div
+        class="flex min-h-screen flex-col items-center justify-center bg-[#fafafa] px-4 dark:bg-[#0a0a0a]"
+    >
+        <div class="mb-8 text-center">
+            <NuxtLink
+                to="/"
+                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
+            >
+                {{ $t('app.name') }}
+            </NuxtLink>
         </div>
+        <UCard class="w-full max-w-md">
+            <slot />
+        </UCard>
     </div>
 </template>

@@ -331,7 +331,6 @@ backend/database/seeders/{Role,Permission,User,Product,Database}Seeder.php
 ## Next Steps (Orchestrator)
 
 1. **Verify Database Connectivity**
-
    - Ensure MySQL is running and configured
    - Check `backend/.env` DATABASE\_\* settings
 
