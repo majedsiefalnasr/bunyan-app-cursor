@@ -17,7 +17,6 @@ class UserControllerTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
-            'role' => 'customer',
             'phone' => '+966501234567',
         ]);
 
@@ -33,7 +32,6 @@ class UserControllerTest extends TestCase
             'email' => 'invalid-email',
             'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
-            'role' => 'customer',
         ]);
 
         $response->assertStatus(422)

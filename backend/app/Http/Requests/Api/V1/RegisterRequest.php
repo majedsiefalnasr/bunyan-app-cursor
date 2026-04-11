@@ -19,6 +19,7 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
             'phone' => ['nullable', 'string', 'max:20'],
+            'role' => ['prohibited'],
         ];
     }
 
@@ -31,6 +32,7 @@ class RegisterRequest extends FormRequest
             'email.unique' => __('validation.unique', ['attribute' => __('validation.attributes.email')]),
             'password.required' => __('validation.required', ['attribute' => __('validation.attributes.password')]),
             'password.confirmed' => __('validation.confirmed', ['attribute' => __('validation.attributes.password')]),
+            'role.prohibited' => __('validation.prohibited', ['attribute' => __('validation.attributes.role')]),
         ];
     }
 }

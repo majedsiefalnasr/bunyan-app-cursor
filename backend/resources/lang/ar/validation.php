@@ -148,4 +148,7 @@ return [
     'url' => 'يجب أن يكون :attribute رابطًا صالحًا',
     'ulid' => 'يجب أن يكون :attribute ULID صالحًا',
     'uuid' => 'يجب أن يكون :attribute UUID صالحًا',
+    'attributes' => [
+        'role' => 'الدور',
+    ],
 ];

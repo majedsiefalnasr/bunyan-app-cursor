@@ -34,12 +34,15 @@
 
 ### Validation Rules
 
-| Field    | Rules                                          |
-| -------- | ---------------------------------------------- |
-| name     | required, string, max:255                      |
-| email    | required, email, unique:users                  |
-| password | required, min:8, confirmed, mixedCase, numbers |
-| phone    | nullable, string, max:20                       |
+| Field    | Rules                                                                                |
+| -------- | ------------------------------------------------------------------------------------ |
+| name     | required, string, max:255                                                            |
+| email    | required, email, unique:users                                                        |
+| password | required, min:8, confirmed, mixedCase, numbers                                       |
+| phone    | nullable, string, max:20                                                             |
+| role     | must not be present (registration is customer-only; use admin flows for other roles) |
+
+Do not send `role` in the request body. If present, the API returns **422** with a validation error on `role`.
 
 ### Response (201)
 

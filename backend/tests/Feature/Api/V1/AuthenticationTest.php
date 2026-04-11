@@ -96,10 +96,8 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function test_register_forces_customer_role(): void
+    public function test_register_rejects_role_field(): void
     {
-        Notification::fake();
-
         $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Sneaky Admin',
             'email' => 'sneaky@example.com',
@@ -108,12 +106,16 @@ class AuthenticationTest extends TestCase
             'role' => 'admin',
         ]);
 
-        $response->assertStatus(201)
-            ->assertJsonPath('data.user.role', 'customer');
+        $response->assertStatus(422)
+            ->assertJsonPath('success', false)
+            ->assertJsonPath('error.code', 'VALIDATION_ERROR');
 
-        $this->assertDatabaseHas('users', [
+        $details = $response->json('error.details');
+        $this->assertIsArray($details);
+        $this->assertArrayHasKey('role', $details);
+
+        $this->assertDatabaseMissing('users', [
             'email' => 'sneaky@example.com',
-            'role' => 'customer',
         ]);
     }
 
