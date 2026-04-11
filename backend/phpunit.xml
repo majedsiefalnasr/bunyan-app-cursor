@@ -32,6 +32,8 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="LOG_STACK" value="single,structured"/>
+        <!-- Avoid 500s when CI/.env sets an empty or invalid MAIL_MAILER (Registered → verification mail). -->
+        <env name="MAIL_MAILER" value="array"/>
     </php>
     <source>
         <include>

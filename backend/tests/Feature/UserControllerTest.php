@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -12,6 +13,8 @@ class UserControllerTest extends TestCase
 
     public function test_register_user_successfully()
     {
+        Notification::fake();
+
         $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
