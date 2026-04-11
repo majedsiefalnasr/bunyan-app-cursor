@@ -202,4 +202,46 @@ Deliver a complete, production-grade authentication system for the Bunyan platfo
 
 ## Open Questions
 
-- None at this time. All requirements are clearly defined from the stage file and codebase analysis.
+- None. All clarifications resolved in session below.
+
+## Clarifications
+
+### Session 2026-04-11
+
+**Q1: Should registration be restricted to specific roles, or can any user self-register with any role?**
+
+**Resolution:** Registration is restricted to `customer` role only. The `role` field is removed from `RegisterRequest` — all self-registered users default to `customer`. Admin, contractor, supervising architect, and field engineer roles are assignable only by an admin through a separate user management flow (future RBAC stage). This prevents role escalation via the public registration API.
+
+**Impact on spec:** US1 acceptance criteria updated — `role` parameter removed from registration form. `RegisterRequest` validates only: name, email, password, password_confirmation, phone.
+
+---
+
+**Q2: Should email verification be mandatory before accessing protected features?**
+
+**Resolution:** Email verification is a **soft requirement**. Unverified users CAN log in and access all features. The frontend displays a persistent warning banner on the dashboard prompting verification. No server-side middleware blocks unverified users. The `email_verified_at` timestamp is stored and exposed via `UserResource` for future enforcement if needed.
+
+**Impact on spec:** US5 acceptance criteria confirmed as written. No blocking middleware needed.
+
+---
+
+**Q3: Is the `password_reset_tokens` table already migrated from Stage 02?**
+
+**Resolution:** The `password_reset_tokens` table is referenced in `config/auth.php` (passwords broker configuration). Laravel's default migration `0001_01_01_000000_create_users_table.php` typically includes this table. Verification during implementation is required — if not present, a new migration `create_password_reset_tokens_table` will be created. This does NOT violate the "no new migrations" expectation since password reset tokens are a standard Laravel table required for auth.
+
+**Impact on spec:** Technical requirements updated to allow a conditional migration for `password_reset_tokens` if not already present.
+
+---
+
+**Q4: What is the API token expiration policy?**
+
+**Resolution:** API tokens expire after **24 hours** from creation. This is configured in `config/sanctum.php` via the `expiration` key (value: `1440` minutes). On login, a new token is issued with a fresh expiration. On logout, ALL user tokens are revoked. No sliding expiration or token refresh — users must re-authenticate after 24 hours. The `sanctum.php` config must be published to set this explicitly.
+
+**Impact on spec:** NFR confirmed. `sanctum.php` publish added to technical requirements.
+
+---
+
+**Q5: How should frontend redirect paths be standardized?**
+
+**Resolution:** All redirect paths use the explicit `/ar` prefix (e.g., `/ar/auth/login`, `/ar/dashboard`). This matches the dominant pattern in `middleware/auth.ts` and `middleware/role.ts`. The `useApi.ts` composable paths (`/auth/login`, `/dashboard`) are updated to include the `/ar` prefix. Migration to `useLocalePath()` is deferred to a dedicated i18n stage.
+
+**Impact on spec:** AV3 fix confirmed — update `useApi.ts` redirect paths to use `/ar` prefix consistently.
