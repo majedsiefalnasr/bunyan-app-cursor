@@ -24,6 +24,12 @@ Route::prefix('v1')->group(function () {
         Route::post('auth/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
     });
 
+    // Signed link from email; must not require Sanctum (user is not authenticated in the mail client).
+    Route::middleware(['throttle:6,1', 'signed'])->group(function () {
+        Route::get('auth/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])
+            ->name('verification.verify');
+    });
+
     // Protected Routes (Require Authentication)
     Route::middleware('auth:sanctum')->group(function () {
         // User Routes
@@ -32,9 +38,6 @@ Route::prefix('v1')->group(function () {
         Route::post('auth/logout', [UserController::class, 'logout'])->name('logout');
 
         // Email Verification Routes
-        Route::get('auth/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])
-            ->middleware('signed')
-            ->name('verification.verify');
         Route::post('auth/email/resend', [UserController::class, 'resendVerification'])
             ->middleware('throttle:1,1')
             ->name('verification.send');
