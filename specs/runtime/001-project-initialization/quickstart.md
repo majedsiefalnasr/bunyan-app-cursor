@@ -315,14 +315,12 @@ curl -X GET http://localhost:8000/api/v1/projects \
 **URL:** `http://localhost:3000/auth/login`
 
 1. **Login Form Page**
-
    - Arabic: "صفحة تسجيل الدخول"
    - Email field (with Arabic placeholder)
    - Password field (masked)
    - "Sign In" button
 
 2. **Submit Credentials**
-
    - Email: `contractor@bunyan.local`
    - Password: `SecurePassword123!`
    - Click "Sign In"
@@ -337,7 +335,6 @@ curl -X GET http://localhost:8000/api/v1/projects \
 **URL:** `http://localhost:3000/dashboard/projects/create` (after login)
 
 1. **Form Fields** (in Arabic)
-
    - Project Title (عنوان المشروع)
    - Description (الوصف)
    - Budget (الميزانية)
@@ -346,7 +343,6 @@ curl -X GET http://localhost:8000/api/v1/projects \
    - Supervising Architect (dropdown)
 
 2. **Fill & Submit**
-
    - Title: "مشروع البناء الحديث"
    - Budget: "250000"
    - Click "Save" (حفظ)

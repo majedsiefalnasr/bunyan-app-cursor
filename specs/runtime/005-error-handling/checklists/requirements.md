@@ -28,7 +28,6 @@
 ### 1.1 Error Code Definitions
 
 - [ ] Create `backend/app/Enums/ErrorCode.php` PHP enum with all standardized error codes:
-
   - [ ] `VALIDATION_ERROR` (422)
   - [ ] `AUTH_INVALID_CREDENTIALS` (401)
   - [ ] `AUTH_TOKEN_EXPIRED` (401)
@@ -43,7 +42,6 @@
   - [ ] `SERVICE_UNAVAILABLE` (503)
 
 - [ ] Create `backend/app/Constants/ErrorCodeHttp.php` mapping error codes to HTTP status:
-
   - [ ] All 12 codes mapped with immutable properties
   - [ ] Each code includes human-readable description
   - [ ] Each code includes severity level (Warning, Error)
@@ -90,7 +88,6 @@
 ### 2.2 Exception Handler Implementation
 
 - [ ] Update `backend/app/Exceptions/Handler.php`:
-
   - [ ] Catch `ValidationException` → 422 with field details
   - [ ] Catch `AuthorizationException` → 403 with RBAC code
   - [ ] Catch `ModelNotFoundException` → 404 with resource type
@@ -123,7 +120,6 @@
 ### 3.1 Correlation ID Middleware
 
 - [ ] Create `backend/app/Http/Middleware/InjectCorrelationId.php`:
-
   - [ ] Get `X-Correlation-ID` from request header
   - [ ] Generate UUID if not present
   - [ ] Store in `$request->attributes`
@@ -138,7 +134,6 @@
 ### 3.2 Request/Response Logging Middleware
 
 - [ ] Create `backend/app/Http/Middleware/LogApiActivity.php`:
-
   - [ ] Record request start time
   - [ ] After response, calculate duration in ms
   - [ ] Log with structured fields:
@@ -205,7 +200,6 @@
 ### 5.1 Logging Configuration
 
 - [ ] Update `backend/config/logging.php`:
-
   - [ ] Add `structured` channel with JsonFormatter
   - [ ] Configure log retention (14 days daily, 90 days structured)
   - [ ] Set log level (debug/info for dev, warning+ for prod)
@@ -218,14 +212,12 @@
 ### 5.2 Log Entry Fields
 
 - [ ] All logs include:
-
   - [ ] `timestamp` (ISO 8601)
   - [ ] `level` (DEBUG, INFO, WARNING, ERROR, CRITICAL)
   - [ ] `message` (short description)
   - [ ] `correlation_id` (from middleware)
 
 - [ ] API request logs include:
-
   - [ ] method, path, status, duration_ms
   - [ ] user_id, user_role
   - [ ] client IP
@@ -240,7 +232,6 @@
 ### 5.3 Sensitive Data Protection
 
 - [ ] Never log:
-
   - [ ] Passwords, tokens, API keys
   - [ ] Credit card numbers
   - [ ] SSN, personal identification numbers
@@ -266,14 +257,12 @@
 ### 6.1 useApi Composable
 
 - [ ] Create `frontend/composables/useApi.ts`:
-
   - [ ] Base URL from runtime config
   - [ ] Default headers (Accept, Accept-Language: ar)
   - [ ] Auth token injection from store
   - [ ] Correlation ID generation and injection
 
 - [ ] Implement error handling:
-
   - [ ] 401 errors → call logout, redirect to login
   - [ ] 403 errors → redirect to /403 or dashboard
   - [ ] 422 validation errors → show specific field errors
@@ -308,14 +297,12 @@
 ### 7.1 useErrorNotification Composable
 
 - [ ] Create `frontend/composables/useErrorNotification.ts`:
-
   - [ ] `showErrorNotification(payload)` function
   - [ ] Map error codes to user-friendly Arabic messages
   - [ ] Determine severity (error/warning) from error code
   - [ ] Show toast with title (error code), description (message)
 
 - [ ] Error message mapping:
-
   - [ ] `VALIDATION_ERROR` → "البيانات غير صحيحة"
   - [ ] `AUTH_INVALID_CREDENTIALS` → "بيانات الدخول غير صحيحة"
   - [ ] `RBAC_ROLE_DENIED` → "غير مصرح لك بهذا الإجراء"
@@ -352,7 +339,6 @@
 ### 8.1 Global Error Boundary Component
 
 - [ ] Create `frontend/components/common/AppErrorBoundary.vue`:
-
   - [ ] Catch all unhandled errors via `onErrorCaptured()`
   - [ ] Display error message in user-friendly card
   - [ ] Show error code for debugging
@@ -429,13 +415,11 @@
 ### 9.1 Backend Translations
 
 - [ ] Create `backend/resources/lang/ar/errors.php`:
-
   - [ ] Error messages for each error code in Arabic
   - [ ] Validation messages for common fields
   - [ ] Workflow error messages
 
 - [ ] Create `backend/resources/lang/en/errors.php`:
-
   - [ ] English translations as fallback
   - [ ] Consistent with Arabic versions
 
@@ -446,14 +430,12 @@
 ### 9.2 Frontend Translations
 
 - [ ] Create `frontend/locales/ar.json`:
-
   - [ ] Error message translations
   - [ ] Error page headings/descriptions
   - [ ] Toast notification messages
   - [ ] Button labels (الحين, تحديث, العودة, أعد المحاولة)
 
 - [ ] Create `frontend/locales/en.json`:
-
   - [ ] English translations as fallback
 
 - [ ] Implement i18n in composables:
@@ -473,7 +455,6 @@
   ```
 
 - [ ] Use Tailwind logical properties:
-
   - [ ] `ml-4` → `ml-4 rtl:mr-4 rtl:ml-0` (use logical properties)
   - [ ] `text-left` → `text-start` (for RTL support)
   - [ ] `border-r` → `border-e` (end instead of right)
@@ -498,7 +479,6 @@
 ### 10.1 Backend Unit Tests
 
 - [ ] Create `backend/tests/Unit/Exceptions/` tests:
-
   - [ ] Test each custom exception class
   - [ ] Test `getErrorCode()`, `getHttpStatus()`, `getDetails()`
   - [ ] Test exception message formatting
@@ -511,39 +491,33 @@
 ### 10.2 Backend Feature Tests
 
 - [ ] Test validation error response (422):
-
   - [ ] [ ] Missing required fields
   - [ ] [ ] Invalid field format
   - [ ] [ ] Field-level error details in response
   - [ ] [ ] Correct error code and message
 
 - [ ] Test authentication errors (401):
-
   - [ ] [ ] Missing auth header
   - [ ] [ ] Invalid token format
   - [ ] [ ] Expired token
   - [ ] [ ] Correct error message in Arabic
 
 - [ ] Test authorization errors (403):
-
   - [ ] [ ] Role not permitted
   - [ ] [ ] Correct RBAC_ROLE_DENIED code
   - [ ] [ ] Required vs actual role in details
 
 - [ ] Test not found errors (404):
-
   - [ ] [ ] Nonexistent project ID
   - [ ] [ ] Nonexistent phase ID
   - [ ] [ ] Correct error code and message
 
 - [ ] Test workflow errors (422):
-
   - [ ] [ ] Invalid state transition
   - [ ] [ ] Allowed transitions in error details
   - [ ] [ ] Unmet prerequisites
 
 - [ ] Test rate limiting (429):
-
   - [ ] [ ] Hit rate limit
   - [ ] [ ] Retry-After header in response
 
@@ -555,14 +529,12 @@
 ### 10.3 Frontend Unit Tests
 
 - [ ] Test `useApi()` composable:
-
   - [ ] Injects auth token
   - [ ] Generates correlation ID
   - [ ] Handles 401 logout
   - [ ] Handles 403 redirect
 
 - [ ] Test `useErrorNotification()` composable:
-
   - [ ] Shows toast with correct message
   - [ ] Maps error codes to messages
   - [ ] Severity detection (error vs warning)
@@ -577,14 +549,12 @@
 ### 10.4 Frontend Integration Tests
 
 - [ ] Test error page rendering:
-
   - [ ] [ ] 404 page displays correctly
   - [ ] [ ] 500 page displays correctly
   - [ ] [ ] 403 page displays correctly
   - [ ] [ ] All use error layout
 
 - [ ] Test error flow end-to-end:
-
   - [ ] [ ] API error triggers notification
   - [ ] [ ] Notification shows correct message
   - [ ] [ ] User can retry if applicable
@@ -599,14 +569,12 @@
 ### 10.5 Integration Tests (Full Stack)
 
 - [ ] Test validation error flow:
-
   - [ ] Backend returns 422 with error details
   - [ ] Frontend API interceptor catches error
   - [ ] Frontend shows validation toast
   - [ ] User sees field-level error messages
 
 - [ ] Test authorization error flow:
-
   - [ ] Backend returns 403 RBAC_ROLE_DENIED
   - [ ] Frontend intercepts 403
   - [ ] User redirected to dashboard or 403 page
@@ -621,7 +589,6 @@
 ### 10.6 Load/Performance Tests
 
 - [ ] Test rate limiting under load:
-
   - [ ] Requests above limit return 429
   - [ ] Retry-After header present
   - [ ] Clients receive correct error message
@@ -634,7 +601,6 @@
 ### 10.7 Security Tests
 
 - [ ] Test error detail filtering:
-
   - [ ] Admin sees stack traces (dev only)
   - [ ] Other roles don't see stack traces
   - [ ] No sensitive data in error responses

@@ -831,7 +831,7 @@ Implement exponential backoff for retryable errors:
 async function retryWithBackoff(
   fn: () => Promise<any>,
   maxRetries: number = 3,
-  baseDelay: number = 1000
+  baseDelay: number = 1000,
 ): Promise<any> {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
@@ -849,7 +849,7 @@ async function retryWithBackoff(
 const result = await retryWithBackoff(
   () => apiFetch("/api/v1/projects"),
   3,
-  1000
+  1000,
 );
 ```
 

@@ -175,21 +175,18 @@
 ### Implementation Phases
 
 1. **Phase 1:** Backend Exception Infrastructure (2 days)
-
    - ErrorCode enum
    - Exception hierarchy
    - ApiResponse trait
    - Handler updates
 
 2. **Phase 2:** Backend Middleware & Logging (1 day)
-
    - InjectCorrelationId
    - LogApiActivity
    - Structured logging config
    - Middleware registration
 
 3. **Phase 3:** Frontend Interceptor & Error Handling (1 day)
-
    - useApi composable
    - useErrorNotification composable
    - AppErrorBoundary component
@@ -197,7 +194,6 @@
    - Error store
 
 4. **Phase 4:** Localization/i18n (0.5 days)
-
    - Backend translations
    - Frontend translations
    - Form messages
@@ -289,13 +285,11 @@
 ## Next Actions
 
 1. **Review & Approval** (1 hour)
-
    - Stakeholders review all 5 documents
    - Clarify any open questions (5 from spec.md section 11)
    - Approve data models and API contracts
 
 2. **Implementation** (4-5 days)
-
    - Backend team: Phases 1-2 (3 days)
    - Frontend team: Phases 3-4 (2 days)
    - Both: Phase 5 (1 day shared)
@@ -312,22 +306,18 @@
 From `specs/runtime/005-error-handling/spec.md` section 11:
 
 1. **Q1: Correlation ID Scope**
-
    - Request-level (current) or session-level?
    - Decision: Request-level (simpler for MVP)
 
 2. **Q2: RBAC Error Detail Visibility**
-
    - Per-error-type specificity rules?
    - Decision: Follow matrix in plan.md section 9
 
 3. **Q3: Toast Notification Behavior**
-
    - Queue vs Replace vs Stack?
    - Decision: Stack (show all errors simultaneously)
 
 4. **Q4: Logging Destination**
-
    - File vs Stdout vs External Service?
    - Decision: File-based for MVP, expand later
 

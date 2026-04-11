@@ -49,33 +49,27 @@ The task breakdown for STAGE_05 has been generated. This report documents the 65
 Can all run in parallel (no dependencies):
 
 - [ ] **T001 [P]** Create ErrorCode enum (`backend/app/Enums/ErrorCode.php`)
-
   - 12 error codes with HTTP status mappings
   - Methods: `httpStatus()`, `severity()`, `description()`
   - Time: 30 min
 
 - [ ] **T002 [P]** Create ExceptionContract interface (`backend/app/Exceptions/ExceptionContract.php`)
-
   - Methods: `getErrorCode()`, `getHttpStatus()`, `getDetails()`
   - Time: 15 min
 
 - [ ] **T003 [P]** Create DomainException base class (`backend/app/Exceptions/DomainException.php`)
-
   - Extends Exception, implements ExceptionContract
   - Time: 15 min
 
 - [ ] **T004 [P]** Create ValidationException (`backend/app/Exceptions/ValidationException.php`)
-
   - Properties: `$errors` (field validation messages)
   - Time: 15 min
 
 - [ ] **T005 [P]** Create InvalidStateTransitionException (`backend/app/Exceptions/InvalidStateTransitionException.php`)
-
   - Properties: `$fromState`, `$toState`, `$allowedTransitions`
   - Time: 15 min
 
 - [ ] **T006 [P]** Create ResourceNotFoundException (`backend/app/Exceptions/ResourceNotFoundException.php`)
-
   - Properties: `$resourceType`, `$resourceId`
   - Time: 15 min
 
@@ -88,40 +82,33 @@ Can all run in parallel (no dependencies):
 Depends on T001-T007:
 
 - [ ] **T008** Create ErrorCodeRegistry service (`backend/app/Services/ErrorCodeRegistry.php`)
-
   - In-memory registry with all 12 error codes
   - Time: 30 min
 
 - [ ] **T009** Create ApiResponseTrait (`backend/app/Http/Traits/ApiResponseTrait.php`)
-
   - Methods: `sendSuccess()`, `sendError()`
   - Time: 20 min
 
 - [ ] **T010** Update Exception Handler (`backend/app/Exceptions/Handler.php`)
-
   - Catch all custom exceptions and format to API contract
   - Time: 45 min
 
 - [ ] **T011** Unit tests: Exception hierarchy
-
   - Test all exception classes, inheritance, methods
   - Coverage: 100%
   - Time: 45 min
 
 - [ ] **T012** Unit tests: ErrorCodeRegistry
-
   - Test registry methods and HTTP status mappings
   - Coverage: 100%
   - Time: 30 min
 
 - [ ] **T013** Feature tests: Validation errors (VALIDATION_ERROR)
-
   - Test field-level error details
   - Coverage: All validation scenarios
   - Time: 1 hour
 
 - [ ] **T014** Feature tests: All 12 error codes
-
   - Coverage matrix: 12 codes × 3 response formats
   - Time: 1.5 hours
 
@@ -142,12 +129,10 @@ Depends on T001-T007:
 Can run in parallel:
 
 - [ ] **T016 [P]** Create CorrelationIdMiddleware (`backend/app/Http/Middleware/CorrelationIdMiddleware.php`)
-
   - Generate or pass correlation ID on request/response
   - Time: 30 min
 
 - [ ] **T017 [P]** Create RequestLoggingMiddleware (`backend/app/Http/Middleware/RequestLoggingMiddleware.php`)
-
   - Log request method, path, user, timestamp
   - Time: 30 min
 
@@ -158,58 +143,47 @@ Can run in parallel:
 ### Sequential: Service & Configuration (T019-T030)
 
 - [ ] **T019** Create LoggingService (`backend/app/Services/LoggingService.php`)
-
   - Structured JSON logging with correlation ID
   - Time: 45 min
 
 - [ ] **T020** Register middleware in Kernel.php
-
   - Add middleware to route pipeline
   - Time: 15 min
 
 - [ ] **T021** Unit tests: CorrelationIdMiddleware
-
   - Test ID generation and propagation
   - Time: 30 min
 
 - [ ] **T022** Unit tests: RequestLoggingMiddleware
-
   - Test request context capture
   - Time: 30 min
 
 - [ ] **T023** Unit tests: ErrorDetailFilteringMiddleware
-
   - Test RBAC filtering logic
   - Time: 45 min
 
 - [ ] **T024** Feature tests: Correlation ID propagation
-
   - Test ID flows through entire request pipeline
   - Time: 1 hour
 
 - [ ] **T025** Feature tests: RBAC error filtering
-
   - Test error details by role (6 roles × 4 detail levels)
   - Coverage: 24 test scenarios
   - Time: 1.5 hours
 
 - [ ] **T026** Integration test: Logging pipeline
-
   - Full request → log → response flow
   - Time: 1 hour
 
 - [ ] **T027** Performance test: Middleware latency
-
   - Benchmark: < 5ms total middleware overhead
   - Time: 30 min
 
 - [ ] **T028** Performance test: Logging throughput
-
   - Benchmark: 1000+ logs/second
   - Time: 30 min
 
 - [ ] **T029** Security test: No credential leaks
-
   - Verify no passwords/tokens in logs
   - Time: 30 min
 
@@ -230,25 +204,21 @@ Can run in parallel:
 Can run in parallel:
 
 - [ ] **T031 [P]** Create useApi composable (`frontend/composables/useApi.ts`)
-
   - API interceptor with error handling
   - Methods: `fetch()`, error catching
   - Time: 1 hour
 
 - [ ] **T032 [P]** Create useErrorNotification composable (`frontend/composables/useErrorNotification.ts`)
-
   - Toast notification system for errors
   - Methods: `showError()`, queue management
   - Time: 1 hour
 
 - [ ] **T033 [P]** Create errorStore (Pinia) (`frontend/stores/errorStore.ts`)
-
   - State: `currentError`, `history`, `isVisible`
   - Methods: `setError()`, `clearError()`, `addToHistory()`
   - Time: 45 min
 
 - [ ] **T034 [P]** Create error types (`frontend/types/errors.ts`)
-
   - TypeScript interfaces for error responses
   - Time: 30 min
 
@@ -261,35 +231,29 @@ Can run in parallel:
 Can run in parallel (after T031-T035):
 
 - [ ] **T036 [P]** Create ErrorBoundary component (`frontend/components/ErrorBoundary.vue`)
-
   - Catch and display unhandled errors gracefully
   - Time: 1 hour
 
 - [ ] **T037 [P]** Create ErrorToast component (`frontend/components/ErrorToast.vue`)
-
   - Toast notification UI with RTL support
   - Time: 45 min
 
 - [ ] **T038 [P]** Create 404 error page (`frontend/pages/error/404.vue`)
-
   - User-friendly "page not found" page
   - RTL support, Arabic text
   - Time: 45 min
 
 - [ ] **T039 [P]** Create 500 error page (`frontend/pages/error/500.vue`)
-
   - User-friendly "server error" page
   - RTL support, Arabic text
   - Time: 45 min
 
 - [ ] **T040 [P]** Create 403 error page (`frontend/pages/error/403.vue`)
-
   - User-friendly "access denied" page
   - RTL support, Arabic text
   - Time: 45 min
 
 - [ ] **T041 [P]** Create error layout (`frontend/layouts/error.vue`)
-
   - Layout template for error pages
   - Time: 30 min
 
@@ -300,13 +264,11 @@ Can run in parallel (after T031-T035):
 ### Sequential: Testing (T043-T045)
 
 - [ ] **T043** Unit tests: useApi composable
-
   - Test interceptor logic, error catching
   - Coverage: 100%
   - Time: 1 hour
 
 - [ ] **T044** Unit tests: useErrorNotification & errorStore
-
   - Test notification queue, state management
   - Coverage: 100%
   - Time: 1 hour
@@ -325,32 +287,26 @@ Can run in parallel (after T031-T035):
 **Parallelizable:** 4 tasks
 
 - [ ] **T046 [P]** Create Arabic translations (`frontend/locales/ar.json`)
-
   - All error messages in Arabic
   - Time: 1 hour
 
 - [ ] **T047 [P]** Create English translations (`frontend/locales/en.json`)
-
   - All error messages in English
   - Time: 1 hour
 
 - [ ] **T048 [P]** Create backend Arabic messages (`backend/resources/lang/ar/errors.php`)
-
   - Laravel validation messages in Arabic
   - Time: 45 min
 
 - [ ] **T049 [P]** Create backend English messages (`backend/resources/lang/en/errors.php`)
-
   - Laravel validation messages in English
   - Time: 45 min
 
 - [ ] **T050** Test RTL rendering on error pages
-
   - Visual regression testing for RTL
   - Time: 45 min
 
 - [ ] **T051** Validate Arabic typography & legibility
-
   - Font sizing, letter spacing, color contrast
   - WCAG AA compliance
   - Time: 1 hour
@@ -372,48 +328,39 @@ Can run in parallel (after T031-T035):
 Can run in parallel:
 
 - [ ] **T053 [P]** Full-stack test: Validation error → notification → retry
-
   - Test complete error flow: form → validation → error → notification
   - Time: 1 hour
 
 - [ ] **T054 [P]** Full-stack test: Auth error → redirect to login
-
   - Test 401 → redirect flow
   - Time: 45 min
 
 - [ ] **T055 [P]** Full-stack test: RBAC error → access denied page
-
   - Test 403 → error page flow
   - Time: 45 min
 
 - [ ] **T056 [P]** Full-stack test: Server error → 500 page
-
   - Test 500 → error page flow
   - Time: 45 min
 
 - [ ] **T057 [P]** Performance test: Exception handler latency
-
   - Benchmark: < 5ms end-to-end
   - Time: 30 min
 
 - [ ] **T058 [P]** Security test: No credential leaks
-
   - Verify no passwords/tokens in responses or logs
   - Time: 1 hour
 
 - [ ] **T059 [P]** Security test: XSS prevention
-
   - Test error messages cannot inject HTML/JS
   - Time: 1 hour
 
 - [ ] **T060 [P]** Accessibility test: WCAG AA compliance
-
   - Validate all error pages for accessibility
   - Screen reader, keyboard navigation, color contrast
   - Time: 1 hour
 
 - [ ] **T061 [P]** End-to-end test: Correlation ID tracing
-
   - Verify correlation ID flows through entire pipeline
   - Time: 1 hour
 
@@ -424,12 +371,10 @@ Can run in parallel:
 ### Sequential: Final Validation (T063-T065)
 
 - [ ] **T063** Lint all code files
-
   - PHP lint (backend), ESLint (frontend)
   - Time: 30 min
 
 - [ ] **T064** Type check frontend
-
   - `npx nuxi typecheck`
   - Time: 30 min
 
@@ -469,18 +414,15 @@ Can run in parallel:
 **Timeline:**
 
 - **Day 1 (Parallel):**
-
   - Dev1: Phase 1 core exceptions (T001-T007) + support (T008-T015) = 1.5d
   - Dev2: Phase 3 composables & components (T031-T042) = 1.5d
   - _Phase 1 completes by day-end_
 
 - **Day 2 (Sequential with 1 dev):**
-
   - Dev1 or Dev2: Phase 2 middleware (T016-T030) = 1.0 day
   - _Phase 2 completes by day-end_
 
 - **Day 2-2.5 (Parallel):**
-
   - Dev1: Phase 3 tests (T043-T045) + Phase 4 i18n (T046-T052)
   - Dev2: Phase 5 integration tests (T053-T062)
   - _Both phases complete by day 2.5_

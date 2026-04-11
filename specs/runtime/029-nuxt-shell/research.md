@@ -97,7 +97,7 @@ watch(
     document.documentElement.dir = dir;
     document.documentElement.lang = locale.value;
   },
-  { immediate: true }
+  { immediate: true },
 );
 ```
 

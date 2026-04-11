@@ -12,13 +12,11 @@ Implement the Nuxt.js application shell for the Bunyan platform — the structur
 ### In Scope
 
 - **Layout System**
-
   - `default.vue` — full-chrome layout: `UHeader` + sidebar + `<NuxtPage />` + `UFooter`
   - `auth.vue` — zero-chrome layout: centered `UCard` only
   - `public.vue` — public/marketing layout: header without sidebar
 
 - **Navigation**
-
   - Main nav using `UNavigationMenu` with role-aware menu items (Customer / Contractor / Supervising Architect / Field Engineer / Admin)
   - Sidebar using `UNavigationTree` + persistent panel, collapsible on mobile via `USlideover`
   - Breadcrumb using `UBreadcrumb`, dynamically populated per route
@@ -26,13 +24,11 @@ Implement the Nuxt.js application shell for the Bunyan platform — the structur
   - Active route highlighting on nav items
 
 - **UI Toggles**
-
   - RTL/LTR toggle: `useDirection` composable — sets `document.documentElement.dir`, persists to `localStorage`
   - Dark mode toggle: `useColorMode()` from `@vueuse/core` + Nuxt UI `AppConfig` color mode
   - Language switcher: Arabic/English via `@nuxtjs/i18n`, persisted to `localStorage`
 
 - **Core Composables**
-
   - `useAuth` — reactive auth state (user, role, permissions, isAuthenticated, logout)
   - `useApi` — `$fetch`-based API client with Sanctum Bearer token header injection
   - `useNotification` — `useToast()` wrapper: `notify.success()`, `notify.error()`, `notify.info()`, `notify.warning()`
@@ -40,26 +36,22 @@ Implement the Nuxt.js application shell for the Bunyan platform — the structur
   - `useDirection` — `direction` (ref), `toggleDirection()`, `setDirection(dir)`
 
 - **Global UI Feedback**
-
   - Global page loading indicator using `UProgress` (top bar)
   - Skeleton states: `USkeleton` wrappers for async content areas
   - Error boundary: global error page using `UAlert` (color="error") with retry action
   - Toast notifications: `UNotification` / `useToast()` — positioned top-end (RTL-aware)
 
 - **RTL Implementation**
-
   - Default `dir="rtl"` on `<html>` via `nuxt.config.ts`
   - All Nuxt UI components used with logical CSS properties (RTL-native)
   - Tailwind logical utility classes (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`)
 
 - **Nuxt Config Baseline**
-
   - Modules: `@nuxt/ui`, `@nuxtjs/i18n`
   - Default RTL/Arabic HTML attrs
   - Theme config: colors `["primary", "secondary", "success", "warning", "error", "info"]`
 
 - **Unit Tests (Vitest)**
-
   - `useDirection` — toggle, persist, SSR-safe
   - `useBreadcrumb` — set/clear breadcrumb, route-driven
   - `useAuth` — login/logout state transitions, role access

@@ -278,22 +278,18 @@ The PLAN step for STAGE_01 (Project Initialization) has been successfully comple
 ### High-Risk Areas (Identified & Mitigated)
 
 1. **Database Schema Complexity** (MEDIUM probability)
-
    - Mitigation: Early migration testing, schema diagram review
    - Owner: Backend Lead
 
 2. **API Contract Misalignment** (MEDIUM probability)
-
    - Mitigation: Review contract BEFORE coding, mock API server
    - Owner: API Architect
 
 3. **RBAC Enforcement Gaps** (HIGH probability)
-
    - Mitigation: Strict code review, policy test matrix, guardian validation
    - Owner: Security Lead
 
 4. **Frontend-Backend Integration Timing** (MEDIUM probability)
-
    - Mitigation: Mock API server for frontend, weekly sync meetings
    - Owner: Tech Lead
 

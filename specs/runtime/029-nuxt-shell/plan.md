@@ -10,7 +10,6 @@ This stage delivers the Bunyan application shell — the structural skeleton tha
 ### Key Architecture Decisions
 
 1. **Nuxt UI v2.17 Component Mapping** — The stage spec references Nuxt UI v3 Pro names (`UNavigationTree`, `UHeader`, `UFooter`, `UDrawer`). The installed version is `@nuxt/ui ^2.17`. Plan uses the correct v2 equivalents:
-
    - `UNavigationTree` → `UVerticalNavigation`
    - `UNavigationMenu` → Custom `AppHeaderNav` using `NuxtLink` + Tailwind
    - `UHeader` / `UFooter` → Custom `AppHeader.vue` / `AppFooter.vue`

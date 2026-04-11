@@ -18,7 +18,6 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
 ### Core Plan Files
 
 1. **plan.md** (35 KB)
-
    - Architecture overview with flow diagrams
    - Exception hierarchy (base + 7 specific classes)
    - Middleware pipeline order
@@ -28,7 +27,6 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Testing strategy
 
 2. **research.md** (24 KB)
-
    - Laravel exception handling patterns
    - Nuxt.js 3 error boundaries & lifecycle
    - Structured logging (Monolog, JSON)
@@ -38,7 +36,6 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Best practices & anti-patterns
 
 3. **data-model.md** (20 KB)
-
    - Persistent error logging schema (optional)
    - Error metrics aggregation
    - Audit trail schema
@@ -47,7 +44,6 @@ The technical plan for STAGE_05 has been generated. This report documents the ar
    - Common SQL queries
 
 4. **quickstart.md** (12 KB)
-
    - Backend bootstrap (15 min)
    - Frontend bootstrap (30 min)
    - E2E test setup (15 min)

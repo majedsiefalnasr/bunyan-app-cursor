@@ -92,7 +92,7 @@ test("checkout flow completes successfully", async ({ page }) => {
   await page.click('[data-testid="place-order-button"]');
   await expect(page).toHaveURL("/payment/success");
   await expect(page.locator('[data-testid="order-number"]')).toHaveText(
-    /BNY-\d{8}-\d{4}/
+    /BNY-\d{8}-\d{4}/,
   );
 });
 

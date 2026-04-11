@@ -711,7 +711,7 @@ describe("LoginForm", () => {
   it("disables submit button when form empty", () => {
     const wrapper = mount(LoginForm);
     expect(
-      wrapper.find('button[type="submit"]').attributes("disabled")
+      wrapper.find('button[type="submit"]').attributes("disabled"),
     ).toBeDefined();
   });
 

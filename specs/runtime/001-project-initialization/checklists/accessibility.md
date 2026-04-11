@@ -17,7 +17,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 1.1 Text Alternatives (Images, Icons, Media)
 
 - [ ] All images have descriptive `alt` text:
-
   - Good: `<img alt="Project budget overview for Q1 2026" src="...">`
   - Bad: `<img alt="image" src="...">` or `<img src="...">` (missing alt)
 
@@ -45,7 +44,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 - [ ] Test contrast: WebAIM Contrast Checker, Axe DevTools
 
 - [ ] Color not sole means of conveying information:
-
   - Bad: "Approved (green), Pending (yellow), Rejected (red)" only
   - Good: "✓ Approved (green), ⏳ Pending (yellow), ✗ Rejected (red)"
 
@@ -76,19 +74,16 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 2.1 Keyboard Accessibility
 
 - [ ] **All functionality keyboard accessible** (not mouse-only):
-
   - Forms: Tab through fields, Enter to submit
   - Modals: Tab cycles through focusable elements, Escape closes
   - Dropdowns: Arrow keys select, Enter confirms
   - Data tables: Tab through rows, Arrow keys navigate cells
 
 - [ ] Tab order logical: left-to-right, top-to-bottom (matches visual order)
-
   - Test: Tab repeatedly through page, verify focus order makes sense
   - Fix: adjust `tabindex` if needed (use `tabindex="-1"` to skip)
 
 - [ ] No keyboard traps: users can Tab out of any element
-
   - Test: Tab through modal, verify Tab/Shift+Tab escape
   - Fix: ensure modal focuses on first input, last button returns to start
 
@@ -113,7 +108,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 - [ ] Focus indicator color contrast ≥ **3:1** against background
 - [ ] Focus indicator visible on keyboard navigation (not just mouse)
 - [ ] Do NOT remove focus outline without providing alternative indicator
-
   - Bad: `outline: none` (removes accessibility)
   - Good: `outline: 2px solid blue` (visible outline)
 
@@ -156,18 +150,15 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 3.1 Readable Text & Language
 
 - [ ] Language clearly identified:
-
   - HTML: `<html lang="ar">` for Arabic, `<html lang="en">` for English
   - Part of page in different language: `<span lang="en">English phrase</span>` in Arabic text
 
 - [ ] Text readability:
-
   - Sentence structure: simple, clear
   - Avoid jargon: explain technical terms
   - Reading level: target 8th-grade (use Flesch Reading Ease score ≥ 60)
 
 - [ ] Arabic text formatting:
-
   - Right-to-left text: `dir="rtl"` on container
   - Text alignment: `text-align: right` or Tailwind `text-end`
   - Logical properties: `ms` (margin-start) instead of `ml` (margin-left)
@@ -179,13 +170,11 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 3.2 Predictable Behavior
 
 - [ ] Navigation consistent across pages:
-
   - Header, sidebar, footer in same location
   - Main navigation order same on all pages
   - User menu in same spot
 
 - [ ] Form behavior predictable:
-
   - Submit button label clear: "Save Project" not "OK"
   - Error messages appear near affected field
   - Required fields marked clearly (red asterisk + `required` attribute)
@@ -199,7 +188,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 3.3 Input Assistance & Error Recovery
 
 - [ ] **Form Errors:**
-
   - Error messages clear and specific: "Email must be valid" not "Invalid input"
   - Error associated with field: `aria-describedby="error-email"`
   - Error message in `id="error-email"` near input
@@ -211,13 +199,11 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
   ```
 
 - [ ] **Validation Feedback:**
-
   - Real-time validation optional, but clear
   - Validation messages appear before form submission (helpful)
   - Successful validation indicated: checkmark or green border
 
 - [ ] **Input Requirements:**
-
   - Required fields marked: `<input required>`
   - Instructions clear: "Phone format: +20 (Egypt)" + placeholder `placeholder="+20 XXX XXX XXXX"`
   - Format hints in label or near field
@@ -234,12 +220,10 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 4.1 Valid HTML & ARIA
 
 - [ ] HTML validates with W3C validator (zero errors)
-
   - Test: https://validator.w3.org/
   - No duplicate IDs, proper nesting, valid attributes
 
 - [ ] Semantic HTML used:
-
   - `<button>` not `<div onclick>` for buttons
   - `<a>` for links, not `<span>` or `<div>`
   - `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>` for structure
@@ -279,7 +263,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 4.3 Heading Structure
 
 - [ ] Headings use semantic hierarchy:
-
   - `<h1>` page title (one per page)
   - `<h2>` main sections
   - `<h3>` subsections
@@ -359,7 +342,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 5.3 ARIA Live Regions
 
 - [ ] Dynamic content updates announced: `aria-live="polite"` or `aria-live="assertive"`
-
   - Polite: announce after current speech finishes
   - Assertive: announce immediately (high priority)
 
@@ -391,7 +373,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 6.3 Mobile Form Input
 
 - [ ] Correct input types for context:
-
   - Email: `type="email"` → shows @ keyboard
   - Phone: `type="tel"` → shows numeric keyboard
   - Number: `type="number"` → shows numeric keyboard
@@ -407,7 +388,6 @@ This checklist ensures Bunyan Platform meets **WCAG 2.1 Level AA** accessibility
 ### 7.1 Form-Heavy Pages (Project Creation, Report Submission)
 
 - [ ] Multi-step forms: indicator of progress
-
   - Step 1 of 4, Step 2 of 4, etc.
   - Visual + text indicator
 
