@@ -8,7 +8,7 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
+Step: clarify
 Risk Level: MEDIUM
 Last Updated: 2026-04-11T00:00:00Z
 
@@ -29,10 +29,10 @@ Deferred Scope:
 
 Architecture Governance Compliance:
 
-- Specification drafted — governance audit pending
+- Clarifications resolved — planning authorized
 
 Notes:
-Specification complete. 4 clarifications resolved inline. Clarification step pending.
+All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
