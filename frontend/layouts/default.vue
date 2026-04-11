@@ -17,7 +17,9 @@
             <slot />
         </main>
 
-        <footer class="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 py-8">
+        <footer
+            class="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 py-8"
+        >
             <div class="container mx-auto px-4 text-center text-slate-600 dark:text-slate-400">
                 <p>&copy; 2026 {{ $t('app.name') }}. All rights reserved.</p>
             </div>

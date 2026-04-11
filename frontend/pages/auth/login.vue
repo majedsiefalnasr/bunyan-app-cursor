@@ -7,7 +7,7 @@
                 type="email"
                 required
                 class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
-            >
+            />
         </div>
         <div>
             <label class="block text-sm font-medium mb-2">Password</label>
@@ -16,7 +16,7 @@
                 type="password"
                 required
                 class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
-            >
+            />
         </div>
         <button
             type="submit"
@@ -37,19 +37,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+    import { ref } from 'vue';
 
-definePageMeta({
-    layout: 'auth',
-});
+    definePageMeta({
+        layout: 'auth',
+    });
 
-const form = ref({
-    email: '',
-    password: '',
-});
+    const form = ref({
+        email: '',
+        password: '',
+    });
 
-async function handleLogin() {
-    // TODO: Implement login
-    console.log('Login form submitted:', form.value);
-}
+    async function handleLogin() {
+        // TODO: Implement login
+        console.log('Login form submitted:', form.value);
+    }
 </script>

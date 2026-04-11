@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
@@ -25,7 +26,10 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render(Request $request, Throwable $exception): JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+    /**
+     * @param  Request  $request
+     */
+    public function render(mixed $request, Throwable $exception): JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
     {
         if ($this->shouldReturnJson($request, $exception)) {
             if ($exception instanceof ValidationException) {

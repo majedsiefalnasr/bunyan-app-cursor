@@ -24,7 +24,10 @@
                         </NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/admin/users" class="block px-4 py-2 rounded hover:bg-slate-700 transition">
+                        <NuxtLink
+                            to="/admin/users"
+                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                        >
                             Users
                         </NuxtLink>
                     </li>
@@ -39,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-async function logout() {
-    // TODO: Implement logout
-}
+    async function logout() {
+        // TODO: Implement logout
+    }
 </script>

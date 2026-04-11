@@ -6,10 +6,16 @@
                 {{ $t('app.description') }}
             </p>
             <div class="flex gap-4 justify-center rtl:flex-row-reverse">
-                <NuxtLink to="/auth/login" class="px-6 py-3 bg-slate-900 text-white rounded-md hover:bg-slate-800">
+                <NuxtLink
+                    to="/auth/login"
+                    class="px-6 py-3 bg-slate-900 text-white rounded-md hover:bg-slate-800"
+                >
                     {{ $t('auth.login') }}
                 </NuxtLink>
-                <NuxtLink to="/auth/register" class="px-6 py-3 bg-slate-200 text-slate-900 rounded-md hover:bg-slate-300">
+                <NuxtLink
+                    to="/auth/register"
+                    class="px-6 py-3 bg-slate-200 text-slate-900 rounded-md hover:bg-slate-300"
+                >
                     {{ $t('auth.register') }}
                 </NuxtLink>
             </div>

@@ -1,5 +1,4 @@
 includes:
-  - ./vendor/phpstan/phpstan-strict-rules/rules.neon
   - ./vendor/larastan/larastan/extension.neon
 
 parameters:
@@ -15,5 +14,4 @@ parameters:
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
   ignoreErrors:
-    - '#Call to an undefined method Illuminate\\.*#'
-    - '#Parameter \$.*has invalid type mapping#'
+    - '#Access to an undefined property App\\Http\\Resources\\Api\\V1\\.+Resource::\$#'

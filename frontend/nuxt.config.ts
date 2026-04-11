@@ -7,9 +7,13 @@ export default defineNuxtConfig({
     },
 
     i18n: {
+        restructureDir: false,
+        bundle: {
+            optimizeTranslationDirective: false,
+        },
         locales: [
-            { code: 'ar', iso: 'ar-SA', dir: 'rtl', name: 'العربية' },
-            { code: 'en', iso: 'en-US', dir: 'ltr', name: 'English' },
+            { code: 'ar', language: 'ar-SA', dir: 'rtl', name: 'العربية' },
+            { code: 'en', language: 'en-US', dir: 'ltr', name: 'English' },
         ],
         defaultLocale: 'ar',
         strategy: 'prefix',
