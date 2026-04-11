@@ -4,10 +4,7 @@
 </script>
 
 <template>
-    <nav
-        v-if="breadcrumbLinks.length > 0"
-        :aria-label="$t('shell.nav.breadcrumb')"
-    >
+    <nav v-if="breadcrumbLinks.length > 0" :aria-label="$t('shell.nav.breadcrumb')">
         <UBreadcrumb :links="breadcrumbLinks" />
     </nav>
 </template>

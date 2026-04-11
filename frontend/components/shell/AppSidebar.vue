@@ -9,7 +9,9 @@
     const navLinks = computed(() => {
         const userRole = role.value as UserRole | null;
         return navigationItems
-            .filter((item) => item.roles.length === 0 || (userRole && item.roles.includes(userRole)))
+            .filter(
+                (item) => item.roles.length === 0 || (userRole && item.roles.includes(userRole))
+            )
             .map((item) => ({
                 label: t(item.labelKey),
                 icon: item.icon,

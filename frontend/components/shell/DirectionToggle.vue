@@ -3,11 +3,11 @@
     const { t } = useI18n();
 
     const label = computed(() =>
-        direction.value === 'rtl' ? t('shell.direction.ltr') : t('shell.direction.rtl'),
+        direction.value === 'rtl' ? t('shell.direction.ltr') : t('shell.direction.rtl')
     );
 
     const icon = computed(() =>
-        direction.value === 'rtl' ? 'i-heroicons-language' : 'i-heroicons-language',
+        direction.value === 'rtl' ? 'i-heroicons-language' : 'i-heroicons-language'
     );
 </script>
 

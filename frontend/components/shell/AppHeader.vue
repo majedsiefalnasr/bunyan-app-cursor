@@ -8,13 +8,9 @@
         colorMode.preference = isDark.value ? 'light' : 'dark';
     }
 
-    const themeIcon = computed(() =>
-        isDark.value ? 'i-heroicons-sun' : 'i-heroicons-moon',
-    );
+    const themeIcon = computed(() => (isDark.value ? 'i-heroicons-sun' : 'i-heroicons-moon'));
 
-    const themeLabel = computed(() =>
-        isDark.value ? 'shell.theme.light' : 'shell.theme.dark',
-    );
+    const themeLabel = computed(() => (isDark.value ? 'shell.theme.light' : 'shell.theme.dark'));
 </script>
 
 <template>

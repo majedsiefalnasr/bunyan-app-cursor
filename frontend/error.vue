@@ -44,19 +44,10 @@
             />
 
             <div class="flex flex-wrap gap-3">
-                <UButton
-                    color="primary"
-                    icon="i-heroicons-arrow-path"
-                    @click="handleRetry"
-                >
+                <UButton color="primary" icon="i-heroicons-arrow-path" @click="handleRetry">
                     {{ $t('errors.retry') }}
                 </UButton>
-                <UButton
-                    color="gray"
-                    variant="outline"
-                    icon="i-heroicons-home"
-                    to="/"
-                >
+                <UButton color="gray" variant="outline" icon="i-heroicons-home" to="/">
                     {{ $t('errors.goHome') }}
                 </UButton>
             </div>

@@ -15,7 +15,9 @@
     const navLinks = computed(() => {
         const userRole = role.value as UserRole | null;
         return navigationItems
-            .filter((item) => item.roles.length === 0 || (userRole && item.roles.includes(userRole)))
+            .filter(
+                (item) => item.roles.length === 0 || (userRole && item.roles.includes(userRole))
+            )
             .map((item) => ({
                 label: t(item.labelKey),
                 icon: item.icon,
@@ -26,11 +28,7 @@
 </script>
 
 <template>
-    <USlideOver
-        v-model="isOpen"
-        side="left"
-        :ui="{ width: 'w-64' }"
-    >
+    <USlideOver v-model="isOpen" side="left" :ui="{ width: 'w-64' }">
         <div class="flex h-full flex-col bg-white dark:bg-[#171717]">
             <div
                 class="flex items-center justify-between p-4 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.08)] dark:shadow-[0px_1px_0px_0px_rgba(255,255,255,0.06)]"
