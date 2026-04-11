@@ -7,8 +7,8 @@
 
 ## Stage Status
 
-Status: BACKEND CLOSED
-Step: implement
+Status: PRODUCTION READY
+Step: stage_production_ready
 Risk Level: MEDIUM
 Last Updated: 2026-04-11T00:00:00Z
 
@@ -27,18 +27,34 @@ Deferred Scope:
 - Real auth API calls (stub in this stage)
 - Page implementations (downstream stages)
 
-Implementation: COMPLETE
-Tasks: 35 / 35 completed
+Closure Date: 2026-04-11
+
+Scope Closed:
+
+- 3 layouts (default, auth, public)
+- 10 shell components
+- 4 composables (useAuth, useNotification, useBreadcrumb, useDirection)
+- 1 new Pinia store (ui.ts), 1 extended (auth.ts)
+- Role-based nav config for all 5 user roles
+- RTL/LTR toggle with localStorage persistence
+- Dark mode + i18n AR/EN
+- 35 / 35 tasks completed
+
+Deferred Scope:
+
+- Real auth API calls (stub — auth stage required)
+- Full RBAC enforcement (stubs — auth stage required)
 
 Architecture Governance Compliance:
 
-- ADR alignment verified (no new ADRs required — pure frontend)
-- RBAC middleware stubs in place
+- ADR alignment verified — no new ADRs required (pure frontend)
+- RBAC middleware stubs in place; full enforcement deferred to auth stage
 - Composable pattern maintained
 - Error contract compliance verified
+- i18n/RTL support: dir="rtl" default, logical Tailwind properties
 
 Notes:
-Implementation complete. All 35 tasks delivered. Lint, typecheck, and tests pass.
+Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
