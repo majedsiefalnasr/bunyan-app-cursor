@@ -21,8 +21,8 @@ class ProductController extends BaseController
         }
 
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhere('description', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%')
+                ->orWhere('description', 'like', '%'.$request->search.'%');
         }
 
         $products = $query->paginate($request->per_page ?? 15);

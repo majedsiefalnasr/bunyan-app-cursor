@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Str;
+use Pdo\Mysql;
 
-$pdoMysqlSslCa = PHP_VERSION_ID >= 80500 && class_exists(\Pdo\Mysql::class)
-    ? \Pdo\Mysql::ATTR_SSL_CA
+$pdoMysqlSslCa = PHP_VERSION_ID >= 80500 && class_exists(Mysql::class)
+    ? Mysql::ATTR_SSL_CA
     : PDO::MYSQL_ATTR_SSL_CA;
 
 return [

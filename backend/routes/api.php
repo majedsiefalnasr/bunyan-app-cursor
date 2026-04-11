@@ -1,15 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\V1\{
-    OrderController,
-    PhaseController,
-    ProductController,
-    ProjectController,
-    ReportController,
-    TaskController,
-    TransactionController,
-    UserController,
-};
+use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PhaseController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TransactionController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
