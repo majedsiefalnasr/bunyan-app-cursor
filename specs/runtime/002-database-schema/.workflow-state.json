@@ -7,7 +7,8 @@
   "base_branch": "develop",
   "pkg_manager": "npm",
   "current_step": "closure",
-  "stage_status": "CLOSED",
+  "stage_status": "PRODUCTION READY",
+  "pr_url": "https://github.com/majedsiefalnasr/bunyan-app-cursor/pull/2",
   "clarifications_resolved": true,
   "drift_passed": true,
   "implementation_allowed": true,
@@ -80,6 +81,12 @@
       "event": "stage_closed",
       "stage_status": "CLOSED",
       "timestamp": "2026-04-11T12:30:00Z"
+    },
+    {
+      "event": "pr_created",
+      "pr_url": "https://github.com/majedsiefalnasr/bunyan-app-cursor/pull/2",
+      "stage_status": "PRODUCTION READY",
+      "timestamp": "2026-04-11T12:45:00Z"
     }
   ]
 }
