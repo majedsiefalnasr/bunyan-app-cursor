@@ -15,7 +15,7 @@
 | Plan      | ✅     | plan.md, research.md, etc. | reports/PLAN_REPORT.md      |
 | Tasks     | ✅     | tasks.md                   | reports/TASKS_REPORT.md     |
 | Analyze   | ✅     | (read-only)                | audits/ANALYZE_REPORT.md    |
-| Implement | ⬜     | tasks.md (marked [X])      | reports/IMPLEMENT_REPORT.md |
+| Implement | ✅     | tasks.md (marked [X])      | reports/IMPLEMENT_REPORT.md |
 | Closure   | ✅     | —                          | reports/CLOSURE_REPORT.md   |
 
 ---
@@ -25,3 +25,5 @@
 **Tests:** 125+ passing (95%+ coverage)  
 **Risk Level:** LOW  
 **Deployment Ready:** YES
+
+**Testing guide:** [guides/TESTING_GUIDE.md](guides/TESTING_GUIDE.md)

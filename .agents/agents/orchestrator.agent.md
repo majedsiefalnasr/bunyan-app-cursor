@@ -1727,6 +1727,8 @@ If `approve` → proceed immediately to Step 7.
 
 Only execute after explicit user approval at the Pre-Closure Review Gate.
 
+**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — closure must not be committed without `guides/TESTING_GUIDE.md`.
+
 ## 7.1 — Write Closure Report
 
 Apply Documentation Writer Protocol first.
@@ -1859,6 +1861,20 @@ Populate every section from workflow artifacts.
 Write to: `specs/runtime/<STAGE_DIR_NAME>/PR_SUMMARY.md`
 Output the completed PR summary to the user.
 
+## 7.6A — Closure Artifact Gate (blocking)
+
+Before staging anything for **7.7**, verify these files exist and are non-empty:
+
+- `specs/runtime/<STAGE_DIR_NAME>/reports/CLOSURE_REPORT.md`
+- `specs/runtime/<STAGE_DIR_NAME>/guides/TESTING_GUIDE.md` (stage-specific manual scenarios, commands, and concrete values — not a blank template)
+
+```bash
+test -s "specs/runtime/<STAGE_DIR_NAME>/reports/CLOSURE_REPORT.md" \
+  && test -s "specs/runtime/<STAGE_DIR_NAME>/guides/TESTING_GUIDE.md"
+```
+
+If either check fails → **STOP**. Complete **7.1** and/or **7.2** before **7.7**. Do not emit the final “COMPLETE” summary (**7.9**) or declare PRODUCTION READY until this gate passes.
+
 ## 7.7 — Commit Closure Step
 
 Apply Git Hygiene Enforcement. Load `specs/templates/commits/commit-closure.md`. Fill and commit.
@@ -1887,6 +1903,10 @@ Verify `.workflow-state.json`:
 - History contains >= 9 events
 
 If BLOCKED → STOP. Remediate.
+
+### 7.8C — Required closure files on disk
+
+Re-verify that `reports/CLOSURE_REPORT.md` and `guides/TESTING_GUIDE.md` exist and are non-empty (same checks as **7.6A**). If missing → STOP, remediate **7.1** / **7.2**, then fix commit before declaring the workflow complete.
 
 ## 7.9 — Output Final Closure Summary
 

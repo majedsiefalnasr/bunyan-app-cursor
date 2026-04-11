@@ -1135,6 +1135,8 @@ If approved → proceed to Step 7.
 
 Only execute after explicit user approval at Pre-Closure Review Gate (or autopilot bypass).
 
+**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — models often mark closure complete without creating `guides/TESTING_GUIDE.md` unless this order is enforced.
+
 ## 7.1 — Write Closure Report
 
 Load `specs/templates/reports/closure-report-template.md`. Fill from all prior outputs.
@@ -1201,6 +1203,20 @@ Load `specs/templates/pr-template.md`. Populate from workflow artifacts.
 Write to: `specs/runtime/<STAGE_DIR_NAME>/PR_SUMMARY.md`
 Output the completed PR summary to the user.
 
+## 7.6A — Closure Artifact Gate (blocking)
+
+Before staging anything for **7.7**, verify these files exist and are non-empty:
+
+- `specs/runtime/<STAGE_DIR_NAME>/reports/CLOSURE_REPORT.md`
+- `specs/runtime/<STAGE_DIR_NAME>/guides/TESTING_GUIDE.md` (must contain stage-specific manual scenarios, commands, and concrete values — not a blank template)
+
+```bash
+test -s "specs/runtime/<STAGE_DIR_NAME>/reports/CLOSURE_REPORT.md" \
+  && test -s "specs/runtime/<STAGE_DIR_NAME>/guides/TESTING_GUIDE.md"
+```
+
+If either check fails → **STOP**. Run **7.1** and/or **7.2** until both exist. Do **not** run **7.7** (closure commit), do **not** emit the Step 7.9 “COMPLETE” banner, and do **not** tell the user the stage is production-ready until this gate passes.
+
 ## 7.7 — Commit Closure Step
 
 Git add, load `specs/templates/commits/commit-closure.md`, fill and commit.
@@ -1229,6 +1245,10 @@ Verify `.workflow-state.json`:
 - History contains >= 9 events
 
 If BLOCKED → **STOP**. Remediate.
+
+### 7.8C — Required closure files on disk
+
+Re-verify (same as **7.6A**) that `reports/CLOSURE_REPORT.md` and `guides/TESTING_GUIDE.md` exist and are non-empty. If missing → **STOP**, remediate **7.1** / **7.2**, amend or follow up with a fix commit before declaring the workflow done.
 
 ## 7.9 — Output Final Closure Summary
 
