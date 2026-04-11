@@ -14,6 +14,6 @@
 | Clarify   | ✅     | spec.md (updated)                            | reports/CLARIFY_REPORT.md       |
 | Plan      | ✅     | plan.md, research.md, data-model.md, etc.    | reports/PLAN_REPORT.md          |
 | Tasks     | ✅     | tasks.md                                     | reports/TASKS_REPORT.md         |
-| Analyze   | ⬜     | (read-only)                                  | audits/ANALYZE_REPORT.md        |
+| Analyze   | ✅ Passed | (read-only)                               | audits/ANALYZE_REPORT.md        |
 | Implement | ⬜     | tasks.md (marked [X])                        | reports/IMPLEMENT_REPORT.md     |
 | Closure   | ⬜     | —                                            | reports/CLOSURE_REPORT.md       |
