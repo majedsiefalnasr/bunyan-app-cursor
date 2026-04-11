@@ -11,6 +11,7 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write \"./**/*.{vue,ts,js,json,css}\"",
+        "format:check": "prettier --check \"./**/*.{vue,ts,js,json,css}\"",
         "fix": "npm run format && npm run lint:fix",
         "typecheck": "nuxi typecheck",
         "pretest": "nuxi prepare",
