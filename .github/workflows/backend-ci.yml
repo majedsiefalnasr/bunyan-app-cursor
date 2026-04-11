@@ -152,14 +152,9 @@ jobs:
 
       - name: Run Tests
         working-directory: backend
-        run: php artisan test --coverage --min=80
-        env:
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: bunyan_test
-          DB_USERNAME: root
-          DB_PASSWORD: password
-          REDIS_HOST: 127.0.0.1
+        run: mkdir -p build && php artisan test --coverage --min=80
+        # Do not set DB_* here: PHPUnit uses sqlite :memory: (phpunit.xml); CI env
+        # would override DB_DATABASE and break the in-memory test database.
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v3

@@ -86,13 +86,7 @@ jobs:
 
       - name: PHPUnit (Tests)
         run: php artisan test --parallel
-        env:
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: bunyan_test
-          DB_USERNAME: root
-          DB_PASSWORD: password
-          REDIS_HOST: 127.0.0.1
+        # Do not set DB_* here: PHPUnit uses sqlite :memory: (phpunit.xml).
 
   frontend:
     name: Frontend (Nuxt.js)

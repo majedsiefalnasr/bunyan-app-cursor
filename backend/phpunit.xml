@@ -32,4 +32,14 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+    </source>
+    <coverage>
+        <report>
+            <clover outputFile="build/coverage.xml"/>
+        </report>
+    </coverage>
 </phpunit>
