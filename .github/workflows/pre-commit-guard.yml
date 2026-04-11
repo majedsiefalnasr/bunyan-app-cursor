@@ -53,7 +53,7 @@ jobs:
 
       - name: Check PHP Formatting
         working-directory: backend
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+        run: vendor/bin/pint --test
 
       - name: Check JavaScript/Vue Formatting
         working-directory: frontend

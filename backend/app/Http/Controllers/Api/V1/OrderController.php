@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\UserRole;
 use App\Http\Requests\Api\V1\CreateOrderRequest;
 use App\Http\Resources\Api\V1\OrderResource;
 use App\Models\Order;
@@ -14,7 +15,7 @@ class OrderController extends BaseController
     {
         $query = Order::query();
 
-        if ($request->user()->role !== 'admin') {
+        if ($request->user()->role !== UserRole::Admin) {
             $query->where('customer_id', $request->user()->id);
         }
 
@@ -33,7 +34,7 @@ class OrderController extends BaseController
 
     public function show(Order $order): JsonResponse
     {
-        if ($order->customer_id !== auth()->id() && auth()->user()->role !== 'admin') {
+        if ($order->customer_id !== auth()->id() && auth()->user()?->role !== UserRole::Admin) {
             return $this->sendError('غير مصرح', [], 403);
         }
 

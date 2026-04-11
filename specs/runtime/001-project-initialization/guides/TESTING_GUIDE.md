@@ -177,7 +177,7 @@ composer run analyze
 
 Equivalent: `vendor/bin/phpstan analyse --memory-limit=512M`.
 
-### Code formatting (PHP-CS-Fixer)
+### Code formatting (Laravel Pint)
 
 ```bash
 cd backend
@@ -693,7 +693,7 @@ npm run test:e2e -- --update-snapshots
 4. Verify commit blocked if linting fails
 5. Fix file manually:
    ```bash
-   php-cs-fixer fix backend/test-bad.php
+   cd backend && vendor/bin/pint app/Models/User.php
    ```
 
 6. Retry commit - should succeed
@@ -1019,7 +1019,7 @@ npm run test:e2e               # Retry
 ✅ **Backend**
 
 - [ ] `cd backend && composer test` (or `php artisan test`) → **exit 0**, all tests green
-- [ ] `cd backend && composer run lint` → **exit 0** (PHP-CS-Fixer dry-run)
+- [ ] `cd backend && composer run lint` → **exit 0** (Laravel Pint `--test`)
 - [ ] `cd backend && composer run analyze` → **exit 0** (PHPStan), when the project enables static analysis in CI
 
 ✅ **Frontend**

@@ -36,6 +36,10 @@
         <include>
             <directory suffix=".php">./app</directory>
         </include>
+        <exclude>
+            <!-- Laravel 11 registers API exception rendering in bootstrap/app.php; this class is unused. -->
+            <file>./app/Exceptions/Handler.php</file>
+        </exclude>
     </source>
     <coverage>
         <report>

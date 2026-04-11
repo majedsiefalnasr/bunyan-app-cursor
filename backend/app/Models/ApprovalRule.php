@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\ApprovalStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ApprovalRule extends Model
+class ApprovalRule extends BaseModel
 {
-    use HasFactory;
-
     protected $fillable = [
         'workflow_configuration_id',
         'entity_type',
@@ -17,9 +14,13 @@ class ApprovalRule extends Model
         'status_to',
         'approver_role',
         'approval_count',
+        'status',
     ];
 
-    // Relationships
+    protected $casts = [
+        'status' => ApprovalStatus::class,
+    ];
+
     public function workflowConfiguration(): BelongsTo
     {
         return $this->belongsTo(WorkflowConfiguration::class);

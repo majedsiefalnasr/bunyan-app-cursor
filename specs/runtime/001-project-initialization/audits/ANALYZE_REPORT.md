@@ -493,7 +493,7 @@ Phase 6 E2E: 10+ Playwright tests (critical user journeys)
    - ✅ Tables: plural, snake_case (projects, workflow_configurations)
 
 2. **Code Style:**
-   - ✅ PHP: PSR-12 (php-cs-fixer enforced) (spec.md 1.3.5)
+   - ✅ PHP: Laravel style (Laravel Pint / `pint.json`) (spec.md 1.3.5)
    - ✅ JavaScript: ESLint (spec.md 2.3.6)
    - ✅ Vue: Vue 3 Composition API recommended (spec.md 2.2.2)
    - ✅ Formatting: Prettier (spec.md 2.3.6)
@@ -513,7 +513,7 @@ Phase 6 E2E: 10+ Playwright tests (critical user journeys)
    - ✅ No cross-contamination (no backend code in frontend, no frontend code in backend)
 
 5. **Code Quality Standards:**
-   - ✅ Linting: Zero violations (php-cs-fixer, eslint must pass)
+   - ✅ Linting: Zero violations (Laravel Pint, eslint must pass)
    - ✅ Static analysis: PHPStan level 5 (strict)
    - ✅ TypeScript: Strict mode, no `any` types
    - ✅ Testing: No merge without tests
@@ -579,7 +579,7 @@ npm run lint && npm run typecheck && npm run test
 ```
 
 **Pipeline Coverage:**
-- ✅ Backend linting: php-cs-fixer (PSR-12)
+- ✅ Backend linting: Laravel Pint (`pint.json`)
 - ✅ Backend static analysis: phpstan (level 5)
 - ✅ Backend testing: phpunit (≥80% coverage)
 - ✅ Frontend linting: eslint (Vue, TypeScript)

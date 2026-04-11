@@ -88,7 +88,8 @@
 
 ## 10. Code Quality Rules
 
-- PHP: PHPStan level 8, PHP CS Fixer
+- PHP: PHPStan level 8, Laravel Pint (`backend/pint.json`)
+- Backend env changes: keep `backend/.env.example` and `backend/ci.env` in sync for local vs CI
 - TypeScript: Strict mode, ESLint
 - No `any` types in TypeScript
 - No `dd()` or `console.log()` in committed code

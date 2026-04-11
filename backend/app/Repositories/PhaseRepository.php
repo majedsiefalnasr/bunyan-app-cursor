@@ -4,63 +4,43 @@ namespace App\Repositories;
 
 use App\Models\Phase;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PhaseRepository
+class PhaseRepository extends BaseRepository
 {
-    public function __construct(
-        private readonly Phase $model,
-    ) {
+    protected function model(): string
+    {
+        return Phase::class;
     }
 
-    public function findById(int $id): ?Phase
+    public function findById(int $id): ?Model
     {
-        return $this->model->with(['project', 'tasks', 'reports'])->find($id);
+        return $this->newQuery()->with(['project', 'tasks', 'reports'])->find($id);
     }
 
-    public function findByIdOrFail(int $id): Phase
+    public function findByIdOrFail(int $id): Model
     {
-        return $this->model->with(['project', 'tasks', 'reports'])->findOrFail($id);
+        return $this->newQuery()->with(['project', 'tasks', 'reports'])->findOrFail($id);
     }
 
     public function allByProject(int $projectId, array $filters = []): LengthAwarePaginator
     {
-        return $this->model
+        return $this->newQuery()
             ->byProject($projectId)
             ->with(['tasks', 'reports'])
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
             ->orderByDesc('created_at')
-            ->paginate($filters['per_page'] ?? 15);
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 
     public function allActiveByProject(int $projectId): Collection
     {
-        return $this->model
+        /** @var Collection<int, Phase> */
+        return $this->newQuery()
             ->byProject($projectId)
             ->active()
             ->with(['tasks'])
             ->get();
-    }
-
-    public function create(array $data): Phase
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(Phase $phase, array $data): Phase
-    {
-        $phase->update($data);
-
-        return $phase->fresh(['project', 'tasks']);
-    }
-
-    public function delete(Phase $phase): bool
-    {
-        return $phase->delete();
-    }
-
-    public function restore(int $phaseId): bool
-    {
-        return $this->model->withTrashed()->findOrFail($phaseId)->restore();
     }
 }

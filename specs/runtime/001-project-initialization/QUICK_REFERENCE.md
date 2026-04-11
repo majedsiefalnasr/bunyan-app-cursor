@@ -59,7 +59,7 @@ backend/
 ├── composer.json              # Dependencies
 ├── phpunit.xml               # Testing config
 ├── phpstan.neon              # Analysis config
-├── .php-cs-fixer.php         # Formatting rules
+├── pint.json                 # Laravel Pint rules (backend/)
 ├── routes/api.php            # API routes
 ├── app/
 │   ├── Models/               # Eloquent models
@@ -147,7 +147,7 @@ php artisan test                # Run tests
 php artisan test --coverage     # With coverage
 
 # Code Quality
-vendor/bin/php-cs-fixer fix     # Fix formatting
+vendor/bin/pint                 # Fix PHP formatting
 vendor/bin/phpstan analyse      # Static analysis
 ```
 
@@ -218,7 +218,7 @@ git commit --no-verify
 - **Auth:** Laravel Sanctum
 - **Testing:** PHPUnit
 - **Analysis:** PHPStan
-- **Format:** PHP-CS-Fixer
+- **Format:** Laravel Pint (`pint.json`)
 
 ### Frontend
 - **Framework:** Nuxt 3

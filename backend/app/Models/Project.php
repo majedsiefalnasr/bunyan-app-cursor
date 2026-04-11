@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectStatus;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class Project extends BaseModel
 {
-    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
@@ -32,9 +31,9 @@ class Project extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'status' => ProjectStatus::class,
     ];
 
-    // Relationships
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
@@ -75,19 +74,18 @@ class Project extends Model
         return $this->hasMany(Order::class);
     }
 
-    // Scopes
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', 'in_progress');
+        return $query->where('status', ProjectStatus::Active->value);
     }
 
     public function scopeForUser(Builder $query, User $user): Builder
     {
         return match ($user->role) {
-            'customer' => $query->where('customer_id', $user->id),
-            'contractor' => $query->where('contractor_id', $user->id),
-            'supervising_architect' => $query->where('supervising_architect_id', $user->id),
-            'admin' => $query,
+            UserRole::Customer => $query->where('customer_id', $user->id),
+            UserRole::Contractor => $query->where('contractor_id', $user->id),
+            UserRole::SupervisingArchitect => $query->where('supervising_architect_id', $user->id),
+            UserRole::Admin => $query,
             default => $query->where('customer_id', $user->id),
         };
     }

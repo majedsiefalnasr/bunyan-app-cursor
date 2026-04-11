@@ -29,7 +29,7 @@ Phase 1 (Infrastructure & Setup) has been **100% completed**. All 25 tasks have 
 backend/
 ├── composer.json                          # Production + dev dependencies
 ├── .env.example & ci.env                  # Environment templates (CI: `cp ci.env .env`)
-├── .php-cs-fixer.php                      # PHP formatting rules
+├── pint.json                              # Laravel Pint rules
 ├── phpstan.neon                           # Static analysis config
 ├── phpunit.xml                            # Test configuration
 ├── routes/api.php                         # API routes foundation
@@ -193,7 +193,7 @@ docker-compose up -d                       # Start all services
 ### ✅ GitHub Actions Pipelines Ready
 
 **backend-ci.yml:**
-- ✅ Lint stage (PHP-CS-Fixer)
+- ✅ Lint stage (Laravel Pint)
 - ✅ Analyze stage (PHPStan level 5)
 - ✅ Test stage (PHPUnit with MySQL service)
 - ✅ Coverage reporting (Codecov)
@@ -232,7 +232,7 @@ npx husky install                          # Initialize hooks
 **lint-staged Rules:**
 ```json
 {
-  "backend/app/**/*.php": ["php-cs-fixer fix", "phpstan analyse"],
+  "backend/**/*.php": ["vendor/bin/pint", "vendor/bin/phpstan analyse --memory-limit=512M"],
   "frontend/**/*.{vue,ts,js}": ["eslint --fix", "prettier --write"],
   "frontend/**/*.ts": ["typecheck"]
 }
@@ -250,7 +250,7 @@ npx husky install                          # Initialize hooks
 - ✅ Laravel Sanctum (auth)
 - ✅ PHPUnit (testing)
 - ✅ PHPStan (analysis)
-- ✅ php-cs-fixer (formatting)
+- ✅ Laravel Pint (formatting)
 
 ### Frontend
 - ✅ Nuxt 3.12+

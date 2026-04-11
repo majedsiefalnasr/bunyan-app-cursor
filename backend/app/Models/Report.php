@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\ReportType;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Report extends Model
+class Report extends BaseModel
 {
-    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
@@ -23,13 +21,14 @@ class Report extends Model
         'description',
         'attachments',
         'status',
+        'type',
     ];
 
     protected $casts = [
         'attachments' => 'json',
+        'type' => ReportType::class,
     ];
 
-    // Relationships
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class)->withTrashed();
@@ -50,7 +49,6 @@ class Report extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // Scopes
     public function scopeByProject(Builder $query, int $projectId): Builder
     {
         return $query->where('project_id', $projectId);

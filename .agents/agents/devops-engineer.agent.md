@@ -36,7 +36,7 @@ You are the DevOps Engineer responsible for:
 
 ## CI/CD Pipeline
 
-1. Lint (PHP CS Fixer + ESLint)
+1. Lint (Laravel Pint + ESLint)
 2. Type check (PHPStan + TypeScript)
 3. Test (PHPUnit + Vitest)
 4. Build (Nuxt generate/build)

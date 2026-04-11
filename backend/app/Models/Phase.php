@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\PhaseStatus;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Phase extends Model
+class Phase extends BaseModel
 {
-    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
@@ -29,9 +27,9 @@ class Phase extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'status' => PhaseStatus::class,
     ];
 
-    // Relationships
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
@@ -47,10 +45,9 @@ class Phase extends Model
         return $this->hasMany(Report::class);
     }
 
-    // Scopes
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', 'in_progress');
+        return $query->where('status', PhaseStatus::InProgress->value);
     }
 
     public function scopeByProject(Builder $query, int $projectId): Builder

@@ -20,7 +20,7 @@ description: Safety rules for terminal operations
 php artisan migrate              # Run pending migrations
 php artisan migrate:status       # Check migration status (safe)
 php artisan test                 # Run tests
-composer run lint                # PHP CS Fixer
+composer run lint                # Laravel Pint
 composer run analyze             # PHPStan
 ```
 

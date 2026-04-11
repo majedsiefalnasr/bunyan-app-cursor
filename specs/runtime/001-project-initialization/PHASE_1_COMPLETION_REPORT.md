@@ -26,7 +26,7 @@ backend/
 ├── composer.json                          ✅ Production & dev dependencies configured
 ├── .env.example                           ✅ Local development template
 ├── ci.env                                 ✅ CI/CD environment template
-├── .php-cs-fixer.php                      ✅ PHP formatting rules (PSR-12)
+├── pint.json                              ✅ Laravel Pint rules (Laravel preset)
 ├── phpstan.neon                           ✅ Static analysis configuration
 ├── phpunit.xml                            ✅ Unit & feature test configuration
 ├── routes/
@@ -57,7 +57,7 @@ backend/
 **Key Features:**
 - Laravel 11.x configured with Sanctum authentication
 - Error contract standardized with BaseController
-- PSR-12 formatting rules enforced via PHP-CS-Fixer
+- PHP style enforced via Laravel Pint (`pint.json`)
 - PHPStan static analysis at level 5
 - PHPUnit testing framework configured with coverage
 - All required directories created with .gitkeep placeholders
@@ -165,7 +165,7 @@ Root Level:
 ```
 .github/workflows/
 ├── backend-ci.yml                         ✅ Backend pipeline
-│   ├── Lint (PHP-CS-Fixer)
+│   ├── Lint (Laravel Pint)
 │   ├── Analyze (PHPStan level 5)
 │   └── Test (PHPUnit with coverage)
 │
@@ -186,7 +186,7 @@ Root Level:
 **Pipeline Details:**
 
 **Backend CI (backend-ci.yml):**
-- ✅ Lint: PHP-CS-Fixer dry-run, fails on formatting violations
+- ✅ Lint: `pint --test`, fails on formatting violations
 - ✅ Analyze: PHPStan level 5, zero tolerance for errors
 - ✅ Test: PHPUnit with MySQL 8.0 service, coverage reporting
 - ✅ Codecov integration for coverage tracking
@@ -230,7 +230,7 @@ Root Level:
 ```json
 {
   "backend/app/**/*.php": [
-    "php-cs-fixer fix",
+    "vendor/bin/pint",
     "phpstan analyse"
   ],
   "frontend/**/*.{vue,ts,js}": [
@@ -263,7 +263,7 @@ Root Level:
 ### Backend Files Created: 22
 - 1 composer.json
 - 2 backend env templates (`.env.example`, `ci.env`)
-- 4 configuration files (.php-cs-fixer.php, phpstan.neon, phpunit.xml, .gitignore)
+- 4 configuration files (pint.json, phpstan.neon, phpunit.xml, .gitignore)
 - 1 API routes file
 - 2 controllers (BaseController)
 - 1 exception handler
@@ -313,7 +313,7 @@ Root Level:
 - ✅ Exception handling: Global handler with error contract
 - ✅ Testing: PHPUnit configured with coverage
 - ✅ Static analysis: PHPStan level 5
-- ✅ Code formatting: PHP-CS-Fixer with PSR-12
+- ✅ Code formatting: Laravel Pint (`pint.json`)
 - ✅ Directory structure: All app/ subdirectories created
 - ✅ Database: migrations/ and seeders/ ready
 

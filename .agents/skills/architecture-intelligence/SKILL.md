@@ -63,7 +63,7 @@ New modules must be documented in:
 
 ```bash
 # Backend
-composer run lint          # PHP CS Fixer
+composer run lint          # Laravel Pint
 composer run analyze       # PHPStan
 php artisan test           # PHPUnit
 

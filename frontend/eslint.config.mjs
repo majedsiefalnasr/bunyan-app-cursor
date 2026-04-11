@@ -1,7 +1,10 @@
 import { createConfigForNuxt } from '@nuxt/eslint-config/flat';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 /**
  * ESLint 9+ flat config. Replaces legacy `.eslintrc.json`.
+ * `eslint-config-prettier` is appended last so ESLint --fix does not rewrite style in ways
+ * that Prettier will undo (and vice versa). Use `npm run fix` for a stable Prettier → ESLint order.
  * @see https://eslint.nuxt.com/packages/module
  */
 export default createConfigForNuxt(
@@ -18,4 +21,4 @@ export default createConfigForNuxt(
             'vue/no-multiple-template-root': 'off',
         },
     }
-);
+).append(eslintConfigPrettier);

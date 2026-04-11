@@ -4,32 +4,35 @@ namespace App\Repositories;
 
 use App\Models\WorkflowConfiguration;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
-class WorkflowConfigurationRepository
+class WorkflowConfigurationRepository extends BaseRepository
 {
-    public function __construct(
-        private readonly WorkflowConfiguration $model,
-    ) {
+    protected function model(): string
+    {
+        return WorkflowConfiguration::class;
     }
 
-    public function findById(int $id): ?WorkflowConfiguration
+    public function findById(int $id): ?Model
     {
-        return $this->model->with(['project', 'approvalRules'])->find($id);
+        return $this->newQuery()->with(['project', 'approvalRules'])->find($id);
     }
 
-    public function findByIdOrFail(int $id): WorkflowConfiguration
+    public function findByIdOrFail(int $id): Model
     {
-        return $this->model->with(['project', 'approvalRules'])->findOrFail($id);
+        return $this->newQuery()->with(['project', 'approvalRules'])->findOrFail($id);
     }
 
     public function findGlobal(): ?WorkflowConfiguration
     {
-        return $this->model->where('is_global', true)->first();
+        /** @var WorkflowConfiguration|null */
+        return $this->newQuery()->where('is_global', true)->first();
     }
 
     public function findByProject(int $projectId): ?WorkflowConfiguration
     {
-        return $this->model
+        /** @var WorkflowConfiguration|null */
+        return $this->newQuery()
             ->where('project_id', $projectId)
             ->with(['approvalRules'])
             ->first();
@@ -37,7 +40,8 @@ class WorkflowConfigurationRepository
 
     public function allGlobal(): Collection
     {
-        return $this->model
+        /** @var Collection<int, WorkflowConfiguration> */
+        return $this->newQuery()
             ->where('is_global', true)
             ->with(['approvalRules'])
             ->get();
@@ -45,26 +49,10 @@ class WorkflowConfigurationRepository
 
     public function allByProject(int $projectId): Collection
     {
-        return $this->model
+        /** @var Collection<int, WorkflowConfiguration> */
+        return $this->newQuery()
             ->where('project_id', $projectId)
             ->with(['approvalRules'])
             ->get();
-    }
-
-    public function create(array $data): WorkflowConfiguration
-    {
-        return $this->model->create($data);
-    }
-
-    public function update(WorkflowConfiguration $config, array $data): WorkflowConfiguration
-    {
-        $config->update($data);
-
-        return $config->fresh(['approvalRules']);
-    }
-
-    public function delete(WorkflowConfiguration $config): bool
-    {
-        return $config->delete();
     }
 }

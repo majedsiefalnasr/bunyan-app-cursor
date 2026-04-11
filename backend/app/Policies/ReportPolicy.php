@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Report;
 use App\Models\User;
 
@@ -14,12 +15,10 @@ class ReportPolicy
 
     public function view(User $user, Report $report): bool
     {
-        // Admin can view any report
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Get the project to check cross-tenant isolation
         $project = $report->project;
 
         return $project->customer_id === $user->id
@@ -30,29 +29,24 @@ class ReportPolicy
 
     public function create(User $user): bool
     {
-        // Only field engineers and supervisors can create reports
-        return in_array($user->role, ['field_engineer', 'supervising_architect', 'admin']);
+        return in_array($user->role, [UserRole::FieldEngineer, UserRole::SupervisingArchitect, UserRole::Admin]);
     }
 
     public function update(User $user, Report $report): bool
     {
-        // Admin can update any report
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Only the creator can update
         return $report->created_by === $user->id;
     }
 
     public function delete(User $user, Report $report): bool
     {
-        // Admin can delete any report
-        if ($user->role === 'admin') {
+        if ($user->role === UserRole::Admin) {
             return true;
         }
 
-        // Only the creator or supervising architect can delete
         return $report->created_by === $user->id
             || $report->project->supervising_architect_id === $user->id;
     }
@@ -64,6 +58,6 @@ class ReportPolicy
 
     public function forceDelete(User $user, Report $report): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRole::Admin;
     }
 }
