@@ -38,7 +38,7 @@ class TransactionController extends BaseController
     public function show(Transaction $transaction): JsonResponse
     {
         if ($transaction->user_id !== auth()->id() && auth()->user()?->role !== UserRole::Admin) {
-            return $this->sendError('غير مصرح', [], 403);
+            return $this->forbidden();
         }
 
         return $this->sendSuccess(

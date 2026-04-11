@@ -12,18 +12,25 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'happy-dom',
+        setupFiles: ['./tests/setup.ts'],
         include: ['tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
         passWithNoTests: true,
         coverage: {
             provider: 'v8',
             reporter: ['text', 'json', 'html'],
-            include: ['components/**/*.vue', 'composables/**/*.ts', 'utils/**/*.ts'],
+            include: [
+                'components/**/*.vue',
+                'composables/**/*.ts',
+                'stores/**/*.ts',
+                'utils/**/*.ts',
+            ],
         },
     },
     resolve: {
         alias: {
             '~': path.resolve(__dirname),
             '@': path.resolve(__dirname),
+            '#app': path.resolve(__dirname, 'tests/shims/nuxt-app.ts'),
         },
     },
 });

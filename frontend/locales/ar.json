@@ -1,0 +1,52 @@
+{
+    "app": {
+        "name": "بنيان",
+        "description": "منصة الخدمات الإنشائية والمواد البناء العربية"
+    },
+    "nav": {
+        "home": "الرئيسية",
+        "projects": "المشاريع",
+        "services": "الخدمات",
+        "products": "المنتجات",
+        "contact": "اتصل بنا"
+    },
+    "auth": {
+        "login": "تسجيل الدخول",
+        "register": "إنشاء حساب",
+        "logout": "تسجيل الخروج"
+    },
+    "errors": {
+        "retry": "أعد المحاولة",
+        "back": "العودة",
+        "refresh": "تحديث",
+        "goHome": "العودة للرئيسية",
+        "pages": {
+            "404": {
+                "title": "404 — الصفحة غير موجودة",
+                "description": "المورد الذي تبحث عنه غير موجود"
+            },
+            "500": {
+                "title": "500 — خطأ في الخادم",
+                "description": "حدث خطأ غير متوقع. يرجى المحاولة لاحقًا"
+            },
+            "403": {
+                "title": "403 — غير مصرح",
+                "description": "ليس لديك صلاحية للوصول إلى هذا المورد"
+            }
+        },
+        "codes": {
+            "VALIDATION_ERROR": { "message": "البيانات المدخلة غير صحيحة" },
+            "AUTH_INVALID_CREDENTIALS": { "message": "بيانات الدخول غير صحيحة" },
+            "AUTH_TOKEN_EXPIRED": { "message": "انتهت صلاحية الجلسة" },
+            "AUTH_UNAUTHORIZED": { "message": "يجب تسجيل الدخول أولاً" },
+            "RBAC_ROLE_DENIED": { "message": "غير مصرح لك بهذا الإجراء" },
+            "RESOURCE_NOT_FOUND": { "message": "المورد المطلوب غير موجود" },
+            "WORKFLOW_INVALID_TRANSITION": { "message": "لا يمكن الانتقال من حالة إلى أخرى" },
+            "WORKFLOW_PREREQUISITES_UNMET": { "message": "المتطلبات غير مستوفاة" },
+            "PAYMENT_FAILED": { "message": "فشل معالجة الدفع" },
+            "RATE_LIMIT_EXCEEDED": { "message": "تم تجاوز حد الطلبات" },
+            "SERVER_ERROR": { "message": "حدث خطأ غير متوقع" },
+            "SERVICE_UNAVAILABLE": { "message": "الخدمة غير متاحة حالياً" }
+        }
+    }
+}

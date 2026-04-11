@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ErrorHandlingTestController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -44,4 +45,8 @@ Route::prefix('v1')->group(function () {
         // Order Routes
         Route::apiResource('orders', OrderController::class);
     });
+
+    if (app()->runningUnitTests()) {
+        Route::get('__errors/{type}', [ErrorHandlingTestController::class, 'show']);
+    }
 });

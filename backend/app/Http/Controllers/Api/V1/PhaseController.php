@@ -26,7 +26,7 @@ class PhaseController extends BaseController
     public function show(Project $project, Phase $phase): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
-            return $this->sendError('المرحلة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         return $this->sendSuccess(
@@ -60,7 +60,7 @@ class PhaseController extends BaseController
     public function update(Project $project, Phase $phase, UpdatePhaseRequest $request): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
-            return $this->sendError('المرحلة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $this->authorize('update', $phase);
@@ -77,7 +77,7 @@ class PhaseController extends BaseController
     public function destroy(Project $project, Phase $phase, Request $request): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
-            return $this->sendError('المرحلة غير موجودة', [], 404);
+            return $this->notFound();
         }
 
         $this->authorize('delete', $phase);
