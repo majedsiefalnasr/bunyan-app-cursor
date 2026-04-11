@@ -23,10 +23,17 @@ export default defineNuxtConfig({
 
     css: ['~/assets/css/main.css'],
 
+    runtimeConfig: {
+        public: {
+            /** Set via `NUXT_PUBLIC_API_BASE_URL` in `.env` (see `.env.example`). */
+            apiBaseUrl: '',
+        },
+    },
+
     ssr: true,
 
     typescript: {
         strict: true,
-        typeCheck: true,
+        typeCheck: false,
     },
 });

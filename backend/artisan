@@ -8,6 +8,12 @@ define('LARAVEL_START', microtime(true));
 // Register the Composer autoloader...
 require __DIR__.'/vendor/autoload.php';
 
+// PHP 8.5: vendor Laravel `config/database.php` still references deprecated `PDO::MYSQL_ATTR_SSL_CA`
+// when that file is loaded; suppress deprecation noise for CLI until framework ships `Pdo\Mysql`.
+if (PHP_VERSION_ID >= 80500) {
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+}
+
 // Bootstrap Laravel and handle the command...
 $status = (require_once __DIR__.'/bootstrap/app.php')
     ->handleCommand(new ArgvInput);

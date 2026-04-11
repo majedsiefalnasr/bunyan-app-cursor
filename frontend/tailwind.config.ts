@@ -14,9 +14,6 @@ export default {
                 sans: ['Geist', 'system-ui', 'sans-serif'],
                 mono: ['Geist Mono', 'monospace'],
             },
-            colors: {
-                primary: 'var(--color-primary)',
-            },
         },
     },
     plugins: [],
