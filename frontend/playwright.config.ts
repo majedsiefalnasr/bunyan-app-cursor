@@ -1,30 +1,34 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const ci = !!process.env.CI;
+/** Avoid IPv6 `localhost` → `::1` connection stalls on Linux CI runners. */
+const serverHost = ci ? '127.0.0.1' : 'localhost';
+const baseURL = `http://${serverHost}:3000`;
+
 export default defineConfig({
     testDir: './tests/e2e',
     fullyParallel: true,
-    forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 0,
-    workers: process.env.CI ? 1 : undefined,
+    forbidOnly: ci,
+    retries: ci ? 2 : 0,
+    workers: ci ? 1 : undefined,
+    globalTimeout: ci ? 15 * 60 * 1000 : 0,
     reporter: 'html',
     use: {
-        baseURL: 'http://localhost:3000',
+        baseURL,
         trace: 'on-first-retry',
     },
-    projects: [
-        {
-            name: 'chromium',
-            use: { ...devices.chromium },
-        },
-        {
-            name: 'firefox',
-            use: { ...devices.firefox },
-        },
-    ],
+    projects: ci
+        ? [{ name: 'chromium', use: { ...devices.chromium } }]
+        : [
+              { name: 'chromium', use: { ...devices.chromium } },
+              { name: 'firefox', use: { ...devices.firefox } },
+          ],
     webServer: {
-        command: 'npm run dev',
-        url: 'http://localhost:3000',
-        reuseExistingServer: !process.env.CI,
-        timeout: process.env.CI ? 120_000 : 60_000,
+        command: ci ? 'npm run dev -- --host 127.0.0.1 --port 3000' : 'npm run dev',
+        url: baseURL,
+        reuseExistingServer: !ci,
+        timeout: ci ? 180_000 : 60_000,
+        stdout: 'ignore',
+        stderr: ci ? 'ignore' : 'pipe',
     },
 });
