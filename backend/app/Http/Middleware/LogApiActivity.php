@@ -19,8 +19,9 @@ class LogApiActivity
 
         $user = $request->user();
         $role = null;
-        if ($user !== null && isset($user->role)) {
-            $role = $user->role instanceof \BackedEnum ? $user->role->value : (string) $user->role;
+        if ($user !== null && $user->role !== null) {
+            // User model casts role to UserRole (string-backed enum).
+            $role = $user->role->value;
         }
 
         Log::channel('structured')->info('api.request', [
