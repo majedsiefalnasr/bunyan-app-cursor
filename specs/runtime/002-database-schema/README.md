@@ -10,7 +10,7 @@
 | Step      | Status | SpecKit Output                               | Orchestrator Output             |
 | --------- | ------ | -------------------------------------------- | ------------------------------- |
 | Pre-Step  | ✅     | —                                            | README.md, .workflow-state.json |
-| Specify   | ⬜     | spec.md, checklists/                         | reports/SPECIFY_REPORT.md       |
+| Specify   | ✅     | spec.md, checklists/                         | reports/SPECIFY_REPORT.md       |
 | Clarify   | ⬜     | spec.md (updated)                            | reports/CLARIFY_REPORT.md       |
 | Plan      | ⬜     | plan.md, research.md, data-model.md, etc.    | reports/PLAN_REPORT.md          |
 | Tasks     | ⬜     | tasks.md                                     | reports/TASKS_REPORT.md         |

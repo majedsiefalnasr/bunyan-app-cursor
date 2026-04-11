@@ -8,20 +8,32 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: MEDIUM
 Initiated: 2026-04-11T00:00:00Z
+Last Updated: 2026-04-11T00:10:00Z
 
-Scope Open:
+Scope Defined:
+- 10 PHP Enums (UserRole, ProjectStatus, PhaseStatus, TaskStatus, OrderStatus, TransactionType, TransactionStatus, WorkflowType, ApprovalStatus, ReportType)
+- BaseModel abstract class with SoftDeletes, scopeActive, scopeOrdered
+- BaseRepository abstract class with 8 standard methods
+- role_user pivot migration (additive, forward-only)
+- Enum casts integrated into all 10 relevant models
+- UserFactory role states (5 roles + inactive)
+- Status states for ProjectFactory, PhaseFactory, TaskFactory
+- RolePermissionSeeder + DatabaseSeeder ordering
+- 10 test files (unit + feature)
 
-- Specification pending
+Deferred Scope:
+- Auth/RBAC logic (STAGE_03/04)
+- API controllers (STAGE_03+)
+- Frontend (later phases)
 
 Architecture Governance Compliance:
-
-- Pending governance audit
+- Specification drafted — governance audit pending
 
 Notes:
-Stage initialized. Specification in progress.
+Specification complete. All clarifications resolved. Ready for technical planning.
 
 ## Objective
 
