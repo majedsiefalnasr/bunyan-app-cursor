@@ -8,4 +8,15 @@ node_modules/
 *.swp
 *.swo
 .vscode/
-.cursor/
+
+# Build outputs
+build/
+**/build/
+public/build/
+backend/build/
+backend/public/build/
+
+# Frontend (Nuxt/Vite) outputs
+frontend/.nuxt/
+frontend/.output/
+frontend/dist/
