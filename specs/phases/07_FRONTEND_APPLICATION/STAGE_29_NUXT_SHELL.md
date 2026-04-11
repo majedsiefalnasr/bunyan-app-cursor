@@ -8,20 +8,31 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: MEDIUM
-Initiated: 2026-04-11T00:00:00Z
+Last Updated: 2026-04-11T00:00:00Z
 
-Scope Open:
+Scope Defined:
 
-- Specification pending
+- 3 layouts (default, auth, public)
+- 10 shell components using Nuxt UI
+- 5 core composables (useAuth, useApi, useNotification, useBreadcrumb, useDirection)
+- Role-based navigation for all 5 user roles
+- RTL/LTR toggle, dark mode, Arabic/English i18n
+- Global loading, toast, skeleton, and error UI
+
+Deferred Scope:
+
+- Backend API changes (none required)
+- Real auth API calls (stub in this stage)
+- Page implementations (downstream stages)
 
 Architecture Governance Compliance:
 
-- Pending governance audit
+- Specification drafted — governance audit pending
 
 Notes:
-Stage initialized. Specification in progress.
+Specification complete. 4 clarifications resolved inline. Clarification step pending.
 
 ## Objective
 
