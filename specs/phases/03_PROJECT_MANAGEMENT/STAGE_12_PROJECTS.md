@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T11:35:00Z
+Last Updated: 2026-04-12T11:42:00Z
 
-Scope Defined: Projects API evolution, schema extensions, status lifecycle, timeline, Nuxt pages, service layer, field-engineer visibility rule
+Scope Planned: Migrations, ProjectStatus enum, ProjectRepository/ProjectService, controller endpoints, policy updates, ProjectResource/PhaseResource, Nuxt pages, PHPUnit updates
 
-Deferred Scope: Full Gantt UI, documents module, team management beyond existing FKs
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
