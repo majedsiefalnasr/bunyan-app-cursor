@@ -8,15 +8,13 @@
 ## Stage Status
 
 Status: DRAFT
-Step: plan
+Step: tasks
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T14:12:00Z
+Last Updated: 2026-04-12T14:15:00Z
 
-Scope Planned: Migrations, repositories, services, policies, controllers, broadcasting, feature tests, Nuxt pages.
+Tasks Generated: Total: 14 atomic tasks
 
-Architecture Governance Compliance: Technical plan compliant — task generation authorized
-
-Notes: Technical plan complete. Task breakdown in progress.
+Architecture Governance Compliance: Task set compliant — drift analysis required
 
 ## Objective
 
