@@ -34,15 +34,15 @@ class EnumCastTest extends TestCase
         $customer = User::factory()->create();
         $project = Project::factory()->create([
             'customer_id' => $customer->id,
-            'status' => 'active',
+            'status' => 'in_progress',
         ]);
 
         $freshProject = Project::find($project->id);
 
         $this->assertInstanceOf(ProjectStatus::class, $freshProject->status);
-        $this->assertSame(ProjectStatus::Active, $freshProject->status);
-        $this->assertSame('active', $freshProject->status->value);
-        $this->assertSame('نشط', $freshProject->status->label());
+        $this->assertSame(ProjectStatus::InProgress, $freshProject->status);
+        $this->assertSame('in_progress', $freshProject->status->value);
+        $this->assertSame('قيد التنفيذ', $freshProject->status->label());
     }
 
     public function test_phase_status_cast_returns_enum(): void
@@ -89,9 +89,9 @@ class EnumCastTest extends TestCase
     public function test_project_factory_states_set_correct_status(): void
     {
         $customer = User::factory()->create();
-        $project = Project::factory()->active()->create(['customer_id' => $customer->id]);
+        $project = Project::factory()->inProgress()->create(['customer_id' => $customer->id]);
 
         $freshProject = Project::find($project->id);
-        $this->assertSame(ProjectStatus::Active, $freshProject->status);
+        $this->assertSame(ProjectStatus::InProgress, $freshProject->status);
     }
 }

@@ -19,10 +19,10 @@ class ProjectFactory extends Factory
         return [
             'name' => fake()->sentence(3),
             'description' => fake()->optional()->paragraph(),
-            'customer_id' => User::factory()->customer(),
+            'customer_id' => User::factory(),
             'contractor_id' => null,
             'supervising_architect_id' => null,
-            'status' => ProjectStatus::Pending->value,
+            'status' => ProjectStatus::Draft->value,
             'budget' => fake()->randomFloat(2, 1000, 500000),
             'location' => fake()->city(),
             'start_date' => now()->toDateString(),
@@ -30,18 +30,31 @@ class ProjectFactory extends Factory
         ];
     }
 
-    public function pending(): static
+    public function draft(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => ProjectStatus::Pending->value,
+            'status' => ProjectStatus::Draft->value,
         ]);
     }
 
-    public function active(): static
+    public function planning(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => ProjectStatus::Active->value,
+            'status' => ProjectStatus::Planning->value,
         ]);
+    }
+
+    public function inProgress(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => ProjectStatus::InProgress->value,
+        ]);
+    }
+
+    /** @deprecated Use inProgress() — alias for older tests */
+    public function active(): static
+    {
+        return $this->inProgress();
     }
 
     public function onHold(): static
@@ -58,10 +71,10 @@ class ProjectFactory extends Factory
         ]);
     }
 
-    public function cancelled(): static
+    public function closed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => ProjectStatus::Cancelled->value,
+            'status' => ProjectStatus::Closed->value,
         ]);
     }
 }

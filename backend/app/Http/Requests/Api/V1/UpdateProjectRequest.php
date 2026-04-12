@@ -2,31 +2,45 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProjectRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $project = $this->route('project');
+        if (! $project instanceof Project) {
+            return false;
+        }
+
+        return $this->user()->can('update', $project);
     }
 
     public function rules(): array
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:2000'],
+            'name_ar' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'name_en' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'description' => ['sometimes', 'nullable', 'string', 'max:2000'],
             'budget' => ['sometimes', 'numeric', 'min:0'],
+            'budget_estimated' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'budget_actual' => ['sometimes', 'nullable', 'numeric', 'min:0'],
             'location' => ['sometimes', 'string', 'max:500'],
-            'status' => ['sometimes', 'in:draft,in_progress,completed,paid'],
-            'end_date' => ['sometimes', 'date'],
+            'city' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'district' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'location_lat' => ['sometimes', 'nullable', 'numeric', 'between:-90,90'],
+            'location_lng' => ['sometimes', 'nullable', 'numeric', 'between:-180,180'],
+            'project_type' => ['sometimes', 'nullable', 'in:residential,commercial,infrastructure'],
+            'end_date' => ['sometimes', 'nullable', 'date'],
+            'start_date' => ['sometimes', 'nullable', 'date'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'status.in' => 'حالة المشروع غير صحيحة',
             'budget.numeric' => 'الميزانية يجب أن تكون رقم',
             'end_date.date' => 'تاريخ الانتهاء يجب أن يكون تاريخ صحيح',
         ];

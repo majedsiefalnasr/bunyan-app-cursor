@@ -126,6 +126,22 @@
         "suspend": "إيقاف",
         "rating": "التقييم"
     },
+    "projects": {
+        "list_title": "المشاريع",
+        "list_subtitle": "مشاريعك المعروضة وفق صلاحياتك في المنصة.",
+        "empty": "لا توجد مشاريع لعرضها.",
+        "new_title": "مشروع جديد",
+        "new_subtitle": "أدخل البيانات الأساسية لإنشاء مشروع.",
+        "name_label": "اسم المشروع",
+        "budget_label": "الميزانية التقديرية",
+        "location_label": "الموقع",
+        "submit": "إنشاء المشروع",
+        "detail_title": "تفاصيل المشروع",
+        "status_label": "الحالة",
+        "timeline_title": "الجدول الزمني",
+        "phases_heading": "المراحل",
+        "back_to_list": "العودة للقائمة"
+    },
     "errors": {
         "retry": "أعد المحاولة",
         "back": "العودة",

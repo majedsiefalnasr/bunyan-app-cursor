@@ -46,7 +46,7 @@ class DomainRepositoriesTest extends TestCase
         $repo = new ProjectRepository;
         $user = User::factory()->customer()->create();
         $project = Project::factory()->create(['customer_id' => $user->id]);
-        Project::factory()->active()->create(['customer_id' => $user->id]);
+        Project::factory()->inProgress()->create(['customer_id' => $user->id]);
 
         $found = $repo->findById($project->id);
         $this->assertNotNull($found);

@@ -3,29 +3,28 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\ProjectStatus;
-use App\Enums\UserRole;
 use App\Http\Requests\Api\V1\CreateProjectRequest;
+use App\Http\Requests\Api\V1\TransitionProjectStatusRequest;
 use App\Http\Requests\Api\V1\UpdateProjectRequest;
 use App\Http\Resources\Api\V1\ProjectResource;
 use App\Models\Project;
+use App\Services\ProjectService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProjectController extends BaseController
 {
+    public function __construct(private ProjectService $projectService)
+    {
+    }
+
     public function index(Request $request): JsonResponse
     {
-        $query = Project::query();
-
-        if ($request->user()->role !== UserRole::Admin) {
-            $query->forUser($request->user());
-        }
-
-        if ($request->has('status')) {
-            $query->byStatus($request->status);
-        }
-
-        $projects = $query->paginate($request->per_page ?? 15);
+        $projects = $this->projectService->paginateForUser(
+            $request->user(),
+            (int) ($request->per_page ?? 15),
+            $request->query('status')
+        );
 
         return $this->sendSuccess(
             ProjectResource::collection($projects),
@@ -34,8 +33,12 @@ class ProjectController extends BaseController
         );
     }
 
-    public function show(Project $project): JsonResponse
+    public function show(Request $request, Project $project): JsonResponse
     {
+        $this->authorize('view', $project);
+
+        $project = $this->projectService->findForShow($project->id);
+
         return $this->sendSuccess(
             new ProjectResource($project),
             'تم جلب المشروع بنجاح',
@@ -45,15 +48,11 @@ class ProjectController extends BaseController
 
     public function store(CreateProjectRequest $request): JsonResponse
     {
-        $project = Project::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'customer_id' => $request->user()->id,
-            'status' => ProjectStatus::Pending->value,
-            'budget' => $request->budget,
-            'location' => $request->location,
-            'start_date' => $request->start_date,
-        ]);
+        $this->authorize('create', Project::class);
+
+        $project = $this->projectService->create($request->user(), $request->validated());
+        $project->load(['customer', 'contractor', 'supervisingArchitect']);
+        $project->loadCount(['phases', 'tasks']);
 
         return $this->sendSuccess(
             new ProjectResource($project),
@@ -66,11 +65,40 @@ class ProjectController extends BaseController
     {
         $this->authorize('update', $project);
 
-        $project->update($request->validated());
+        $project = $this->projectService->updateProject($project, $request->validated());
+        $project->load(['customer', 'contractor', 'supervisingArchitect']);
+        $project->loadCount(['phases', 'tasks']);
 
         return $this->sendSuccess(
             new ProjectResource($project),
             'تم تحديث المشروع بنجاح',
+            200
+        );
+    }
+
+    public function updateStatus(TransitionProjectStatusRequest $request, Project $project): JsonResponse
+    {
+        $this->authorize('transitionStatus', $project);
+
+        $next = ProjectStatus::from($request->validated('status'));
+        $project = $this->projectService->transitionStatus($project, $next);
+        $project->load(['customer', 'contractor', 'supervisingArchitect']);
+        $project->loadCount(['phases', 'tasks']);
+
+        return $this->sendSuccess(
+            new ProjectResource($project),
+            'تم تحديث حالة المشروع بنجاح',
+            200
+        );
+    }
+
+    public function timeline(Request $request, Project $project): JsonResponse
+    {
+        $this->authorize('view', $project);
+
+        return $this->sendSuccess(
+            $this->projectService->timeline($project),
+            'تم جلب الجدول الزمني بنجاح',
             200
         );
     }

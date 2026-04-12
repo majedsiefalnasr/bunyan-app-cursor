@@ -14,7 +14,10 @@ class Phase extends BaseModel
 
     protected $fillable = [
         'project_id',
+        'sort_order',
         'name',
+        'name_ar',
+        'name_en',
         'description',
         'status',
         'budget',
@@ -27,6 +30,7 @@ class Phase extends BaseModel
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'sort_order' => 'integer',
         'status' => PhaseStatus::class,
     ];
 

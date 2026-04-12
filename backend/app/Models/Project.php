@@ -16,13 +16,22 @@ class Project extends BaseModel
 
     protected $fillable = [
         'name',
+        'name_ar',
+        'name_en',
         'description',
         'customer_id',
         'contractor_id',
         'supervising_architect_id',
         'status',
         'budget',
+        'budget_estimated',
+        'budget_actual',
         'location',
+        'city',
+        'district',
+        'location_lat',
+        'location_lng',
+        'project_type',
         'start_date',
         'end_date',
     ];
@@ -31,6 +40,10 @@ class Project extends BaseModel
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'budget_estimated' => 'decimal:2',
+        'budget_actual' => 'decimal:2',
+        'location_lat' => 'decimal:7',
+        'location_lng' => 'decimal:7',
         'status' => ProjectStatus::class,
     ];
 
@@ -76,7 +89,7 @@ class Project extends BaseModel
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', ProjectStatus::Active->value);
+        return $query->where('status', ProjectStatus::InProgress->value);
     }
 
     public function scopeForUser(Builder $query, User $user): Builder
@@ -85,8 +98,10 @@ class Project extends BaseModel
             UserRole::Customer => $query->where('customer_id', $user->id),
             UserRole::Contractor => $query->where('contractor_id', $user->id),
             UserRole::SupervisingArchitect => $query->where('supervising_architect_id', $user->id),
+            UserRole::FieldEngineer => $query->whereHas('reports', function (Builder $q) use ($user): void {
+                $q->where('created_by', $user->id);
+            }),
             UserRole::Admin => $query,
-            default => $query->where('customer_id', $user->id),
         };
     }
 

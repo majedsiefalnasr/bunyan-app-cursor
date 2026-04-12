@@ -14,7 +14,7 @@ class PhaseController extends BaseController
 {
     public function index(Project $project, Request $request): JsonResponse
     {
-        $phases = $project->phases()->paginate($request->per_page ?? 15);
+        $phases = $project->phases()->orderBy('sort_order')->orderBy('id')->paginate($request->per_page ?? 15);
 
         return $this->sendSuccess(
             PhaseResource::collection($phases),

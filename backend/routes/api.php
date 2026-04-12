@@ -79,6 +79,11 @@ Route::prefix('v1')->group(function () {
         // Projects (all roles can view)
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::get('projects/{project}/timeline', [ProjectController::class, 'timeline'])->name('projects.timeline');
+
+        Route::middleware('role:customer,contractor,supervising_architect,admin')->group(function () {
+            Route::put('projects/{project}/status', [ProjectController::class, 'updateStatus'])->name('projects.status');
+        });
 
         // Phases & Tasks (read — all project-related roles)
         Route::middleware('role:customer,contractor,supervising_architect,field_engineer,admin')->group(function () {

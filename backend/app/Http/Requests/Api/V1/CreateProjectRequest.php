@@ -16,9 +16,18 @@ class CreateProjectRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'name_ar' => ['nullable', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
             'budget' => ['required', 'numeric', 'min:0'],
+            'budget_estimated' => ['nullable', 'numeric', 'min:0'],
+            'budget_actual' => ['nullable', 'numeric', 'min:0'],
             'location' => ['required', 'string', 'max:500'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'district' => ['nullable', 'string', 'max:255'],
+            'location_lat' => ['nullable', 'numeric', 'between:-90,90'],
+            'location_lng' => ['nullable', 'numeric', 'between:-180,180'],
+            'project_type' => ['nullable', 'in:residential,commercial,infrastructure'],
             'start_date' => ['nullable', 'date', 'after:today'],
         ];
     }
