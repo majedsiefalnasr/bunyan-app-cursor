@@ -1,0 +1,22 @@
+# Tasks — Catalog Pages
+
+- [ ] T001 [US2] Add `getRouteKeyName` slug binding on `backend/app/Models/Category.php`
+- [ ] T002 [US2] Add `resolveRouteBinding` id/SKU on `backend/app/Models/Product.php`
+- [ ] T003 [US2] Expose `sku` in `backend/app/Http/Resources/Api/V1/ProductResource.php`
+- [ ] T004 [US1] Fix slug URLs in `CategoryControllerTest.php` and `frontend/pages/admin/categories.vue` reorder API
+- [ ] T005 [US2] Add SKU show test in `backend/tests/Feature/ProductControllerTest.php`
+- [ ] T006 [US2] Add `frontend/composables/useProductCatalogQuery.ts`
+- [ ] T007 [US2] Add `frontend/tests/unit/useProductCatalogQuery.spec.ts`
+- [ ] T008 [US2] Add `frontend/components/catalog/ProductCard.vue`
+- [ ] T009 [US2] Add `frontend/components/catalog/ProductFilterSidebar.vue`
+- [ ] T010 [US1] Add `frontend/pages/categories/index.vue`
+- [ ] T011 [US1] Add `frontend/pages/categories/[slug].vue`
+- [ ] T012 [US2] Upgrade `frontend/pages/products/index.vue` (filters, pagination, cards)
+- [ ] T013 [US2] Replace `frontend/pages/products/[id].vue` with `frontend/pages/products/[slug].vue`
+- [ ] T014 [US3] Add `frontend/pages/search/index.vue`
+- [ ] T015 [US4] Polish `frontend/pages/suppliers/index.vue` with shared catalog styling
+- [ ] T016 [US4] Align `frontend/pages/suppliers/[id].vue` with catalog styling
+- [ ] T017 [US1] Extend `frontend/locales/ar.json` and `frontend/locales/en.json` catalog/category/search keys
+- [ ] T018 [US5] Add `frontend/tests/e2e/catalog.spec.ts`
+- [ ] T019 [P] Mark `checklists/requirements.md` items satisfied during verification
+- [ ] T020 [P] Update `checklists/security.md` and `checklists/performance.md` checkboxes where applicable
