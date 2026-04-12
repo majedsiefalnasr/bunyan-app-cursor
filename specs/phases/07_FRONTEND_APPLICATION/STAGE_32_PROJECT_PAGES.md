@@ -8,18 +8,16 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
 Initiated: 2026-04-12T23:00:00Z
-Last Updated: 2026-04-12T23:10:00Z
+Last Updated: 2026-04-12T23:18:00Z
 
-Scope Defined: Nested project shell, `/projects/create` wizard, composables, client BOQ MVP, Vitest + Playwright.
+Scope Planned: Nested shell, wizard, team/workflow/estimates routes, composables, tests.
 
-Deferred Scope: Server-persisted BOQ, Gantt, `USortable` Kanban.
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: Ready for technical planning.
+Notes: Task breakdown next.
 
 ## Objective
 
