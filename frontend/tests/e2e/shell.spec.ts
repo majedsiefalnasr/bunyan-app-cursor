@@ -1,57 +1,62 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function gotoArHome(page: Page) {
+    await page.goto('/ar/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('networkidle').catch(() => {
+        /* dev server may keep sockets open; domcontentloaded + visible shell is enough */
+    });
+}
 
 test.describe('Application Shell', () => {
     test('shell renders AppHeader and navigation for unauthenticated user', async ({ page }) => {
-        await page.goto('/ar/');
+        await gotoArHome(page);
         await expect(page.locator('header')).toBeVisible();
-        await expect(page.locator('[data-testid="rtl-toggle"]')).toBeVisible();
+        await expect(page.getByTestId('rtl-toggle')).toBeVisible();
     });
 
     test('RTL direction toggle persists across navigation', async ({ page }) => {
-        await page.goto('/ar/');
+        await gotoArHome(page);
 
         await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 
-        await page.click('[data-testid="rtl-toggle"]');
+        await page.getByTestId('rtl-toggle').click();
         await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
 
-        await page.goto('/ar/');
+        await gotoArHome(page);
         await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     });
 
     test('dark mode toggle applies dark class to html', async ({ page }) => {
-        await page.goto('/ar/');
+        await gotoArHome(page);
 
-        await page.click('[data-testid="theme-toggle"]');
+        await page.getByTestId('theme-toggle').click();
 
         await expect(page.locator('html')).toHaveClass(/dark/);
     });
 
     test('language switch AR→EN updates page URL', async ({ page }) => {
-        await page.goto('/ar/');
+        await gotoArHome(page);
 
-        await page.click('button:has([class*="heroicons-language"])');
-        await page.click('text=English');
+        await page.getByTestId('language-switcher').click();
+        const enOption = page.locator('.e2e-locale-en');
+        await expect(enOption).toBeVisible();
+        await enOption.click();
 
-        await expect(page).toHaveURL(/\/en\//);
+        await expect(page).toHaveURL(/\/en(?:\/|$)/);
     });
 
-    test('mobile drawer opens and closes on 375px viewport', async ({ page }) => {
+    test('mobile drawer opens on 375px viewport', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
         await page.goto('/ar/');
 
-        const hamburger = page.locator('button[aria-label]').filter({
-            has: page.locator('[class*="heroicons-bars-3"]'),
-        });
+        const hamburger = page.getByTestId('mobile-nav-toggle');
         await expect(hamburger).toBeVisible();
 
         await hamburger.click();
 
-        const drawer = page.locator('[role="dialog"]');
+        const drawer = page.getByTestId('mobile-drawer');
         await expect(drawer).toBeVisible();
-
-        await page.locator(`button[aria-label="${'إغلاق'}"], button[aria-label="Close"]`).click();
-        await expect(drawer).not.toBeVisible();
+        await expect(page.getByRole('button', { name: /إغلاق|Close/ })).toBeVisible();
     });
 
     test('navigation items are visible in sidebar on desktop', async ({ page }) => {

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function (...$_): void {
+            // Plain 200 for CI / local readiness. Hidden outside local, testing, or `CI=true` (GitHub Actions).
+            Route::get('/__ci_ready', function () {
+                $ci = filter_var(getenv('CI') ?: ($_SERVER['CI'] ?? ''), FILTER_VALIDATE_BOOLEAN);
+                abort_unless(app()->environment(['local', 'testing']) || $ci, 404);
+
+                return response('ok', 200);
+            });
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->prepend(InjectCorrelationId::class);

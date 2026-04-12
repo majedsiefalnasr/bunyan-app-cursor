@@ -27,7 +27,14 @@
 
 <template>
     <UDropdown :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }">
-        <UButton color="gray" variant="ghost" :aria-label="$t('shell.user.profile')" class="p-1">
+        <!-- as="div": avoid nested <button> inside UDropdown MenuButton (see LanguageSwitcher). -->
+        <UButton
+            as="div"
+            color="gray"
+            variant="ghost"
+            :aria-label="$t('shell.user.profile')"
+            class="p-1"
+        >
             <UAvatar :src="user?.avatar ?? undefined" :alt="user?.name ?? ''" size="sm">
                 <template v-if="!user?.avatar" #default>
                     <span class="text-xs font-medium">{{ avatarLabel }}</span>

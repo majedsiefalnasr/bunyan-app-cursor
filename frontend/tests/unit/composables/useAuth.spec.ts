@@ -5,6 +5,17 @@ import { useAuth } from '~/composables/useAuth';
 import { useAuthStore } from '~/stores/auth';
 import type { UserProfile } from '~/types/auth';
 
+const profileDefaults: Pick<
+    UserProfile,
+    'phone' | 'active' | 'email_verified_at' | 'created_at' | 'updated_at'
+> = {
+    phone: null,
+    active: true,
+    email_verified_at: null,
+    created_at: '2020-01-01T00:00:00.000000Z',
+    updated_at: '2020-01-01T00:00:00.000000Z',
+};
+
 const navigateToMock = vi.fn();
 vi.stubGlobal('navigateTo', navigateToMock);
 
@@ -38,6 +49,7 @@ describe('useAuth', () => {
             name: 'أحمد',
             email: 'ahmed@example.com',
             role: 'contractor',
+            ...profileDefaults,
         };
         store.setUser(mockUser);
         const { role } = useAuth();
@@ -46,7 +58,7 @@ describe('useAuth', () => {
 
     it('hasRole returns true for matching role', () => {
         const store = useAuthStore();
-        store.setUser({ id: 1, name: 'Test', email: 't@t.com', role: 'admin' });
+        store.setUser({ id: 1, name: 'Test', email: 't@t.com', role: 'admin', ...profileDefaults });
         const { hasRole } = useAuth();
         expect(hasRole('admin')).toBe(true);
         expect(hasRole('customer', 'admin')).toBe(true);
@@ -54,7 +66,13 @@ describe('useAuth', () => {
 
     it('hasRole returns false for non-matching role', () => {
         const store = useAuthStore();
-        store.setUser({ id: 1, name: 'Test', email: 't@t.com', role: 'customer' });
+        store.setUser({
+            id: 1,
+            name: 'Test',
+            email: 't@t.com',
+            role: 'customer',
+            ...profileDefaults,
+        });
         const { hasRole } = useAuth();
         expect(hasRole('admin')).toBe(false);
     });
@@ -62,7 +80,13 @@ describe('useAuth', () => {
     it('logout clears token and user and navigates to login', async () => {
         const store = useAuthStore();
         store.setToken('test-token');
-        store.setUser({ id: 1, name: 'Test', email: 't@t.com', role: 'customer' });
+        store.setUser({
+            id: 1,
+            name: 'Test',
+            email: 't@t.com',
+            role: 'customer',
+            ...profileDefaults,
+        });
 
         const { logout } = useAuth();
         await logout();
@@ -77,7 +101,13 @@ describe('useAuth', () => {
         const { user } = useAuth();
 
         expect(user.value).toBeNull();
-        store.setUser({ id: 2, name: 'Sara', email: 's@s.com', role: 'architect' });
+        store.setUser({
+            id: 2,
+            name: 'Sara',
+            email: 's@s.com',
+            role: 'supervising_architect',
+            ...profileDefaults,
+        });
         expect(user.value?.name).toBe('Sara');
     });
 });

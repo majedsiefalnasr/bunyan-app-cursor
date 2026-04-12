@@ -1,4 +1,10 @@
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
+
+import { resetNuxtAppTestShims } from './shims/nuxt-app';
+
+beforeEach(() => {
+    resetNuxtAppTestShims();
+});
 
 vi.stubGlobal('definePageMeta', vi.fn());
 

@@ -38,5 +38,17 @@ return [
         'SERVICE_UNAVAILABLE' => [
             'message' => 'The service is temporarily unavailable.',
         ],
+        'AUTH_ACCOUNT_INACTIVE' => [
+            'message' => 'Your account is deactivated.',
+        ],
+        'AUTH_INVALID_RESET_TOKEN' => [
+            'message' => 'The password reset token is invalid.',
+        ],
+        'AUTH_EMAIL_ALREADY_VERIFIED' => [
+            'message' => 'This email is already verified.',
+        ],
+        'AUTH_EMAIL_NOT_VERIFIED' => [
+            'message' => 'Your email is not verified.',
+        ],
     ],
 ];

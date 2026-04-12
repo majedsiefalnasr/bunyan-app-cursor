@@ -15,17 +15,17 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:8'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'email.required' => 'البريد الإلكتروني مطلوب',
-            'email.email' => 'البريد الإلكتروني غير صحيح',
-            'password.required' => 'كلمة المرور مطلوبة',
-            'password.min' => 'كلمة المرور يجب أن تكون 6 أحرف على الأقل',
+            'email.required' => __('validation.required', ['attribute' => __('validation.attributes.email')]),
+            'email.email' => __('validation.email', ['attribute' => __('validation.attributes.email')]),
+            'password.required' => __('validation.required', ['attribute' => __('validation.attributes.password')]),
+            'password.min' => __('validation.min.string', ['attribute' => __('validation.attributes.password'), 'min' => 8]),
         ];
     }
 }

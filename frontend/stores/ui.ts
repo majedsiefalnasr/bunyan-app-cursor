@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import type { ColorMode, Direction } from '~/types/ui';
 
 export const useUIStore = defineStore('ui', () => {
-    const isSidebarOpen = ref(true);
+    const isSidebarOpen = ref(false);
     const direction = ref<Direction>('rtl');
     const colorMode = ref<ColorMode>('system');
 

@@ -1,8 +1,16 @@
 export default defineNuxtConfig({
-    // Avoid Vite DevTools Kit RPC "Unauthorized … devtoolskit:internal" noise/failures in CI (Playwright webServer).
-    devtools: { enabled: !process.env.CI },
+    // Avoid Vite DevTools Kit RPC noise/failures when Playwright drives `nuxt dev` (sets PLAYWRIGHT_TEST=1).
+    devtools: { enabled: !(process.env.CI || process.env.PLAYWRIGHT_TEST) },
 
     modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
+
+    /** Use file basename as tag (`<AppHeader>`), not `ShellAppHeader` from nested dirs. */
+    components: [
+        {
+            path: '~/components',
+            pathPrefix: false,
+        },
+    ],
 
     app: {
         head: {

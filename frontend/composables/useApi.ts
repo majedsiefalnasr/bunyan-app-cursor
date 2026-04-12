@@ -50,10 +50,10 @@ export function useApi() {
             if (statusCode === 401) {
                 auth.logout();
                 if (errorCode !== 'AUTH_TOKEN_EXPIRED') {
-                    await navigateTo('/auth/login');
+                    await navigateTo('/ar/auth/login');
                 }
             } else if (statusCode === 403 && errorCode === 'RBAC_ROLE_DENIED') {
-                await navigateTo('/dashboard');
+                await navigateTo('/ar/dashboard');
             }
 
             showErrorNotification({

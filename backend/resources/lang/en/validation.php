@@ -18,4 +18,9 @@ return [
     ],
     'date' => 'The :attribute is not a valid date.',
     'unique' => 'The :attribute has already been taken.',
+    'confirmed' => 'The :attribute field confirmation does not match.',
+    'prohibited' => 'The :attribute field is prohibited.',
+    'attributes' => [
+        'role' => 'role',
+    ],
 ];
