@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T12:20:00Z
+Last Updated: 2026-04-12T12:35:00Z
 
-Scope Defined: Project estimates, line items, BOQ templates (admin), calculation, compare, CSV export, Nuxt UI; field-engineer read-only; approval matrix locked
+Scope Planned: Migrations, enums, models, repositories, EstimateService, policies, Form Requests, resources, controllers, routes, feature tests, Nuxt pages, i18n
 
-Deferred Scope: PDF binary, template-to-lines apply, XLSX styling
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
