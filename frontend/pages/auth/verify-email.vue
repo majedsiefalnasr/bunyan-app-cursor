@@ -3,8 +3,9 @@
         layout: 'auth',
     });
 
-    const { apiFetch } = useApi();
+    const authApi = useAuthApi();
     const { user, isEmailVerified } = useAuth();
+    const localePath = useLocalePath();
 
     const loading = ref(false);
     const success = ref(false);
@@ -20,7 +21,7 @@
         error.value = null;
 
         try {
-            await apiFetch('/v1/auth/email/resend', { method: 'POST' });
+            await authApi.resendEmailVerification();
             success.value = true;
             cooldown.value = 60;
 
@@ -61,7 +62,7 @@
                 :title="$t('auth.email_verified')"
                 class="mb-4"
             />
-            <UButton block size="lg" @click="navigateTo('/ar/dashboard')">
+            <UButton block size="lg" @click="navigateTo(localePath('/dashboard'))">
                 {{ $t('auth.go_to_dashboard') }}
             </UButton>
         </template>
@@ -82,7 +83,15 @@
                 class="mb-4"
             />
 
-            <UAlert v-if="error" color="red" variant="subtle" :title="error" class="mb-4" />
+            <UAlert
+                v-if="error"
+                color="red"
+                variant="subtle"
+                role="alert"
+                :title="error"
+                class="mb-4"
+                @close="error = null"
+            />
 
             <UButton
                 block
@@ -101,7 +110,7 @@
 
             <div class="mt-6">
                 <NuxtLink
-                    to="/ar/auth/login"
+                    :to="localePath('/auth/login')"
                     class="text-sm font-medium text-[#171717] hover:underline dark:text-white"
                 >
                     {{ $t('auth.back_to_login') }}

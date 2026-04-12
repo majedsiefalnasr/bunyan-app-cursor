@@ -77,6 +77,22 @@ describe('useAuth', () => {
         expect(hasRole('admin')).toBe(false);
     });
 
+    it('hasPermission reflects store permissions', () => {
+        const store = useAuthStore();
+        store.setUser({
+            id: 1,
+            name: 'Test',
+            email: 't@t.com',
+            role: 'admin',
+            permissions: ['reports.create', 'reports.view'],
+            ...profileDefaults,
+        });
+        const { hasPermission, hasAnyPermission } = useAuth();
+        expect(hasPermission('reports.view')).toBe(true);
+        expect(hasPermission('reports.delete')).toBe(false);
+        expect(hasAnyPermission(['reports.delete', 'reports.create'])).toBe(true);
+    });
+
     it('logout clears token and user and navigates to login', async () => {
         const store = useAuthStore();
         store.setToken('test-token');
@@ -93,6 +109,7 @@ describe('useAuth', () => {
 
         expect(store.token).toBeNull();
         expect(store.user).toBeNull();
+        expect(store.permissions).toEqual([]);
         expect(navigateToMock).toHaveBeenCalledWith('/ar/auth/login');
     });
 

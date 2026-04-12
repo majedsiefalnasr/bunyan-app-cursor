@@ -25,6 +25,11 @@ vi.stubGlobal('useRuntimeConfig', () => ({
 
 vi.stubGlobal('navigateTo', vi.fn());
 
+vi.stubGlobal('useLocalePath', () => (path: string) => {
+    const normalized = path.startsWith('/') ? path : `/${path}`;
+    return `/ar${normalized}`;
+});
+
 vi.stubGlobal('useRouter', () => ({
     back: vi.fn(),
     push: vi.fn(),

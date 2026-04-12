@@ -10,6 +10,7 @@ export interface UserProfile {
     name: string;
     email: string;
     role: UserRole;
+    /** RBAC permission names returned by the API (login, profile, etc.) */
     permissions?: string[];
     /** Optional avatar URL when the API returns one */
     avatar?: string | null;

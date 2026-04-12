@@ -1,14 +1,8 @@
 import { useCookie } from '#app';
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useApi } from '~/composables/useApi';
-import type {
-    AuthResponse,
-    LoginPayload,
-    RegisterPayload,
-    UserProfile,
-    UserRole,
-} from '~/types/auth';
+import { useAuthApi } from '~/composables/useAuthApi';
+import type { LoginPayload, RegisterPayload, UserProfile, UserRole } from '~/types/auth';
 
 export const useAuthStore = defineStore('auth', () => {
     const tokenCookie = useCookie<string | null>('auth_token', {
@@ -34,63 +28,57 @@ export const useAuthStore = defineStore('auth', () => {
 
     function setUser(profile: UserProfile | null) {
         user.value = profile;
+        permissions.value = profile?.permissions ?? [];
     }
 
-    async function login(payload: LoginPayload): Promise<AuthResponse> {
-        const { apiFetch } = useApi();
-        const response = await apiFetch<{ success: boolean; data: AuthResponse }>(
-            '/v1/auth/login',
-            {
-                method: 'POST',
-                body: payload,
-            }
-        );
-
-        token.value = response.data.token;
-        user.value = response.data.user;
-        permissions.value = response.data.user.permissions ?? [];
-
-        return response.data;
+    async function login(payload: LoginPayload) {
+        const authApi = useAuthApi();
+        const data = await authApi.login(payload);
+        token.value = data.token;
+        user.value = data.user;
+        permissions.value = data.user.permissions ?? [];
+        return data;
     }
 
-    async function register(payload: RegisterPayload): Promise<AuthResponse> {
-        const { apiFetch } = useApi();
-        const response = await apiFetch<{ success: boolean; data: AuthResponse }>(
-            '/v1/auth/register',
-            {
-                method: 'POST',
-                body: payload,
-            }
-        );
-
-        token.value = response.data.token;
-        user.value = response.data.user;
-        permissions.value = response.data.user.permissions ?? [];
-
-        return response.data;
+    async function register(payload: RegisterPayload) {
+        const authApi = useAuthApi();
+        const data = await authApi.register(payload);
+        token.value = data.token;
+        user.value = data.user;
+        permissions.value = data.user.permissions ?? [];
+        return data;
     }
 
     async function fetchUser(): Promise<UserProfile | null> {
         if (!token.value) return null;
 
         try {
-            const { apiFetch } = useApi();
-            const response = await apiFetch<{ success: boolean; data: UserProfile }>(
-                '/v1/auth/profile'
-            );
-            user.value = response.data;
-            permissions.value = response.data.permissions ?? [];
-            return response.data;
+            const authApi = useAuthApi();
+            const profile = await authApi.getProfile();
+            user.value = profile;
+            permissions.value = profile.permissions ?? [];
+            return profile;
         } catch {
             return null;
         }
     }
 
+    async function updateProfile(payload: {
+        name?: string;
+        phone?: string | null;
+    }): Promise<UserProfile> {
+        const authApi = useAuthApi();
+        const profile = await authApi.updateProfile(payload);
+        user.value = profile;
+        permissions.value = profile.permissions ?? [];
+        return profile;
+    }
+
     async function logout(): Promise<void> {
         if (token.value) {
             try {
-                const { apiFetch } = useApi();
-                await apiFetch('/v1/auth/logout', { method: 'POST' });
+                const authApi = useAuthApi();
+                await authApi.logout();
             } catch {
                 // Clear state regardless of API errors
             }
@@ -111,6 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         register,
         fetchUser,
+        updateProfile,
         logout,
     };
 });

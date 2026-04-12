@@ -1,25 +1,19 @@
 <script setup lang="ts">
-    import { z } from 'zod';
     import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import { resetPasswordSchema } from '~/schemas/auth';
+    import type { ResetPasswordFormValues } from '~/schemas/auth';
 
     definePageMeta({
         layout: 'auth',
     });
 
     const route = useRoute();
-    const { apiFetch } = useApi();
+    const authApi = useAuthApi();
+    const localePath = useLocalePath();
 
-    const schema = z
-        .object({
-            password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
-            password_confirmation: z.string().min(8, 'تأكيد كلمة المرور مطلوب'),
-        })
-        .refine((data) => data.password === data.password_confirmation, {
-            message: 'كلمتا المرور غير متطابقتين',
-            path: ['password_confirmation'],
-        });
+    const schema = resetPasswordSchema;
 
-    type ResetSchema = z.output<typeof schema>;
+    type ResetSchema = ResetPasswordFormValues;
 
     const state = reactive<Partial<ResetSchema>>({
         password: '',
@@ -38,18 +32,15 @@
         error.value = null;
 
         try {
-            await apiFetch('/v1/auth/reset-password', {
-                method: 'POST',
-                body: {
-                    token: token.value,
-                    email: email.value,
-                    password: event.data.password,
-                    password_confirmation: event.data.password_confirmation,
-                },
+            await authApi.resetPassword({
+                token: token.value,
+                email: email.value,
+                password: event.data.password,
+                password_confirmation: event.data.password_confirmation,
             });
             success.value = true;
             setTimeout(() => {
-                navigateTo('/ar/auth/login');
+                void navigateTo(localePath('/auth/login'));
             }, 3000);
         } catch (e: unknown) {
             const err = e as { data?: { error?: { message?: string } } };
@@ -61,11 +52,7 @@
 </script>
 
 <template>
-    <div>
-        <h2 class="mb-6 text-center text-xl font-semibold text-[#171717] dark:text-white">
-            {{ $t('auth.reset_password') }}
-        </h2>
-
+    <AuthCard :title="$t('auth.reset_password')">
         <UAlert
             v-if="success"
             color="green"
@@ -79,6 +66,7 @@
             v-if="error"
             color="red"
             variant="subtle"
+            role="alert"
             :title="error"
             class="mb-4"
             @close="error = null"
@@ -94,6 +82,8 @@
                     size="lg"
                 />
             </UFormField>
+
+            <PasswordStrength :password="state.password || ''" />
 
             <UFormField :label="$t('auth.password_confirmation')" name="password_confirmation">
                 <UInput
@@ -112,11 +102,11 @@
 
         <div class="mt-6 text-center text-sm text-[#666666]">
             <NuxtLink
-                to="/ar/auth/login"
+                :to="localePath('/auth/login')"
                 class="font-medium text-[#171717] hover:underline dark:text-white"
             >
                 {{ $t('auth.back_to_login') }}
             </NuxtLink>
         </div>
-    </div>
+    </AuthCard>
 </template>

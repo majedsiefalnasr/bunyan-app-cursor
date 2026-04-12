@@ -4,6 +4,7 @@ import { useAuthStore } from '~/stores/auth';
 
 export function useAuth() {
     const store = useAuthStore();
+    const localePath = useLocalePath();
 
     const user = computed(() => store.user);
     const role = computed<UserRole | null>(() => store.user?.role ?? null);
@@ -13,19 +14,28 @@ export function useAuth() {
 
     async function login(payload: LoginPayload) {
         const result = await store.login(payload);
-        await navigateTo('/ar/dashboard');
+        await navigateTo(localePath('/dashboard'));
         return result;
     }
 
-    async function register(payload: RegisterPayload) {
+    async function register(
+        payload: RegisterPayload,
+        options?: { skipPostRegisterNavigation?: boolean }
+    ) {
         const result = await store.register(payload);
-        await navigateTo('/ar/auth/verify-email');
+        if (!options?.skipPostRegisterNavigation) {
+            await navigateTo(localePath('/auth/verify-email'));
+        }
         return result;
     }
 
     async function logout() {
         await store.logout();
-        await navigateTo('/ar/auth/login');
+        await navigateTo(localePath('/auth/login'));
+    }
+
+    async function updateProfile(payload: { name?: string; phone?: string | null }) {
+        return store.updateProfile(payload);
     }
 
     function hasRole(...roles: UserRole[]): boolean {
@@ -49,6 +59,7 @@ export function useAuth() {
         login,
         register,
         logout,
+        updateProfile,
         hasRole,
         hasPermission,
         hasAnyPermission,

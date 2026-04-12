@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    const localePath = useLocalePath();
+</script>
+
 <template>
     <div class="space-y-8">
         <section class="text-center">
@@ -7,14 +11,14 @@
             </p>
             <div class="flex gap-4 justify-center rtl:flex-row-reverse">
                 <NuxtLink
-                    to="/auth/login"
-                    class="px-6 py-3 bg-slate-900 text-white rounded-md hover:bg-slate-800"
+                    :to="localePath('/auth/login')"
+                    class="rounded-md bg-slate-900 px-6 py-3 text-white hover:bg-slate-800"
                 >
                     {{ $t('auth.login') }}
                 </NuxtLink>
                 <NuxtLink
-                    to="/auth/register"
-                    class="px-6 py-3 bg-slate-200 text-slate-900 rounded-md hover:bg-slate-300"
+                    :to="localePath('/auth/register')"
+                    class="rounded-md bg-slate-200 px-6 py-3 text-slate-900 hover:bg-slate-300"
                 >
                     {{ $t('auth.register') }}
                 </NuxtLink>
