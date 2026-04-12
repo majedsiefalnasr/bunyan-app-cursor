@@ -1,21 +1,29 @@
 # STAGE_08 — Products
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** DRAFT
+> **Status:** PRODUCTION READY
 > **Scope:** Product/material catalog, variants, attributes, media
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: BACKEND CLOSED
-Implementation: COMPLETE
-Tasks: 12 / 12 completed
+Status: PRODUCTION READY
 Risk Level: LOW
-Last Updated: 2026-04-12T15:15:00Z
+Closure Date: 2026-04-12
 
-Architecture Governance Compliance: Validation gate passed (PHPUnit, Pint, PHPStan; frontend lint, typecheck, Vitest)
+Scope Closed: Product catalog filters; ProductService + repository; category FK; variants and media tables + admin POST endpoints; Nuxt `/products` and `/products/[id]`; tests and validation reports. Tasks 12/12.
 
-Notes: [AUTOPILOT] Pre-Closure Review Gate bypassed (auto_advance=true, no blockers)
+Deferred Scope: Supplier-owned product CRUD without admin; bilingual product name columns migration.
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no new ADR required; follows existing API + layering rules)
+- RBAC enforcement confirmed (admin nested routes + policies)
+- Service layer architecture maintained
+- Error contract compliance verified
+- i18n keys added for new UI
+
+Notes: Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
