@@ -8,18 +8,19 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: HIGH
 Last Updated: 2026-04-12T00:00:00Z
 
-Scope Defined:
+Scope Planned:
 
-- RBAC middleware (CheckRole, CheckPermission) for route protection
-- Gate-based permission system wired to role_permissions table (Redis cached)
-- Admin role/user management endpoints (dedicated Admin namespace)
-- Token revocation on role change for security
-- Defense-in-depth: role middleware on all existing resource routes
-- Frontend permission-aware navigation and admin role management page
+- 2 RBAC middleware (CheckRole, CheckPermission)
+- Gate registration from DB permissions (Redis cached)
+- RoleService + RoleRepository + PermissionRepository
+- 5 admin endpoints (roles, permissions, users, assign, remove)
+- Route restructuring with role-based groups
+- Frontend usePermission composable + admin page
+- 14 new backend files, 3 new frontend files, ~23 modified files
 
 Deferred Scope:
 
@@ -27,10 +28,10 @@ Deferred Scope:
 
 Architecture Governance Compliance:
 
-- Clarifications resolved — planning authorized
+- Technical plan compliant — task generation authorized
 
 Notes:
-All specification ambiguities resolved. Ready for technical planning.
+Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
