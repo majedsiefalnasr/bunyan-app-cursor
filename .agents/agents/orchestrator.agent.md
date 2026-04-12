@@ -305,6 +305,16 @@ Workflow state lives at: `specs/runtime/<STAGE_DIR_NAME>/.workflow-state.json`
 
 ---
 
+## Git discipline (mandatory)
+
+**Per-step commits:** Perform **one git commit per orchestrator step** (Pre.9, 1.6, 2.6, 3.6, 4.6, 5.6, 6.11, 7.7) using `specs/templates/commits/*.md`. **Forbidden:** squashing the full workflow into a single commit for speed.
+
+**`autopilot`:** Auto-advance does **not** waive per-step commits.
+
+**Push after closure:** After **7.8** (subsection **7.8D**), run `git push -u origin spec/<STAGE_DIR_NAME>` unless `dry-run` / `no-push` / `local-only`. Full step text: `.cursor/commands/orchestrator.md`.
+
+---
+
 ## Automatic Continuation Rule
 
 After completing each sub-step:
@@ -398,13 +408,14 @@ If any skill is missing → WARN but do not block. Log the missing skill for ses
 
 ## Session Flow Keywords
 
-| Keyword(s)           | Action                                                                       |
-| -------------------- | ---------------------------------------------------------------------------- |
-| `continue`, `resume` | Resume the most recent interrupted stage                                     |
-| `dry-run`, `dryrun`  | Enter dry-run validation mode                                                |
-| `discuss`, `chat`    | Enter Discuss Mode                                                           |
-| `status`             | Show active/interrupted stages                                               |
-| `autopilot`          | Auto-advance through all SpecKit steps without manual approval between steps |
+| Keyword(s)              | Action                                                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `continue`, `resume`    | Resume the most recent interrupted stage                                                                                      |
+| `dry-run`, `dryrun`     | Enter dry-run validation mode                                                                                                 |
+| `discuss`, `chat`       | Enter Discuss Mode                                                                                                            |
+| `status`                | Show active/interrupted stages                                                                                                |
+| `autopilot`             | Auto-advance through all SpecKit steps without manual approval between steps (**still one git commit per orchestrator step**) |
+| `no-push`, `local-only` | Skip automatic `git push` after closure (**7.8D**)                                                                            |
 
 ## Agent Route Keywords
 
@@ -1727,7 +1738,7 @@ If `approve` → proceed immediately to Step 7.
 
 Only execute after explicit user approval at the Pre-Closure Review Gate.
 
-**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — closure must not be committed without `guides/TESTING_GUIDE.md`.
+**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 (including **7.8D** push) → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — closure must not be committed without `guides/TESTING_GUIDE.md`.
 
 ## 7.1 — Write Closure Report
 
@@ -1908,6 +1919,10 @@ If BLOCKED → STOP. Remediate.
 
 Re-verify that `reports/CLOSURE_REPORT.md` and `guides/TESTING_GUIDE.md` exist and are non-empty (same checks as **7.6A**). If missing → STOP, remediate **7.1** / **7.2**, then fix commit before declaring the workflow complete.
 
+### 7.8D — Push stage branch
+
+After **7.8A–7.8C** pass, unless `dry-run` / `no-push` / `local-only`, run `git push -u origin spec/<STAGE_DIR_NAME>`. If push fails, note it in `reports/LOCAL_CI_REPORT.md` and surface the command again in **7.9**.
+
 ## 7.9 — Output Final Closure Summary
 
 ```
@@ -1958,7 +1973,7 @@ buttons:
     style: secondary
 ```
 
-Execute `🚀 Push branch` only after explicit click. Do NOT auto-push.
+After **7.8D** (see `.cursor/commands/orchestrator.md`), run `git push -u origin spec/<STAGE_DIR_NAME>` unless `dry-run` / `no-push` / `local-only`. In widget UIs, the `🚀 Push branch` button remains available for manual retry if the automated push failed.
 
 ---
 

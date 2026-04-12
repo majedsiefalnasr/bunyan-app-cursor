@@ -75,6 +75,17 @@ Conflict resolution: **ADR > Specs > AI_CONTEXT_INDEX > AI_ENGINEERING_RULES > A
 
 ---
 
+## Git discipline (mandatory)
+
+**Per-step commits (no consolidation).** The orchestrator defines a **separate git commit** after each of: Pre-Step (Pre.9), Specify (1.6), Clarify (2.6), Plan (3.6), Tasks (4.6), Analyze (5.6), Implement (6.11), and Closure (7.7). Each commit MUST use the matching template under `specs/templates/commits/` (see `git-governance` skill).
+
+- **Forbidden:** Squashing Pre-Step through Closure into one commit, or deferring all commits until the end of the workflow, for convenience or “autopilot speed.”
+- **`autopilot` / `continue`:** Only skips **human confirmation between steps**; it does **not** relax git hygiene. You still perform **one commit per step** before advancing `current_step` in `.workflow-state.json`.
+
+**Push stage branch after closure.** As part of **7.8** (see **7.8D**), after governance checks pass, push the current stage branch so `origin` matches local. Run **before** emitting the Step **7.9** completion banner. Skip only when: `dry-run`, **`no-push`**, or **`local-only`** appears in the user request; `git push` fails (record in `reports/LOCAL_CI_REPORT.md` and tell the user to push manually); or the user explicitly aborts push in-session.
+
+---
+
 ## Execution Context
 
 **Stage:** $ARGUMENTS (extracted from user request)
@@ -109,6 +120,7 @@ Parse `$ARGUMENTS` for these parameters (flexible format):
 | Package Manager | `pm:`, `package manager:`, `--pm`                       | `pm: composer`                      |
 | Base Branch     | `base:`, `branch:`, `--base`                            | `base: develop`                     |
 | Mode            | `autopilot`, `dry-run`, `discuss`, `continue`, `resume` | `autopilot`                         |
+| Push            | `no-push`, `local-only`                                 | (omit = push after closure)         |
 
 ---
 
@@ -163,13 +175,14 @@ When resuming:
 
 ## Session Flow Keywords
 
-| Keyword(s)           | Action                                                                       |
-| -------------------- | ---------------------------------------------------------------------------- |
-| `continue`, `resume` | Resume the most recent interrupted stage                                     |
-| `dry-run`, `dryrun`  | Enter dry-run validation mode                                                |
-| `discuss`, `chat`    | Enter Discuss Mode                                                           |
-| `status`             | Show active/interrupted stages                                               |
-| `autopilot`          | Auto-advance through all SpecKit steps without manual approval between steps |
+| Keyword(s)              | Action                                                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `continue`, `resume`    | Resume the most recent interrupted stage                                                                                      |
+| `dry-run`, `dryrun`     | Enter dry-run validation mode                                                                                                 |
+| `discuss`, `chat`       | Enter Discuss Mode                                                                                                            |
+| `status`                | Show active/interrupted stages                                                                                                |
+| `autopilot`             | Auto-advance through all SpecKit steps without manual approval between steps (**still one git commit per orchestrator step**) |
+| `no-push`, `local-only` | Skip automatic `git push` after closure (**7.8D**)                                                                            |
 
 ## Agent Route Keywords
 
@@ -1135,7 +1148,7 @@ If approved → proceed to Step 7.
 
 Only execute after explicit user approval at Pre-Closure Review Gate (or autopilot bypass).
 
-**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — models often mark closure complete without creating `guides/TESTING_GUIDE.md` unless this order is enforced.
+**Mandatory substep order:** Run **7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 7.6A → 7.7 → 7.8 (including 7.8D push) → 7.9** in that order. Skipping **7.2** (Testing Guide) or **7.6A** (artifact gate) is a workflow violation — models often mark closure complete without creating `guides/TESTING_GUIDE.md` unless this order is enforced.
 
 ## 7.1 — Write Closure Report
 
@@ -1250,6 +1263,16 @@ If BLOCKED → **STOP**. Remediate.
 
 Re-verify (same as **7.6A**) that `reports/CLOSURE_REPORT.md` and `guides/TESTING_GUIDE.md` exist and are non-empty. If missing → **STOP**, remediate **7.1** / **7.2**, amend or follow up with a fix commit before declaring the workflow done.
 
+### 7.8D — Push stage branch
+
+After **7.8A–7.8C** all pass, unless `dry-run` / `no-push` / `local-only`, run:
+
+```bash
+git push -u origin spec/<STAGE_DIR_NAME>
+```
+
+If push fails, append a note to `reports/LOCAL_CI_REPORT.md` and state the exact command in **7.9** for manual follow-up.
+
 ## 7.9 — Output Final Closure Summary
 
 ```
@@ -1285,11 +1308,9 @@ specs/runtime/<STAGE_DIR_NAME>/
 
 Present next actions:
 
-- **Push branch**: `git push origin spec/<STAGE_DIR_NAME>` (only on explicit request)
+- **Push branch** (already executed in **7.8D** unless `dry-run` / `no-push` / `local-only` or push failed): if not run, instruct user: `git push -u origin spec/<STAGE_DIR_NAME>`.
 - **Open PR Summary**: `specs/runtime/<STAGE_DIR_NAME>/PR_SUMMARY.md`
 - **Open Testing Guide**: `specs/runtime/<STAGE_DIR_NAME>/guides/TESTING_GUIDE.md`
-
-Do NOT auto-push.
 
 ---
 
