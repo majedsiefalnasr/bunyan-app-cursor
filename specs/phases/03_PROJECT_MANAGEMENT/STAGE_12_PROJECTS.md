@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T11:25:10Z
+Last Updated: 2026-04-12T11:30:00Z
 
-Scope Open:
+Scope Defined: Projects API evolution, schema extensions, status lifecycle, timeline, Nuxt pages, service layer
 
-- Specification pending
+Deferred Scope: Full Gantt UI, documents module, team management beyond existing FKs
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
