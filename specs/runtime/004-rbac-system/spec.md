@@ -253,3 +253,45 @@ Route::prefix('v1')->group(function () {
 ## Open Questions
 
 - None. All clarifications resolved in session below.
+
+## Clarifications
+
+### Session 2026-04-12
+
+**Q1: Should the permission system use Gates registered dynamically from DB, or should we refactor existing Policies to check DB permissions?**
+
+**Resolution:** Keep existing Policies as-is for ownership/relationship logic (e.g., "is this the project owner?") and add Gates registered dynamically from the `permissions` table for permission-string checks (e.g., `Gate::check('project.create')`). This maintains separation of concerns: Policies handle contextual authorization (ownership, assignment), Gates handle role-based permission checks.
+
+**Impact on spec:** No change needed — spec already describes this approach. Policies remain untouched for ownership logic. Gates added for permission-string authorization.
+
+---
+
+**Q2: How should permissions be cached?**
+
+**Resolution:** Redis cache with explicit invalidation on role change. When a user's role is changed via `RoleService::assignRole()`, the permission cache key for that user is explicitly deleted from Redis. Permission lookups hit Redis first (sub-1ms), falling back to DB query on cache miss. Cache key format: `user:{id}:permissions`. No TTL expiration — cache is valid until explicitly invalidated.
+
+**Impact on spec:** Technical requirement added — Redis dependency for permission caching. `RoleService::assignRole()` must call `Cache::forget("user:{$user->id}:permissions")`.
+
+---
+
+**Q3: Should admin user management use the existing `UserController` or a dedicated `Admin\RoleController`?**
+
+**Resolution:** Dedicated `Admin\RoleController` in the `App\Http\Controllers\Api\V1\Admin` namespace. This maintains clean separation between public-facing user endpoints and admin management endpoints. The admin route group (`/api/v1/admin/*`) is self-contained.
+
+**Impact on spec:** Already specified this way. No change needed.
+
+---
+
+**Q4: When an admin changes a user's role, should existing API tokens be revoked?**
+
+**Resolution:** Yes. When a role is changed, ALL existing API tokens for that user are revoked via `$user->tokens()->delete()`. This forces re-login, ensuring the user's next session reflects the new role and permissions. The role change audit log records this token revocation.
+
+**Impact on spec:** Technical requirement added to `RoleService::assignRole()` — must revoke all tokens after role update. Audit log entry includes `tokens_revoked: true`.
+
+---
+
+**Q5: Should we apply role middleware to existing resource routes (projects, phases, etc.) in this stage?**
+
+**Resolution:** Yes. Apply role middleware now for defense-in-depth. All existing resource routes get explicit role middleware in addition to their existing Policy checks. This creates two authorization layers: middleware (role-level gate at route entry) + Policy (contextual authorization in controller). The middleware prevents unauthorized roles from even reaching the controller.
+
+**Impact on spec:** Route definitions in `routes/api.php` will be restructured into role-based groups. All 7 existing resource controllers get explicit middleware.

@@ -8,15 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
+Step: clarify
 Risk Level: HIGH
 Last Updated: 2026-04-12T00:00:00Z
 
 Scope Defined:
 
 - RBAC middleware (CheckRole, CheckPermission) for route protection
-- Gate-based permission system wired to role_permissions table
-- Admin role/user management endpoints
+- Gate-based permission system wired to role_permissions table (Redis cached)
+- Admin role/user management endpoints (dedicated Admin namespace)
+- Token revocation on role change for security
+- Defense-in-depth: role middleware on all existing resource routes
 - Frontend permission-aware navigation and admin role management page
 
 Deferred Scope:
@@ -25,10 +27,10 @@ Deferred Scope:
 
 Architecture Governance Compliance:
 
-- Specification drafted — governance audit pending
+- Clarifications resolved — planning authorized
 
 Notes:
-Specification complete. Clarification step pending.
+All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
