@@ -3,7 +3,7 @@
 > **Phase:** 03_PROJECT_MANAGEMENT
 > **Status:** PRODUCTION READY
 > **Scope:** Approval workflows, state machine, configurable rules
-> **Risk Level:** HIGH
+> **Risk Level:** MEDIUM
 
 ## Stage Status
 
