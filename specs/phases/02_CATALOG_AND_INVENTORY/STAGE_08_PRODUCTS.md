@@ -1,15 +1,27 @@
 # STAGE_08 — Products
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** NOT STARTED
+> **Status:** DRAFT
 > **Scope:** Product/material catalog, variants, attributes, media
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: DRAFT
+Step: pre_step
+Risk Level: UNKNOWN
+Initiated: 2026-04-12T12:57:02Z
+
+Scope Open:
+
+- Specification pending
+
+Architecture Governance Compliance:
+
+- Pending governance audit
+
+Notes:
+Stage initialized. Specification in progress.
 
 ## Objective
 

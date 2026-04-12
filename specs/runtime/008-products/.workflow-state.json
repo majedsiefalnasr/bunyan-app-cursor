@@ -1,0 +1,32 @@
+{
+  "stage": "Products",
+  "phase": "02_CATALOG_AND_INVENTORY",
+  "stage_dir": "specs/runtime/008-products",
+  "stage_file": "specs/phases/02_CATALOG_AND_INVENTORY/STAGE_08_PRODUCTS.md",
+  "branch": "spec/008-products",
+  "base_branch": "develop",
+  "pkg_manager": "composer",
+  "auto_advance": true,
+  "current_step": "pre_step",
+  "stage_status": "DRAFT",
+  "clarifications_resolved": false,
+  "drift_passed": false,
+  "implementation_allowed": false,
+  "plan_completed": false,
+  "tasks_total": null,
+  "tasks_completed": null,
+  "deferred_tasks": [],
+  "guardian_verdicts": {},
+  "parallel_task_groups": [],
+  "current_parallel_group": null,
+  "session_started_at": "2026-04-12T12:57:02Z",
+  "last_updated": "2026-04-12T12:57:02Z",
+  "step_timings": {},
+  "history": [
+    {
+      "event": "branch_created",
+      "branch": "spec/008-products",
+      "timestamp": "2026-04-12T12:57:02Z"
+    }
+  ]
+}
