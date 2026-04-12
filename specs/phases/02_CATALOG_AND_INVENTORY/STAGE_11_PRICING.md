@@ -8,20 +8,21 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T17:05:00Z
+Last Updated: 2026-04-12T17:10:00Z
 
-Scope Open:
+Scope Defined:
 
-- Specification pending
+- Price tiers, calculate API, SAR formatting, price history on base price change, admin UI
 
-Architecture Governance Compliance:
+Deferred Scope:
 
-- Pending governance audit
+- Supplier-owned tier editing, discount engine, non-SAR currencies
 
-Notes:
-Stage initialized. Specification in progress.
+Architecture Governance Compliance: Specification drafted — governance audit pending
+
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
