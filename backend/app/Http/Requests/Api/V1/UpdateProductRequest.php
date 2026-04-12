@@ -20,6 +20,7 @@ class UpdateProductRequest extends FormRequest
             'category' => ['sometimes', 'string', 'max:100'],
             'price' => ['sometimes', 'numeric', 'min:0.01'],
             'quantity' => ['sometimes', 'integer', 'min:0'],
+            'supplier_id' => ['sometimes', 'nullable', 'integer', 'exists:supplier_profiles,id'],
         ];
     }
 

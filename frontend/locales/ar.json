@@ -10,6 +10,7 @@
         "reports": "التقارير",
         "services": "الخدمات",
         "products": "المنتجات",
+        "suppliers": "الموردون",
         "contact": "اتصل بنا",
         "admin": "الإدارة"
     },
@@ -106,6 +107,24 @@
     "dashboard": {
         "welcome_hint": "ابدأ من هنا للوصول إلى حسابك والملف الشخصي.",
         "profile_cta": "حدّث بياناتك الشخصية في أي وقت."
+    },
+    "suppliers": {
+        "directory_title": "دليل الموردين",
+        "directory_subtitle": "موردون موثّقون لمواد البناء والتشييد.",
+        "profile_title": "ملف المورد",
+        "products_title": "المنتجات",
+        "view_products": "عرض المنتجات",
+        "register_title": "تسجيل ملف مورد",
+        "register_subtitle": "للمقاولين: أنشئ ملفاً يظهر في الدليل بعد موافقة الإدارة.",
+        "company_name_ar": "اسم الشركة (عربي)",
+        "city": "المدينة",
+        "submit": "إرسال الطلب",
+        "empty": "لا يوجد موردون مطابقون.",
+        "admin_title": "إدارة الموردين",
+        "verification_status": "حالة التحقق",
+        "verify": "توثيق",
+        "suspend": "إيقاف",
+        "rating": "التقييم"
     },
     "errors": {
         "retry": "أعد المحاولة",

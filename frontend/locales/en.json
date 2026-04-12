@@ -10,6 +10,7 @@
         "reports": "Reports",
         "services": "Services",
         "products": "Products",
+        "suppliers": "Suppliers",
         "contact": "Contact",
         "admin": "Admin"
     },
@@ -106,6 +107,24 @@
     "dashboard": {
         "welcome_hint": "Start here to access your account and profile.",
         "profile_cta": "Update your personal details anytime."
+    },
+    "suppliers": {
+        "directory_title": "Supplier directory",
+        "directory_subtitle": "Verified suppliers for building materials.",
+        "profile_title": "Supplier profile",
+        "products_title": "Products",
+        "view_products": "View products",
+        "register_title": "Supplier registration",
+        "register_subtitle": "For contractors: create a profile that appears after admin approval.",
+        "company_name_ar": "Company name (Arabic)",
+        "city": "City",
+        "submit": "Submit request",
+        "empty": "No matching suppliers.",
+        "admin_title": "Supplier management",
+        "verification_status": "Verification status",
+        "verify": "Verify",
+        "suspend": "Suspend",
+        "rating": "Rating"
     },
     "errors": {
         "retry": "Retry",

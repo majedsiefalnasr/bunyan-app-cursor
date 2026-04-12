@@ -20,6 +20,7 @@ class CreateProductRequest extends FormRequest
             'category' => ['required', 'string', 'max:100'],
             'price' => ['required', 'numeric', 'min:0.01'],
             'quantity' => ['required', 'integer', 'min:0'],
+            'supplier_id' => ['nullable', 'integer', 'exists:supplier_profiles,id'],
         ];
     }
 

@@ -54,6 +54,7 @@ class ProductController extends BaseController
             'category' => $request->category,
             'price' => $request->price,
             'quantity_in_stock' => $request->quantity,
+            'supplier_id' => $request->validated('supplier_id'),
         ]);
 
         return $this->sendSuccess(
