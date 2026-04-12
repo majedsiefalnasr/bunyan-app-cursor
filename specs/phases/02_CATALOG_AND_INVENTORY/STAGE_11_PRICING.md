@@ -1,22 +1,33 @@
 # STAGE_11 — Pricing
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** DRAFT
+> **Status:** PRODUCTION READY
 > **Scope:** Pricing rules, bulk pricing tiers, currency handling
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: BACKEND CLOSED
-Step: implement
+Status: PRODUCTION READY
 Risk Level: LOW
-Last Updated: 2026-04-12T18:30:00Z
+Closure Date: 2026-04-12
 
-Implementation: COMPLETE
+Scope Closed:
 
-Tasks: 12 / 12 completed
+- Price tiers API (read + admin sync), price calculator, SAR formatting, price history on base price change, admin pricing UI, product detail tier display — 12/12 tasks
 
-Notes: See `specs/runtime/011-pricing/reports/IMPLEMENT_REPORT.md` and `audits/VALIDATION_REPORT.md`.
+Deferred Scope:
+
+- Supplier-owned tier editing; discount rules engine; non-SAR FX
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no new ADR required for this slice)
+- RBAC enforcement confirmed
+- Service layer architecture maintained
+- Error contract compliance verified
+
+Notes:
+Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
@@ -40,11 +51,11 @@ Implement pricing engine supporting base prices, bulk/tier pricing, and currency
 
 ### API Endpoints
 
-| Method | Route                         | Description                  |
-| ------ | ----------------------------- | ---------------------------- |
-| GET    | /api/v1/products/{id}/pricing | Get pricing tiers            |
-| PUT    | /api/v1/products/{id}/pricing | Update pricing tiers         |
-| POST   | /api/v1/pricing/calculate     | Calculate price for quantity |
+| Method | Route                               | Description                  |
+| ------ | ----------------------------------- | ---------------------------- |
+| GET    | /api/v1/products/{id}/pricing       | Get pricing tiers            |
+| PUT    | /api/v1/admin/products/{id}/pricing | Update pricing tiers         |
+| POST   | /api/v1/pricing/calculate           | Calculate price for quantity |
 
 ### Database Schema
 
