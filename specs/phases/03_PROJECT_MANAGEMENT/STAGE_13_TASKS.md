@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T14:10:00Z
+Last Updated: 2026-04-12T14:18:00Z
 
-Scope Defined: Additive project task API, status migration, comments, dependencies MVP, FE board/list, legacy route retention
+Scope Planned: Migrations, TaskService, repositories, new API routes, policy tweaks, TaskResource, PHPUnit, Nuxt tasks page
 
-Deferred Scope: Real-time board, advanced DAG validation, Gantt
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
