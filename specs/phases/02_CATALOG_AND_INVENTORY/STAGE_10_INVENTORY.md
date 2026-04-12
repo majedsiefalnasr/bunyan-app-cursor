@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T17:00:00Z
+Last Updated: 2026-04-12T17:05:00Z
 
-Scope Open:
+Scope Defined: Inventory rows, movements, low-stock APIs, policy-scoped contractor access, admin UI
 
-- Specification pending
+Deferred Scope: Order reservation integration, dedicated supplier role
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
