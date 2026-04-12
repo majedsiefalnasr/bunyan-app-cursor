@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ErrorHandlingTestController;
+use App\Http\Controllers\Api\V1\ActivityLogController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
@@ -95,6 +96,11 @@ Route::prefix('v1')->group(function () {
         Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
         Route::get('projects/{project}/timeline', [ProjectController::class, 'timeline'])->name('projects.timeline');
 
+        Route::middleware('throttle:120,1')->get('{entity}/{id}/activity', [ActivityLogController::class, 'forSubject'])
+            ->whereNumber('id')
+            ->whereIn('entity', ['projects', 'orders'])
+            ->name('activity-log.for-subject');
+
         Route::middleware('role:customer,contractor,supervising_architect,admin')->group(function () {
             Route::put('projects/{project}/status', [ProjectController::class, 'updateStatus'])->name('projects.status');
         });
@@ -184,6 +190,8 @@ Route::prefix('v1')->group(function () {
             Route::delete('reports/{report}', [ReportController::class, 'destroy'])->name('admin.reports.destroy');
 
             Route::get('suppliers', [SupplierProfileController::class, 'adminIndex'])->name('admin.suppliers.index');
+
+            Route::get('activity-log', [ActivityLogController::class, 'adminIndex'])->name('admin.activity-log.index');
         });
     });
 

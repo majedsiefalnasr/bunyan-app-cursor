@@ -199,6 +199,16 @@
         "phases_heading": "Phases",
         "back_to_list": "Back to list"
     },
+    "activityLog": {
+        "admin_title": "Activity log",
+        "empty": "No activity recorded",
+        "load_error": "Could not load activity log",
+        "actor": "User",
+        "action": "Action",
+        "subject": "Subject",
+        "when": "When",
+        "project_activity_title": "Project activity"
+    },
     "errors": {
         "retry": "Retry",
         "back": "Go back",

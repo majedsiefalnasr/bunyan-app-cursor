@@ -39,6 +39,14 @@
                             Categories
                         </NuxtLink>
                     </li>
+                    <li>
+                        <NuxtLink
+                            to="/admin/activity-log"
+                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                        >
+                            Activity log
+                        </NuxtLink>
+                    </li>
                 </ul>
             </aside>
 

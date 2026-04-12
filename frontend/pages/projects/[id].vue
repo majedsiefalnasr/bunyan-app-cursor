@@ -81,6 +81,8 @@
                     </li>
                 </ul>
             </UCard>
+
+            <ActivityTimeline v-if="project" entity="projects" :subject-id="project.id" />
         </template>
     </div>
 </template>

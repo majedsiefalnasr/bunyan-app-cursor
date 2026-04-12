@@ -199,6 +199,16 @@
         "phases_heading": "المراحل",
         "back_to_list": "العودة للقائمة"
     },
+    "activityLog": {
+        "admin_title": "سجل النشاط",
+        "empty": "لا توجد أحداث مسجلة",
+        "load_error": "تعذر تحميل سجل النشاط",
+        "actor": "المستخدم",
+        "action": "الإجراء",
+        "subject": "الكيان",
+        "when": "التاريخ",
+        "project_activity_title": "سجل نشاط المشروع"
+    },
     "errors": {
         "retry": "أعد المحاولة",
         "back": "العودة",

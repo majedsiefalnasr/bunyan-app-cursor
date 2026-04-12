@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProjectStatus;
 use App\Enums\UserRole;
+use App\Models\Concerns\LogsModelActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends BaseModel
 {
+    use LogsModelActivity;
     use SoftDeletes;
 
     protected $fillable = [
