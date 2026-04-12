@@ -75,3 +75,4 @@ Deliver a production-ready **projects** module: persisted projects and phases in
 - **Table naming:** Implementation uses existing `phases` table (not `project_phases`); stage narrative “project_phases” refers to this table.
 - **Owner field:** `customer_id` remains the project owner foreign key (equivalent to “owner_id” in stage sketch).
 - **Status strings:** API uses lowercase snake values as enumerated above; labels remain Arabic where returned by resources or UI.
+- **Paid / legacy:** `UpdateProjectRequest` previously allowed impossible `paid` status for projects; status changes are consolidated on `PUT .../status` with the lifecycle enum only.

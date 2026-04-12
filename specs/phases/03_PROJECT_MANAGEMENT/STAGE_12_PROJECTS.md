@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T11:30:00Z
+Step: clarify
+Risk Level: MEDIUM
+Last Updated: 2026-04-12T11:35:00Z
 
-Scope Defined: Projects API evolution, schema extensions, status lifecycle, timeline, Nuxt pages, service layer
+Scope Defined: Projects API evolution, schema extensions, status lifecycle, timeline, Nuxt pages, service layer, field-engineer visibility rule
 
 Deferred Scope: Full Gantt UI, documents module, team management beyond existing FKs
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
