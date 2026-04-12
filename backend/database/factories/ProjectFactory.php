@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Models\User;
+use App\Repositories\ProjectMemberRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -13,6 +14,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProjectFactory extends Factory
 {
     protected $model = Project::class;
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Project $project): void {
+            if ($project->customer_id === null) {
+                return;
+            }
+
+            app(ProjectMemberRepository::class)->ensureOwnerMembership($project);
+        });
+    }
 
     public function definition(): array
     {

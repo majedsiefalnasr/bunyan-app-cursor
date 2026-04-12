@@ -80,6 +80,16 @@ class Project extends BaseModel
         return $this->hasMany(Report::class);
     }
 
+    public function members(): HasMany
+    {
+        return $this->hasMany(ProjectMember::class);
+    }
+
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(ProjectInvitation::class);
+    }
+
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);

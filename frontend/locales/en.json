@@ -197,7 +197,21 @@
         "status_label": "Status",
         "timeline_title": "Timeline",
         "phases_heading": "Phases",
-        "back_to_list": "Back to list"
+        "back_to_list": "Back to list",
+        "team_title": "Project team",
+        "team_members": "Members",
+        "team_invitations": "Pending invitations",
+        "team_email": "Invitee email",
+        "team_role": "Project role",
+        "team_invite": "Send invitation",
+        "team_invite_success": "Invitation sent",
+        "team_load_error": "Could not load team",
+        "team_empty_members": "No team members yet.",
+        "team_empty_invites": "No pending invitations.",
+        "team_role_manager": "Manager",
+        "team_role_engineer": "Engineer",
+        "team_role_worker": "Worker",
+        "team_role_viewer": "Viewer"
     },
     "activityLog": {
         "admin_title": "Activity log",
