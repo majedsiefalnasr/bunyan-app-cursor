@@ -7,14 +7,14 @@
   "base_branch": "develop",
   "pkg_manager": "composer",
   "auto_advance": true,
-  "current_step": "plan",
-  "stage_status": "DRAFT",
+  "current_step": "tasks",
+  "stage_status": "IN PROGRESS",
   "clarifications_resolved": true,
   "drift_passed": false,
   "implementation_allowed": false,
   "plan_completed": true,
-  "tasks_total": null,
-  "tasks_completed": null,
+  "tasks_total": 12,
+  "tasks_completed": 0,
   "deferred_tasks": [],
   "guardian_verdicts": {
     "architecture_checker": "PASS",
@@ -36,6 +36,10 @@
     "plan": {
       "started_at": "2026-04-12T12:53:53Z",
       "completed_at": "2026-04-12T12:53:53Z"
+    },
+    "tasks": {
+      "started_at": "2026-04-12T12:53:53Z",
+      "completed_at": "2026-04-12T12:53:53Z"
     }
   },
   "history": [
@@ -54,6 +58,11 @@
     },
     {
       "event": "plan_complete",
+      "timestamp": "2026-04-12T12:53:53Z"
+    },
+    {
+      "event": "tasks_complete",
+      "tasks_total": 12,
       "timestamp": "2026-04-12T12:53:53Z"
     }
   ]
