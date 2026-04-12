@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ErrorHandlingTestController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
@@ -48,6 +49,16 @@ Route::prefix('v1')->group(function () {
         // Public-read resources (all authenticated roles)
         Route::get('products', [ProductController::class, 'index'])->name('products.index');
         Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+        Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+        Route::middleware('role:admin')->group(function () {
+            Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+            Route::put('categories/{category}/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
+            Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+            Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        });
 
         // Projects (all roles can view)
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');

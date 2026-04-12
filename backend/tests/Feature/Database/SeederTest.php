@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Database;
 
+use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Role;
 use Database\Seeders\DatabaseSeeder;
@@ -17,6 +18,15 @@ class SeederTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertTrue(true);
+    }
+
+    public function test_default_categories_are_seeded(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->assertGreaterThanOrEqual(4, Category::count());
+        $this->assertDatabaseHas('categories', ['slug' => 'building-materials']);
+        $this->assertDatabaseHas('categories', ['slug' => 'electrical']);
     }
 
     public function test_five_roles_are_seeded(): void
