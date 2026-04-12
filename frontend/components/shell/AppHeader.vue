@@ -26,6 +26,7 @@
             icon="i-heroicons-bars-3"
             :aria-label="$t('shell.sidebar.toggle')"
             class="lg:hidden"
+            data-testid="mobile-nav-toggle"
             @click="uiStore.toggleSidebar"
         />
 

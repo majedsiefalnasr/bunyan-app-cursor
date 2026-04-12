@@ -1,12 +1,10 @@
 <script setup lang="ts">
+    import { storeToRefs } from 'pinia';
     import { navigationItems } from '~/config/navigation';
     import type { UserRole } from '~/types/auth';
 
     const uiStore = useUIStore();
-    const isOpen = computed({
-        get: () => uiStore.isSidebarOpen,
-        set: (val) => uiStore.setSidebarOpen(val),
-    });
+    const { isSidebarOpen } = storeToRefs(uiStore);
 
     const { role } = useAuth();
     const { t } = useI18n();
@@ -28,8 +26,8 @@
 </script>
 
 <template>
-    <USlideOver v-model="isOpen" side="left" :ui="{ width: 'w-64' }">
-        <div class="flex h-full flex-col bg-white dark:bg-[#171717]">
+    <USlideOver v-model="isSidebarOpen" side="left" :ui="{ width: 'w-64' }">
+        <div data-testid="mobile-drawer" class="flex h-full flex-col bg-white dark:bg-[#171717]">
             <div
                 class="flex items-center justify-between p-4 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.08)] dark:shadow-[0px_1px_0px_0px_rgba(255,255,255,0.06)]"
             >
@@ -41,6 +39,7 @@
                     variant="ghost"
                     icon="i-heroicons-x-mark"
                     :aria-label="$t('shell.sidebar.close')"
+                    data-testid="mobile-drawer-close"
                     @click="uiStore.setSidebarOpen(false)"
                 />
             </div>

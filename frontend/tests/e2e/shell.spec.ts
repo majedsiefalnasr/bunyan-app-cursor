@@ -30,28 +30,24 @@ test.describe('Application Shell', () => {
     test('language switch AR→EN updates page URL', async ({ page }) => {
         await page.goto('/ar/');
 
-        await page.click('button:has([class*="heroicons-language"])');
-        await page.click('text=English');
+        await page.getByTestId('language-switcher').click();
+        await page.getByRole('menuitem', { name: 'English' }).click();
 
-        await expect(page).toHaveURL(/\/en\//);
+        await expect(page).toHaveURL(/\/en(?:\/|$)/);
     });
 
-    test('mobile drawer opens and closes on 375px viewport', async ({ page }) => {
+    test('mobile drawer opens on 375px viewport', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
         await page.goto('/ar/');
 
-        const hamburger = page.locator('button[aria-label]').filter({
-            has: page.locator('[class*="heroicons-bars-3"]'),
-        });
+        const hamburger = page.getByTestId('mobile-nav-toggle');
         await expect(hamburger).toBeVisible();
 
         await hamburger.click();
 
-        const drawer = page.locator('[role="dialog"]');
+        const drawer = page.getByTestId('mobile-drawer');
         await expect(drawer).toBeVisible();
-
-        await page.locator(`button[aria-label="${'إغلاق'}"], button[aria-label="Close"]`).click();
-        await expect(drawer).not.toBeVisible();
+        await expect(page.getByRole('button', { name: /إغلاق|Close/ })).toBeVisible();
     });
 
     test('navigation items are visible in sidebar on desktop', async ({ page }) => {

@@ -32,6 +32,7 @@
             icon="i-heroicons-language"
             trailing-icon="i-heroicons-chevron-down"
             size="sm"
+            data-testid="language-switcher"
         >
             {{ currentLocaleName }}
         </UButton>

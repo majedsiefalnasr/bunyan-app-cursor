@@ -7,10 +7,11 @@ const baseURL = `http://${serverHost}:3000`;
 
 export default defineConfig({
     testDir: './tests/e2e',
-    fullyParallel: true,
+    // One shared `nuxt dev` — parallel workers corrupt HMR / SSR and flake badly.
+    fullyParallel: false,
     forbidOnly: ci,
     retries: ci ? 2 : 0,
-    workers: ci ? 1 : undefined,
+    workers: 1,
     globalTimeout: ci ? 15 * 60 * 1000 : 0,
     reporter: 'html',
     use: {
