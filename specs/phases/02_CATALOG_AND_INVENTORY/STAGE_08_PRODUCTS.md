@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T12:57:02Z
+Last Updated: 2026-04-12T13:00:00Z
 
-Scope Open:
+Scope Defined: Catalog API, admin CRUD, category FK, variants, media metadata, Nuxt catalog pages
 
-- Specification pending
+Deferred Scope: Supplier-owned CRUD without admin role; full bilingual product name columns
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
