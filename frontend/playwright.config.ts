@@ -1,9 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const ci = !!process.env.CI;
-/** Avoid IPv6 `localhost` → `::1` connection stalls on Linux CI runners. */
-const serverHost = ci ? '127.0.0.1' : 'localhost';
+/**
+ * Always use IPv4 loopback for `baseURL` and `nuxt dev --host`.
+ * `localhost` can resolve to `::1` while Vite/Nuxt listens on `127.0.0.1` only,
+ * which makes Playwright's webServer health check hang until timeout.
+ */
+const serverHost = '127.0.0.1';
 const baseURL = `http://${serverHost}:3000`;
+const devServerCommand = `npm run dev -- --host ${serverHost} --port 3000`;
 
 export default defineConfig({
     testDir: './tests/e2e',
@@ -25,11 +30,17 @@ export default defineConfig({
               { name: 'firefox', use: { ...devices.firefox } },
           ],
     webServer: {
-        command: ci ? 'npm run dev -- --host 127.0.0.1 --port 3000' : 'npm run dev',
+        command: devServerCommand,
         url: baseURL,
         reuseExistingServer: !ci,
-        timeout: ci ? 180_000 : 60_000,
+        /** Cold `nuxt dev` (deps optimize, Nitro) can exceed 60s on slower disks. */
+        timeout: ci ? 180_000 : 120_000,
         stdout: 'ignore',
         stderr: ci ? 'ignore' : 'pipe',
+        env: {
+            ...process.env,
+            /** Disables Nuxt DevTools during e2e (see `nuxt.config.ts`). */
+            PLAYWRIGHT_TEST: '1',
+        },
     },
 });
