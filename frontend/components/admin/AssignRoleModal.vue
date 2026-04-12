@@ -1,0 +1,106 @@
+<script setup lang="ts">
+    import type { UserRole } from '~/types/auth';
+
+    interface AdminUser {
+        id: number;
+        name: string;
+        role: UserRole;
+        role_label: string;
+    }
+
+    const props = defineProps<{
+        user: AdminUser | null;
+    }>();
+
+    const open = defineModel<boolean>('open', { default: false });
+
+    const emit = defineEmits<{
+        assigned: [];
+    }>();
+
+    const { apiFetch } = useApi();
+    const toast = useToast();
+
+    const selectedRole = ref<string>('');
+    const isSubmitting = ref(false);
+
+    const roleOptions = [
+        { label: 'العميل', value: 'customer' },
+        { label: 'المقاول', value: 'contractor' },
+        { label: 'المهندس المشرف', value: 'supervising_architect' },
+        { label: 'المهندس الميداني', value: 'field_engineer' },
+        { label: 'الإدارة', value: 'admin' },
+    ];
+
+    watch(
+        () => props.user,
+        (u) => {
+            if (u) selectedRole.value = u.role;
+        }
+    );
+
+    async function assignRole() {
+        if (!props.user || !selectedRole.value) return;
+
+        isSubmitting.value = true;
+        try {
+            await apiFetch(`/v1/admin/users/${props.user.id}/role`, {
+                method: 'POST',
+                body: { role: selectedRole.value },
+            });
+
+            toast.add({
+                title: 'تم بنجاح',
+                description: 'تم تعيين الدور بنجاح',
+                color: 'green',
+                icon: 'i-heroicons-check-circle',
+            });
+
+            emit('assigned');
+        } catch (error: unknown) {
+            const message =
+                error && typeof error === 'object' && 'data' in error
+                    ? String((error as Record<string, unknown>).data ?? 'فشل في تعيين الدور')
+                    : 'فشل في تعيين الدور';
+            toast.add({
+                title: 'خطأ',
+                description: message,
+                color: 'red',
+                icon: 'i-heroicons-exclamation-triangle',
+            });
+        } finally {
+            isSubmitting.value = false;
+        }
+    }
+</script>
+
+<template>
+    <UModal v-model="open">
+        <UCard>
+            <template #header>
+                <h3 class="text-lg font-semibold" style="color: #171717">تعيين دور</h3>
+                <p v-if="user" class="mt-1 text-sm" style="color: #666">
+                    {{ user.name }} — {{ user.role_label }}
+                </p>
+            </template>
+
+            <div class="space-y-4">
+                <UFormGroup label="الدور الجديد">
+                    <USelect
+                        v-model="selectedRole"
+                        :options="roleOptions"
+                        option-attribute="label"
+                        value-attribute="value"
+                    />
+                </UFormGroup>
+            </div>
+
+            <template #footer>
+                <div class="flex justify-end gap-3">
+                    <UButton color="gray" variant="ghost" @click="open = false"> إلغاء </UButton>
+                    <UButton :loading="isSubmitting" @click="assignRole"> تأكيد التعيين </UButton>
+                </div>
+            </template>
+        </UCard>
+    </UModal>
+</template>

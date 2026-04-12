@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api\V1;
 
 use App\Enums\UserRole;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,6 +16,10 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->role instanceof UserRole ? $this->role->value : $this->role,
+            'permissions' => $this->when(
+                $request->user()?->id === $this->id,
+                fn () => app(RoleService::class)->getUserPermissions($this->resource),
+            ),
             'phone' => $this->phone,
             'active' => $this->active,
             'email_verified_at' => $this->email_verified_at?->toIso8601String(),

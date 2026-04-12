@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const token = ref<string | null>(tokenCookie.value ?? null);
     const user = ref<UserProfile | null>(null);
+    const permissions = ref<string[]>([]);
 
     const isAuthenticated = computed(() => !!token.value);
     const userRole = computed<UserRole | null>(() => user.value?.role ?? null);
@@ -47,6 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         token.value = response.data.token;
         user.value = response.data.user;
+        permissions.value = response.data.user.permissions ?? [];
 
         return response.data;
     }
@@ -63,6 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         token.value = response.data.token;
         user.value = response.data.user;
+        permissions.value = response.data.user.permissions ?? [];
 
         return response.data;
     }
@@ -76,6 +79,7 @@ export const useAuthStore = defineStore('auth', () => {
                 '/v1/auth/profile'
             );
             user.value = response.data;
+            permissions.value = response.data.permissions ?? [];
             return response.data;
         } catch {
             return null;
@@ -93,11 +97,13 @@ export const useAuthStore = defineStore('auth', () => {
         }
         token.value = null;
         user.value = null;
+        permissions.value = [];
     }
 
     return {
         token,
         user,
+        permissions,
         isAuthenticated,
         userRole,
         setToken,

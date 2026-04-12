@@ -35,7 +35,8 @@ class ProjectPolicy
             return true;
         }
 
-        return $project->customer_id === $user->id;
+        return $project->customer_id === $user->id
+            || $project->contractor_id === $user->id;
     }
 
     public function delete(User $user, Project $project): bool
