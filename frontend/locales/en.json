@@ -140,7 +140,21 @@
         "stock_label": "In stock",
         "detail_title": "Product details",
         "variants_title": "Variants",
-        "back_list": "Back to list"
+        "back_list": "Back to list",
+        "tiers_title": "Quantity pricing",
+        "tier_qty_range": "Quantity",
+        "tier_unit_price": "Unit price",
+        "tier_open": "and up",
+        "admin_pricing_title": "Product pricing",
+        "admin_pricing_subtitle": "Configure quantity bands (SAR).",
+        "tier_min": "Min qty",
+        "tier_max": "Max qty",
+        "tier_unit": "Unit price",
+        "tier_variant": "Variant (optional)",
+        "tier_max_open": "Leave empty for open-ended band",
+        "tier_variant_null": "Empty = base product",
+        "tier_add": "Add band",
+        "tier_save": "Save"
     },
     "suppliers": {
         "directory_title": "Supplier directory",

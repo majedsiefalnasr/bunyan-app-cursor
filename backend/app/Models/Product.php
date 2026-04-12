@@ -51,6 +51,16 @@ class Product extends BaseModel
         return $this->hasMany(ProductMedia::class);
     }
 
+    public function priceTiers(): HasMany
+    {
+        return $this->hasMany(PriceTier::class);
+    }
+
+    public function priceHistories(): HasMany
+    {
+        return $this->hasMany(PriceHistory::class);
+    }
+
     public function supplierProfile(): BelongsTo
     {
         return $this->belongsTo(SupplierProfile::class, 'supplier_id');

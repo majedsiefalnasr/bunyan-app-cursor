@@ -13,7 +13,9 @@ use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
+use App\Http\Controllers\Api\V1\PricingCalculationController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ProductPricingController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\ProjectDocumentController;
 use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
@@ -86,6 +88,8 @@ Route::prefix('v1')->group(function () {
         // Public-read resources (all authenticated roles)
         Route::get('products', [ProductController::class, 'index'])->name('products.index');
         Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('products/{product}/pricing', [ProductPricingController::class, 'show'])->name('products.pricing.show');
+        Route::post('pricing/calculate', PricingCalculationController::class)->name('pricing.calculate');
 
         Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
@@ -221,6 +225,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
             Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])->name('admin.products.variants.store');
             Route::post('products/{product}/media', [ProductController::class, 'storeMedia'])->name('admin.products.media.store');
+            Route::put('products/{product}/pricing', [ProductPricingController::class, 'sync'])->name('admin.products.pricing.sync');
 
             Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('admin.projects.destroy');
             Route::delete('reports/{report}', [ReportController::class, 'destroy'])->name('admin.reports.destroy');

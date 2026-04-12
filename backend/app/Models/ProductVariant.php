@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductVariant extends BaseModel
 {
@@ -29,5 +30,10 @@ class ProductVariant extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function priceTiers(): HasMany
+    {
+        return $this->hasMany(PriceTier::class);
     }
 }

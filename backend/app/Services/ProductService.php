@@ -6,14 +6,18 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductMedia;
 use App\Models\ProductVariant;
+use App\Repositories\PriceHistoryRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ProductService
 {
-    public function __construct(private ProductRepository $products)
-    {
+    public function __construct(
+        private ProductRepository $products,
+        private PriceHistoryRepository $priceHistories,
+    ) {
     }
 
     public function paginateCatalog(array $filters): LengthAwarePaginator
@@ -23,7 +27,7 @@ class ProductService
 
     public function loadDisplay(Product $product): Product
     {
-        return $product->loadMissing(['catalogCategory', 'variants', 'productMedia', 'supplierProfile']);
+        return $product->loadMissing(['catalogCategory', 'variants', 'productMedia', 'supplierProfile', 'priceTiers']);
     }
 
     /**
@@ -56,6 +60,11 @@ class ProductService
 
     public function update(Product $product, array $data): Product
     {
+        $oldPrice = null;
+        if (array_key_exists('price', $data)) {
+            $oldPrice = number_format((float) $product->price, 2, '.', '');
+        }
+
         if (array_key_exists('quantity', $data)) {
             $data['quantity_in_stock'] = $data['quantity'];
             unset($data['quantity']);
@@ -72,6 +81,18 @@ class ProductService
 
         /** @var Product $updated */
         $updated = $this->products->update($product, $data);
+
+        if ($oldPrice !== null) {
+            $newPrice = number_format((float) $updated->price, 2, '.', '');
+            if ($oldPrice !== $newPrice) {
+                $this->priceHistories->record(
+                    (int) $updated->id,
+                    $oldPrice,
+                    $newPrice,
+                    Auth::id(),
+                );
+            }
+        }
 
         return $updated;
     }
