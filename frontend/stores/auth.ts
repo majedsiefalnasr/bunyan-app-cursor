@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const token = ref<string | null>(tokenCookie.value ?? null);
     const user = ref<UserProfile | null>(null);
+    const permissions = ref<string[]>([]);
 
     const isAuthenticated = computed(() => !!token.value);
     const userRole = computed<UserRole | null>(() => user.value?.role ?? null);
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function setUser(profile: UserProfile | null) {
         user.value = profile;
+        permissions.value = profile?.permissions ?? [];
     }
 
     async function login(payload: LoginPayload) {
@@ -34,6 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
         const data = await authApi.login(payload);
         token.value = data.token;
         user.value = data.user;
+        permissions.value = data.user.permissions ?? [];
         return data;
     }
 
@@ -42,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
         const data = await authApi.register(payload);
         token.value = data.token;
         user.value = data.user;
+        permissions.value = data.user.permissions ?? [];
         return data;
     }
 
@@ -52,6 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
             const authApi = useAuthApi();
             const profile = await authApi.getProfile();
             user.value = profile;
+            permissions.value = profile.permissions ?? [];
             return profile;
         } catch {
             return null;
@@ -65,6 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
         const authApi = useAuthApi();
         const profile = await authApi.updateProfile(payload);
         user.value = profile;
+        permissions.value = profile.permissions ?? [];
         return profile;
     }
 
@@ -79,11 +85,13 @@ export const useAuthStore = defineStore('auth', () => {
         }
         token.value = null;
         user.value = null;
+        permissions.value = [];
     }
 
     return {
         token,
         user,
+        permissions,
         isAuthenticated,
         userRole,
         setToken,

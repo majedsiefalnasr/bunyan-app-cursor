@@ -49,6 +49,28 @@ describe('useAuthStore', () => {
         expect(store.token).toBe('jwt');
         expect(store.user?.email).toBe('t@t.com');
         expect(store.isAuthenticated).toBe(true);
+        expect(store.permissions).toEqual([]);
+    });
+
+    it('login stores permissions from user payload when present', async () => {
+        login.mockResolvedValueOnce({
+            token: 'jwt',
+            user: {
+                id: 1,
+                name: 'Test',
+                email: 't@t.com',
+                role: 'admin',
+                permissions: ['users.view', 'users.edit'],
+                phone: null,
+                active: true,
+                email_verified_at: null,
+                created_at: '2020-01-01T00:00:00.000000Z',
+                updated_at: '2020-01-01T00:00:00.000000Z',
+            },
+        });
+        const store = useAuthStore();
+        await store.login({ email: 't@t.com', password: 'password1' });
+        expect(store.permissions).toEqual(['users.view', 'users.edit']);
     });
 
     it('logout clears state and calls API when token exists', async () => {
@@ -70,6 +92,7 @@ describe('useAuthStore', () => {
         expect(logoutApi).toHaveBeenCalled();
         expect(store.token).toBeNull();
         expect(store.user).toBeNull();
+        expect(store.permissions).toEqual([]);
     });
 
     it('register persists returned session', async () => {
@@ -119,6 +142,7 @@ describe('useAuthStore', () => {
             name: 'Loaded',
             email: 'l@l.com',
             role: 'customer' as const,
+            permissions: ['projects.view'],
             phone: null,
             active: true,
             email_verified_at: null,
@@ -131,5 +155,6 @@ describe('useAuthStore', () => {
         const result = await store.fetchUser();
         expect(result).toEqual(profile);
         expect(store.user).toEqual(profile);
+        expect(store.permissions).toEqual(['projects.view']);
     });
 });
