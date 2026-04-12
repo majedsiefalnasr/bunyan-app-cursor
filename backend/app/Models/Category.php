@@ -11,6 +11,11 @@ class Category extends BaseModel
 {
     use SoftDeletes;
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     protected $fillable = [
         'parent_id',
         'name_ar',

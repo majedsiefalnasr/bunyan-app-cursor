@@ -90,7 +90,7 @@ class CategoryControllerTest extends TestCase
         $parent = Category::factory()->create();
         Category::factory()->childOf($parent)->create();
 
-        $response = $this->actingAs($admin)->deleteJson("/api/v1/categories/{$parent->id}");
+        $response = $this->actingAs($admin)->deleteJson("/api/v1/categories/{$parent->slug}");
 
         $response->assertStatus(422);
     }
@@ -101,7 +101,7 @@ class CategoryControllerTest extends TestCase
         $a = Category::factory()->create(['name_en' => 'A', 'sort_order' => 0, 'slug' => 'reorder-a']);
         $b = Category::factory()->create(['name_en' => 'B', 'sort_order' => 1, 'slug' => 'reorder-b']);
 
-        $response = $this->actingAs($admin)->putJson("/api/v1/categories/{$b->id}/reorder", [
+        $response = $this->actingAs($admin)->putJson("/api/v1/categories/{$b->slug}/reorder", [
             'sort_order' => 0,
         ]);
 

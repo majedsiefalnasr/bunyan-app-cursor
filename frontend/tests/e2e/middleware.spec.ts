@@ -13,4 +13,15 @@ test.describe('Auth middleware', () => {
         expect(redirect).toBeTruthy();
         expect(decodeURIComponent(redirect ?? '')).toContain('/ar/profile');
     });
+
+    test('unauthenticated visit to products catalog redirects to login', async ({ page }) => {
+        await page.goto('/ar/products', { waitUntil: 'domcontentloaded' });
+
+        await expect(page).toHaveURL(/\/ar\/auth\/login/);
+
+        const url = new URL(page.url());
+        const redirect = url.searchParams.get('redirect');
+        expect(redirect).toBeTruthy();
+        expect(decodeURIComponent(redirect ?? '')).toContain('/ar/products');
+    });
 });

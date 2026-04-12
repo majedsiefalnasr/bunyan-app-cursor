@@ -53,6 +53,12 @@ export const navigationItems: NavItem[] = [
         roles: ['customer', 'admin'],
     },
     {
+        labelKey: 'nav.categories',
+        to: '/categories',
+        icon: 'i-heroicons-rectangle-stack',
+        roles: ['customer', 'admin'],
+    },
+    {
         labelKey: 'nav.admin',
         to: '/admin',
         icon: 'i-heroicons-cog-6-tooth',

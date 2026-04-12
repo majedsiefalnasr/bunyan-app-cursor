@@ -69,3 +69,4 @@ Deliver Arabic-first, RTL catalog UX on Nuxt 3 using Nuxt UI: public-style brows
 3. **Search scope** — `/search` reuses `GET /v1/products` with `search` and existing filters only (no new backend endpoint).
 4. **Supplier routes** — Continue to use numeric `supplierProfile` id; no slug binding in this slice.
 5. **Authentication** — Category and product catalog pages require Sanctum session (cookie); supplier directory remains callable without auth per existing API routes.
+6. **Nuxt gate** — Catalog Nuxt pages set `requiresAuth: true` so the existing `auth` middleware enforces redirect to login (middleware checks `requiresAuth`, not the string `auth` alone).

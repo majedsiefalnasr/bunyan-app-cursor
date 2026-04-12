@@ -12,6 +12,7 @@
         "reports": "Reports",
         "services": "Services",
         "products": "Products",
+        "categories": "Categories",
         "suppliers": "Suppliers",
         "contact": "Contact",
         "admin": "Admin"
@@ -154,7 +155,25 @@
         "tier_max_open": "Leave empty for open-ended band",
         "tier_variant_null": "Empty = base product",
         "tier_add": "Add band",
-        "tier_save": "Save"
+        "tier_save": "Save",
+        "filters_title": "Filters",
+        "filter_category": "Category",
+        "filter_min_price": "Min price",
+        "filter_max_price": "Max price",
+        "filter_in_stock": "In stock only",
+        "filter_apply": "Apply",
+        "filter_reset": "Reset"
+    },
+    "categories": {
+        "list_title": "Material categories",
+        "list_subtitle": "Pick a category to browse linked products.",
+        "empty": "No categories to show.",
+        "back_grid": "Back to categories",
+        "not_found": "Category not found."
+    },
+    "search": {
+        "page_title": "Search results",
+        "page_subtitle": "Browse products matching your query."
     },
     "suppliers": {
         "directory_title": "Supplier directory",

@@ -22,6 +22,8 @@
         id: number;
         name: string;
         price: string;
+        quantity: number;
+        sku?: string | null;
     }
 
     const supplier = ref<SupplierDetail | null>(null);
@@ -69,19 +71,9 @@
                 <template #header>
                     <span class="font-medium">{{ $t('suppliers.products_title') }}</span>
                 </template>
-                <ul
-                    v-if="products.length"
-                    class="divide-y divide-[#ebebeb] dark:divide-neutral-800"
-                >
-                    <li
-                        v-for="p in products"
-                        :key="p.id"
-                        class="flex items-center justify-between py-3 text-sm rtl:flex-row-reverse"
-                    >
-                        <span>{{ p.name }}</span>
-                        <span class="text-[#666666]">{{ p.price }}</span>
-                    </li>
-                </ul>
+                <div v-if="products.length" class="grid gap-3 sm:grid-cols-2">
+                    <CatalogProductCard v-for="p in products" :key="p.id" :product="p" />
+                </div>
                 <p v-else class="text-sm text-[#666666]">{{ $t('suppliers.empty') }}</p>
             </UCard>
         </template>

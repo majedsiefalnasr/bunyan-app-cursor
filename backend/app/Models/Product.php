@@ -11,6 +11,22 @@ class Product extends BaseModel
 {
     use SoftDeletes;
 
+    /**
+     * @param  mixed  $value
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field !== null) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        if (is_numeric($value)) {
+            return $this->whereKey((int) $value)->firstOrFail();
+        }
+
+        return $this->where('sku', (string) $value)->firstOrFail();
+    }
+
     protected $fillable = [
         'name',
         'description',
