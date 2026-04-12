@@ -105,6 +105,11 @@ class Project extends BaseModel
         return $this->morphMany(Media::class, 'mediable');
     }
 
+    public function documents(): MorphMany
+    {
+        return $this->morphMany(Document::class, 'documentable');
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', ProjectStatus::InProgress->value);
