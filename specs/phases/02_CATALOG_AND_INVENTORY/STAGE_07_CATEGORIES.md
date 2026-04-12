@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
+Step: clarify
 Risk Level: LOW
-Last Updated: 2026-04-12T14:05:00Z
+Last Updated: 2026-04-12T14:08:00Z
 
-Scope Defined: Hierarchical categories API, admin UI, seed data; product FK deferred.
+Scope Defined: Hierarchical categories API, admin UI, seed data; product FK deferred; authenticated list; admin `include_inactive`; guarded delete.
 
 Deferred Scope: `products.category_id` (STAGE_08).
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
