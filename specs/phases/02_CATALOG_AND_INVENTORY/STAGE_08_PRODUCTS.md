@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T13:00:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T13:05:00Z
 
-Scope Defined: Catalog API, admin CRUD, category FK, variants, media metadata, Nuxt catalog pages
+Scope Defined: Catalog API, admin CRUD, category FK, variants, media metadata, Nuxt catalog pages; admin route prefix; metadata-only nested media
 
 Deferred Scope: Supplier-owned CRUD without admin role; full bilingual product name columns
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 

@@ -54,3 +54,11 @@ Deliver a catalog-ready product domain: REST list/detail with filters, admin CRU
 - Laravel 11, Sanctum, service + repository pattern, Form Requests, API Resources, standard success/error JSON contract.
 - Nuxt 3 + Nuxt UI + Tailwind v4 + RTL per `DESIGN.md`.
 - Forward-only migrations with `down()` implemented.
+
+## Clarifications
+
+### Session 2026-04-12
+
+1. **Admin route prefix** — Product mutations remain under `/api/v1/admin/products` (and nested `/api/v1/admin/products/{product}/…`) to match existing RBAC route groups, even where the stage table showed `/api/v1/products` for writes.
+2. **Supplier-authored products** — Out of scope until a distinct supplier role or permission matrix exists; only `UserRole::Admin` may mutate products in this slice.
+3. **Media** — Nested `POST …/media` records catalog metadata (type, path, sort order). Binary uploads continue to use `POST /api/v1/media/upload`, then the returned path may be persisted via the nested endpoint.
