@@ -1,15 +1,39 @@
 # STAGE_06 — API Foundation
 
 > **Phase:** 01_PLATFORM_FOUNDATION
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** API routing, versioning, middleware stack, rate limiting
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: PRODUCTION READY
+Step: stage_production_ready
+Risk Level: LOW
+Closure Date: 2026-04-12
+
+Scope Closed:
+
+- Public `GET /api/v1/health` with platform JSON envelope
+- Published CORS configuration for `api/*` and Sanctum SPA flows
+- Baseline OpenAPI 3.0.3 under `backend/docs/openapi/openapi.yaml`
+- Feature tests for health and correlation ID propagation
+- SpecKit runtime artifacts under `specs/runtime/006-api-foundation/`
+
+Deferred Scope:
+
+- Hosted Swagger UI (optional)
+- Full OpenAPI coverage for all domain routes (incremental)
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (versioned API, thin controller, existing error contract)
+- RBAC enforcement confirmed on existing route groups; new route is intentionally public
+- Service layer architecture maintained for this slice
+- Error contract compliance verified (`ApiResponse` + STAGE_05 renderer)
+
+Notes:
+Stage closed via orchestrator autopilot (`auto_advance=true`). Modifications require a new stage or amendment protocol.
 
 ## Objective
 

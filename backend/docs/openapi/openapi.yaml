@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: Bunyan API
+  description: Arabic-first construction marketplace API (baseline — extend per feature).
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Version 1
+paths:
+  /health:
+    get:
+      summary: API health
+      operationId: getHealth
+      tags: [Meta]
+      responses:
+        "200":
+          description: Service is reachable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiSuccessEnvelope"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum personal access token
+  schemas:
+    ApiSuccessEnvelope:
+      type: object
+      required: [success, data, message, errors, error]
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            service:
+              type: string
+              example: bunyan-api
+            version:
+              type: string
+              example: v1
+            time:
+              type: string
+              format: date-time
+            app:
+              type: string
+            correlation_id:
+              type: string
+              nullable: true
+        message:
+          type: string
+          nullable: true
+        errors:
+          type: array
+          items: {}
+        error:
+          nullable: true
+          description: Always null on success responses

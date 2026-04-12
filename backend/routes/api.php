@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ErrorHandlingTestController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
+use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -13,6 +14,8 @@ use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+    Route::get('health', HealthController::class)->name('health');
+
     // Public Authentication Routes
     Route::middleware('throttle:5,1')->group(function () {
         Route::post('auth/login', [UserController::class, 'login'])->name('login');
