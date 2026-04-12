@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
+use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\ProjectDocumentController;
 use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
@@ -109,6 +111,15 @@ Route::prefix('v1')->group(function () {
 
         // Phases & Tasks (read — all project-related roles)
         Route::middleware('role:customer,contractor,supervising_architect,field_engineer,admin')->group(function () {
+            Route::middleware('throttle:60,1')->group(function () {
+                Route::get('projects/{project}/documents', [ProjectDocumentController::class, 'index'])->name('projects.documents.index');
+                Route::get('documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
+                Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+                Route::get('documents/{document}/versions', [DocumentController::class, 'versions'])->name('documents.versions.index');
+            });
+            Route::middleware('throttle:30,1')->post('projects/{project}/documents', [ProjectDocumentController::class, 'store'])->name('projects.documents.store');
+            Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
             Route::get('projects/{project}/phases', [PhaseController::class, 'index'])->name('projects.phases.index');
             Route::get('projects/{project}/phases/{phase}', [PhaseController::class, 'show'])->name('projects.phases.show');
             Route::get('projects/{project}/phases/{phase}/tasks', [TaskController::class, 'index'])->name('projects.phases.tasks.index');
