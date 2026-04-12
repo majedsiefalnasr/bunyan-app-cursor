@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -21,6 +22,7 @@ class Product extends BaseModel
         'specifications',
         'image_url',
         'active',
+        'supplier_id',
     ];
 
     protected $casts = [
@@ -32,6 +34,11 @@ class Product extends BaseModel
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function supplierProfile(): BelongsTo
+    {
+        return $this->belongsTo(SupplierProfile::class, 'supplier_id');
     }
 
     public function scopeActive(Builder $query): Builder

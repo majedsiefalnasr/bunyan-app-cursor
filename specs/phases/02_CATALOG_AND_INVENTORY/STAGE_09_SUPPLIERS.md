@@ -1,15 +1,35 @@
 # STAGE_09 — Suppliers
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** Supplier profiles, verification, product association
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: PRODUCTION READY  
+Step: stage_production_ready  
+Risk Level: MEDIUM  
+Closure Date: 2026-04-12
+
+Scope Closed:
+
+- Supplier profiles, verification API, public catalog, admin supplier list, product `supplier_id`, Nuxt supplier pages, feature tests, SpecKit runtime artifacts under `specs/runtime/009-suppliers/`.
+
+Deferred Scope:
+
+- Supplier product self-service UI; automated rating aggregation from downstream commerce stages.
+
+Architecture Governance Compliance:
+
+- ADR alignment: no conflicting ADR changes introduced.
+- RBAC: `role` middleware on authenticated supplier routes; admin-only verify and admin index.
+- Service/repository layering maintained for supplier domain.
+- Error contract: existing `ApiResponse` envelope preserved.
+
+Notes:
+
+- Stage delivered on branch `spec/009-suppliers` via SpecKit Hard Mode (autopilot).
 
 ## Objective
 

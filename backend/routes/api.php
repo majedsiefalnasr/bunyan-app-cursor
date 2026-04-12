@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::get('health', HealthController::class)->name('health');
+
+    Route::middleware('throttle:60,1')->group(function () {
+        Route::get('suppliers', [SupplierProfileController::class, 'index'])->name('suppliers.index');
+        Route::get('suppliers/{supplierProfile}', [SupplierProfileController::class, 'show'])->name('suppliers.show');
+        Route::get('suppliers/{supplierProfile}/products', [SupplierProfileController::class, 'products'])->name('suppliers.products');
+    });
 
     // Public Authentication Routes
     Route::middleware('throttle:5,1')->group(function () {
@@ -41,6 +48,15 @@ Route::prefix('v1')->group(function () {
         Route::get('auth/profile', [UserController::class, 'profile'])->name('profile');
         Route::put('auth/profile', [UserController::class, 'update'])->name('profile.update');
         Route::post('auth/logout', [UserController::class, 'logout'])->name('logout');
+
+        Route::middleware('role:contractor,admin')->group(function () {
+            Route::post('suppliers', [SupplierProfileController::class, 'store'])->name('suppliers.store');
+            Route::put('suppliers/{supplierProfile}', [SupplierProfileController::class, 'update'])->name('suppliers.update');
+        });
+
+        Route::middleware('role:admin')->group(function () {
+            Route::put('suppliers/{supplierProfile}/verify', [SupplierProfileController::class, 'verify'])->name('suppliers.verify');
+        });
 
         Route::post('auth/email/resend', [UserController::class, 'resendVerification'])
             ->middleware('throttle:1,1')
@@ -129,6 +145,8 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('admin.projects.destroy');
             Route::delete('reports/{report}', [ReportController::class, 'destroy'])->name('admin.reports.destroy');
+
+            Route::get('suppliers', [SupplierProfileController::class, 'adminIndex'])->name('admin.suppliers.index');
         });
     });
 
