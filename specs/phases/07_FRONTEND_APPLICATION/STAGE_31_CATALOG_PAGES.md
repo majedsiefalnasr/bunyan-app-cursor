@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T20:10:00Z
+Last Updated: 2026-04-12T20:18:00Z
 
-Scope Defined: Slug-based categories; product detail by id/SKU; search reuses product API; suppliers numeric id; catalog auth matches Sanctum.
+Scope Planned: Backend binding tweaks; composable + components; categories/products/search pages; i18n; Vitest + Playwright.
 
-Deferred Scope: Guest catalog, command palette wiring, dedicated product slug column.
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: Ready for technical planning.
+Notes: Task breakdown next.
 
 ## Objective
 
