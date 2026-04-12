@@ -6,7 +6,7 @@
   "branch": "spec/030-auth-pages",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "pre_step",
+  "current_step": "specify",
   "stage_status": "DRAFT",
   "clarifications_resolved": false,
   "drift_passed": false,
@@ -19,11 +19,15 @@
   "parallel_task_groups": [],
   "current_parallel_group": null,
   "session_started_at": "2026-04-12T10:28:00Z",
-  "last_updated": "2026-04-12T10:28:00Z",
+  "last_updated": "2026-04-12T10:35:00Z",
   "step_timings": {
     "pre_step": {
       "started_at": "2026-04-12T10:28:00Z",
       "completed_at": "2026-04-12T10:28:00Z"
+    },
+    "specify": {
+      "started_at": "2026-04-12T10:28:00Z",
+      "completed_at": "2026-04-12T10:35:00Z"
     }
   },
   "history": [
@@ -36,6 +40,12 @@
       "event": "stage_initialized",
       "stage_dir": "specs/runtime/030-auth-pages",
       "timestamp": "2026-04-12T10:28:00Z"
+    },
+    {
+      "event": "specify_complete",
+      "pages_scoped": 6,
+      "components_scoped": 5,
+      "timestamp": "2026-04-12T10:35:00Z"
     }
   ]
 }

@@ -8,20 +8,28 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: LOW
-Initiated: 2026-04-12T10:28:00Z
+Last Updated: 2026-04-12T10:30:00Z
 
-Scope Open:
+Scope Defined:
 
-- Specification pending
+- 6 authentication pages (Login, Register, Forgot Password, Reset Password, Email Verification, Profile)
+- 5 shared components (AuthLayout, AuthCard, PasswordStrength, RoleSelector, OtpInput)
+- VeeValidate + Zod form validation with Arabic messages
+- Pinia state management (useAuthStore, useUserStore)
+- Full RTL support with Nuxt UI components
+- Unit + E2E testing strategy defined
 
 Architecture Governance Compliance:
 
-- Pending governance audit
+- Specification drafted — governance audit pending
+- RBAC middleware for protected routes specified
+- Error contract compliance specified
 
 Notes:
-Stage initialized. Specification in progress.
+
+Specification complete. No ambiguities detected. Ready for clarification or planning phase.
 
 ## Objective
 
