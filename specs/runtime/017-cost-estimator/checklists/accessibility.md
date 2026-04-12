@@ -1,5 +1,5 @@
 # Accessibility Checklist — Cost Estimator
 
-- [ ] Tables and actions keyboard reachable (Nuxt UI defaults)
-- [ ] Comparison modal/sheet has focus trap where used
-- [ ] RTL layout verified on estimates list and detail pages
+- [x] Tables and actions keyboard reachable (Nuxt UI defaults)
+- [x] Comparison modal/sheet has focus trap where used
+- [x] RTL layout verified on estimates list and detail pages
