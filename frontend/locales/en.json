@@ -8,6 +8,7 @@
         "dashboard": "Dashboard",
         "projects": "Projects",
         "messages": "Messages",
+        "media": "Media library",
         "reports": "Reports",
         "services": "Services",
         "products": "Products",
@@ -158,6 +159,17 @@
         "mark_read": "Mark as read",
         "partner_id_label": "Other user ID",
         "partner_hint": "Enter the other user's numeric ID, then send to start a direct conversation."
+    },
+    "media": {
+        "title": "Media library",
+        "subtitle": "Upload images and browse files you have uploaded to Bunyan.",
+        "drop_label": "Drag a file here or choose from your device.",
+        "choose_file": "Choose file",
+        "upload_aria": "Select file to upload",
+        "loading": "Loading media…",
+        "empty": "No media yet. Upload a file to get started.",
+        "open": "Open file",
+        "back_dashboard": "Back to dashboard"
     },
     "projects": {
         "list_title": "Projects",

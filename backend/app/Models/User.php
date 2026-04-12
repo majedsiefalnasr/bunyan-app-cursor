@@ -90,6 +90,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Message::class, 'sender_id');
     }
 
+    public function uploadedMedia(): HasMany
+    {
+        return $this->hasMany(Media::class, 'uploaded_by');
+    }
+
     public function supplierProfile(): HasOne
     {
         return $this->hasOne(SupplierProfile::class);

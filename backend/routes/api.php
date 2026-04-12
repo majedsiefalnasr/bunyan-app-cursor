@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\OrderController;
@@ -120,6 +121,14 @@ Route::prefix('v1')->group(function () {
             Route::put('conversations/{conversation}/read', [ConversationController::class, 'markRead'])->name('conversations.read');
             Route::get('conversations/{conversation}/messages', [ConversationMessageController::class, 'index'])->name('conversations.messages.index');
             Route::post('conversations/{conversation}/messages', [ConversationMessageController::class, 'store'])->name('conversations.messages.store');
+        });
+
+        Route::middleware('throttle:30,1')->post('media/upload', [MediaController::class, 'store'])->name('media.upload');
+
+        Route::middleware('throttle:60,1')->group(function () {
+            Route::get('media', [MediaController::class, 'index'])->name('media.index');
+            Route::get('media/{media}', [MediaController::class, 'show'])->name('media.show');
+            Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
         });
 
         // Customer-specific routes
