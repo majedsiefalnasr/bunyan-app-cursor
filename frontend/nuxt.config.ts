@@ -4,6 +4,14 @@ export default defineNuxtConfig({
 
     modules: ['@nuxt/ui', '@nuxtjs/i18n', '@pinia/nuxt'],
 
+    /** Use file basename as tag (`<AppHeader>`), not `ShellAppHeader` from nested dirs. */
+    components: [
+        {
+            path: '~/components',
+            pathPrefix: false,
+        },
+    ],
+
     app: {
         head: {
             htmlAttrs: { dir: 'rtl', lang: 'ar' },
