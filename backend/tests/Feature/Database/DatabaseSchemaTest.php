@@ -122,4 +122,13 @@ class DatabaseSchemaTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('approval_rules'));
     }
+
+    public function test_activity_logs_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasTable('activity_logs'));
+        $this->assertTrue(Schema::hasColumns('activity_logs', [
+            'id', 'user_id', 'action', 'subject_type', 'subject_id', 'properties_json',
+            'ip_address', 'user_agent', 'created_at',
+        ]));
+    }
 }

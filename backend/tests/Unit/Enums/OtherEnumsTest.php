@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Enums;
 
+use App\Enums\ActivityLogAction;
 use App\Enums\ApprovalStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ReportType;
@@ -75,5 +76,13 @@ class OtherEnumsTest extends TestCase
         $this->assertNull(WorkflowType::tryFrom('invalid'));
         $this->assertNull(ApprovalStatus::tryFrom('invalid'));
         $this->assertNull(ReportType::tryFrom('invalid'));
+        $this->assertNull(ActivityLogAction::tryFrom('invalid'));
+    }
+
+    public function test_activity_log_action_has_five_cases(): void
+    {
+        $this->assertCount(5, ActivityLogAction::cases());
+        $this->assertSame('created', ActivityLogAction::Created->value);
+        $this->assertSame('exported', ActivityLogAction::Exported->value);
     }
 }
