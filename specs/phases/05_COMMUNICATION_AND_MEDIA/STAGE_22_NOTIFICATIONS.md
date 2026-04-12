@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T12:05:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T12:08:00Z
 
-Scope Defined: In-app notifications, REST APIs, preferences, Nuxt shell surfaces
+Scope Defined: In-app notifications, REST APIs, preference registry, Nuxt shell surfaces
 
 Deferred Scope: Push/SMS providers, admin broadcast console
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 

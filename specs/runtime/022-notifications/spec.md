@@ -39,3 +39,13 @@ Deliver in-app notifications stored in MySQL (`notifications` table compatible w
 - Mobile push provider integration (FCM/APNs) beyond preference flags.
 - Production SMS provider wiring and template management.
 - Rich admin broadcast console.
+
+## Clarifications
+
+### Session 2026-04-12
+
+- **Notification types:** Preferences and defaults use a fixed string registry (`general`, `orders`, `projects`, `approvals`). Unknown types from clients are rejected with validation errors.
+- **In-app channel:** Database notifications are always stored for authenticated activity; preference toggles govern **email / SMS / push** only (in-app feed remains authoritative).
+- **UUID routes:** `notifications/{id}` uses string UUID primary keys; route model binding resolves within the authenticated user scope only.
+- **Queue driver:** Non-database channels use `ShouldQueue`; CI uses `sync` or `database` queue as already configured in the platform.
+- **Frontend auth:** Bell and notification pages render only when a Sanctum session exists; guests see no notification chrome.
