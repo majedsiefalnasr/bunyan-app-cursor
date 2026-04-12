@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\MediaController;
+use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -51,6 +53,15 @@ Route::prefix('v1')->group(function () {
         Route::get('auth/profile', [UserController::class, 'profile'])->name('profile');
         Route::put('auth/profile', [UserController::class, 'update'])->name('profile.update');
         Route::post('auth/logout', [UserController::class, 'logout'])->name('logout');
+
+        Route::middleware('throttle:60,1')->group(function () {
+            Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+            Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+            Route::put('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+            Route::put('notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+            Route::get('notification-preferences', [NotificationPreferenceController::class, 'show'])->name('notification-preferences.show');
+            Route::put('notification-preferences', [NotificationPreferenceController::class, 'update'])->name('notification-preferences.update');
+        });
 
         Route::middleware('role:contractor,admin')->group(function () {
             Route::post('suppliers', [SupplierProfileController::class, 'store'])->name('suppliers.store');

@@ -38,7 +38,27 @@
         "nav": {
             "main": "Main navigation",
             "breadcrumb": "Breadcrumb"
+        },
+        "notifications": {
+            "open": "Notifications",
+            "badge": "Unread notifications"
         }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "history": "History",
+        "settings": "Settings",
+        "empty": "No notifications yet",
+        "markRead": "Mark as read",
+        "markAll": "Mark all read",
+        "viewAll": "View all",
+        "unread": "Unread",
+        "preferenceType": "Category",
+        "email": "Email",
+        "sms": "SMS",
+        "push": "Push",
+        "save": "Save preferences",
+        "saved": "Preferences saved"
     },
     "auth": {
         "login": "Login",

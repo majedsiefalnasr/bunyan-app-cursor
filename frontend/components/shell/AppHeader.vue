@@ -1,4 +1,5 @@
 <script setup lang="ts">
+    const authStore = useAuthStore();
     const uiStore = useUIStore();
     const colorMode = useColorMode();
 
@@ -59,6 +60,8 @@
 
             <!-- Language switcher -->
             <LanguageSwitcher />
+
+            <NotificationBell v-if="authStore.isAuthenticated" />
 
             <!-- User menu -->
             <AppUserMenu />
