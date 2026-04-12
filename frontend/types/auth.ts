@@ -10,6 +10,7 @@ export interface UserProfile {
     name: string;
     email: string;
     role: UserRole;
+    permissions?: string[];
     /** Optional avatar URL when the API returns one */
     avatar?: string | null;
     phone: string | null;

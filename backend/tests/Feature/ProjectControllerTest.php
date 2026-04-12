@@ -71,8 +71,12 @@ class ProjectControllerTest extends TestCase
 
     public function test_update_project_successfully()
     {
-        $user = User::factory()->create(['role' => 'customer']);
-        $project = Project::factory()->create(['customer_id' => $user->id]);
+        $customer = User::factory()->create(['role' => 'customer']);
+        $user = User::factory()->create(['role' => 'contractor']);
+        $project = Project::factory()->create([
+            'customer_id' => $customer->id,
+            'contractor_id' => $user->id,
+        ]);
 
         $response = $this->actingAs($user)
             ->putJson("/api/v1/projects/{$project->id}", [

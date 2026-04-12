@@ -51,7 +51,13 @@ class TaskPolicy
             return true;
         }
 
-        return $task->phase->project->contractor_id === $user->id;
+        $project = $task->phase->project;
+
+        if ($user->role === UserRole::SupervisingArchitect) {
+            return $project->supervising_architect_id === $user->id;
+        }
+
+        return $project->contractor_id === $user->id;
     }
 
     public function restore(User $user, Task $task): bool

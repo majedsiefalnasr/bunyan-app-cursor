@@ -50,6 +50,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'order.create', 'description' => 'Create orders'],
             ['name' => 'order.update', 'description' => 'Update orders'],
             ['name' => 'order.delete', 'description' => 'Delete orders'],
+
+            // User management permissions
+            ['name' => 'user.view', 'description' => 'View users'],
+            ['name' => 'user.update', 'description' => 'Update users'],
+            ['name' => 'role.assign', 'description' => 'Assign roles to users'],
         ];
 
         foreach ($permissions as $permission) {

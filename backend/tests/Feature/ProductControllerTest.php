@@ -40,7 +40,7 @@ class ProductControllerTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($admin)
-            ->postJson('/api/v1/products', [
+            ->postJson('/api/v1/admin/products', [
                 'name' => 'Cement',
                 'category' => 'building_materials',
                 'price' => 50.00,
@@ -56,7 +56,7 @@ class ProductControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'customer']);
 
         $response = $this->actingAs($user)
-            ->postJson('/api/v1/products', [
+            ->postJson('/api/v1/admin/products', [
                 'name' => 'Cement',
                 'category' => 'building_materials',
                 'price' => 50.00,
@@ -72,7 +72,7 @@ class ProductControllerTest extends TestCase
         $product = Product::factory()->create();
 
         $response = $this->actingAs($admin)
-            ->putJson("/api/v1/products/{$product->id}", [
+            ->putJson("/api/v1/admin/products/{$product->id}", [
                 'name' => 'Updated Product',
             ]);
 

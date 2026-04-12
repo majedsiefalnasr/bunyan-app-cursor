@@ -7,6 +7,7 @@ export function useAuth() {
 
     const user = computed(() => store.user);
     const role = computed<UserRole | null>(() => store.user?.role ?? null);
+    const permissions = computed(() => store.permissions);
     const isAuthenticated = computed(() => store.isAuthenticated);
     const isEmailVerified = computed(() => !!store.user?.email_verified_at);
 
@@ -31,5 +32,25 @@ export function useAuth() {
         return role.value !== null && roles.includes(role.value);
     }
 
-    return { user, role, isAuthenticated, isEmailVerified, login, register, logout, hasRole };
+    function hasPermission(name: string): boolean {
+        return permissions.value.includes(name);
+    }
+
+    function hasAnyPermission(names: string[]): boolean {
+        return names.some((n) => permissions.value.includes(n));
+    }
+
+    return {
+        user,
+        role,
+        permissions,
+        isAuthenticated,
+        isEmailVerified,
+        login,
+        register,
+        logout,
+        hasRole,
+        hasPermission,
+        hasAnyPermission,
+    };
 }

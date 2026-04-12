@@ -17,6 +17,12 @@ return [
         'RBAC_ROLE_DENIED' => [
             'message' => 'غير مصرح لك بهذا الإجراء',
         ],
+        'RBAC_PERMISSION_DENIED' => [
+            'message' => 'ليس لديك الصلاحية لتنفيذ هذا الإجراء',
+        ],
+        'RBAC_LAST_ADMIN' => [
+            'message' => 'لا يمكن تغيير دور آخر مدير في النظام',
+        ],
         'RESOURCE_NOT_FOUND' => [
             'message' => 'المورد المطلوب غير موجود',
         ],

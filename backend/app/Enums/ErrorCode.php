@@ -9,6 +9,8 @@ enum ErrorCode: string
     case AUTH_TOKEN_EXPIRED = 'AUTH_TOKEN_EXPIRED';
     case AUTH_UNAUTHORIZED = 'AUTH_UNAUTHORIZED';
     case RBAC_ROLE_DENIED = 'RBAC_ROLE_DENIED';
+    case RBAC_PERMISSION_DENIED = 'RBAC_PERMISSION_DENIED';
+    case RBAC_LAST_ADMIN = 'RBAC_LAST_ADMIN';
     case RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND';
     case WORKFLOW_INVALID_TRANSITION = 'WORKFLOW_INVALID_TRANSITION';
     case WORKFLOW_PREREQUISITES_UNMET = 'WORKFLOW_PREREQUISITES_UNMET';
@@ -35,7 +37,9 @@ enum ErrorCode: string
             self::AUTH_TOKEN_EXPIRED,
             self::AUTH_UNAUTHORIZED => 401,
             self::RBAC_ROLE_DENIED,
+            self::RBAC_PERMISSION_DENIED,
             self::AUTH_ACCOUNT_INACTIVE => 403,
+            self::RBAC_LAST_ADMIN => 422,
             self::RESOURCE_NOT_FOUND => 404,
             self::RATE_LIMIT_EXCEEDED => 429,
             self::SERVER_ERROR => 500,
@@ -65,6 +69,8 @@ enum ErrorCode: string
             self::AUTH_EMAIL_ALREADY_VERIFIED => 'Email is already verified',
             self::AUTH_EMAIL_NOT_VERIFIED => 'Email is not verified',
             self::RBAC_ROLE_DENIED => 'User role not permitted',
+            self::RBAC_PERMISSION_DENIED => 'User does not have required permission',
+            self::RBAC_LAST_ADMIN => 'Cannot change role of the last admin user',
             self::RESOURCE_NOT_FOUND => 'Requested resource not found',
             self::WORKFLOW_INVALID_TRANSITION => 'Invalid state transition',
             self::WORKFLOW_PREREQUISITES_UNMET => 'Prerequisites not satisfied',

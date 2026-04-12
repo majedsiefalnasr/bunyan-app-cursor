@@ -41,8 +41,12 @@ class PhaseControllerTest extends TestCase
 
     public function test_create_phase_successfully()
     {
-        $user = User::factory()->create();
-        $project = Project::factory()->create(['customer_id' => $user->id]);
+        $customer = User::factory()->create();
+        $user = User::factory()->create(['role' => 'contractor']);
+        $project = Project::factory()->create([
+            'customer_id' => $customer->id,
+            'contractor_id' => $user->id,
+        ]);
 
         $response = $this->actingAs($user)
             ->postJson("/api/v1/projects/{$project->id}/phases", [
@@ -56,8 +60,12 @@ class PhaseControllerTest extends TestCase
 
     public function test_update_phase_successfully()
     {
-        $user = User::factory()->create();
-        $project = Project::factory()->create(['customer_id' => $user->id]);
+        $customer = User::factory()->create();
+        $user = User::factory()->create(['role' => 'contractor']);
+        $project = Project::factory()->create([
+            'customer_id' => $customer->id,
+            'contractor_id' => $user->id,
+        ]);
         $phase = Phase::factory()->create(['project_id' => $project->id]);
 
         $response = $this->actingAs($user)
@@ -71,8 +79,14 @@ class PhaseControllerTest extends TestCase
 
     public function test_delete_phase_successfully()
     {
-        $user = User::factory()->create();
-        $project = Project::factory()->create(['customer_id' => $user->id]);
+        $customer = User::factory()->create();
+        $contractor = User::factory()->create(['role' => 'contractor']);
+        $user = User::factory()->create(['role' => 'supervising_architect']);
+        $project = Project::factory()->create([
+            'customer_id' => $customer->id,
+            'contractor_id' => $contractor->id,
+            'supervising_architect_id' => $user->id,
+        ]);
         $phase = Phase::factory()->create(['project_id' => $project->id]);
 
         $response = $this->actingAs($user)

@@ -83,7 +83,15 @@ class TaskControllerTest extends TestCase
 
     public function test_delete_task_successfully()
     {
-        extract($this->contractorTaskFixture(), EXTR_SKIP);
+        $customer = User::factory()->create(['role' => 'customer']);
+        $contractor = User::factory()->create(['role' => 'contractor']);
+        $user = User::factory()->create(['role' => 'supervising_architect']);
+        $project = Project::factory()->create([
+            'customer_id' => $customer->id,
+            'contractor_id' => $contractor->id,
+            'supervising_architect_id' => $user->id,
+        ]);
+        $phase = Phase::factory()->create(['project_id' => $project->id]);
         $task = Task::factory()->create(['phase_id' => $phase->id]);
 
         $response = $this->actingAs($user)
