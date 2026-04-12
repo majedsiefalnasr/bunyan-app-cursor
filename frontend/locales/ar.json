@@ -211,7 +211,7 @@
         "team_role_manager": "مدير",
         "team_role_engineer": "مهندس",
         "team_role_worker": "عامل",
-        "team_role_viewer": "مشاهد"
+        "team_role_viewer": "مشاهد",
         "open_tasks": "المهام",
         "tasks_title": "مهام المشروع",
         "tasks_subtitle": "عرض لوحة كانبان حسب حالة المهمة."

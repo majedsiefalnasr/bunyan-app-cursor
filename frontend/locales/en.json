@@ -211,7 +211,7 @@
         "team_role_manager": "Manager",
         "team_role_engineer": "Engineer",
         "team_role_worker": "Worker",
-        "team_role_viewer": "Viewer"
+        "team_role_viewer": "Viewer",
         "open_tasks": "Tasks",
         "tasks_title": "Project tasks",
         "tasks_subtitle": "Kanban-style board grouped by task status."
