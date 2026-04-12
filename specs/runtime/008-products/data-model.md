@@ -35,7 +35,7 @@ Legacy `category` string retained for backward compatibility.
 
 ## Relationships
 
-- `Product` belongsTo `Category` (optional)
+- `Product` belongsTo `Category` via `catalogCategory()` (foreign `category_id`; avoids clashing with legacy `category` string column)
 - `Product` hasMany `ProductVariant`
 - `Product` hasMany `ProductMedia`
 - `Category` hasMany `Product`

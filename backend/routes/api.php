@@ -177,6 +177,8 @@ Route::prefix('v1')->group(function () {
             Route::post('products', [ProductController::class, 'store'])->name('admin.products.store');
             Route::put('products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
             Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+            Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])->name('admin.products.variants.store');
+            Route::post('products/{product}/media', [ProductController::class, 'storeMedia'])->name('admin.products.media.store');
 
             Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('admin.projects.destroy');
             Route::delete('reports/{report}', [ReportController::class, 'destroy'])->name('admin.reports.destroy');

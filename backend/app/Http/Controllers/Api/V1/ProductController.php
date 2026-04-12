@@ -3,29 +3,52 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\V1\CreateProductRequest;
+use App\Http\Requests\Api\V1\StoreProductMediaRequest;
+use App\Http\Requests\Api\V1\StoreProductVariantRequest;
 use App\Http\Requests\Api\V1\UpdateProductRequest;
+use App\Http\Resources\Api\V1\ProductMediaResource;
 use App\Http\Resources\Api\V1\ProductResource;
+use App\Http\Resources\Api\V1\ProductVariantResource;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProductController extends BaseController
 {
+    public function __construct(private ProductService $productService)
+    {
+    }
+
     public function index(Request $request): JsonResponse
     {
-        $query = Product::query();
+        $filters = [
+            'per_page' => $request->get('per_page'),
+        ];
 
-        if ($request->has('category')) {
-            $query->where('category', $request->category);
+        if ($request->filled('category')) {
+            $filters['category'] = $request->string('category')->toString();
+        }
+        if ($request->filled('category_id')) {
+            $filters['category_id'] = (int) $request->get('category_id');
+        }
+        if ($request->filled('supplier_id')) {
+            $filters['supplier_id'] = (int) $request->get('supplier_id');
+        }
+        if ($request->filled('min_price')) {
+            $filters['min_price'] = $request->get('min_price');
+        }
+        if ($request->filled('max_price')) {
+            $filters['max_price'] = $request->get('max_price');
+        }
+        if ($request->filled('search')) {
+            $filters['search'] = $request->string('search')->toString();
+        }
+        if ($request->boolean('in_stock')) {
+            $filters['in_stock'] = true;
         }
 
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%'.$request->search.'%')
-                ->orWhere('description', 'like', '%'.$request->search.'%');
-        }
-
-        $products = $query->paginate($request->per_page ?? 15);
+        $products = $this->productService->paginateCatalog($filters);
 
         return $this->sendSuccess(
             ProductResource::collection($products),
@@ -36,6 +59,8 @@ class ProductController extends BaseController
 
     public function show(Product $product): JsonResponse
     {
+        $product = $this->productService->loadDisplay($product);
+
         return $this->sendSuccess(
             new ProductResource($product),
             'تم جلب المنتج بنجاح',
@@ -47,18 +72,10 @@ class ProductController extends BaseController
     {
         $this->authorize('create', Product::class);
 
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'sku' => 'SKU-'.strtoupper(Str::random(10)),
-            'category' => $request->category,
-            'price' => $request->price,
-            'quantity_in_stock' => $request->quantity,
-            'supplier_id' => $request->validated('supplier_id'),
-        ]);
+        $product = $this->productService->create($request->validated());
 
         return $this->sendSuccess(
-            new ProductResource($product),
+            new ProductResource($this->productService->loadDisplay($product)),
             'تم إنشاء المنتج بنجاح',
             201
         );
@@ -68,15 +85,10 @@ class ProductController extends BaseController
     {
         $this->authorize('update', $product);
 
-        $data = $request->validated();
-        if (array_key_exists('quantity', $data)) {
-            $data['quantity_in_stock'] = $data['quantity'];
-            unset($data['quantity']);
-        }
-        $product->update($data);
+        $product = $this->productService->update($product, $request->validated());
 
         return $this->sendSuccess(
-            new ProductResource($product),
+            new ProductResource($this->productService->loadDisplay($product)),
             'تم تحديث المنتج بنجاح',
             200
         );
@@ -86,8 +98,34 @@ class ProductController extends BaseController
     {
         $this->authorize('delete', $product);
 
-        $product->delete();
+        $this->productService->delete($product);
 
         return $this->sendSuccess(null, 'تم حذف المنتج بنجاح', 200);
+    }
+
+    public function storeVariant(StoreProductVariantRequest $request, Product $product): JsonResponse
+    {
+        $this->authorize('update', $product);
+
+        $variant = $this->productService->addVariant($product, $request->validated());
+
+        return $this->sendSuccess(
+            new ProductVariantResource($variant),
+            'تم إنشاء المتغير بنجاح',
+            201
+        );
+    }
+
+    public function storeMedia(StoreProductMediaRequest $request, Product $product): JsonResponse
+    {
+        $this->authorize('update', $product);
+
+        $media = $this->productService->addMedia($product, $request->validated());
+
+        return $this->sendSuccess(
+            new ProductMediaResource($media),
+            'تمت إضافة الوسائط بنجاح',
+            201
+        );
     }
 }

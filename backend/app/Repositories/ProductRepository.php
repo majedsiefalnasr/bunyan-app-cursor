@@ -21,17 +21,42 @@ class ProductRepository extends BaseRepository
 
     public function allActive(array $filters = []): LengthAwarePaginator
     {
-        return $this->newQuery()
-            ->active()
-            ->when($filters['category'] ?? null, fn ($q, $category) => $q->byCategory($category))
-            ->when($filters['in_stock'] ?? null, fn ($q) => $q->inStock())
-            ->when(
-                $filters['search'] ?? null,
-                fn ($q, $search) => $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-            )
-            ->orderBy('name')
-            ->paginate((int) ($filters['per_page'] ?? 20));
+        $query = $this->newQuery()->active()->with('catalogCategory');
+
+        if ($filters['category_id'] ?? null) {
+            $query->where('category_id', (int) $filters['category_id']);
+        }
+
+        if ($filters['category'] ?? null) {
+            $query->byCategory((string) $filters['category']);
+        }
+
+        if ($filters['supplier_id'] ?? null) {
+            $query->where('supplier_id', (int) $filters['supplier_id']);
+        }
+
+        if ($filters['min_price'] ?? null) {
+            $query->where('price', '>=', (float) $filters['min_price']);
+        }
+
+        if ($filters['max_price'] ?? null) {
+            $query->where('price', '<=', (float) $filters['max_price']);
+        }
+
+        if ($filters['search'] ?? null) {
+            $search = (string) $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
+            });
+        }
+
+        if (! empty($filters['in_stock'])) {
+            $query->inStock();
+        }
+
+        return $query->orderBy('name')
+            ->paginate((int) ($filters['per_page'] ?? 15));
     }
 
     public function allByCategory(string $category, array $filters = []): Collection
