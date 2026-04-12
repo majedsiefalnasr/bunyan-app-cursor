@@ -2,6 +2,7 @@
     definePageMeta({
         layout: 'default',
         middleware: 'auth',
+        requiresAuth: true,
     });
 
     interface VariantRow {
@@ -42,8 +43,8 @@
     async function load() {
         isLoading.value = true;
         try {
-            const id = route.params.id;
-            const res = await apiFetch<{ data: ProductDetail }>(`/v1/products/${id}`);
+            const slug = route.params.slug as string;
+            const res = await apiFetch<{ data: ProductDetail }>(`/v1/products/${slug}`);
             product.value = res.data ?? null;
         } catch {
             product.value = null;
@@ -53,7 +54,7 @@
     }
 
     watch(
-        () => route.params.id,
+        () => route.params.slug,
         () => {
             void load();
         },

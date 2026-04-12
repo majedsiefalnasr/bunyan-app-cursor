@@ -1,15 +1,28 @@
 # STAGE_31 — Catalog Pages
 
 > **Phase:** 07_FRONTEND_APPLICATION
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** Product browsing, search, filtering, category pages
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
+Status: PRODUCTION READY
 Risk Level: MEDIUM
+Closure Date: 2026-04-12
+
+Scope Closed: Categories grid/detail (`/categories`, `/categories/:slug`); product listing with filters, debounced search, and pagination; product detail by id or SKU (`/products/:slug`); search page (`/search`); supplier profile product grid; admin category reorder aligned with slug API binding; Vitest for `useProductCatalogQuery`; Playwright auth gate for `/products`; navigation + i18n.
+
+Deferred Scope: Guest catalog without Sanctum; `UCommandPalette` wiring; dedicated product `slug` column migration.
+
+Architecture Governance Compliance:
+
+- ADR alignment: no new architectural layers; reuses v1 REST + Sanctum.
+- RBAC: catalog APIs unchanged; Nuxt `requiresAuth: true` on catalog pages.
+- Service layer: unchanged on backend for this slice.
+- Error contract: unchanged client `useApi` behavior.
+
+Notes: Stage is production ready per `specs/runtime/031-catalog-pages/`. Runtime artifacts: spec through closure reports completed.
 
 ## Objective
 

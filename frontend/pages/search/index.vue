@@ -23,6 +23,7 @@
         sku?: string | null;
     }
 
+    const route = useRoute();
     const { apiFetch } = useApi();
 
     const filters = ref<ProductCatalogFilters>(defaultProductCatalogFilters());
@@ -72,6 +73,16 @@
         void loadProducts();
     }
 
+    function onPageChange(p: number) {
+        filters.value.page = p;
+        void loadProducts();
+    }
+
+    function syncQueryFromRoute() {
+        filters.value.search = String(route.query.q ?? '').trim();
+        filters.value.page = 1;
+    }
+
     watchDebounced(
         () => filters.value.search,
         () => {
@@ -81,12 +92,16 @@
         { debounce: 350 }
     );
 
-    function onPageChange(p: number) {
-        filters.value.page = p;
-        void loadProducts();
-    }
+    watch(
+        () => route.query.q,
+        () => {
+            syncQueryFromRoute();
+            void loadProducts();
+        }
+    );
 
     onMounted(async () => {
+        syncQueryFromRoute();
         await loadCategories();
         await loadProducts();
     });
@@ -99,10 +114,10 @@
                 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
                 style="letter-spacing: -0.06em"
             >
-                {{ $t('catalog.list_title') }}
+                {{ $t('search.page_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">
-                {{ $t('catalog.list_subtitle') }}
+                {{ $t('search.page_subtitle') }}
             </p>
         </div>
 

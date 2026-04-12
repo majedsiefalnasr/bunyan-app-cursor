@@ -18,6 +18,21 @@
         parent_id: null as number | null,
     });
 
+    function findSlugById(nodes: CategoryNode[], id: number): string | null {
+        for (const n of nodes) {
+            if (n.id === id) {
+                return n.slug;
+            }
+            if (n.children?.length) {
+                const found = findSlugById(n.children, id);
+                if (found) {
+                    return found;
+                }
+            }
+        }
+        return null;
+    }
+
     async function fetchTree() {
         isLoading.value = true;
         try {
@@ -38,7 +53,16 @@
 
     async function onReorder(payload: { id: number; parentId: number | null; newIndex: number }) {
         try {
-            await apiFetch(`/v1/categories/${payload.id}/reorder`, {
+            const slug = findSlugById(tree.value, payload.id);
+            if (!slug) {
+                toast.add({
+                    title: 'خطأ',
+                    description: 'تعذر العثور على التصنيف',
+                    color: 'red',
+                });
+                return;
+            }
+            await apiFetch(`/v1/categories/${slug}/reorder`, {
                 method: 'PUT',
                 body: { sort_order: payload.newIndex },
             });

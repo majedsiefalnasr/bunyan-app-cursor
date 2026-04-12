@@ -12,6 +12,7 @@
         "reports": "التقارير",
         "services": "الخدمات",
         "products": "المنتجات",
+        "categories": "التصنيفات",
         "suppliers": "الموردون",
         "contact": "اتصل بنا",
         "admin": "الإدارة"
@@ -154,7 +155,25 @@
         "tier_max_open": "اتركه فارغاً لنطاق مفتوح",
         "tier_variant_null": "فارغ = المنتج الأساسي",
         "tier_add": "إضافة شريحة",
-        "tier_save": "حفظ"
+        "tier_save": "حفظ",
+        "filters_title": "تصفية النتائج",
+        "filter_category": "التصنيف",
+        "filter_min_price": "أقل سعر",
+        "filter_max_price": "أعلى سعر",
+        "filter_in_stock": "متوفر فقط",
+        "filter_apply": "تطبيق",
+        "filter_reset": "إعادة ضبط"
+    },
+    "categories": {
+        "list_title": "تصنيفات المواد",
+        "list_subtitle": "اختر تصنيفاً لتصفح المنتجات المرتبطة.",
+        "empty": "لا توجد تصنيفات للعرض.",
+        "back_grid": "العودة للتصنيفات",
+        "not_found": "التصنيف غير موجود."
+    },
+    "search": {
+        "page_title": "نتائج البحث",
+        "page_subtitle": "تصفح المنتجات المطابقة لعبارة البحث."
     },
     "suppliers": {
         "directory_title": "دليل الموردين",

@@ -38,6 +38,18 @@ class ProductControllerTest extends TestCase
             ->assertJsonPath('data.id', $product->id);
     }
 
+    public function test_show_product_resolves_by_sku(): void
+    {
+        $product = Product::factory()->create(['sku' => 'SKU-CATALOG-ROUTE']);
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->getJson('/api/v1/products/SKU-CATALOG-ROUTE')
+            ->assertOk()
+            ->assertJsonPath('data.id', $product->id)
+            ->assertJsonPath('data.sku', 'SKU-CATALOG-ROUTE');
+    }
+
     public function test_create_product_by_admin()
     {
         $admin = User::factory()->create(['role' => 'admin']);
