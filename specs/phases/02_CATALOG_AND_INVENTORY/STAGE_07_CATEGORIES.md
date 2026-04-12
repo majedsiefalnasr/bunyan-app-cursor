@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T14:08:00Z
+Last Updated: 2026-04-12T14:12:00Z
 
-Scope Defined: Hierarchical categories API, admin UI, seed data; product FK deferred; authenticated list; admin `include_inactive`; guarded delete.
+Scope Planned: Migration, model, repository, service, policy, requests, resource, routes, seeder, PHPUnit, Nuxt admin + components.
 
-Deferred Scope: `products.category_id` (STAGE_08).
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
