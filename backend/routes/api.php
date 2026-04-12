@@ -16,9 +16,11 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
+use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\TaskWorkspaceController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -124,6 +126,8 @@ Route::prefix('v1')->group(function () {
             Route::get('projects/{project}/phases/{phase}', [PhaseController::class, 'show'])->name('projects.phases.show');
             Route::get('projects/{project}/phases/{phase}/tasks', [TaskController::class, 'index'])->name('projects.phases.tasks.index');
             Route::get('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'show'])->name('projects.phases.tasks.show');
+            Route::get('projects/{project}/tasks', [ProjectTaskController::class, 'index'])->name('projects.tasks.index');
+            Route::get('tasks/{task}', [TaskWorkspaceController::class, 'show'])->name('tasks.show');
         });
 
         // Reports (read — roles with report.view)
@@ -169,6 +173,14 @@ Route::prefix('v1')->group(function () {
             Route::put('projects/{project}/phases/{phase}', [PhaseController::class, 'update'])->name('projects.phases.update');
             Route::post('projects/{project}/phases/{phase}/tasks', [TaskController::class, 'store'])->name('projects.phases.tasks.store');
             Route::put('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'update'])->name('projects.phases.tasks.update');
+        });
+
+        Route::middleware('role:contractor,supervising_architect,admin')->group(function () {
+            Route::post('projects/{project}/tasks', [ProjectTaskController::class, 'store'])->name('projects.tasks.store');
+            Route::put('tasks/{task}', [TaskWorkspaceController::class, 'update'])->name('tasks.update');
+            Route::put('tasks/{task}/assign', [TaskWorkspaceController::class, 'assign'])->name('tasks.assign');
+            Route::put('tasks/{task}/status', [TaskWorkspaceController::class, 'transitionStatus'])->name('tasks.status');
+            Route::post('tasks/{task}/comments', [TaskWorkspaceController::class, 'storeComment'])->name('tasks.comments.store');
         });
 
         // Supervising Architect routes

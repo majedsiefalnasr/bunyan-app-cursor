@@ -16,12 +16,35 @@ class TaskRepository extends BaseRepository
 
     public function findById(int $id): ?Model
     {
-        return $this->newQuery()->with(['phase', 'assignee', 'reports'])->find($id);
+        return $this->newQuery()->with(['phase', 'phase.project', 'project', 'assignee', 'reports'])->find($id);
     }
 
     public function findByIdOrFail(int $id): Model
     {
-        return $this->newQuery()->with(['phase', 'assignee', 'reports'])->findOrFail($id);
+        return $this->newQuery()->with(['phase', 'phase.project', 'project', 'assignee', 'reports'])->findOrFail($id);
+    }
+
+    public function paginateForProject(int $projectId, array $filters = []): LengthAwarePaginator
+    {
+        return $this->newQuery()
+            ->where('project_id', $projectId)
+            ->with(['phase', 'assignee'])
+            ->when($filters['phase_id'] ?? null, fn ($q, $phaseId) => $q->where('phase_id', $phaseId))
+            ->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status))
+            ->when($filters['priority'] ?? null, fn ($q, $priority) => $q->where('priority', $priority))
+            ->when($filters['assigned_to'] ?? null, fn ($q, $userId) => $q->where('assigned_to', $userId))
+            ->orderByDesc('sort_order')
+            ->orderByDesc('created_at')
+            ->paginate((int) ($filters['per_page'] ?? 15));
+    }
+
+    public function findForProjectOrFail(int $taskId, int $projectId): Model
+    {
+        return $this->newQuery()
+            ->whereKey($taskId)
+            ->where('project_id', $projectId)
+            ->with(['phase', 'project', 'assignee', 'comments.user'])
+            ->firstOrFail();
     }
 
     public function allByPhase(int $phaseId, array $filters = []): LengthAwarePaginator

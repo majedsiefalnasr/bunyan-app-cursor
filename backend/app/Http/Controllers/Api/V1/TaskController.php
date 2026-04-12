@@ -8,11 +8,16 @@ use App\Http\Resources\Api\V1\TaskResource;
 use App\Models\Phase;
 use App\Models\Project;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends BaseController
 {
+    public function __construct(private TaskService $taskService)
+    {
+    }
+
     public function index(Project $project, Phase $phase, Request $request): JsonResponse
     {
         if ($phase->project_id !== $project->id) {
@@ -35,7 +40,7 @@ class TaskController extends BaseController
         }
 
         return $this->sendSuccess(
-            new TaskResource($task),
+            new TaskResource($task->load(['assignee', 'phase', 'project', 'comments.user'])),
             'تم جلب المهمة بنجاح',
             200
         );
@@ -49,19 +54,10 @@ class TaskController extends BaseController
 
         $this->authorize('create', [Task::class, $phase]);
 
-        $task = Task::create([
-            'phase_id' => $phase->id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => 'pending',
-            'budget' => $request->budget,
-            'assigned_to' => $request->assigned_to,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-        ]);
+        $task = $this->taskService->createForPhase($phase, $request->user(), $request->validated());
 
         return $this->sendSuccess(
-            new TaskResource($task),
+            new TaskResource($task->load(['assignee', 'phase', 'comments.user'])),
             'تم إنشاء المهمة بنجاح',
             201
         );
@@ -75,7 +71,7 @@ class TaskController extends BaseController
 
         $this->authorize('update', $task);
 
-        $task->update($request->validated());
+        $task = $this->taskService->updateTask($task, $request->validated());
 
         return $this->sendSuccess(
             new TaskResource($task),
