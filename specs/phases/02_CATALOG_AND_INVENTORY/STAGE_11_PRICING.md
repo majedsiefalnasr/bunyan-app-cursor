@@ -1,15 +1,27 @@
 # STAGE_11 — Pricing
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** NOT STARTED
+> **Status:** DRAFT
 > **Scope:** Pricing rules, bulk pricing tiers, currency handling
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: DRAFT
+Step: pre_step
+Risk Level: UNKNOWN
+Initiated: 2026-04-12T17:05:00Z
+
+Scope Open:
+
+- Specification pending
+
+Architecture Governance Compliance:
+
+- Pending governance audit
+
+Notes:
+Stage initialized. Specification in progress.
 
 ## Objective
 
