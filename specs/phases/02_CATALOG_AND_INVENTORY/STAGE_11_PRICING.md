@@ -8,21 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T17:12:00Z
+Last Updated: 2026-04-12T17:15:00Z
 
-Scope Defined:
+Scope Planned:
 
-- Price tiers, calculate API, SAR formatting, price history on base price change, admin UI; admin write path; variant fallback pricing
+- Migrations, models, repositories, `PricingService`, three endpoints, `ProductService` history hook, admin + product pages
 
-Deferred Scope:
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-- Supplier-owned tier editing, discount engine, non-SAR currencies
-
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
