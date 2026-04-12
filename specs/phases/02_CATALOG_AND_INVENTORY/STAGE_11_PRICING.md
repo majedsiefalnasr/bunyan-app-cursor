@@ -8,21 +8,21 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T17:10:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T17:12:00Z
 
 Scope Defined:
 
-- Price tiers, calculate API, SAR formatting, price history on base price change, admin UI
+- Price tiers, calculate API, SAR formatting, price history on base price change, admin UI; admin write path; variant fallback pricing
 
 Deferred Scope:
 
 - Supplier-owned tier editing, discount engine, non-SAR currencies
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
