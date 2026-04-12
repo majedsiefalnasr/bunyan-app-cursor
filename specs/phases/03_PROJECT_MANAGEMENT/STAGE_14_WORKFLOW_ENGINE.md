@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: HIGH
-Last Updated: 2026-04-12T15:45:00Z
+Step: clarify
+Risk Level: MEDIUM
+Last Updated: 2026-04-12T15:50:00Z
 
-Scope Defined: Workflow definitions API, instances/approvals, project start, pending list, admin UI
+Scope Defined: Workflow definitions API, instances/approvals, project start, pending list, admin UI; definitions map to workflow_configurations
 
-Deferred Scope: Notifications, escalation jobs, designer UI
+Deferred Scope: Notifications, escalation jobs, designer UI, sort_order on rules
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: Ready for technical planning.
 
 ## Objective
 
