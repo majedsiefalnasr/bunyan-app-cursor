@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\UserRole;
 use App\Models\Product;
+use App\Models\SupplierProfile;
 use App\Models\User;
 
 class ProductPolicy
@@ -41,5 +42,23 @@ class ProductPolicy
     public function forceDelete(User $user, Product $product): bool
     {
         return $user->role === UserRole::Admin;
+    }
+
+    public function manageInventory(User $user, Product $product): bool
+    {
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        if ($user->role !== UserRole::Contractor) {
+            return false;
+        }
+
+        $profile = SupplierProfile::query()->where('user_id', $user->id)->first();
+        if ($profile === null || $product->supplier_id === null) {
+            return false;
+        }
+
+        return (int) $product->supplier_id === (int) $profile->id;
     }
 }

@@ -79,4 +79,12 @@ class ProductRepository extends BaseRepository
             ->orderBy('name')
             ->get();
     }
+
+    public function adjustQuantityInStock(int $productId, int $delta): void
+    {
+        /** @var Product $product */
+        $product = $this->newQuery()->whereKey($productId)->firstOrFail();
+        $new = max(0, (int) $product->quantity_in_stock + $delta);
+        $this->newQuery()->whereKey($productId)->update(['quantity_in_stock' => $new]);
+    }
 }

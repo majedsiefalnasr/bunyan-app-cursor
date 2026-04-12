@@ -66,6 +66,11 @@ class Product extends BaseModel
         return $this->belongsTo(SupplierProfile::class, 'supplier_id');
     }
 
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(Inventory::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true);

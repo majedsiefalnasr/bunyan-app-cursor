@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('media:prune-temporary')->hourly();
+Schedule::command('inventory:check-low-stock')->daily();
