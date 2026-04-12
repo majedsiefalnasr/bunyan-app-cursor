@@ -19,6 +19,10 @@ class ProjectPolicy
             return true;
         }
 
+        if ($project->members()->where('user_id', $user->id)->exists()) {
+            return true;
+        }
+
         if ($user->role === UserRole::FieldEngineer) {
             return $project->reports()->where('created_by', $user->id)->exists();
         }
@@ -50,6 +54,17 @@ class ProjectPolicy
         }
 
         return $project->customer_id === $user->id;
+    }
+
+    public function manageTeam(User $user, Project $project): bool
+    {
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        return $project->customer_id === $user->id
+            || $project->contractor_id === $user->id
+            || $project->supervising_architect_id === $user->id;
     }
 
     public function transitionStatus(User $user, Project $project): bool

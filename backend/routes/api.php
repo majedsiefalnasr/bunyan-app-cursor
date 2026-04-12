@@ -16,7 +16,9 @@ use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\ProjectDocumentController;
+use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
 use App\Http\Controllers\Api\V1\ProjectTaskController;
+use App\Http\Controllers\Api\V1\ProjectTeamController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
@@ -99,6 +101,17 @@ Route::prefix('v1')->group(function () {
         Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
         Route::get('projects/{project}/timeline', [ProjectController::class, 'timeline'])->name('projects.timeline');
+        Route::get('projects/{project}/team', [ProjectTeamController::class, 'index'])->name('projects.team.index');
+
+        Route::middleware('throttle:30,1')->post('invitations/{token}/accept', [ProjectInvitationAcceptController::class, 'accept'])
+            ->where('token', '[A-Za-z0-9]+')
+            ->name('invitations.accept');
+
+        Route::middleware('role:customer,contractor,supervising_architect,admin')->group(function () {
+            Route::post('projects/{project}/team', [ProjectTeamController::class, 'store'])->name('projects.team.store');
+            Route::put('projects/{project}/team/{user}', [ProjectTeamController::class, 'update'])->name('projects.team.update');
+            Route::delete('projects/{project}/team/{user}', [ProjectTeamController::class, 'destroy'])->name('projects.team.destroy');
+        });
 
         Route::middleware('throttle:120,1')->get('{entity}/{id}/activity', [ActivityLogController::class, 'forSubject'])
             ->whereNumber('id')

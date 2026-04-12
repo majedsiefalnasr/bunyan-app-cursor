@@ -131,4 +131,21 @@ class DatabaseSchemaTest extends TestCase
             'ip_address', 'user_agent', 'created_at',
         ]));
     }
+
+    public function test_project_members_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasTable('project_members'));
+        $this->assertTrue(Schema::hasColumns('project_members', [
+            'id', 'project_id', 'user_id', 'project_role', 'joined_at', 'created_at', 'updated_at',
+        ]));
+    }
+
+    public function test_project_invitations_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasTable('project_invitations'));
+        $this->assertTrue(Schema::hasColumns('project_invitations', [
+            'id', 'project_id', 'email', 'project_role', 'token_hash', 'invited_by',
+            'accepted_at', 'expires_at', 'created_at', 'updated_at',
+        ]));
+    }
 }
