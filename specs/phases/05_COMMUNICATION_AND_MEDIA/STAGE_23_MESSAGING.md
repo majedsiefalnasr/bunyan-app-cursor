@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T14:08:00Z
+Last Updated: 2026-04-12T14:12:00Z
 
-Scope Defined: Conversations, participants, messages, read receipts, attachments, broadcasting, REST API, Nuxt inbox/thread, rate limits on writes.
+Scope Planned: Migrations, repositories, services, policies, controllers, broadcasting, feature tests, Nuxt pages.
 
-Deferred Scope: Push notifications, typing indicators, message edit.
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
