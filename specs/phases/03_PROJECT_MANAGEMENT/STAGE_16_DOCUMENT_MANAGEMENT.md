@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T18:45:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T19:00:00Z
 
-Scope Defined: Project documents API, versioning, policies, Nuxt project documents page
+Scope Defined: Project documents API, versioning, policies, Nuxt project documents page, optional `document_id` uploads
 
 Deferred Scope: OCR, virus scan, public sharing
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
