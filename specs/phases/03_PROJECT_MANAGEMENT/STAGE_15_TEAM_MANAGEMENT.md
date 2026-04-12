@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T15:30:00Z
+Last Updated: 2026-04-12T15:35:00Z
 
-Scope Open:
+Scope Defined: Project members, invitations, team API, policies, Nuxt team panel, activity logging
 
-- Specification pending
+Deferred Scope: SMTP for invitation emails
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
