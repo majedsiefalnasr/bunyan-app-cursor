@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Models\User;
+use App\Repositories\ProjectMemberRepository;
 use App\Repositories\ProjectRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -12,8 +13,10 @@ use Illuminate\Validation\ValidationException;
 
 class ProjectService
 {
-    public function __construct(private ProjectRepository $projects)
-    {
+    public function __construct(
+        private ProjectRepository $projects,
+        private ProjectMemberRepository $projectMembers,
+    ) {
     }
 
     public function paginateForUser(User $user, int $perPage, ?string $status): LengthAwarePaginator
@@ -49,8 +52,11 @@ class ProjectService
             'end_date' => $data['end_date'] ?? null,
         ];
 
-        /** @var Project */
-        return $this->projects->create($payload);
+        /** @var Project $project */
+        $project = $this->projects->create($payload);
+        $this->projectMembers->ensureOwnerMembership($project);
+
+        return $project;
     }
 
     public function updateProject(Project $project, array $data): Project
