@@ -2,10 +2,10 @@
     definePageMeta({
         layout: 'default',
         middleware: 'auth',
+        requiresAuth: true,
     });
 
     const { t } = useI18n();
-    const localePath = useLocalePath();
     const route = useRoute();
     const { apiFetch } = useApi();
     const auth = useAuthStore();
@@ -173,15 +173,6 @@
 
 <template>
     <div class="mx-auto max-w-4xl space-y-6">
-        <div class="flex flex-wrap gap-2">
-            <UButton :to="localePath('/projects')" variant="soft" color="gray">
-                {{ $t('projects.back_to_list') }}
-            </UButton>
-            <UButton :to="localePath(`/projects/${route.params.id}`)" variant="soft" color="gray">
-                {{ $t('projects.open_overview') }}
-            </UButton>
-        </div>
-
         <div>
             <h1
                 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"

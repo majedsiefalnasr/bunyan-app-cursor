@@ -2,6 +2,7 @@
     definePageMeta({
         layout: 'default',
         middleware: 'auth',
+        requiresAuth: true,
     });
 
     const localePath = useLocalePath();
@@ -45,7 +46,7 @@
                     {{ $t('projects.list_subtitle') }}
                 </p>
             </div>
-            <UButton :to="localePath('/projects/new')" color="primary" variant="solid">
+            <UButton :to="localePath('/projects/create')" color="primary" variant="solid">
                 {{ $t('projects.new_title') }}
             </UButton>
         </div>
@@ -68,7 +69,9 @@
                     <h2 class="text-lg font-semibold text-[#171717] dark:text-white">
                         {{ p.name }}
                     </h2>
-                    <UBadge color="gray" variant="soft">{{ p.status }}</UBadge>
+                    <UBadge :color="projectStatusBadgeColor(p.status)" variant="soft">{{
+                        p.status
+                    }}</UBadge>
                     <UButton :to="localePath(`/projects/${p.id}`)" variant="soft" color="gray">
                         {{ $t('projects.detail_title') }}
                     </UButton>
