@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T19:50:56Z
+Last Updated: 2026-04-12T20:05:00Z
 
-Scope Open:
+Scope Defined: Categories grid/detail, product list filters + pagination, search page, product detail by id/SKU, supplier directory polish, Vitest + Playwright coverage.
 
-- Specification pending
+Deferred Scope: Guest catalog, command palette wiring, dedicated product slug column.
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
