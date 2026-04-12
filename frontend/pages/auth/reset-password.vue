@@ -8,7 +8,7 @@
     });
 
     const route = useRoute();
-    const { apiFetch } = useApi();
+    const authApi = useAuthApi();
     const localePath = useLocalePath();
 
     const schema = resetPasswordSchema;
@@ -32,14 +32,11 @@
         error.value = null;
 
         try {
-            await apiFetch('/v1/auth/reset-password', {
-                method: 'POST',
-                body: {
-                    token: token.value,
-                    email: email.value,
-                    password: event.data.password,
-                    password_confirmation: event.data.password_confirmation,
-                },
+            await authApi.resetPassword({
+                token: token.value,
+                email: email.value,
+                password: event.data.password,
+                password_confirmation: event.data.password_confirmation,
             });
             success.value = true;
             setTimeout(() => {

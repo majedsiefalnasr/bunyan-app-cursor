@@ -3,7 +3,7 @@
         layout: 'auth',
     });
 
-    const { apiFetch } = useApi();
+    const authApi = useAuthApi();
     const { user, isEmailVerified } = useAuth();
     const localePath = useLocalePath();
 
@@ -21,7 +21,7 @@
         error.value = null;
 
         try {
-            await apiFetch('/v1/auth/email/resend', { method: 'POST' });
+            await authApi.resendEmailVerification();
             success.value = true;
             cooldown.value = 60;
 

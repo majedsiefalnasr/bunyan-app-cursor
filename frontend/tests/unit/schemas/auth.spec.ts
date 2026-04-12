@@ -5,6 +5,9 @@ import {
     loginSchema,
     profileUpdateSchema,
     registerSchema,
+    registerWizardAccountSchema,
+    registerWizardCredentialsSchema,
+    registerWizardPersonalSchema,
     resetPasswordSchema,
 } from '~/schemas/auth';
 
@@ -58,5 +61,45 @@ describe('auth schemas', () => {
     it('profileUpdateSchema accepts name and optional phone', () => {
         const r = profileUpdateSchema.safeParse({ name: 'Name', phone: '' });
         expect(r.success).toBe(true);
+    });
+
+    it('registerWizardAccountSchema requires customer or contractor', () => {
+        expect(registerWizardAccountSchema.safeParse({ accountType: null }).success).toBe(false);
+        expect(registerWizardAccountSchema.safeParse({ accountType: 'customer' }).success).toBe(
+            true
+        );
+    });
+
+    it('registerWizardPersonalSchema validates name and email', () => {
+        expect(registerWizardPersonalSchema.safeParse({ name: '', email: 'bad' }).success).toBe(
+            false
+        );
+        expect(
+            registerWizardPersonalSchema.safeParse({ name: 'User', email: 'u@example.com' }).success
+        ).toBe(true);
+    });
+
+    it('registerWizardCredentialsSchema merges phone and password rules', () => {
+        expect(
+            registerWizardCredentialsSchema.safeParse({
+                phone: '',
+                password: 'short',
+                password_confirmation: 'short',
+            }).success
+        ).toBe(false);
+        expect(
+            registerWizardCredentialsSchema.safeParse({
+                phone: '',
+                password: 'password1',
+                password_confirmation: 'password2',
+            }).success
+        ).toBe(false);
+        expect(
+            registerWizardCredentialsSchema.safeParse({
+                phone: '',
+                password: 'password1',
+                password_confirmation: 'password1',
+            }).success
+        ).toBe(true);
     });
 });

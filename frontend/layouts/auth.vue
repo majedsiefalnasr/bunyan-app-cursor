@@ -1,20 +1,27 @@
+<script setup lang="ts">
+    const localePath = useLocalePath();
+</script>
+
 <template>
-    <div
-        class="flex min-h-screen flex-col items-center justify-center bg-[#fafafa] px-4 dark:bg-[#0a0a0a]"
-    >
-        <div class="mb-8 text-center">
+    <AuthLayout>
+        <template #brand>
             <NuxtLink
-                to="/"
+                :to="localePath('/')"
                 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
             >
                 {{ $t('app.name') }}
             </NuxtLink>
-        </div>
-        <UCard class="w-full max-w-md">
+        </template>
+
+        <UCard
+            class="w-full max-w-md shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+            :ui="{ body: { padding: 'p-6 sm:p-8' } }"
+        >
             <slot />
         </UCard>
-        <div class="mt-6 text-center text-sm text-[#666666]">
+
+        <template #footer>
             <p>{{ $t('app.name') }} &copy; {{ new Date().getFullYear() }}</p>
-        </div>
-    </div>
+        </template>
+    </AuthLayout>
 </template>

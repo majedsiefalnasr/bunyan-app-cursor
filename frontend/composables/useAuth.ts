@@ -17,9 +17,14 @@ export function useAuth() {
         return result;
     }
 
-    async function register(payload: RegisterPayload) {
+    async function register(
+        payload: RegisterPayload,
+        options?: { skipPostRegisterNavigation?: boolean }
+    ) {
         const result = await store.register(payload);
-        await navigateTo(localePath('/auth/verify-email'));
+        if (!options?.skipPostRegisterNavigation) {
+            await navigateTo(localePath('/auth/verify-email'));
+        }
         return result;
     }
 

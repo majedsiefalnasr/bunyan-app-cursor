@@ -20,6 +20,42 @@ export const registerSchema = z
         path: ['password_confirmation'],
     });
 
+/** Multi-step wizard — step 0 (UI only; API assigns role today) */
+export const registerWizardAccountSchema = z.object({
+    accountType: z.enum(['customer', 'contractor']),
+});
+
+export const registerWizardPersonalSchema = z.object({
+    name: z.string().min(1, 'الاسم مطلوب').max(255),
+    email: z.string().email('البريد الإلكتروني غير صحيح'),
+});
+
+export const registerWizardContactSchema = z.object({
+    phone: z.string().max(20).optional().or(z.literal('')),
+});
+
+export const registerWizardPasswordSchema = z
+    .object({
+        password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
+        password_confirmation: z.string().min(8, 'تأكيد كلمة المرور مطلوب'),
+    })
+    .refine((data) => data.password === data.password_confirmation, {
+        message: 'كلمتا المرور غير متطابقتين',
+        path: ['password_confirmation'],
+    });
+
+/** Wizard step 3 — contact + password (before API submit) */
+export const registerWizardCredentialsSchema = z
+    .object({
+        phone: z.string().max(20).optional().or(z.literal('')),
+        password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
+        password_confirmation: z.string().min(8, 'تأكيد كلمة المرور مطلوب'),
+    })
+    .refine((data) => data.password === data.password_confirmation, {
+        message: 'كلمتا المرور غير متطابقتين',
+        path: ['password_confirmation'],
+    });
+
 export const forgotPasswordSchema = z.object({
     email: z.string().email('البريد الإلكتروني غير صحيح'),
 });
@@ -45,3 +81,8 @@ export type RegisterFormValues = z.infer<typeof registerSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 export type ProfileUpdateFormValues = z.infer<typeof profileUpdateSchema>;
+export type RegisterWizardAccount = z.infer<typeof registerWizardAccountSchema>;
+export type RegisterWizardPersonal = z.infer<typeof registerWizardPersonalSchema>;
+export type RegisterWizardContact = z.infer<typeof registerWizardContactSchema>;
+export type RegisterWizardPassword = z.infer<typeof registerWizardPasswordSchema>;
+export type RegisterWizardCredentials = z.infer<typeof registerWizardCredentialsSchema>;

@@ -1,14 +1,8 @@
 import { useCookie } from '#app';
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useApi } from '~/composables/useApi';
-import type {
-    AuthResponse,
-    LoginPayload,
-    RegisterPayload,
-    UserProfile,
-    UserRole,
-} from '~/types/auth';
+import { useAuthApi } from '~/composables/useAuthApi';
+import type { LoginPayload, RegisterPayload, UserProfile, UserRole } from '~/types/auth';
 
 export const useAuthStore = defineStore('auth', () => {
     const tokenCookie = useCookie<string | null>('auth_token', {
@@ -35,48 +29,30 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = profile;
     }
 
-    async function login(payload: LoginPayload): Promise<AuthResponse> {
-        const { apiFetch } = useApi();
-        const response = await apiFetch<{ success: boolean; data: AuthResponse }>(
-            '/v1/auth/login',
-            {
-                method: 'POST',
-                body: payload,
-            }
-        );
-
-        token.value = response.data.token;
-        user.value = response.data.user;
-
-        return response.data;
+    async function login(payload: LoginPayload) {
+        const authApi = useAuthApi();
+        const data = await authApi.login(payload);
+        token.value = data.token;
+        user.value = data.user;
+        return data;
     }
 
-    async function register(payload: RegisterPayload): Promise<AuthResponse> {
-        const { apiFetch } = useApi();
-        const response = await apiFetch<{ success: boolean; data: AuthResponse }>(
-            '/v1/auth/register',
-            {
-                method: 'POST',
-                body: payload,
-            }
-        );
-
-        token.value = response.data.token;
-        user.value = response.data.user;
-
-        return response.data;
+    async function register(payload: RegisterPayload) {
+        const authApi = useAuthApi();
+        const data = await authApi.register(payload);
+        token.value = data.token;
+        user.value = data.user;
+        return data;
     }
 
     async function fetchUser(): Promise<UserProfile | null> {
         if (!token.value) return null;
 
         try {
-            const { apiFetch } = useApi();
-            const response = await apiFetch<{ success: boolean; data: UserProfile }>(
-                '/v1/auth/profile'
-            );
-            user.value = response.data;
-            return response.data;
+            const authApi = useAuthApi();
+            const profile = await authApi.getProfile();
+            user.value = profile;
+            return profile;
         } catch {
             return null;
         }
@@ -86,23 +62,17 @@ export const useAuthStore = defineStore('auth', () => {
         name?: string;
         phone?: string | null;
     }): Promise<UserProfile> {
-        const { apiFetch } = useApi();
-        const response = await apiFetch<{ success: boolean; data: UserProfile }>(
-            '/v1/auth/profile',
-            {
-                method: 'PUT',
-                body: payload,
-            }
-        );
-        user.value = response.data;
-        return response.data;
+        const authApi = useAuthApi();
+        const profile = await authApi.updateProfile(payload);
+        user.value = profile;
+        return profile;
     }
 
     async function logout(): Promise<void> {
         if (token.value) {
             try {
-                const { apiFetch } = useApi();
-                await apiFetch('/v1/auth/logout', { method: 'POST' });
+                const authApi = useAuthApi();
+                await authApi.logout();
             } catch {
                 // Clear state regardless of API errors
             }

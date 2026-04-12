@@ -7,7 +7,7 @@
         layout: 'auth',
     });
 
-    const { apiFetch } = useApi();
+    const authApi = useAuthApi();
     const localePath = useLocalePath();
 
     const schema = forgotPasswordSchema;
@@ -27,10 +27,7 @@
         error.value = null;
 
         try {
-            await apiFetch('/v1/auth/forgot-password', {
-                method: 'POST',
-                body: { email: event.data.email },
-            });
+            await authApi.forgotPassword(event.data.email);
             success.value = true;
         } catch (e: unknown) {
             const err = e as { data?: { error?: { message?: string } } };

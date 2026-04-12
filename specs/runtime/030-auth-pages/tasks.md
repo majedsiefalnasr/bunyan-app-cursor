@@ -19,11 +19,11 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 ### Core Infrastructure & Components
 
 - [ ] T001 [F][C] Setup Pinia stores → `frontend/stores/auth.ts`, `frontend/stores/user.ts`; Acceptance: useAuthStore exports login/logout/register/fetchUser actions, isAuthenticated computed property; useUserStore exports fetchProfile/updateProfile actions
-- [ ] T002 [F][C] Create useAuthApi composable → `frontend/composables/useAuthApi.ts`; Acceptance: All 7 API methods (login, register, forgotPassword, resetPassword, verifyEmail, getProfile, updateProfile) implemented with error handling, token attachment
+- [x] T002 [F][C] Create useAuthApi composable → `frontend/composables/useAuthApi.ts`; Acceptance: All 7 API methods (login, register, forgotPassword, resetPassword, verifyEmail, getProfile, updateProfile) implemented with error handling, token attachment
 - [x] T003 [F][C] Generate Zod schemas with Arabic → `frontend/schemas/auth.ts`; Acceptance: 6 schemas (login, registerStep1/2/3, resetPassword, profile) with Arabic error messages, all validation rules defined
 - [x] T004 [F][C] Create auth middleware → `frontend/middleware/auth.ts`; Acceptance: Protects /profile route, redirects unauthenticated users to /auth/login, preserves attempted URL
-- [ ] T005 [F][C] Setup i18n locale files → `frontend/locales/ar.json`, `frontend/locales/en.json`; Acceptance: All auth UI strings translated to Arabic/English, includes error messages, form labels
-- [ ] T006 [F] Create AuthLayout RTL wrapper → `frontend/components/auth/AuthLayout.vue`; Acceptance: dir="rtl" support, full viewport height, responsive padding (16px mobile, 0 desktop), centers content, shadow-as-border styling
+- [x] T005 [F][C] Setup i18n locale files → `frontend/locales/ar.json`, `frontend/locales/en.json`; Acceptance: All auth UI strings translated to Arabic/English, includes error messages, form labels
+- [x] T006 [F] Create AuthLayout RTL wrapper → `frontend/components/auth/AuthLayout.vue`; Acceptance: dir="rtl" support, full viewport height, responsive padding (16px mobile, 0 desktop), centers content, shadow-as-border styling
 - [x] T007 [F]→T006 Create AuthCard wrapper → `frontend/components/auth/AuthCard.vue`; Acceptance: UCard with title/subtitle props, shadow-as-border (0px 0px 0px 1px rgba(0,0,0,0.08)), max-width 400px desktop, responsive padding
 - [x] T008 [F] Create PasswordStrength indicator → `frontend/components/auth/PasswordStrength.vue`; Acceptance: UProgress component shows 0-100% strength, analyzes length/uppercase/lowercase/numbers/special chars, Arabic labels (ضعيف/قوي)
 - [x] T009 [F] Create RoleSelector component → `frontend/components/auth/RoleSelector.vue`; Acceptance: URadioGroup with Customer/Contractor options, v-model binding, emit update:modelValue, Arabic labels
@@ -42,11 +42,11 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Multi-Step Registration Pages
 
-- [ ] T015 [C]→T001,T003,T009,T005 Create Register Step 1 (account type) → `frontend/pages/auth/register.vue` (Step 1); Acceptance: USteppers shows "Step 1 of 4", RoleSelector component for Customer/Contractor, next button validates selection, stores in form state
-- [ ] T016 [C]→T015 Create Register Step 2 (personal info) → `frontend/pages/auth/register.vue` (Step 2); Acceptance: firstName, lastName, email inputs, validates with registerStep2Schema, back/next buttons functional, form state persisted in store
-- [ ] T017 [C]→T016 Create Register Step 3 (contact & password) → `frontend/pages/auth/register.vue` (Step 3); Acceptance: phone, country inputs, password+confirmPassword fields, PasswordStrength component, validates with registerStep3Schema, back/submit buttons, form state persisted
-- [ ] T018 [C]→T017 Create Register Step 4 (verification pending) → `frontend/pages/auth/register.vue` (Step 4); Acceptance: Display message "تحقق من بريدك الإلكتروني", show email address, resend button (60s cooldown), Step 3 submit sends POST /api/v1/register, waits for verification webhook
-- [ ] T019 [C]→T018 Create Register form state management → `frontend/pages/auth/register.vue` (state logic); Acceptance: All 4 steps load from Pinia store on page refresh, form data survives navigation, reset on completion, validation prevents step advance without required fields
+- [x] T015 [C]→T001,T003,T009,T005 Create Register Step 1 (account type) → `frontend/pages/auth/register.vue` (Step 1); Acceptance: USteppers shows "Step 1 of 4", RoleSelector component for Customer/Contractor, next button validates selection, stores in form state
+- [x] T016 [C]→T015 Create Register Step 2 (personal info) → `frontend/pages/auth/register.vue` (Step 2); Acceptance: firstName, lastName, email inputs, validates with registerStep2Schema, back/next buttons functional, form state persisted in store
+- [x] T017 [C]→T016 Create Register Step 3 (contact & password) → `frontend/pages/auth/register.vue` (Step 3); Acceptance: phone, country inputs, password+confirmPassword fields, PasswordStrength component, validates with registerStep3Schema, back/submit buttons, form state persisted
+- [x] T018 [C]→T017 Create Register Step 4 (verification pending) → `frontend/pages/auth/register.vue` (Step 4); Acceptance: Display message "تحقق من بريدك الإلكتروني", show email address, resend button (60s cooldown), Step 3 submit sends POST /api/v1/register, waits for verification webhook
+- [x] T019 [C]→T018 Create Register form state management → `frontend/pages/auth/register.vue` (state logic); Acceptance: All 4 steps load from Pinia store on page refresh, form data survives navigation, reset on completion, validation prevents step advance without required fields
 
 ### Profile Management Page
 
@@ -58,10 +58,10 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Design System & Responsiveness
 
-- [ ] T021 [F]→T006,T007 Create auth layout file → `frontend/layouts/auth.vue`; Acceptance: Applies AuthLayout wrapper to all /auth/\* routes, consistent styling across login/register/password pages, supports RTL automatically
+- [x] T021 [F]→T006,T007 Create auth layout file → `frontend/layouts/auth.vue`; Acceptance: Applies AuthLayout wrapper to all /auth/\* routes, consistent styling across login/register/password pages, supports RTL automatically
 - [ ] T022 [F] Implement design system compliance → `frontend/components/auth/*`; Acceptance: Geist Sans typography (400/500/600 weights), negative letter-spacing, shadow-as-border technique, achromatic palette, Tailwind logical properties (ms-/me-/ps-/pe-), no ml-/mr-/pl-/pr-
 - [ ] T023 [F] Responsive design refinement → `frontend/pages/auth/*`, `frontend/components/auth/*`; Acceptance: Mobile <768px full-width with 16px padding, tablet 768-1024px max-width 600px centered, desktop >1024px max-width 400px centered, form fields 44px+ touch targets
-- [ ] T024 [F]→T009 Add RoleSelector descriptions → `frontend/components/auth/RoleSelector.vue`; Acceptance: Customer option shows brief description, Contractor option shows brief description, both in Arabic
+- [x] T024 [F]→T009 Add RoleSelector descriptions → `frontend/components/auth/RoleSelector.vue`; Acceptance: Customer option shows brief description, Contractor option shows brief description, both in Arabic
 - [ ] T025 [F] Error display standardization → `frontend/pages/auth/*`, `frontend/components/`; Acceptance: Field-level errors below inputs via UFormField :error prop, form-level errors in UAlert (color="error"), all error text in Arabic, consistent styling
 
 ---
@@ -71,16 +71,16 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 ### Unit Tests (Vitest)
 
 - [x] T026 [C] Test auth schemas → `frontend/tests/unit/schemas/auth.spec.ts`; Acceptance: loginSchema validation (email/password/rememberMe), registerStep1/2/3 schemas, resetPasswordSchema, profileSchema all validate correct inputs, reject invalid inputs, all error messages in Arabic
-- [ ] T027 [C]→T001 Test useAuthStore → `frontend/tests/unit/stores/auth.spec.ts`; Acceptance: login action stores token/user/sets isAuthenticated, logout clears all state, register action works, fetchUser handles 401, localStorage integration tested, error handling verified
+- [x] T027 [C]→T001 Test useAuthStore → `frontend/tests/unit/stores/auth.spec.ts`; Acceptance: login action stores token/user/sets isAuthenticated, logout clears all state, register action works, fetchUser handles 401, localStorage integration tested, error handling verified
 - [ ] T028 [C]→T001 Test useUserStore → `frontend/tests/unit/stores/user.spec.ts`; Acceptance: fetchProfile action populates profile state, updateProfile modifies profile, error handling, state persistence tested
-- [ ] T029 [C] Test useAuthApi composable → `frontend/tests/unit/composables/useAuthApi.spec.ts`; Acceptance: All 7 methods make correct API calls, token attachment verified, error response handling (StandardErrorResponse), field error extraction, 401 handling
+- [x] T029 [C] Test useAuthApi composable → `frontend/tests/unit/composables/useAuthApi.spec.ts`; Acceptance: All 7 methods make correct API calls, token attachment verified, error response handling (StandardErrorResponse), field error extraction, 401 handling
 - [x] T030 [F] Test PasswordStrength logic → `frontend/tests/unit/components/PasswordStrength.spec.ts`; Acceptance: Strength calculation accurate (weak/fair/good/strong), color transitions correct, percentage calculation verified
-- [ ] T031 [F] Test component rendering → `frontend/tests/unit/components/auth.spec.ts`; Acceptance: AuthCard props/slots work, RoleSelector v-model binding, OtpInput completion event, AuthLayout layout correct
+- [x] T031 [F] Test component rendering → `frontend/tests/unit/components/auth.spec.ts`; Acceptance: AuthCard props/slots work, RoleSelector v-model binding, OtpInput completion event, AuthLayout layout correct
 
 ### E2E Tests (Playwright)
 
-- [ ] T032 [C] Test login flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Valid credentials redirect to /dashboard, invalid credentials show error UAlert (Arabic), "Remember me" checkbox functional, password show/hide toggle works, links to forgot password/register functional
-- [ ] T033 [C] Test registration complete flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Step 1 role selection advances, Step 2 personal info validates, Step 3 contact info validates, Step 4 verification pending displays, form data persists across steps, submit sends registration request
+- [x] T032 [C] Test login flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Valid credentials redirect to /dashboard, invalid credentials show error UAlert (Arabic), "Remember me" checkbox functional, password show/hide toggle works, links to forgot password/register functional
+- [x] T033 [C] Test registration complete flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Step 1 role selection advances, Step 2 personal info validates, Step 3 contact info validates, Step 4 verification pending displays, form data persists across steps, submit sends registration request
 - [ ] T034 [C] Test password reset flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Forgot password email submission, reset link navigation, token validation, password reset form submission, redirect to login on success, expired token error handling
 - [ ] T035 [F] Test email verification flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token extraction from URL, verification request sent, success message displays (Arabic), auto-redirect to /dashboard, error state with resend button
 - [ ] T036 [F] Test profile page flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Protected route check (unauthenticated redirect to login), profile data loads on mount, form fields pre-populated, save button updates profile, success notification displays (Arabic), cancel reverts changes
@@ -89,7 +89,7 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### E2E Integration Tests
 
-- [ ] T039 [C] Test protected route redirects → `frontend/tests/e2e/middleware.spec.ts`; Acceptance: Unauthenticated users redirected to /auth/login from /profile, after login redirect to originally requested route, middleware works on all protected routes
+- [x] T039 [C] Test protected route redirects → `frontend/tests/e2e/middleware.spec.ts`; Acceptance: Unauthenticated users redirected to /auth/login from /profile, after login redirect to originally requested route, middleware works on all protected routes
 - [ ] T040 [F] Test token persistence → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token stored in localStorage after login, token restored on page refresh, authenticated requests include Authorization header, expired token triggers logout
 - [ ] T041 [F] Test multi-language support → `frontend/tests/e2e/i18n.spec.ts`; Acceptance: Form labels in Arabic when locale="ar", error messages in Arabic, form placeholders translated, all UI strings from i18n keys (not hardcoded)
 

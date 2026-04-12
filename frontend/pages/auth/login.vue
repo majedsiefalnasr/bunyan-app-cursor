@@ -45,6 +45,7 @@
             variant="subtle"
             :title="error"
             class="mb-4"
+            data-testid="auth-error-alert"
             @close="error = null"
         />
 
