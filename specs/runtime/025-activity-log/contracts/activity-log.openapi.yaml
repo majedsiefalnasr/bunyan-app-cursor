@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: Bunyan Activity Log API (STAGE_25 excerpt)
+  version: 1.0.0
+paths:
+  /api/v1/admin/activity-log:
+    get:
+      summary: List activity logs (admin)
+      security:
+        - sanctum: []
+  /api/v1/{entity}/{id}/activity:
+    get:
+      summary: List activity for a subject
+      parameters:
+        - in: path
+          name: entity
+          schema:
+            type: string
+            enum: [projects, orders]
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      security:
+        - sanctum: []

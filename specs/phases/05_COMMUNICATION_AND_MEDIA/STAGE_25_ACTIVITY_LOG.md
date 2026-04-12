@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
 Last Updated: 2026-04-12T12:53:53Z
 
-Scope Defined: Activity log persistence, admin listing, subject timelines, trait-based logging for projects, retention + prune command, admin Nuxt UI + timeline component.
+Scope Planned: Migration, service/repository, admin + subject APIs, trait on Project, prune command, admin UI + timeline component, PHPUnit coverage.
 
 Deferred Scope: SIEM, websockets, legal hold, full export pipeline.
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
