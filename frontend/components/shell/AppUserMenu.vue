@@ -1,13 +1,14 @@
 <script setup lang="ts">
     const { user, logout } = useAuth();
     const { t } = useI18n();
+    const localePath = useLocalePath();
 
     const items = computed(() => [
         [
             {
                 label: t('shell.user.profile'),
                 icon: 'i-heroicons-user-circle',
-                to: '/profile',
+                to: localePath('/profile'),
             },
         ],
         [

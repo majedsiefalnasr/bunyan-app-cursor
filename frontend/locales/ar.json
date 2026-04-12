@@ -68,7 +68,29 @@
         "verification_sent": "تم إرسال رابط التحقق مرة أخرى",
         "resend_verification": "إعادة إرسال رابط التحقق",
         "resend_in": "إعادة الإرسال بعد {seconds} ثانية",
-        "go_to_dashboard": "الذهاب إلى لوحة التحكم"
+        "go_to_dashboard": "الذهاب إلى لوحة التحكم",
+        "remember_me": "تذكرني",
+        "show_password": "إظهار كلمة المرور",
+        "hide_password": "إخفاء كلمة المرور",
+        "password_strength": "قوة كلمة المرور",
+        "password_strength_weak": "ضعيفة",
+        "password_strength_fair": "متوسطة",
+        "password_strength_good": "جيدة",
+        "password_strength_strong": "قوية",
+        "account_type": "نوع الحساب",
+        "role_customer": "عميل",
+        "role_contractor": "مقاول",
+        "otp_label": "رمز التحقق"
+    },
+    "profile": {
+        "title": "الملف الشخصي",
+        "subtitle": "تحديث اسمك ورقم هاتفك كما يظهران في المنصة.",
+        "save": "حفظ التغييرات",
+        "save_success": "تم حفظ الملف الشخصي بنجاح"
+    },
+    "dashboard": {
+        "welcome_hint": "ابدأ من هنا للوصول إلى حسابك والملف الشخصي.",
+        "profile_cta": "حدّث بياناتك الشخصية في أي وقت."
     },
     "errors": {
         "retry": "أعد المحاولة",

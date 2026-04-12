@@ -68,7 +68,29 @@
         "verification_sent": "Verification link sent again",
         "resend_verification": "Resend Verification Link",
         "resend_in": "Resend in {seconds} seconds",
-        "go_to_dashboard": "Go to Dashboard"
+        "go_to_dashboard": "Go to Dashboard",
+        "remember_me": "Remember me",
+        "show_password": "Show password",
+        "hide_password": "Hide password",
+        "password_strength": "Password strength",
+        "password_strength_weak": "Weak",
+        "password_strength_fair": "Fair",
+        "password_strength_good": "Good",
+        "password_strength_strong": "Strong",
+        "account_type": "Account type",
+        "role_customer": "Customer",
+        "role_contractor": "Contractor",
+        "otp_label": "Verification code"
+    },
+    "profile": {
+        "title": "Profile",
+        "subtitle": "Update your name and phone as shown on the platform.",
+        "save": "Save changes",
+        "save_success": "Profile saved successfully"
+    },
+    "dashboard": {
+        "welcome_hint": "Start here to access your account and profile.",
+        "profile_cta": "Update your personal details anytime."
     },
     "errors": {
         "retry": "Retry",

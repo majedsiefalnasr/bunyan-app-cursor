@@ -11,6 +11,7 @@ export function useApi() {
     const auth = useAuthStore();
     const errorStore = useErrorStore();
     const { showErrorNotification } = useErrorNotification();
+    const localePath = useLocalePath();
 
     const apiFetch = $fetch.create({
         baseURL: config.public.apiBaseUrl || '',
@@ -48,12 +49,12 @@ export function useApi() {
             });
 
             if (statusCode === 401) {
-                auth.logout();
+                await auth.logout();
                 if (errorCode !== 'AUTH_TOKEN_EXPIRED') {
-                    await navigateTo('/ar/auth/login');
+                    await navigateTo(localePath('/auth/login'));
                 }
             } else if (statusCode === 403 && errorCode === 'RBAC_ROLE_DENIED') {
-                await navigateTo('/ar/dashboard');
+                await navigateTo(localePath('/dashboard'));
             }
 
             showErrorNotification({

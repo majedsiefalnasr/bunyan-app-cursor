@@ -20,14 +20,14 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 - [ ] T001 [F][C] Setup Pinia stores → `frontend/stores/auth.ts`, `frontend/stores/user.ts`; Acceptance: useAuthStore exports login/logout/register/fetchUser actions, isAuthenticated computed property; useUserStore exports fetchProfile/updateProfile actions
 - [ ] T002 [F][C] Create useAuthApi composable → `frontend/composables/useAuthApi.ts`; Acceptance: All 7 API methods (login, register, forgotPassword, resetPassword, verifyEmail, getProfile, updateProfile) implemented with error handling, token attachment
-- [ ] T003 [F][C] Generate Zod schemas with Arabic → `frontend/schemas/auth.ts`; Acceptance: 6 schemas (login, registerStep1/2/3, resetPassword, profile) with Arabic error messages, all validation rules defined
-- [ ] T004 [F][C] Create auth middleware → `frontend/middleware/auth.ts`; Acceptance: Protects /profile route, redirects unauthenticated users to /auth/login, preserves attempted URL
+- [x] T003 [F][C] Generate Zod schemas with Arabic → `frontend/schemas/auth.ts`; Acceptance: 6 schemas (login, registerStep1/2/3, resetPassword, profile) with Arabic error messages, all validation rules defined
+- [x] T004 [F][C] Create auth middleware → `frontend/middleware/auth.ts`; Acceptance: Protects /profile route, redirects unauthenticated users to /auth/login, preserves attempted URL
 - [ ] T005 [F][C] Setup i18n locale files → `frontend/locales/ar.json`, `frontend/locales/en.json`; Acceptance: All auth UI strings translated to Arabic/English, includes error messages, form labels
 - [ ] T006 [F] Create AuthLayout RTL wrapper → `frontend/components/auth/AuthLayout.vue`; Acceptance: dir="rtl" support, full viewport height, responsive padding (16px mobile, 0 desktop), centers content, shadow-as-border styling
-- [ ] T007 [F]→T006 Create AuthCard wrapper → `frontend/components/auth/AuthCard.vue`; Acceptance: UCard with title/subtitle props, shadow-as-border (0px 0px 0px 1px rgba(0,0,0,0.08)), max-width 400px desktop, responsive padding
-- [ ] T008 [F] Create PasswordStrength indicator → `frontend/components/auth/PasswordStrength.vue`; Acceptance: UProgress component shows 0-100% strength, analyzes length/uppercase/lowercase/numbers/special chars, Arabic labels (ضعيف/قوي)
-- [ ] T009 [F] Create RoleSelector component → `frontend/components/auth/RoleSelector.vue`; Acceptance: URadioGroup with Customer/Contractor options, v-model binding, emit update:modelValue, Arabic labels
-- [ ] T010 [F] Create OtpInput component → `frontend/components/auth/OtpInput.vue`; Acceptance: UPinInput wrapper, 6-digit code default, paste support, emit complete event, prepared for future 2FA
+- [x] T007 [F]→T006 Create AuthCard wrapper → `frontend/components/auth/AuthCard.vue`; Acceptance: UCard with title/subtitle props, shadow-as-border (0px 0px 0px 1px rgba(0,0,0,0.08)), max-width 400px desktop, responsive padding
+- [x] T008 [F] Create PasswordStrength indicator → `frontend/components/auth/PasswordStrength.vue`; Acceptance: UProgress component shows 0-100% strength, analyzes length/uppercase/lowercase/numbers/special chars, Arabic labels (ضعيف/قوي)
+- [x] T009 [F] Create RoleSelector component → `frontend/components/auth/RoleSelector.vue`; Acceptance: URadioGroup with Customer/Contractor options, v-model binding, emit update:modelValue, Arabic labels
+- [x] T010 [F] Create OtpInput component → `frontend/components/auth/OtpInput.vue`; Acceptance: UPinInput wrapper, 6-digit code default, paste support, emit complete event, prepared for future 2FA
 
 ---
 
@@ -35,10 +35,10 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Login & Forgot Password Pages
 
-- [ ] T011 [C]→T001,T003,T005 Create Login page → `frontend/pages/auth/login.vue`; Acceptance: Form validates with loginSchema, email/password/rememberMe fields, show/hide password toggle, API call on submit, error display in UAlert (Arabic), loading state
-- [ ] T012 [C]→T001,T005 Create Forgot Password page → `frontend/pages/auth/forgot-password.vue`; Acceptance: Email input only, validates with email schema, submit sends POST /api/v1/forgot-password, success message in UAlert (Arabic), loading state, back to login link
-- [ ] T013 [C]→T001,T003,T005 Create Reset Password page → `frontend/pages/auth/reset-password.vue`; Acceptance: Extract token from URL ?token=abc, validate token on load, show form if valid (password+confirm), PasswordStrength component, submit sends POST /api/v1/reset-password, redirect to /auth/login on success, error handling
-- [ ] T014 [C]→T001,T005 Create Email Verification page → `frontend/pages/auth/verify-email.vue`; Acceptance: Extract token from URL, POST /api/v1/verify-email on load, loading spinner, success message in Arabic, auto-redirect /dashboard after 3s (or manual button), resend button, error state with retry link
+- [x] T011 [C]→T001,T003,T005 Create Login page → `frontend/pages/auth/login.vue`; Acceptance: Form validates with loginSchema, email/password/rememberMe fields, show/hide password toggle, API call on submit, error display in UAlert (Arabic), loading state
+- [x] T012 [C]→T001,T005 Create Forgot Password page → `frontend/pages/auth/forgot-password.vue`; Acceptance: Email input only, validates with email schema, submit sends POST /api/v1/forgot-password, success message in UAlert (Arabic), loading state, back to login link
+- [x] T013 [C]→T001,T003,T005 Create Reset Password page → `frontend/pages/auth/reset-password.vue`; Acceptance: Extract token from URL ?token=abc, validate token on load, show form if valid (password+confirm), PasswordStrength component, submit sends POST /api/v1/reset-password, redirect to /auth/login on success, error handling
+- [x] T014 [C]→T001,T005 Create Email Verification page → `frontend/pages/auth/verify-email.vue`; Acceptance: Extract token from URL, POST /api/v1/verify-email on load, loading spinner, success message in Arabic, auto-redirect /dashboard after 3s (or manual button), resend button, error state with retry link
 
 ### Multi-Step Registration Pages
 
@@ -50,7 +50,7 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Profile Management Page
 
-- [ ] T020 [C]→T001,T003,T004,T005 Create Profile page (protected) → `frontend/pages/profile/index.vue`; Acceptance: Protected by auth middleware, GET /api/v1/profile on load, form fields (firstName, lastName, email, phone, country), pre-populated with user data, validates with profileSchema, save button sends PUT /api/v1/profile, cancel button reverts changes, success/error UAlert messages
+- [x] T020 [C]→T001,T003,T004,T005 Create Profile page (protected) → `frontend/pages/profile/index.vue`; Acceptance: Protected by auth middleware, GET /api/v1/profile on load, form fields (firstName, lastName, email, phone, country), pre-populated with user data, validates with profileSchema, save button sends PUT /api/v1/profile, cancel button reverts changes, success/error UAlert messages
 
 ---
 
@@ -70,11 +70,11 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Unit Tests (Vitest)
 
-- [ ] T026 [C] Test auth schemas → `frontend/tests/unit/schemas/auth.spec.ts`; Acceptance: loginSchema validation (email/password/rememberMe), registerStep1/2/3 schemas, resetPasswordSchema, profileSchema all validate correct inputs, reject invalid inputs, all error messages in Arabic
+- [x] T026 [C] Test auth schemas → `frontend/tests/unit/schemas/auth.spec.ts`; Acceptance: loginSchema validation (email/password/rememberMe), registerStep1/2/3 schemas, resetPasswordSchema, profileSchema all validate correct inputs, reject invalid inputs, all error messages in Arabic
 - [ ] T027 [C]→T001 Test useAuthStore → `frontend/tests/unit/stores/auth.spec.ts`; Acceptance: login action stores token/user/sets isAuthenticated, logout clears all state, register action works, fetchUser handles 401, localStorage integration tested, error handling verified
 - [ ] T028 [C]→T001 Test useUserStore → `frontend/tests/unit/stores/user.spec.ts`; Acceptance: fetchProfile action populates profile state, updateProfile modifies profile, error handling, state persistence tested
 - [ ] T029 [C] Test useAuthApi composable → `frontend/tests/unit/composables/useAuthApi.spec.ts`; Acceptance: All 7 methods make correct API calls, token attachment verified, error response handling (StandardErrorResponse), field error extraction, 401 handling
-- [ ] T030 [F] Test PasswordStrength logic → `frontend/tests/unit/components/PasswordStrength.spec.ts`; Acceptance: Strength calculation accurate (weak/fair/good/strong), color transitions correct, percentage calculation verified
+- [x] T030 [F] Test PasswordStrength logic → `frontend/tests/unit/components/PasswordStrength.spec.ts`; Acceptance: Strength calculation accurate (weak/fair/good/strong), color transitions correct, percentage calculation verified
 - [ ] T031 [F] Test component rendering → `frontend/tests/unit/components/auth.spec.ts`; Acceptance: AuthCard props/slots work, RoleSelector v-model binding, OtpInput completion event, AuthLayout layout correct
 
 ### E2E Tests (Playwright)

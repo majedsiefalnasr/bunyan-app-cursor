@@ -1,29 +1,18 @@
 <script setup lang="ts">
-    import { z } from 'zod';
     import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import { registerSchema } from '~/schemas/auth';
+    import type { RegisterFormValues } from '~/schemas/auth';
 
     definePageMeta({
         layout: 'auth',
     });
 
     const { register } = useAuth();
+    const localePath = useLocalePath();
 
-    const schema = z
-        .object({
-            name: z.string().min(1, 'الاسم مطلوب').max(255),
-            email: z.string().email('البريد الإلكتروني غير صحيح'),
-            password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
-            password_confirmation: z.string().min(8, 'تأكيد كلمة المرور مطلوب'),
-            phone: z.string().max(20).optional().or(z.literal('')),
-        })
-        .refine((data) => data.password === data.password_confirmation, {
-            message: 'كلمتا المرور غير متطابقتين',
-            path: ['password_confirmation'],
-        });
+    const schema = registerSchema;
 
-    type RegisterSchema = z.output<typeof schema>;
-
-    const state = reactive<Partial<RegisterSchema>>({
+    const state = reactive<Partial<RegisterFormValues>>({
         name: '',
         email: '',
         password: '',
@@ -34,7 +23,7 @@
     const loading = ref(false);
     const error = ref<string | null>(null);
 
-    async function onSubmit(event: NuxtUiFormSubmitEvent<RegisterSchema>) {
+    async function onSubmit(event: NuxtUiFormSubmitEvent<RegisterFormValues>) {
         loading.value = true;
         error.value = null;
 
@@ -56,11 +45,7 @@
 </script>
 
 <template>
-    <div>
-        <h2 class="mb-6 text-center text-xl font-semibold text-[#171717] dark:text-white">
-            {{ $t('auth.register') }}
-        </h2>
-
+    <AuthCard :title="$t('auth.register')">
         <UAlert
             v-if="error"
             color="red"
@@ -110,6 +95,8 @@
                 />
             </UFormField>
 
+            <PasswordStrength :password="state.password || ''" />
+
             <UFormField :label="$t('auth.password_confirmation')" name="password_confirmation">
                 <UInput
                     v-model="state.password_confirmation"
@@ -129,12 +116,12 @@
             <p>
                 {{ $t('auth.has_account') }}
                 <NuxtLink
-                    to="/ar/auth/login"
+                    :to="localePath('/auth/login')"
                     class="font-medium text-[#171717] hover:underline dark:text-white"
                 >
                     {{ $t('auth.login') }}
                 </NuxtLink>
             </p>
         </div>
-    </div>
+    </AuthCard>
 </template>

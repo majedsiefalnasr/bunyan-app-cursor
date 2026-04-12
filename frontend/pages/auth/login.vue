@@ -1,29 +1,28 @@
 <script setup lang="ts">
-    import { z } from 'zod';
     import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import { loginSchema } from '~/schemas/auth';
+    import type { LoginFormValues } from '~/schemas/auth';
 
     definePageMeta({
         layout: 'auth',
     });
 
     const { login } = useAuth();
+    const localePath = useLocalePath();
 
-    const schema = z.object({
-        email: z.string().email('البريد الإلكتروني غير صحيح'),
-        password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
-    });
+    const schema = loginSchema;
 
-    type LoginSchema = z.output<typeof schema>;
-
-    const state = reactive<LoginSchema>({
+    const state = reactive<LoginFormValues>({
         email: '',
         password: '',
     });
 
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const showPassword = ref(false);
+    const rememberMe = ref(false);
 
-    async function onSubmit(event: NuxtUiFormSubmitEvent<LoginSchema>) {
+    async function onSubmit(event: NuxtUiFormSubmitEvent<LoginFormValues>) {
         loading.value = true;
         error.value = null;
 
@@ -39,11 +38,7 @@
 </script>
 
 <template>
-    <div>
-        <h2 class="mb-6 text-center text-xl font-semibold text-[#171717] dark:text-white">
-            {{ $t('auth.login') }}
-        </h2>
-
+    <AuthCard :title="$t('auth.login')">
         <UAlert
             v-if="error"
             color="red"
@@ -65,18 +60,33 @@
             </UFormField>
 
             <UFormField :label="$t('auth.password')" name="password">
-                <UInput
-                    v-model="state.password"
-                    type="password"
-                    :placeholder="$t('auth.password_placeholder')"
-                    icon="i-heroicons-lock-closed"
-                    size="lg"
-                />
+                <div class="flex items-stretch gap-2">
+                    <UInput
+                        v-model="state.password"
+                        :type="showPassword ? 'text' : 'password'"
+                        :placeholder="$t('auth.password_placeholder')"
+                        icon="i-heroicons-lock-closed"
+                        size="lg"
+                        class="min-w-0 flex-1"
+                    />
+                    <UButton
+                        color="gray"
+                        variant="outline"
+                        type="button"
+                        size="lg"
+                        :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                        :aria-label="
+                            showPassword ? $t('auth.hide_password') : $t('auth.show_password')
+                        "
+                        @click="showPassword = !showPassword"
+                    />
+                </div>
             </UFormField>
 
-            <div class="flex items-center justify-end">
+            <div class="flex items-center justify-between gap-3">
+                <UCheckbox v-model="rememberMe" :label="$t('auth.remember_me')" />
                 <NuxtLink
-                    to="/ar/auth/forgot-password"
+                    :to="localePath('/auth/forgot-password')"
                     class="text-sm text-[#0072f5] hover:underline"
                 >
                     {{ $t('auth.forgot_password') }}
@@ -92,12 +102,12 @@
             <p>
                 {{ $t('auth.no_account') }}
                 <NuxtLink
-                    to="/ar/auth/register"
+                    :to="localePath('/auth/register')"
                     class="font-medium text-[#171717] hover:underline dark:text-white"
                 >
                     {{ $t('auth.register') }}
                 </NuxtLink>
             </p>
         </div>
-    </div>
+    </AuthCard>
 </template>

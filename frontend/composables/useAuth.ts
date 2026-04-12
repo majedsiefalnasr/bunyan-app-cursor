@@ -4,6 +4,7 @@ import { useAuthStore } from '~/stores/auth';
 
 export function useAuth() {
     const store = useAuthStore();
+    const localePath = useLocalePath();
 
     const user = computed(() => store.user);
     const role = computed<UserRole | null>(() => store.user?.role ?? null);
@@ -12,24 +13,38 @@ export function useAuth() {
 
     async function login(payload: LoginPayload) {
         const result = await store.login(payload);
-        await navigateTo('/ar/dashboard');
+        await navigateTo(localePath('/dashboard'));
         return result;
     }
 
     async function register(payload: RegisterPayload) {
         const result = await store.register(payload);
-        await navigateTo('/ar/auth/verify-email');
+        await navigateTo(localePath('/auth/verify-email'));
         return result;
     }
 
     async function logout() {
         await store.logout();
-        await navigateTo('/ar/auth/login');
+        await navigateTo(localePath('/auth/login'));
+    }
+
+    async function updateProfile(payload: { name?: string; phone?: string | null }) {
+        return store.updateProfile(payload);
     }
 
     function hasRole(...roles: UserRole[]): boolean {
         return role.value !== null && roles.includes(role.value);
     }
 
-    return { user, role, isAuthenticated, isEmailVerified, login, register, logout, hasRole };
+    return {
+        user,
+        role,
+        isAuthenticated,
+        isEmailVerified,
+        login,
+        register,
+        logout,
+        updateProfile,
+        hasRole,
+    };
 }

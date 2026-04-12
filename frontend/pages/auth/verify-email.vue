@@ -5,6 +5,7 @@
 
     const { apiFetch } = useApi();
     const { user, isEmailVerified } = useAuth();
+    const localePath = useLocalePath();
 
     const loading = ref(false);
     const success = ref(false);
@@ -61,7 +62,7 @@
                 :title="$t('auth.email_verified')"
                 class="mb-4"
             />
-            <UButton block size="lg" @click="navigateTo('/ar/dashboard')">
+            <UButton block size="lg" @click="navigateTo(localePath('/dashboard'))">
                 {{ $t('auth.go_to_dashboard') }}
             </UButton>
         </template>
@@ -101,7 +102,7 @@
 
             <div class="mt-6">
                 <NuxtLink
-                    to="/ar/auth/login"
+                    :to="localePath('/auth/login')"
                     class="text-sm font-medium text-[#171717] hover:underline dark:text-white"
                 >
                     {{ $t('auth.back_to_login') }}

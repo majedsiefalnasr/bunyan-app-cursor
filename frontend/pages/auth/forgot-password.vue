@@ -1,18 +1,18 @@
 <script setup lang="ts">
-    import { z } from 'zod';
     import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import { forgotPasswordSchema } from '~/schemas/auth';
+    import type { ForgotPasswordFormValues } from '~/schemas/auth';
 
     definePageMeta({
         layout: 'auth',
     });
 
     const { apiFetch } = useApi();
+    const localePath = useLocalePath();
 
-    const schema = z.object({
-        email: z.string().email('البريد الإلكتروني غير صحيح'),
-    });
+    const schema = forgotPasswordSchema;
 
-    type ForgotSchema = z.output<typeof schema>;
+    type ForgotSchema = ForgotPasswordFormValues;
 
     const state = reactive<ForgotSchema>({
         email: '',
@@ -42,14 +42,10 @@
 </script>
 
 <template>
-    <div>
-        <h2 class="mb-2 text-center text-xl font-semibold text-[#171717] dark:text-white">
-            {{ $t('auth.forgot_password') }}
-        </h2>
-        <p class="mb-6 text-center text-sm text-[#666666]">
-            {{ $t('auth.forgot_password_description') }}
-        </p>
-
+    <AuthCard
+        :title="$t('auth.forgot_password')"
+        :description="$t('auth.forgot_password_description')"
+    >
         <UAlert
             v-if="success"
             color="green"
@@ -85,11 +81,11 @@
 
         <div class="mt-6 text-center text-sm text-[#666666]">
             <NuxtLink
-                to="/ar/auth/login"
+                :to="localePath('/auth/login')"
                 class="font-medium text-[#171717] hover:underline dark:text-white"
             >
                 {{ $t('auth.back_to_login') }}
             </NuxtLink>
         </div>
-    </div>
+    </AuthCard>
 </template>

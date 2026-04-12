@@ -82,6 +82,22 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function updateProfile(payload: {
+        name?: string;
+        phone?: string | null;
+    }): Promise<UserProfile> {
+        const { apiFetch } = useApi();
+        const response = await apiFetch<{ success: boolean; data: UserProfile }>(
+            '/v1/auth/profile',
+            {
+                method: 'PUT',
+                body: payload,
+            }
+        );
+        user.value = response.data;
+        return response.data;
+    }
+
     async function logout(): Promise<void> {
         if (token.value) {
             try {
@@ -105,6 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         register,
         fetchUser,
+        updateProfile,
         logout,
     };
 });
