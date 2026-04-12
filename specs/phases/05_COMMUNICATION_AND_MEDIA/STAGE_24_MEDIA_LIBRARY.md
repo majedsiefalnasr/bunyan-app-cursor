@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T16:08:00Z
+Last Updated: 2026-04-12T16:12:00Z
 
-Scope Defined: Media API, polymorphic media (Project allowlist), uploads, optional GD thumbnails, temp cleanup, Nuxt media page
+Scope Planned: Migration, Media model, service/repository, policy, API routes, prune command + schedule, feature tests, Nuxt media page
 
 Deferred Scope: CDN signed URLs, cropper/lightbox polish, watermarking, S3 driver implementation
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
