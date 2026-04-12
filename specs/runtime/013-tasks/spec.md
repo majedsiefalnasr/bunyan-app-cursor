@@ -38,4 +38,12 @@ Deliver project-scoped task management with bilingual titles, priorities, lifecy
 
 ## Clarifications
 
-See `## Clarifications` section appended during Clarify step.
+### Session 2026-04-12
+
+| #   | Topic                      | Resolution                                                                                                                                      |
+| --- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Legacy phase-nested routes | Keep `projects/{project}/phases/{phase}/tasks` for backward compatibility; new project-level routes are additive.                               |
+| 2   | Status enum vs DB          | Migrate existing `pending/completed/approved/rejected` to `todo/done/blocked` mapping; `in_progress` unchanged.                                 |
+| 3   | `budget` field             | Retain `budget` column for compatibility; new UI may hide behind “estimated cost” later.                                                        |
+| 4   | Field engineer task access | Read-only list/detail where `ProjectPolicy@view` already allows field engineers with reports on project.                                        |
+| 5   | Assignee validation        | `assigned_to` must be a user who can `view` the parent project (customer, contractor, architect, admin, or field engineer with report linkage). |

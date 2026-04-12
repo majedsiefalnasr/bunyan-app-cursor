@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T14:05:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T14:10:00Z
 
-Scope Defined: Project tasks API, schema extensions, comments, dependencies MVP, Nuxt task views
+Scope Defined: Additive project task API, status migration, comments, dependencies MVP, FE board/list, legacy route retention
 
 Deferred Scope: Real-time board, advanced DAG validation, Gantt
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
