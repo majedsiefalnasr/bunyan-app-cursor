@@ -72,7 +72,7 @@
                     </UButton>
                     <UButton
                         size="xs"
-                        color="error"
+                        color="red"
                         variant="soft"
                         @click="setStatus(row.id, 'suspended')"
                     >

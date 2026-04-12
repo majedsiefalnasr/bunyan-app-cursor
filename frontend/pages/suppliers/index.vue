@@ -64,7 +64,7 @@
                     <p class="text-xs text-[#666666]">
                         {{ $t('suppliers.rating') }}: {{ s.rating_avg }}
                     </p>
-                    <UButton :to="localePath(`/suppliers/${s.id}`)" variant="soft" color="neutral">
+                    <UButton :to="localePath(`/suppliers/${s.id}`)" variant="soft" color="gray">
                         {{ $t('suppliers.view_products') }}
                     </UButton>
                 </div>
