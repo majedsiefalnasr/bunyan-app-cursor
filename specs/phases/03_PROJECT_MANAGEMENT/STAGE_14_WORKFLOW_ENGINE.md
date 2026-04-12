@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T15:50:00Z
+Last Updated: 2026-04-12T16:00:00Z
 
-Scope Defined: Workflow definitions API, instances/approvals, project start, pending list, admin UI; definitions map to workflow_configurations
+Scope Planned: Migrations, services, controllers, policies, routes, tests, admin UI
 
-Deferred Scope: Notifications, escalation jobs, designer UI, sort_order on rules
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: Ready for technical planning.
+Notes: Task breakdown next.
 
 ## Objective
 
