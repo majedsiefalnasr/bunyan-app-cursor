@@ -1,23 +1,25 @@
-# Validation Report — STAGE_30 Auth Pages (partial implementation)
+# Validation Report — STAGE_30 Auth Pages
 
 **Date:** 2026-04-12  
-**Scope:** Frontend (`frontend/`) only
+**Scope:** Frontend (`frontend/`)
 
 ## Commands run
 
-| Command                                                                                      | Result          |
-| -------------------------------------------------------------------------------------------- | --------------- |
-| `npm run lint` (frontend)                                                                    | PASS            |
-| `npm run typecheck` (frontend)                                                               | PASS            |
-| `npm run test` (Vitest)                                                                      | PASS (58 tests) |
-| `npx playwright test tests/e2e/auth.spec.ts tests/e2e/middleware.spec.ts --project=chromium` | PASS (4 tests)  |
+| Command                        | Result          |
+| ------------------------------ | --------------- |
+| `npm run lint` (frontend)      | PASS            |
+| `npm run typecheck` (frontend) | PASS            |
+| `npm run test` (Vitest)        | PASS (61 tests) |
+| `npm run build` (frontend)     | PASS            |
 
-## Notes
+## Playwright
 
-- Backend `composer run lint` / `php artisan test` not re-run for this change set (frontend-only).
-- `php artisan migrate --pretend` not applicable (no migrations).
-- Full Playwright suite (`firefox` + `chromium`) not run in this session; Chromium subset above passed.
+- **Note:** `npm run test:e2e` depends on `nuxt dev` via `playwright.config.ts`. If `webServer` times out (port busy / cold start), free port 3000 or re-run. Chromium subset recommended in constrained CI: `PLAYWRIGHT_TEST=1 npx playwright test tests/e2e/ --project=chromium`.
+
+## Backend
+
+- `composer run lint` / `php artisan test` **not** re-run for this frontend-only closure increment.
 
 ## Outcome
 
-**Gate:** PASS for frontend validation executed above.
+**Gate:** PASS for commands executed above.

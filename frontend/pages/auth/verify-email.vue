@@ -83,7 +83,15 @@
                 class="mb-4"
             />
 
-            <UAlert v-if="error" color="red" variant="subtle" :title="error" class="mb-4" />
+            <UAlert
+                v-if="error"
+                color="red"
+                variant="subtle"
+                role="alert"
+                :title="error"
+                class="mb-4"
+                @close="error = null"
+            />
 
             <UButton
                 block

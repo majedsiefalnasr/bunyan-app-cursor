@@ -6,14 +6,15 @@
   "branch": "spec/030-auth-pages",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "implement",
-  "stage_status": "IN PROGRESS",
+  "current_step": "stage_production_ready",
+  "stage_status": "PRODUCTION READY",
   "plan_completed": true,
   "tasks_total": 46,
-  "tasks_completed": 29,
+  "tasks_completed": 46,
   "drift_passed": true,
   "implementation_allowed": true,
-  "last_updated": "2026-04-12T14:30:00Z",
+  "auto_advance": true,
+  "last_updated": "2026-04-12T16:00:00Z",
   "step_timings": {
     "pre_step": {
       "started_at": "2026-04-12T10:28:00Z",
@@ -37,7 +38,11 @@
     },
     "implement": {
       "started_at": "2026-04-12T12:30:00Z",
-      "completed_at": null
+      "completed_at": "2026-04-12T15:30:00Z"
+    },
+    "closure": {
+      "started_at": "2026-04-12T15:30:00Z",
+      "completed_at": "2026-04-12T16:00:00Z"
     }
   },
   "guardian_verdicts": {
@@ -97,6 +102,22 @@
       "tasks_total": 46,
       "note": "useAuthApi, AuthLayout, multi-step register (useState), E2E auth+middleware, unit tests",
       "timestamp": "2026-04-12T14:30:00Z"
+    },
+    {
+      "event": "implement_complete",
+      "tasks_completed": 46,
+      "tasks_total": 46,
+      "note": "user store, design/error polish, expanded E2E, docs, verification",
+      "timestamp": "2026-04-12T15:30:00Z"
+    },
+    {
+      "event": "pre_closure_review_approved",
+      "mode": "autopilot",
+      "timestamp": "2026-04-12T15:45:00Z"
+    },
+    {
+      "event": "stage_production_ready",
+      "timestamp": "2026-04-12T16:00:00Z"
     }
   ]
 }

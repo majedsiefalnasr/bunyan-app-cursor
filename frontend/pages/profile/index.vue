@@ -9,7 +9,8 @@
         requiresAuth: true,
     });
 
-    const { user, updateProfile } = useAuth();
+    const { user } = useAuth();
+    const userStore = useUserStore();
     const { t } = useI18n();
 
     const schema = profileUpdateSchema;
@@ -21,25 +22,41 @@
     });
 
     watch(
-        () => user.value,
-        (u) => {
-            if (!u) return;
-            state.name = u.name ?? '';
-            state.phone = u.phone ?? '';
+        [() => userStore.profile, () => user.value],
+        ([p, u]) => {
+            const src = p ?? u;
+            if (!src) return;
+            state.name = src.name ?? '';
+            state.phone = src.phone ?? '';
         },
-        { immediate: true }
+        { immediate: true, deep: true }
     );
+
+    onMounted(() => {
+        void userStore.fetchProfile().catch(() => {
+            /* session may clear on 401 via useApi */
+        });
+    });
 
     const loading = ref(false);
     const error = ref<string | null>(null);
     const success = ref(false);
+
+    function revertForm() {
+        const src = userStore.profile ?? user.value;
+        if (!src) return;
+        state.name = src.name ?? '';
+        state.phone = src.phone ?? '';
+        success.value = false;
+        error.value = null;
+    }
 
     async function onSubmit(event: NuxtUiFormSubmitEvent<ProfileForm>) {
         loading.value = true;
         error.value = null;
         success.value = false;
         try {
-            await updateProfile({
+            await userStore.updateProfile({
                 name: event.data.name,
                 phone: event.data.phone || null,
             });
@@ -85,6 +102,7 @@
                 v-if="error"
                 color="red"
                 variant="subtle"
+                role="alert"
                 :title="error"
                 class="mb-4"
                 @close="error = null"
@@ -99,9 +117,25 @@
                     <UInput v-model="state.phone" type="tel" icon="i-heroicons-phone" size="lg" />
                 </UFormField>
 
-                <UButton type="submit" block size="lg" :loading="loading">
-                    {{ $t('profile.save') }}
-                </UButton>
+                <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <UButton
+                        type="button"
+                        color="gray"
+                        variant="ghost"
+                        class="min-h-11"
+                        @click="revertForm"
+                    >
+                        {{ $t('profile.cancel') }}
+                    </UButton>
+                    <UButton
+                        type="submit"
+                        class="min-h-11 sm:min-w-40"
+                        size="lg"
+                        :loading="loading"
+                    >
+                        {{ $t('profile.save') }}
+                    </UButton>
+                </div>
             </UForm>
         </UCard>
     </div>

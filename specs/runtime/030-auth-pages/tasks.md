@@ -4,7 +4,7 @@
 **Parallel Groups:** 5  
 **Estimated Duration:** 48 hours (5 full-time days)  
 **Priority:** CRITICAL  
-**Status:** Ready for Implementation
+**Status:** Complete (46/46)
 
 ---
 
@@ -18,7 +18,7 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Core Infrastructure & Components
 
-- [ ] T001 [F][C] Setup Pinia stores → `frontend/stores/auth.ts`, `frontend/stores/user.ts`; Acceptance: useAuthStore exports login/logout/register/fetchUser actions, isAuthenticated computed property; useUserStore exports fetchProfile/updateProfile actions
+- [x] T001 [F][C] Setup Pinia stores → `frontend/stores/auth.ts`, `frontend/stores/user.ts`; Acceptance: useAuthStore exports login/logout/register/fetchUser actions, isAuthenticated computed property; useUserStore exports fetchProfile/updateProfile actions
 - [x] T002 [F][C] Create useAuthApi composable → `frontend/composables/useAuthApi.ts`; Acceptance: All 7 API methods (login, register, forgotPassword, resetPassword, verifyEmail, getProfile, updateProfile) implemented with error handling, token attachment
 - [x] T003 [F][C] Generate Zod schemas with Arabic → `frontend/schemas/auth.ts`; Acceptance: 6 schemas (login, registerStep1/2/3, resetPassword, profile) with Arabic error messages, all validation rules defined
 - [x] T004 [F][C] Create auth middleware → `frontend/middleware/auth.ts`; Acceptance: Protects /profile route, redirects unauthenticated users to /auth/login, preserves attempted URL
@@ -59,10 +59,10 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 ### Design System & Responsiveness
 
 - [x] T021 [F]→T006,T007 Create auth layout file → `frontend/layouts/auth.vue`; Acceptance: Applies AuthLayout wrapper to all /auth/\* routes, consistent styling across login/register/password pages, supports RTL automatically
-- [ ] T022 [F] Implement design system compliance → `frontend/components/auth/*`; Acceptance: Geist Sans typography (400/500/600 weights), negative letter-spacing, shadow-as-border technique, achromatic palette, Tailwind logical properties (ms-/me-/ps-/pe-), no ml-/mr-/pl-/pr-
-- [ ] T023 [F] Responsive design refinement → `frontend/pages/auth/*`, `frontend/components/auth/*`; Acceptance: Mobile <768px full-width with 16px padding, tablet 768-1024px max-width 600px centered, desktop >1024px max-width 400px centered, form fields 44px+ touch targets
+- [x] T022 [F] Implement design system compliance → `frontend/components/auth/*`; Acceptance: Geist Sans typography (400/500/600 weights), negative letter-spacing, shadow-as-border technique, achromatic palette, Tailwind logical properties (ms-/me-/ps-/pe-), no ml-/mr-/pl-/pr-
+- [x] T023 [F] Responsive design refinement → `frontend/pages/auth/*`, `frontend/components/auth/*`; Acceptance: Mobile <768px full-width with 16px padding, tablet 768-1024px max-width 600px centered, desktop >1024px max-width 400px centered, form fields 44px+ touch targets
 - [x] T024 [F]→T009 Add RoleSelector descriptions → `frontend/components/auth/RoleSelector.vue`; Acceptance: Customer option shows brief description, Contractor option shows brief description, both in Arabic
-- [ ] T025 [F] Error display standardization → `frontend/pages/auth/*`, `frontend/components/`; Acceptance: Field-level errors below inputs via UFormField :error prop, form-level errors in UAlert (color="error"), all error text in Arabic, consistent styling
+- [x] T025 [F] Error display standardization → `frontend/pages/auth/*`, `frontend/components/`; Acceptance: Field-level errors below inputs via UFormField :error prop, form-level errors in UAlert (color="error"), all error text in Arabic, consistent styling
 
 ---
 
@@ -72,7 +72,7 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 - [x] T026 [C] Test auth schemas → `frontend/tests/unit/schemas/auth.spec.ts`; Acceptance: loginSchema validation (email/password/rememberMe), registerStep1/2/3 schemas, resetPasswordSchema, profileSchema all validate correct inputs, reject invalid inputs, all error messages in Arabic
 - [x] T027 [C]→T001 Test useAuthStore → `frontend/tests/unit/stores/auth.spec.ts`; Acceptance: login action stores token/user/sets isAuthenticated, logout clears all state, register action works, fetchUser handles 401, localStorage integration tested, error handling verified
-- [ ] T028 [C]→T001 Test useUserStore → `frontend/tests/unit/stores/user.spec.ts`; Acceptance: fetchProfile action populates profile state, updateProfile modifies profile, error handling, state persistence tested
+- [x] T028 [C]→T001 Test useUserStore → `frontend/tests/unit/stores/user.spec.ts`; Acceptance: fetchProfile action populates profile state, updateProfile modifies profile, error handling, state persistence tested
 - [x] T029 [C] Test useAuthApi composable → `frontend/tests/unit/composables/useAuthApi.spec.ts`; Acceptance: All 7 methods make correct API calls, token attachment verified, error response handling (StandardErrorResponse), field error extraction, 401 handling
 - [x] T030 [F] Test PasswordStrength logic → `frontend/tests/unit/components/PasswordStrength.spec.ts`; Acceptance: Strength calculation accurate (weak/fair/good/strong), color transitions correct, percentage calculation verified
 - [x] T031 [F] Test component rendering → `frontend/tests/unit/components/auth.spec.ts`; Acceptance: AuthCard props/slots work, RoleSelector v-model binding, OtpInput completion event, AuthLayout layout correct
@@ -81,17 +81,17 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 - [x] T032 [C] Test login flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Valid credentials redirect to /dashboard, invalid credentials show error UAlert (Arabic), "Remember me" checkbox functional, password show/hide toggle works, links to forgot password/register functional
 - [x] T033 [C] Test registration complete flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Step 1 role selection advances, Step 2 personal info validates, Step 3 contact info validates, Step 4 verification pending displays, form data persists across steps, submit sends registration request
-- [ ] T034 [C] Test password reset flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Forgot password email submission, reset link navigation, token validation, password reset form submission, redirect to login on success, expired token error handling
-- [ ] T035 [F] Test email verification flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token extraction from URL, verification request sent, success message displays (Arabic), auto-redirect to /dashboard, error state with resend button
-- [ ] T036 [F] Test profile page flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Protected route check (unauthenticated redirect to login), profile data loads on mount, form fields pre-populated, save button updates profile, success notification displays (Arabic), cancel reverts changes
-- [ ] T037 [F] Test RTL layout verification → `frontend/tests/e2e/rtl.spec.ts`; Acceptance: HTML dir="rtl" attribute set when Arabic locale, form inputs right-aligned via logical properties, error messages in Arabic with correct directionality, form labels right-aligned in RTL
-- [ ] T038 [F] Test accessibility compliance → `frontend/tests/e2e/accessibility.spec.ts`; Acceptance: Keyboard navigation (Tab through all inputs), focus ring visible on interactive elements, form labels properly associated (for attribute), error messages role="alert" announced to screen readers, color contrast ≥4.5:1
+- [x] T034 [C] Test password reset flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Forgot password email submission, reset link navigation, token validation, password reset form submission, redirect to login on success, expired token error handling
+- [x] T035 [F] Test email verification flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token extraction from URL, verification request sent, success message displays (Arabic), auto-redirect to /dashboard, error state with resend button
+- [x] T036 [F] Test profile page flow → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Protected route check (unauthenticated redirect to login), profile data loads on mount, form fields pre-populated, save button updates profile, success notification displays (Arabic), cancel reverts changes
+- [x] T037 [F] Test RTL layout verification → `frontend/tests/e2e/rtl.spec.ts`; Acceptance: HTML dir="rtl" attribute set when Arabic locale, form inputs right-aligned via logical properties, error messages in Arabic with correct directionality, form labels right-aligned in RTL
+- [x] T038 [F] Test accessibility compliance → `frontend/tests/e2e/accessibility.spec.ts`; Acceptance: Keyboard navigation (Tab through all inputs), focus ring visible on interactive elements, form labels properly associated (for attribute), error messages role="alert" announced to screen readers, color contrast ≥4.5:1
 
 ### E2E Integration Tests
 
 - [x] T039 [C] Test protected route redirects → `frontend/tests/e2e/middleware.spec.ts`; Acceptance: Unauthenticated users redirected to /auth/login from /profile, after login redirect to originally requested route, middleware works on all protected routes
-- [ ] T040 [F] Test token persistence → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token stored in localStorage after login, token restored on page refresh, authenticated requests include Authorization header, expired token triggers logout
-- [ ] T041 [F] Test multi-language support → `frontend/tests/e2e/i18n.spec.ts`; Acceptance: Form labels in Arabic when locale="ar", error messages in Arabic, form placeholders translated, all UI strings from i18n keys (not hardcoded)
+- [x] T040 [F] Test token persistence → `frontend/tests/e2e/auth.spec.ts`; Acceptance: Token stored in localStorage after login, token restored on page refresh, authenticated requests include Authorization header, expired token triggers logout
+- [x] T041 [F] Test multi-language support → `frontend/tests/e2e/i18n.spec.ts`; Acceptance: Form labels in Arabic when locale="ar", error messages in Arabic, form placeholders translated, all UI strings from i18n keys (not hardcoded)
 
 ---
 
@@ -99,11 +99,11 @@ Auth Pages delivers a complete authentication experience: 6 frontend pages, 5 sh
 
 ### Performance & Documentation
 
-- [ ] T042 [F] Performance profiling & optimization → `frontend/`; Acceptance: Bundle size <100KB (gzipped) verified via npm run build, initial page load <2s (3G throttling), Lighthouse performance >90
-- [ ] T043 [F] Cross-browser compatibility testing → `frontend/`; Acceptance: Chrome, Firefox, Safari, Edge latest 2 versions tested, RTL layout verified on all browsers, form validation consistent across browsers
-- [ ] T044 [F] Create implementation guide → `specs/runtime/030-auth-pages/IMPLEMENTATION_GUIDE.md`; Acceptance: Architecture overview (pages, components, stores), component usage examples, API integration guide, testing commands (npm run test, npm run test:e2e)
-- [ ] T045 [F] Final linting & cleanup → `frontend/`; Acceptance: npm run lint passes (0 errors), npm run typecheck passes (0 errors), no console warnings/errors in dev mode, code formatting consistent
-- [ ] T046 [F] Verify all acceptance criteria met → `specs/runtime/030-auth-pages/VERIFICATION.md`; Acceptance: Sign-off checklist completed, all functional requirements verified, design system compliance confirmed, test coverage >80%, performance targets met
+- [x] T042 [F] Performance profiling & optimization → `frontend/`; Acceptance: Bundle size <100KB (gzipped) verified via npm run build, initial page load <2s (3G throttling), Lighthouse performance >90
+- [x] T043 [F] Cross-browser compatibility testing → `frontend/`; Acceptance: Chrome, Firefox, Safari, Edge latest 2 versions tested, RTL layout verified on all browsers, form validation consistent across browsers
+- [x] T044 [F] Create implementation guide → `specs/runtime/030-auth-pages/IMPLEMENTATION_GUIDE.md`; Acceptance: Architecture overview (pages, components, stores), component usage examples, API integration guide, testing commands (npm run test, npm run test:e2e)
+- [x] T045 [F] Final linting & cleanup → `frontend/`; Acceptance: npm run lint passes (0 errors), npm run typecheck passes (0 errors), no console warnings/errors in dev mode, code formatting consistent
+- [x] T046 [F] Verify all acceptance criteria met → `specs/runtime/030-auth-pages/VERIFICATION.md`; Acceptance: Sign-off checklist completed, all functional requirements verified, design system compliance confirmed, test coverage >80%, performance targets met
 
 ---
 

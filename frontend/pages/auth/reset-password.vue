@@ -66,6 +66,7 @@
             v-if="error"
             color="red"
             variant="subtle"
+            role="alert"
             :title="error"
             class="mb-4"
             @close="error = null"
