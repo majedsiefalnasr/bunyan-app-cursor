@@ -58,4 +58,10 @@ Deliver Arabic-first, RTL project management UX on Nuxt 3 using Nuxt UI against 
 
 ## Clarifications
 
-(Added in Step 2 — see `reports/CLARIFY_REPORT.md`.)
+### Session 2026-04-12
+
+1. **Creation wizard vs `/projects/new`** — `/projects/create` is canonical; `/projects/new` performs a client redirect to preserve bookmarks.
+2. **`start_date` validation** — Wizard does not send `start_date` by default so `CreateProjectRequest::after:today` is not tripped; optional future field stays out of MVP.
+3. **BOQ / estimates** — `/projects/:id/estimates` is a **client-only** worksheet keyed by `sessionStorage` until a BOQ API is specified; totals are UX-only.
+4. **Workflow visibility** — Workflow tab surfaces `POST .../workflow/start` success or API error message; no new read endpoint assumed.
+5. **Nuxt UI version** — Repo uses Nuxt UI 2.x without `USteppers`/`USortable`; wizard uses stepped `UCard` flow; Kanban remains columnar without drag reorder.
