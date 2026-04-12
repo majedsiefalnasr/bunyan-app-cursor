@@ -48,7 +48,13 @@ class PhasePolicy
             return true;
         }
 
-        return $phase->project->customer_id === $user->id;
+        $project = $phase->project;
+
+        if ($user->role === UserRole::SupervisingArchitect) {
+            return $project->supervising_architect_id === $user->id;
+        }
+
+        return $project->customer_id === $user->id;
     }
 
     public function restore(User $user, Phase $phase): bool

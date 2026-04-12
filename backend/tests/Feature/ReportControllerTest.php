@@ -72,7 +72,7 @@ class ReportControllerTest extends TestCase
 
     public function test_update_report_successfully()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'field_engineer']);
         $project = Project::factory()->create();
         $report = Report::factory()->create(['project_id' => $project->id, 'created_by' => $user->id]);
 

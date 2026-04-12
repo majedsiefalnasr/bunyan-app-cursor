@@ -1,6 +1,8 @@
 <?php
 
 use App\Exceptions\ApiExceptionRenderer;
+use App\Http\Middleware\CheckPermission;
+use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\ErrorDetailFiltering;
 use App\Http\Middleware\InjectCorrelationId;
 use App\Http\Middleware\LogApiActivity;
@@ -30,6 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend(InjectCorrelationId::class);
         $middleware->appendToGroup('api', LogApiActivity::class);
         $middleware->appendToGroup('api', ErrorDetailFiltering::class);
+        $middleware->alias([
+            'role' => CheckRole::class,
+            'permission' => CheckPermission::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e, Request $request) {

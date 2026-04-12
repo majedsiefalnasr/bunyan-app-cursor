@@ -53,7 +53,7 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertTrue($policy->create($admin));
 
         $this->assertTrue($policy->update($customer, $project));
-        $this->assertFalse($policy->update($contractor, $project));
+        $this->assertTrue($policy->update($contractor, $project));
         $this->assertTrue($policy->update($admin, $project));
 
         $this->assertTrue($policy->delete($customer, $project));
@@ -73,12 +73,14 @@ class ApplicationPoliciesTest extends TestCase
         $policy = new PhasePolicy;
         $customer = User::factory()->customer()->create();
         $contractor = User::factory()->contractor()->create();
+        $architect = User::factory()->supervisingArchitect()->create();
         $admin = User::factory()->admin()->create();
         $field = User::factory()->fieldEngineer()->create();
 
         $project = Project::factory()->create([
             'customer_id' => $customer->id,
             'contractor_id' => $contractor->id,
+            'supervising_architect_id' => $architect->id,
         ]);
         $phase = Phase::factory()->create(['project_id' => $project->id]);
 
@@ -97,6 +99,7 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertFalse($policy->update($field, $phase));
 
         $this->assertTrue($policy->delete($customer, $phase));
+        $this->assertTrue($policy->delete($architect, $phase));
         $this->assertFalse($policy->delete($contractor, $phase));
         $this->assertTrue($policy->restore($customer, $phase));
         $this->assertTrue($policy->forceDelete($admin, $phase));
@@ -137,7 +140,7 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertFalse($policy->update($customer, $task));
 
         $this->assertTrue($policy->delete($contractor, $task));
-        $this->assertFalse($policy->delete($architect, $task));
+        $this->assertTrue($policy->delete($architect, $task));
         $this->assertTrue($policy->restore($contractor, $task));
         $this->assertTrue($policy->forceDelete($admin, $task));
     }

@@ -84,6 +84,18 @@ final class ApiExceptionRenderer
             );
         }
 
+        if ($e instanceof RbacException) {
+            $code = ErrorCode::tryFrom($e->getErrorCode()) ?? ErrorCode::RBAC_ROLE_DENIED;
+
+            return ApiErrorResponse::json(
+                $request,
+                $code,
+                $e->getMessage(),
+                null,
+                $code->httpStatus(),
+            );
+        }
+
         if ($e instanceof DomainException) {
             $code = ErrorCode::tryFrom($e->getErrorCode()) ?? ErrorCode::SERVER_ERROR;
 

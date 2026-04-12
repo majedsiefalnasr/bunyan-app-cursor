@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -53,8 +54,20 @@ class UserSeeder extends Seeder
             ],
         ];
 
-        foreach ($users as $user) {
-            User::firstOrCreate(['email' => $user['email']], $user);
+        $roles = Role::all()->keyBy('name');
+
+        foreach ($users as $userData) {
+            $user = User::firstOrCreate(['email' => $userData['email']], $userData);
+
+            $role = $roles->get($userData['role']);
+            if ($role !== null) {
+                $user->roles()->syncWithoutDetaching([
+                    $role->id => [
+                        'assigned_at' => now(),
+                        'assigned_by' => null,
+                    ],
+                ]);
+            }
         }
     }
 }

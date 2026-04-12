@@ -8,6 +8,14 @@ export default defineNuxtRouteMiddleware((to) => {
     const userRole = auth.userRole;
 
     if (!userRole || !requiredRoles.includes(userRole)) {
+        const toast = useToast();
+        toast.add({
+            title: 'غير مصرح',
+            description: 'ليس لديك الصلاحية للوصول لهذه الصفحة',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle',
+        });
+
         return navigateTo('/ar/dashboard');
     }
 });

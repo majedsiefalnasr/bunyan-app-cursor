@@ -17,6 +17,12 @@ return [
         'RBAC_ROLE_DENIED' => [
             'message' => 'You are not allowed to perform this action.',
         ],
+        'RBAC_PERMISSION_DENIED' => [
+            'message' => 'You do not have the required permission for this action.',
+        ],
+        'RBAC_LAST_ADMIN' => [
+            'message' => 'Cannot change the role of the last admin user.',
+        ],
         'RESOURCE_NOT_FOUND' => [
             'message' => 'The requested resource was not found.',
         ],
