@@ -8,21 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
+Last Updated: 2026-04-12T12:53:53Z
 
-Initiated: 2026-04-12T00:00:00Z
+Scope Defined: Activity log persistence, admin listing, subject timelines, trait-based logging for projects, retention + prune command, admin Nuxt UI + timeline component.
 
-Scope Open:
+Deferred Scope: SIEM, websockets, legal hold, full export pipeline.
 
-- Specification pending
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-Architecture Governance Compliance:
-
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
