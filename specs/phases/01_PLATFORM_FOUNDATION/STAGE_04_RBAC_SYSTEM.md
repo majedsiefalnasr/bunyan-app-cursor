@@ -8,20 +8,27 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: HIGH
-Initiated: 2026-04-12T00:00:00Z
+Last Updated: 2026-04-12T00:00:00Z
 
-Scope Open:
+Scope Defined:
 
-- Specification pending
+- RBAC middleware (CheckRole, CheckPermission) for route protection
+- Gate-based permission system wired to role_permissions table
+- Admin role/user management endpoints
+- Frontend permission-aware navigation and admin role management page
+
+Deferred Scope:
+
+- Custom role creation, permission CRUD, multi-role, OAuth role mapping
 
 Architecture Governance Compliance:
 
-- Pending governance audit
+- Specification drafted — governance audit pending
 
 Notes:
-Stage initialized. Specification in progress.
+Specification complete. Clarification step pending.
 
 ## Objective
 
