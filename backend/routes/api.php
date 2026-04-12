@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
@@ -84,6 +85,13 @@ Route::prefix('v1')->group(function () {
         // Public-read resources (all authenticated roles)
         Route::get('products', [ProductController::class, 'index'])->name('products.index');
         Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+        Route::middleware(['role:admin,contractor', 'throttle:120,1'])->prefix('inventory')->group(function () {
+            Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
+            Route::get('low-stock', [InventoryController::class, 'lowStock'])->name('inventory.low-stock');
+            Route::put('{product}/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
+            Route::get('{product}/movements', [InventoryController::class, 'movements'])->name('inventory.movements');
+        });
 
         Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
