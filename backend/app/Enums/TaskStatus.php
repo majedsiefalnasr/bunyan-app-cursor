@@ -4,20 +4,20 @@ namespace App\Enums;
 
 enum TaskStatus: string
 {
-    case Pending = 'pending';
+    case Todo = 'todo';
     case InProgress = 'in_progress';
-    case Completed = 'completed';
-    case Approved = 'approved';
-    case Rejected = 'rejected';
+    case InReview = 'in_review';
+    case Done = 'done';
+    case Blocked = 'blocked';
 
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'في الانتظار',
+            self::Todo => 'قائمة',
             self::InProgress => 'قيد التنفيذ',
-            self::Completed => 'مكتملة',
-            self::Approved => 'معتمدة',
-            self::Rejected => 'مرفوضة',
+            self::InReview => 'قيد المراجعة',
+            self::Done => 'منجزة',
+            self::Blocked => 'متوقفة',
         };
     }
 

@@ -68,13 +68,13 @@ class EnumCastTest extends TestCase
         $phase = Phase::factory()->create(['project_id' => $project->id]);
         $task = Task::factory()->create([
             'phase_id' => $phase->id,
-            'status' => 'completed',
+            'status' => 'done',
         ]);
 
         $freshTask = Task::find($task->id);
 
         $this->assertInstanceOf(TaskStatus::class, $freshTask->status);
-        $this->assertSame(TaskStatus::Completed, $freshTask->status);
+        $this->assertSame(TaskStatus::Done, $freshTask->status);
     }
 
     public function test_user_factory_states_set_correct_role(): void

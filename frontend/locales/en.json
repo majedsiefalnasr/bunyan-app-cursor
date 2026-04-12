@@ -197,7 +197,10 @@
         "status_label": "Status",
         "timeline_title": "Timeline",
         "phases_heading": "Phases",
-        "back_to_list": "Back to list"
+        "back_to_list": "Back to list",
+        "open_tasks": "Tasks",
+        "tasks_title": "Project tasks",
+        "tasks_subtitle": "Kanban-style board grouped by task status."
     },
     "activityLog": {
         "admin_title": "Activity log",
