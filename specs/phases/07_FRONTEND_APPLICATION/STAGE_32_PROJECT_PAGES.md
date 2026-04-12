@@ -8,20 +8,18 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
-Risk Level: HIGH
+Step: specify
+Risk Level: UNKNOWN
 Initiated: 2026-04-12T23:00:00Z
+Last Updated: 2026-04-12T23:05:00Z
 
-Scope Open:
+Scope Defined: Nested project shell, creation wizard, composables, estimates MVP, tests.
 
-- Specification pending
+Deferred Scope: Server BOQ API, Gantt, drag-and-drop Kanban.
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
