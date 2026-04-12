@@ -7,42 +7,44 @@ use PHPUnit\Framework\TestCase;
 
 class TaskStatusTest extends TestCase
 {
-    public function test_has_five_cases(): void
+    public function test_it_has_five_cases(): void
     {
         $this->assertCount(5, TaskStatus::cases());
     }
 
-    public function test_backing_values(): void
+    public function test_values_map_to_expected_strings(): void
     {
-        $this->assertSame('pending', TaskStatus::Pending->value);
+        $this->assertSame('todo', TaskStatus::Todo->value);
         $this->assertSame('in_progress', TaskStatus::InProgress->value);
-        $this->assertSame('completed', TaskStatus::Completed->value);
-        $this->assertSame('approved', TaskStatus::Approved->value);
-        $this->assertSame('rejected', TaskStatus::Rejected->value);
+        $this->assertSame('in_review', TaskStatus::InReview->value);
+        $this->assertSame('done', TaskStatus::Done->value);
+        $this->assertSame('blocked', TaskStatus::Blocked->value);
     }
 
-    public function test_arabic_labels(): void
+    public function test_labels_are_arabic(): void
     {
-        $this->assertSame('في الانتظار', TaskStatus::Pending->label());
+        $this->assertSame('قائمة', TaskStatus::Todo->label());
         $this->assertSame('قيد التنفيذ', TaskStatus::InProgress->label());
-        $this->assertSame('مكتملة', TaskStatus::Completed->label());
-        $this->assertSame('معتمدة', TaskStatus::Approved->label());
-        $this->assertSame('مرفوضة', TaskStatus::Rejected->label());
+        $this->assertSame('قيد المراجعة', TaskStatus::InReview->label());
+        $this->assertSame('منجزة', TaskStatus::Done->label());
+        $this->assertSame('متوقفة', TaskStatus::Blocked->label());
     }
 
-    public function test_values_returns_all_backing_values(): void
+    public function test_values_returns_all_status_strings(): void
     {
-        $expected = ['pending', 'in_progress', 'completed', 'approved', 'rejected'];
+        $expected = ['todo', 'in_progress', 'in_review', 'done', 'blocked'];
         $this->assertSame($expected, TaskStatus::values());
     }
 
-    public function test_from_valid_value(): void
+    public function test_from_accepts_valid_strings(): void
     {
-        $this->assertSame(TaskStatus::Completed, TaskStatus::from('completed'));
+        $this->assertSame(TaskStatus::Done, TaskStatus::from('done'));
+        $this->assertSame(TaskStatus::Todo, TaskStatus::from('todo'));
     }
 
-    public function test_try_from_invalid_returns_null(): void
+    public function test_try_from_rejects_unknown_strings(): void
     {
-        $this->assertNull(TaskStatus::tryFrom('done'));
+        $this->assertNull(TaskStatus::tryFrom('completed'));
+        $this->assertNull(TaskStatus::tryFrom('pending'));
     }
 }

@@ -44,9 +44,18 @@
 
 <template>
     <div class="mx-auto max-w-3xl space-y-6">
-        <UButton :to="localePath('/projects')" variant="soft" color="gray">
-            {{ $t('projects.back_to_list') }}
-        </UButton>
+        <div class="flex flex-wrap gap-2">
+            <UButton :to="localePath('/projects')" variant="soft" color="gray">
+                {{ $t('projects.back_to_list') }}
+            </UButton>
+            <UButton
+                :to="localePath(`/projects/${route.params.id}/tasks`)"
+                variant="soft"
+                color="gray"
+            >
+                {{ $t('projects.open_tasks') }}
+            </UButton>
+        </div>
 
         <div v-if="isLoading" class="text-sm text-[#666666]">
             {{ $t('shell.loading') }}

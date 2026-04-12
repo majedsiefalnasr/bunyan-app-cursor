@@ -197,7 +197,10 @@
         "status_label": "الحالة",
         "timeline_title": "الجدول الزمني",
         "phases_heading": "المراحل",
-        "back_to_list": "العودة للقائمة"
+        "back_to_list": "العودة للقائمة",
+        "open_tasks": "المهام",
+        "tasks_title": "مهام المشروع",
+        "tasks_subtitle": "عرض لوحة كانبان حسب حالة المهمة."
     },
     "activityLog": {
         "admin_title": "سجل النشاط",

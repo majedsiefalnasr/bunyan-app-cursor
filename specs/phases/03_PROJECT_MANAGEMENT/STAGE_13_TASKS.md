@@ -1,15 +1,30 @@
 # STAGE_13 — Tasks
 
 > **Phase:** 03_PROJECT_MANAGEMENT
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** Task management within projects, assignment, tracking
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: PRODUCTION READY
+Risk Level: LOW
+Closure Date: 2026-04-12
+
+Step: stage_production_ready
+
+Scope Closed: Project-scoped task API, schema extensions (`project_id`, titles, priority, hours, comments), `TaskService`, workspace routes, Kanban Nuxt page, legacy phase routes preserved; 14/14 tasks.
+
+Deferred Scope: Real-time board, advanced DAG validation, Gantt.
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR)
+- RBAC enforcement confirmed
+- Service layer architecture maintained
+- Error contract compliance verified
+
+Notes: Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
