@@ -1,0 +1,32 @@
+{
+  "stage": "Media Library",
+  "phase": "05_COMMUNICATION_AND_MEDIA",
+  "stage_dir": "specs/runtime/024-media-library",
+  "stage_file": "specs/phases/05_COMMUNICATION_AND_MEDIA/STAGE_24_MEDIA_LIBRARY.md",
+  "branch": "spec/024-media-library",
+  "base_branch": "develop",
+  "pkg_manager": "composer",
+  "auto_advance": true,
+  "current_step": "pre_step",
+  "stage_status": "DRAFT",
+  "clarifications_resolved": false,
+  "drift_passed": false,
+  "implementation_allowed": false,
+  "plan_completed": false,
+  "tasks_total": null,
+  "tasks_completed": null,
+  "deferred_tasks": [],
+  "guardian_verdicts": {},
+  "parallel_task_groups": [],
+  "current_parallel_group": null,
+  "session_started_at": "2026-04-12T16:00:00Z",
+  "last_updated": "2026-04-12T16:00:00Z",
+  "step_timings": {},
+  "history": [
+    {
+      "event": "branch_created",
+      "branch": "spec/024-media-library",
+      "timestamp": "2026-04-12T16:00:00Z"
+    }
+  ]
+}
