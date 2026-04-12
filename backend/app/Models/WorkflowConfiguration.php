@@ -11,17 +11,21 @@ class WorkflowConfiguration extends BaseModel
     protected $fillable = [
         'project_id',
         'name',
+        'name_ar',
+        'name_en',
         'description',
         'type',
         'status_transitions',
         'approval_requirements',
         'is_global',
+        'is_active',
     ];
 
     protected $casts = [
         'status_transitions' => 'json',
         'approval_requirements' => 'json',
         'is_global' => 'boolean',
+        'is_active' => 'boolean',
         'type' => WorkflowType::class,
     ];
 
@@ -33,5 +37,10 @@ class WorkflowConfiguration extends BaseModel
     public function approvalRules(): HasMany
     {
         return $this->hasMany(ApprovalRule::class);
+    }
+
+    public function workflowInstances(): HasMany
+    {
+        return $this->hasMany(WorkflowInstance::class);
     }
 }

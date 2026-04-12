@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PendingApprovalController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\PricingCalculationController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -22,12 +23,15 @@ use App\Http\Controllers\Api\V1\ProjectDocumentController;
 use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
 use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
+use App\Http\Controllers\Api\V1\ProjectWorkflowController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TaskWorkspaceController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\WorkflowDefinitionController;
+use App\Http\Controllers\Api\V1\WorkflowInstanceActionController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -211,6 +215,20 @@ Route::prefix('v1')->group(function () {
             Route::delete('projects/{project}/phases/{phase}', [PhaseController::class, 'destroy'])->name('projects.phases.destroy');
             Route::delete('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'destroy'])->name('projects.phases.tasks.destroy');
         });
+
+        Route::middleware('role:admin')->group(function () {
+            Route::get('workflows', [WorkflowDefinitionController::class, 'index'])->name('workflows.index');
+            Route::post('workflows', [WorkflowDefinitionController::class, 'store'])->name('workflows.store');
+            Route::get('workflows/{workflowConfiguration}', [WorkflowDefinitionController::class, 'show'])->name('workflows.show');
+        });
+
+        Route::middleware('role:customer,contractor,supervising_architect,admin')->group(function () {
+            Route::post('projects/{project}/workflow/start', [ProjectWorkflowController::class, 'start'])->name('projects.workflow.start');
+            Route::put('workflow-instances/{workflowInstance}/approve', [WorkflowInstanceActionController::class, 'approve'])->name('workflow-instances.approve');
+            Route::put('workflow-instances/{workflowInstance}/reject', [WorkflowInstanceActionController::class, 'reject'])->name('workflow-instances.reject');
+        });
+
+        Route::get('approvals/pending', [PendingApprovalController::class, 'index'])->name('approvals.pending');
 
         // Field Engineer routes
         Route::middleware('role:field_engineer,admin')->group(function () {

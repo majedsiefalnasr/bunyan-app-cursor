@@ -43,4 +43,17 @@ class ApprovalRuleRepository extends BaseRepository
             ->where('status_to', $statusTo)
             ->first();
     }
+
+    /**
+     * @return Collection<int, ApprovalRule>
+     */
+    public function projectRulesFor(int $configId): Collection
+    {
+        /** @var Collection<int, ApprovalRule> */
+        return $this->newQuery()
+            ->where('workflow_configuration_id', $configId)
+            ->where('entity_type', 'project')
+            ->orderBy('id')
+            ->get();
+    }
 }
