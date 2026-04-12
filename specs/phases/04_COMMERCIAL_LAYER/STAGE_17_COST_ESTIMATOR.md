@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T12:15:00Z
+Step: clarify
+Risk Level: MEDIUM
+Last Updated: 2026-04-12T12:20:00Z
 
-Scope Defined: Project estimates, line items, BOQ templates (admin), calculation, compare, CSV export, Nuxt UI
+Scope Defined: Project estimates, line items, BOQ templates (admin), calculation, compare, CSV export, Nuxt UI; field-engineer read-only; approval matrix locked
 
 Deferred Scope: PDF binary, template-to-lines apply, XLSX styling
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 

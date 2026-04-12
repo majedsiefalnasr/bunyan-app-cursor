@@ -88,3 +88,13 @@ Deliver **project-scoped cost estimation** for Bunyan: `estimates` and `estimate
 
 - **Upstream:** Products, pricing, projects (existing models and policies).
 - **Downstream:** Quotations stage may consume approved estimates (out of scope here).
+
+## Clarifications
+
+### Session 2026-04-12
+
+- **Field engineer access:** Read-only on estimates and exports (`GET` routes); no create/update/items/calculate/approve (aligned with project read group minus mutation roles).
+- **Export format:** CSV with UTF-8 BOM for Excel Arabic compatibility; filename `estimate-{id}-boq.csv`.
+- **Compare API:** `GET /projects/{project}/estimates/compare?ids=2,3,5` — minimum 2, maximum 5 ids; all must belong to the project or 422.
+- **Approval roles:** `customer`, `supervising_architect`, and `admin` may approve or reject; `contractor` cannot approve own-only workflow (contractor can still submit by setting status to `submitted` via `PUT` when policy allows).
+- **Submitted status:** Contractor or customer may move `draft` → `submitted` via `PUT` when they have update permission and estimate has at least one line item.
