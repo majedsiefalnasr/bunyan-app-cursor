@@ -1,24 +1,28 @@
 # STAGE_07 — Categories
 
 > **Phase:** 02_CATALOG_AND_INVENTORY
-> **Status:** BACKEND CLOSED
+> **Status:** PRODUCTION READY
 > **Scope:** Product/service category hierarchy, nested categories
 > **Risk Level:** LOW
 
 ## Stage Status
 
-Status: BACKEND CLOSED  
-Step: implement  
+Status: PRODUCTION READY  
+Step: stage_production_ready  
 Risk Level: LOW  
-Last Updated: 2026-04-12T15:32:00Z
+Closure Date: 2026-04-12
 
-Implementation: COMPLETE — 12/12 tasks
+Scope Closed: Hierarchical categories API, admin UI, seeder, tests, validation pipeline green; 12/12 tasks.
 
-Deferred Scope: `products.category_id` FK (STAGE_08).
+Deferred Scope: `products.category_id` FK and migration from string `category` (STAGE_08).
 
-Architecture Governance Compliance: Implementation complete; pre-closure review pending (autopilot eligible).
+Architecture Governance Compliance:
 
-Notes: Backend and frontend delivered; closure artifacts pending final commit.
+- ADR alignment: additive catalog module within existing API/RBAC patterns
+- RBAC: Sanctum + `role:admin` on mutations; `include_inactive` admin-only
+- Service/repository layering; thin controller; error contract preserved
+
+Notes: Stage production ready. Changes require a new stage or formal amendment.
 
 ## Objective
 
