@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T12:08:00Z
+Last Updated: 2026-04-12T12:12:00Z
 
-Scope Defined: In-app notifications, REST APIs, preference registry, Nuxt shell surfaces
+Scope Planned: Migrations, services, REST API, Nuxt bell + pages
 
-Deferred Scope: Push/SMS providers, admin broadcast console
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
