@@ -130,6 +130,18 @@
         "welcome_hint": "ابدأ من هنا للوصول إلى حسابك والملف الشخصي.",
         "profile_cta": "حدّث بياناتك الشخصية في أي وقت."
     },
+    "catalog": {
+        "list_title": "منتجات البناء",
+        "list_subtitle": "تصفح المواد المعروضة في المنصة.",
+        "empty": "لا توجد منتجات مطابقة.",
+        "search_placeholder": "بحث بالاسم…",
+        "search_action": "بحث",
+        "price_label": "السعر",
+        "stock_label": "المخزون",
+        "detail_title": "تفاصيل المنتج",
+        "variants_title": "الخيارات",
+        "back_list": "العودة للقائمة"
+    },
     "suppliers": {
         "directory_title": "دليل الموردين",
         "directory_subtitle": "موردون موثّقون لمواد البناء والتشييد.",

@@ -36,6 +36,11 @@ class Category extends BaseModel
         return $this->hasMany(self::class, 'parent_id')->orderBy('sort_order')->orderBy('id');
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

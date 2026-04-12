@@ -130,6 +130,18 @@
         "welcome_hint": "Start here to access your account and profile.",
         "profile_cta": "Update your personal details anytime."
     },
+    "catalog": {
+        "list_title": "Building products",
+        "list_subtitle": "Browse materials listed on the marketplace.",
+        "empty": "No matching products.",
+        "search_placeholder": "Search by name…",
+        "search_action": "Search",
+        "price_label": "Price",
+        "stock_label": "In stock",
+        "detail_title": "Product details",
+        "variants_title": "Variants",
+        "back_list": "Back to list"
+    },
     "suppliers": {
         "directory_title": "Supplier directory",
         "directory_subtitle": "Verified suppliers for building materials.",

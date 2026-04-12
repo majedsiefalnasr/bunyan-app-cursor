@@ -21,6 +21,7 @@ class ProductFactory extends Factory
             'price' => fake()->randomFloat(2, 1, 9999),
             'quantity_in_stock' => fake()->numberBetween(0, 500),
             'category' => 'building_materials',
+            'category_id' => null,
             'specifications' => null,
             'image_url' => null,
             'active' => true,

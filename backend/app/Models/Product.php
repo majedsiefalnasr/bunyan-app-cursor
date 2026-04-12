@@ -16,9 +16,9 @@ class Product extends BaseModel
         'description',
         'sku',
         'price',
-        'quantity',
         'quantity_in_stock',
         'category',
+        'category_id',
         'specifications',
         'image_url',
         'active',
@@ -34,6 +34,21 @@ class Product extends BaseModel
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function catalogCategory(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function productMedia(): HasMany
+    {
+        return $this->hasMany(ProductMedia::class);
     }
 
     public function supplierProfile(): BelongsTo

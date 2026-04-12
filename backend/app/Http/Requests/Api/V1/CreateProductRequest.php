@@ -17,7 +17,8 @@ class CreateProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'category' => ['required', 'string', 'max:100'],
+            'category' => ['required_without:category_id', 'nullable', 'string', 'max:100'],
+            'category_id' => ['required_without:category', 'nullable', 'integer', 'exists:categories,id'],
             'price' => ['required', 'numeric', 'min:0.01'],
             'quantity' => ['required', 'integer', 'min:0'],
             'supplier_id' => ['nullable', 'integer', 'exists:supplier_profiles,id'],
