@@ -7,6 +7,7 @@
         "home": "الرئيسية",
         "dashboard": "لوحة التحكم",
         "projects": "المشاريع",
+        "messages": "الرسائل",
         "reports": "التقارير",
         "services": "الخدمات",
         "products": "المنتجات",
@@ -125,6 +126,18 @@
         "verify": "توثيق",
         "suspend": "إيقاف",
         "rating": "التقييم"
+    },
+    "messages": {
+        "list_title": "الرسائل",
+        "list_subtitle": "محادثاتك داخل المنصة.",
+        "empty": "لا توجد محادثات بعد.",
+        "thread_title": "المحادثة",
+        "back": "العودة للقائمة",
+        "composer_placeholder": "اكتب رسالة...",
+        "send": "إرسال",
+        "mark_read": "تعيين كمقروء",
+        "partner_id_label": "معرّف المستخدم للطرف الآخر",
+        "partner_hint": "أدخل رقم المستخدم ثم اضغط إرسال لبدء محادثة مباشرة."
     },
     "projects": {
         "list_title": "المشاريع",

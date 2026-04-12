@@ -7,6 +7,7 @@
         "home": "Home",
         "dashboard": "Dashboard",
         "projects": "Projects",
+        "messages": "Messages",
         "reports": "Reports",
         "services": "Services",
         "products": "Products",
@@ -125,6 +126,18 @@
         "verify": "Verify",
         "suspend": "Suspend",
         "rating": "Rating"
+    },
+    "messages": {
+        "list_title": "Messages",
+        "list_subtitle": "Your in-platform conversations.",
+        "empty": "No conversations yet.",
+        "thread_title": "Conversation",
+        "back": "Back to list",
+        "composer_placeholder": "Write a message...",
+        "send": "Send",
+        "mark_read": "Mark as read",
+        "partner_id_label": "Other user ID",
+        "partner_hint": "Enter the other user's numeric ID, then send to start a direct conversation."
     },
     "projects": {
         "list_title": "Projects",
