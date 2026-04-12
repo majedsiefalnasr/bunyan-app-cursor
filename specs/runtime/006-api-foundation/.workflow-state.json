@@ -31,24 +31,60 @@
   "session_started_at": "2026-04-12T12:00:00Z",
   "last_updated": "2026-04-12T12:50:00Z",
   "step_timings": {
-    "pre_step": { "started_at": "2026-04-12T12:00:00Z", "completed_at": "2026-04-12T12:00:00Z" },
-    "specify": { "started_at": "2026-04-12T12:05:00Z", "completed_at": "2026-04-12T12:06:00Z" },
-    "clarify": { "started_at": "2026-04-12T12:07:00Z", "completed_at": "2026-04-12T12:08:00Z" },
-    "plan": { "started_at": "2026-04-12T12:10:00Z", "completed_at": "2026-04-12T12:12:00Z" },
-    "tasks": { "started_at": "2026-04-12T12:14:00Z", "completed_at": "2026-04-12T12:15:00Z" },
-    "analyze": { "started_at": "2026-04-12T12:16:00Z", "completed_at": "2026-04-12T12:18:00Z" },
-    "implement": { "started_at": "2026-04-12T12:20:00Z", "completed_at": "2026-04-12T12:45:00Z" },
-    "closure": { "started_at": "2026-04-12T12:48:00Z", "completed_at": "2026-04-12T12:50:00Z" }
+    "pre_step": {
+      "started_at": "2026-04-12T12:00:00Z",
+      "completed_at": "2026-04-12T12:00:00Z"
+    },
+    "specify": {
+      "started_at": "2026-04-12T12:05:00Z",
+      "completed_at": "2026-04-12T12:06:00Z"
+    },
+    "clarify": {
+      "started_at": "2026-04-12T12:07:00Z",
+      "completed_at": "2026-04-12T12:08:00Z"
+    },
+    "plan": {
+      "started_at": "2026-04-12T12:10:00Z",
+      "completed_at": "2026-04-12T12:12:00Z"
+    },
+    "tasks": {
+      "started_at": "2026-04-12T12:14:00Z",
+      "completed_at": "2026-04-12T12:15:00Z"
+    },
+    "analyze": {
+      "started_at": "2026-04-12T12:16:00Z",
+      "completed_at": "2026-04-12T12:18:00Z"
+    },
+    "implement": {
+      "started_at": "2026-04-12T12:20:00Z",
+      "completed_at": "2026-04-12T12:45:00Z"
+    },
+    "closure": {
+      "started_at": "2026-04-12T12:48:00Z",
+      "completed_at": "2026-04-12T12:50:00Z"
+    }
   },
   "history": [
-    { "event": "branch_created", "branch": "spec/006-api-foundation", "timestamp": "2026-04-12T12:00:00Z" },
+    {
+      "event": "branch_created",
+      "branch": "spec/006-api-foundation",
+      "timestamp": "2026-04-12T12:00:00Z"
+    },
     { "event": "specify_complete", "timestamp": "2026-04-12T12:06:00Z" },
     { "event": "clarifications_locked", "timestamp": "2026-04-12T12:08:00Z" },
     { "event": "plan_complete", "timestamp": "2026-04-12T12:12:00Z" },
-    { "event": "tasks_complete", "tasks_total": 5, "timestamp": "2026-04-12T12:15:00Z" },
+    {
+      "event": "tasks_complete",
+      "tasks_total": 5,
+      "timestamp": "2026-04-12T12:15:00Z"
+    },
     { "event": "drift_analysis_passed", "timestamp": "2026-04-12T12:18:00Z" },
     { "event": "stage_backend_closed", "timestamp": "2026-04-12T12:45:00Z" },
-    { "event": "pre_closure_review_approved", "timestamp": "2026-04-12T12:48:00Z", "note": "AUTOPILOT auto_advance=true" },
+    {
+      "event": "pre_closure_review_approved",
+      "timestamp": "2026-04-12T12:48:00Z",
+      "note": "AUTOPILOT auto_advance=true"
+    },
     { "event": "stage_production_ready", "timestamp": "2026-04-12T12:50:00Z" }
   ]
 }
