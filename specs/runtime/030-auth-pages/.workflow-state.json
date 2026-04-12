@@ -6,20 +6,9 @@
   "branch": "spec/030-auth-pages",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "specify",
-  "stage_status": "DRAFT",
-  "clarifications_resolved": false,
-  "drift_passed": false,
-  "implementation_allowed": false,
-  "plan_completed": false,
-  "tasks_total": null,
-  "tasks_completed": null,
-  "deferred_tasks": [],
-  "guardian_verdicts": {},
-  "parallel_task_groups": [],
-  "current_parallel_group": null,
-  "session_started_at": "2026-04-12T10:28:00Z",
-  "last_updated": "2026-04-12T10:35:00Z",
+  "current_step": "plan",
+  "plan_completed": true,
+  "last_updated": "2026-04-12T11:00:00Z",
   "step_timings": {
     "pre_step": {
       "started_at": "2026-04-12T10:28:00Z",
@@ -28,6 +17,10 @@
     "specify": {
       "started_at": "2026-04-12T10:28:00Z",
       "completed_at": "2026-04-12T10:35:00Z"
+    },
+    "plan": {
+      "started_at": "2026-04-12T10:35:00Z",
+      "completed_at": "2026-04-12T11:00:00Z"
     }
   },
   "history": [
@@ -46,6 +39,14 @@
       "pages_scoped": 6,
       "components_scoped": 5,
       "timestamp": "2026-04-12T10:35:00Z"
+    },
+    {
+      "event": "plan_complete",
+      "timeline_days": 5,
+      "total_hours": 48,
+      "endpoints_documented": 8,
+      "schemas": 6,
+      "timestamp": "2026-04-12T11:00:00Z"
     }
   ]
 }

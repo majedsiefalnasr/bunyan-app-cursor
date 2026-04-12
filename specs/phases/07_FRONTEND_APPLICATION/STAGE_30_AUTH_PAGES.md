@@ -8,28 +8,32 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T10:30:00Z
+Last Updated: 2026-04-12T11:00:00Z
 
-Scope Defined:
+Scope Planned:
 
-- 6 authentication pages (Login, Register, Forgot Password, Reset Password, Email Verification, Profile)
-- 5 shared components (AuthLayout, AuthCard, PasswordStrength, RoleSelector, OtpInput)
-- VeeValidate + Zod form validation with Arabic messages
-- Pinia state management (useAuthStore, useUserStore)
-- Full RTL support with Nuxt UI components
-- Unit + E2E testing strategy defined
+- 6 pages with detailed specifications (Login, Register 4-step, Forgot Password, Reset Password, Email Verification, Profile)
+- 5 shared components with implementation order
+- 2 Pinia stores (useAuthStore, useUserStore)
+- 8 API endpoints with StandardErrorResponse contract
+- 6 Zod schemas with Arabic error messages
+- VeeValidate + Zod form validation architecture
+- Tailwind logical properties for RTL support
+- Vitest unit tests (>80% coverage)
+- Playwright E2E tests (all user flows)
 
 Architecture Governance Compliance:
 
-- Specification drafted — governance audit pending
-- RBAC middleware for protected routes specified
-- Error contract compliance specified
+- Technical plan compliant with RBAC middleware specification
+- Service layer pattern for API composable
+- Error contract compliance verified
+- Testing strategy defined (unit + E2E)
 
 Notes:
 
-Specification complete. No ambiguities detected. Ready for clarification or planning phase.
+Technical plan complete. No architecture violations. Ready for task generation.
 
 ## Objective
 
