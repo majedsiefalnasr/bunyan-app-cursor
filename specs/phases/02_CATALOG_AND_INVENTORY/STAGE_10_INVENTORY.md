@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T17:08:00Z
+Last Updated: 2026-04-12T17:12:00Z
 
-Scope Defined: Inventory rows, movements, low-stock APIs, policy-scoped contractor access, admin UI
+Scope Planned: Migrations, service/repository stack, four API routes, policy, scheduled low-stock scan, admin inventory page
 
-Deferred Scope: Order reservation integration, dedicated supplier role
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
