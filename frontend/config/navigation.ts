@@ -29,6 +29,12 @@ export const navigationItems: NavItem[] = [
         roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
     },
     {
+        labelKey: 'nav.messages',
+        to: '/messages',
+        icon: 'i-heroicons-chat-bubble-left-right',
+        roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
+    },
+    {
         labelKey: 'nav.reports',
         to: '/reports',
         icon: 'i-heroicons-document-text',
