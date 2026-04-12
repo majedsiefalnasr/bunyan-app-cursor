@@ -140,7 +140,21 @@
         "stock_label": "المخزون",
         "detail_title": "تفاصيل المنتج",
         "variants_title": "الخيارات",
-        "back_list": "العودة للقائمة"
+        "back_list": "العودة للقائمة",
+        "tiers_title": "أسعار الكمية",
+        "tier_qty_range": "الكمية",
+        "tier_unit_price": "سعر الوحدة",
+        "tier_open": "فأكثر",
+        "admin_pricing_title": "تسعير المنتج",
+        "admin_pricing_subtitle": "حدّد شرائح السعر حسب الكمية (ريال سعودي).",
+        "tier_min": "من كمية",
+        "tier_max": "إلى كمية",
+        "tier_unit": "سعر الوحدة",
+        "tier_variant": "المتغير (اختياري)",
+        "tier_max_open": "اتركه فارغاً لنطاق مفتوح",
+        "tier_variant_null": "فارغ = المنتج الأساسي",
+        "tier_add": "إضافة شريحة",
+        "tier_save": "حفظ"
     },
     "suppliers": {
         "directory_title": "دليل الموردين",

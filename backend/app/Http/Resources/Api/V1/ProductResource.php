@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'quantity' => $product->quantity_in_stock,
             'supplier_id' => $product->supplier_id,
             'variants' => ProductVariantResource::collection($this->whenLoaded('variants')),
+            'price_tiers' => PriceTierResource::collection($this->whenLoaded('priceTiers')),
             'media' => ProductMediaResource::collection($this->whenLoaded('productMedia')),
             'created_at' => $product->created_at?->toIso8601String(),
             'updated_at' => $product->updated_at?->toIso8601String(),

@@ -12,6 +12,15 @@
         price_modifier: string;
     }
 
+    interface PriceTierRow {
+        id: number;
+        product_id: number;
+        product_variant_id: number | null;
+        min_quantity: number;
+        max_quantity: number | null;
+        unit_price: string;
+    }
+
     interface ProductDetail {
         id: number;
         name: string;
@@ -19,11 +28,13 @@
         price: string;
         quantity: number;
         variants?: VariantRow[];
+        price_tiers?: PriceTierRow[];
     }
 
     const route = useRoute();
     const localePath = useLocalePath();
     const { apiFetch } = useApi();
+    const { formatSar } = useSarPriceFormat();
 
     const product = ref<ProductDetail | null>(null);
     const isLoading = ref(true);
@@ -84,13 +95,53 @@
                 <dl class="mt-3 grid gap-2 text-sm text-[#171717] dark:text-white">
                     <div class="flex justify-between gap-4">
                         <dt>{{ $t('catalog.price_label') }}</dt>
-                        <dd class="font-medium">{{ product.price }}</dd>
+                        <dd class="font-medium">{{ formatSar(product.price) }}</dd>
                     </div>
                     <div class="flex justify-between gap-4">
                         <dt>{{ $t('catalog.stock_label') }}</dt>
                         <dd class="font-medium">{{ product.quantity }}</dd>
                     </div>
                 </dl>
+            </div>
+
+            <div
+                v-if="product.price_tiers && product.price_tiers.length"
+                class="rounded-lg bg-white p-4 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)] dark:bg-[#0a0a0a]"
+            >
+                <h2
+                    class="text-base font-semibold text-[#171717] dark:text-white"
+                    style="letter-spacing: -0.04em"
+                >
+                    {{ $t('catalog.tiers_title') }}
+                </h2>
+                <table class="mt-3 w-full text-start text-sm text-[#4d4d4d]">
+                    <thead>
+                        <tr class="border-b border-[#ebebeb] dark:border-[#262626]">
+                            <th class="py-2 font-medium text-[#171717] dark:text-white">
+                                {{ $t('catalog.tier_qty_range') }}
+                            </th>
+                            <th class="py-2 font-medium text-[#171717] dark:text-white">
+                                {{ $t('catalog.tier_unit_price') }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="t in product.price_tiers"
+                            :key="t.id"
+                            class="border-b border-[#ebebeb] last:border-0 dark:border-[#262626]"
+                        >
+                            <td class="py-2">
+                                {{ t.min_quantity }}
+                                —
+                                {{ t.max_quantity ?? $t('catalog.tier_open') }}
+                            </td>
+                            <td class="py-2 font-medium text-[#171717] dark:text-white">
+                                {{ formatSar(t.unit_price) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div
