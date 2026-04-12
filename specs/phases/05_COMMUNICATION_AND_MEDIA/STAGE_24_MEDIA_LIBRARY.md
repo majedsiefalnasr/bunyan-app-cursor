@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T16:05:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T16:08:00Z
 
-Scope Defined: Media API, polymorphic media, uploads, thumbnails (GD optional), temp cleanup job, Nuxt media page
+Scope Defined: Media API, polymorphic media (Project allowlist), uploads, optional GD thumbnails, temp cleanup, Nuxt media page
 
-Deferred Scope: CDN signed URLs, cropper/lightbox polish, watermarking, S3 implementation
+Deferred Scope: CDN signed URLs, cropper/lightbox polish, watermarking, S3 driver implementation
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
