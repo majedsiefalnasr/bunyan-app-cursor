@@ -41,6 +41,12 @@ export default defineConfig({
             ...process.env,
             /** Disables Nuxt DevTools during e2e (see `nuxt.config.ts`). */
             PLAYWRIGHT_TEST: '1',
+            /**
+             * CI sets `NUXT_PUBLIC_API_BASE_URL` to Laravel on :8000. Client `$fetch` then
+             * targets another origin; Playwright route mocks are reliable for same-origin
+             * requests to this dev server (e.g. `/v1/auth/profile`), and match local e2e.
+             */
+            NUXT_PUBLIC_API_BASE_URL: '',
         },
     },
 });
