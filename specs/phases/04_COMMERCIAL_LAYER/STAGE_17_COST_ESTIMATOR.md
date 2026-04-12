@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-12T12:00:00Z
+Last Updated: 2026-04-12T12:15:00Z
 
-Scope Open:
+Scope Defined: Project estimates, line items, BOQ templates (admin), calculation, compare, CSV export, Nuxt UI
 
-- Specification pending
+Deferred Scope: PDF binary, template-to-lines apply, XLSX styling
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
