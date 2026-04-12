@@ -31,6 +31,14 @@
                             Users
                         </NuxtLink>
                     </li>
+                    <li>
+                        <NuxtLink
+                            to="/admin/categories"
+                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                        >
+                            Categories
+                        </NuxtLink>
+                    </li>
                 </ul>
             </aside>
 

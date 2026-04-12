@@ -95,6 +95,15 @@ class DatabaseSchemaTest extends TestCase
         $this->assertTrue(Schema::hasTable('products'));
     }
 
+    public function test_categories_table_exists_with_required_columns(): void
+    {
+        $this->assertTrue(Schema::hasTable('categories'));
+        $this->assertTrue(Schema::hasColumns('categories', [
+            'id', 'parent_id', 'name_ar', 'name_en', 'slug', 'icon', 'sort_order', 'is_active',
+            'created_at', 'updated_at', 'deleted_at',
+        ]));
+    }
+
     public function test_transactions_table_exists(): void
     {
         $this->assertTrue(Schema::hasTable('transactions'));

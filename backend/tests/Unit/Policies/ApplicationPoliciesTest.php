@@ -3,6 +3,7 @@
 namespace Tests\Unit\Policies;
 
 use App\Enums\OrderStatus;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Phase;
 use App\Models\Product;
@@ -11,6 +12,7 @@ use App\Models\Report;
 use App\Models\Task;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Policies\CategoryPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\PhasePolicy;
 use App\Policies\ProductPolicy;
@@ -217,6 +219,29 @@ class ApplicationPoliciesTest extends TestCase
 
         $this->assertTrue($policy->restore($customer, $order));
         $this->assertTrue($policy->forceDelete($admin, $order));
+    }
+
+    public function test_category_policy_matrix(): void
+    {
+        $policy = new CategoryPolicy;
+        $customer = User::factory()->customer()->create();
+        $admin = User::factory()->admin()->create();
+        $active = Category::factory()->create(['is_active' => true]);
+        $inactive = Category::factory()->inactive()->create();
+
+        $this->assertTrue($policy->viewAny($customer));
+        $this->assertTrue($policy->view($customer, $active));
+        $this->assertFalse($policy->view($customer, $inactive));
+        $this->assertTrue($policy->view($admin, $inactive));
+
+        $this->assertFalse($policy->create($customer));
+        $this->assertTrue($policy->create($admin));
+
+        $this->assertFalse($policy->update($customer, $active));
+        $this->assertTrue($policy->update($admin, $active));
+
+        $this->assertFalse($policy->delete($customer, $active));
+        $this->assertTrue($policy->delete($admin, $active));
     }
 
     public function test_product_policy_matrix(): void
