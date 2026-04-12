@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T19:00:00Z
+Last Updated: 2026-04-12T19:15:00Z
 
-Scope Defined: Project documents API, versioning, policies, Nuxt project documents page, optional `document_id` uploads
+Scope Planned: Migrations, models, service/repository, policies, six API routes, Nuxt documents page, feature tests
 
-Deferred Scope: OCR, virus scan, public sharing
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
