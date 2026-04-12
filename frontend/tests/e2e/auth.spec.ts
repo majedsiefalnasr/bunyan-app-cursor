@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const apiProfile = {
     id: 42,
@@ -49,6 +49,11 @@ function matchesResetPost(req: { method: () => string; url: () => string }) {
         req.method() === 'POST' &&
         /\/v1\/auth\/reset-password|\/api\/v1\/auth\/reset-password/.test(req.url())
     );
+}
+
+/** Name field is `type="text"`; phone is `tel` — avoids `input.first()` matching layout/auth inputs. */
+function profileNameInput(page: Page) {
+    return page.locator('#main-content .max-w-lg input[type="text"]').first();
 }
 
 test.describe('Auth pages', () => {
@@ -213,7 +218,7 @@ test.describe('Auth pages', () => {
 
         await page.goto('/ar/profile', { waitUntil: 'domcontentloaded' });
         await expect(page.getByRole('heading', { name: 'الملف الشخصي' })).toBeVisible();
-        await expect(page.locator('input').first()).toHaveValue('Playwright User', {
+        await expect(profileNameInput(page)).toHaveValue('Playwright User', {
             timeout: 15_000,
         });
     });
@@ -247,7 +252,9 @@ test.describe('Auth pages', () => {
         });
 
         await page.goto('/ar/profile', { waitUntil: 'domcontentloaded' });
-        const nameInput = page.locator('input').first();
+        await expect(page.getByRole('heading', { name: 'الملف الشخصي' })).toBeVisible();
+        const nameInput = profileNameInput(page);
+        await expect(nameInput).toHaveValue('Playwright User', { timeout: 15_000 });
         await nameInput.fill('Temporary');
         await page.getByRole('button', { name: 'إلغاء' }).click();
         await expect(nameInput).toHaveValue('Playwright User');
