@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-12T15:40:00Z
+Last Updated: 2026-04-12T15:45:00Z
 
-Scope Defined: Project members, invitations, team API, policies, Nuxt team panel, activity logging, owner backfill
+Scope Planned: Migrations, enums, repositories, ProjectTeamService, controllers, policies, routes, Nuxt team UI, PHPUnit coverage
 
-Deferred Scope: SMTP for invitation emails
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: Ready for technical planning.
+Notes: Task breakdown in progress.
 
 ## Objective
 
