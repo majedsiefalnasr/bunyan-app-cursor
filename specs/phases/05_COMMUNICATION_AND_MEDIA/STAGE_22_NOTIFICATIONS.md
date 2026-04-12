@@ -1,20 +1,28 @@
 # STAGE_22 — Notifications
 
 > **Phase:** 05_COMMUNICATION_AND_MEDIA
-> **Status:** DRAFT
+> **Status:** PRODUCTION READY
 > **Scope:** Push, email, SMS, in-app notifications
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: DRAFT
-Step: implement
+Status: PRODUCTION READY
 Risk Level: LOW
-Last Updated: 2026-04-12T12:45:00Z
+Closure Date: 2026-04-12
 
-Status: BACKEND CLOSED  
-Implementation: COMPLETE  
-Tasks: 14 / 14 completed
+Scope Closed: Notifications API (`/api/v1/notifications*`, `/api/v1/notification-preferences*`), migrations, queued database notifications, Nuxt bell + `/notifications` pages, feature tests `NotificationFlowTest`, bilingual i18n.
+
+Deferred Scope: Push/SMS provider wiring, admin broadcast console, domain event fan-out beyond manual dispatch.
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR changes)
+- RBAC: Sanctum auth + throttling on all new routes
+- Service layer architecture maintained
+- Error contract compliance verified
+
+Notes: Stage is production ready for the delivered slice. Further channels require a new scoped change.
 
 ## Objective
 
