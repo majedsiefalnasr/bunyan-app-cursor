@@ -59,3 +59,13 @@ Deliver Arabic-first, RTL catalog UX on Nuxt 3 using Nuxt UI: public-style brows
 
 - Nuxt UI + Tailwind v4 + Pinia auth cookie; no direct `$fetch` bypassing `useApi`.
 - Match existing error and success JSON contract on the client.
+
+## Clarifications
+
+### Session 2026-04-12
+
+1. **Category URL segment** — Backend `Category` route binding uses `slug` (not numeric id) for `GET/PUT/DELETE /v1/categories/{category}` so public Nuxt routes and API stay aligned; admin UI must call the same slug-based paths.
+2. **Product URL segment** — Detail segment accepts **numeric id** or **SKU** via `Product::resolveRouteBinding`; list links prefer `sku` when returned in `ProductResource`.
+3. **Search scope** — `/search` reuses `GET /v1/products` with `search` and existing filters only (no new backend endpoint).
+4. **Supplier routes** — Continue to use numeric `supplierProfile` id; no slug binding in this slice.
+5. **Authentication** — Category and product catalog pages require Sanctum session (cookie); supplier directory remains callable without auth per existing API routes.

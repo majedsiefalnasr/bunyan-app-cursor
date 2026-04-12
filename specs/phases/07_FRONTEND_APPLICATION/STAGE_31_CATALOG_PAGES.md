@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T20:05:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-12T20:10:00Z
 
-Scope Defined: Categories grid/detail, product list filters + pagination, search page, product detail by id/SKU, supplier directory polish, Vitest + Playwright coverage.
+Scope Defined: Slug-based categories; product detail by id/SKU; search reuses product API; suppliers numeric id; catalog auth matches Sanctum.
 
 Deferred Scope: Guest catalog, command palette wiring, dedicated product slug column.
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: Ready for technical planning.
 
 ## Objective
 
