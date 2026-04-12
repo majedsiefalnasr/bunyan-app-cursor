@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-12T14:05:00Z
+Step: clarify
+Risk Level: MEDIUM
+Last Updated: 2026-04-12T14:08:00Z
 
-Scope Defined: Conversations, participants, messages, read receipts, attachments, broadcasting, REST API, Nuxt inbox/thread.
+Scope Defined: Conversations, participants, messages, read receipts, attachments, broadcasting, REST API, Nuxt inbox/thread, rate limits on writes.
 
 Deferred Scope: Push notifications, typing indicators, message edit.
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 

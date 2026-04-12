@@ -73,3 +73,4 @@ Deliver in-app **messaging**: persisted conversations and messages with optional
 - **Read endpoint:** Stage table documents `PUT .../read`; implementation matches that verb and path.
 - **Attachments:** Stored on the default `public` disk under `messages/{id}/filename`; max size 5MB; images and common document MIME types only.
 - **Broadcasting:** Laravel `install:broadcasting` scaffolding with Reverb skipped; Echo client wiring deferred to env-specific frontend config; backend event + channel authorization required.
+- **Rate limiting:** `POST` conversations and `POST` messages throttled (e.g. 60/min per user) via route middleware group.
