@@ -1,22 +1,29 @@
 # STAGE_23 — Messaging
 
 > **Phase:** 05_COMMUNICATION_AND_MEDIA
-> **Status:** DRAFT
+> **Status:** PRODUCTION READY
 > **Scope:** In-app messaging, conversations, project chat
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: DRAFT
-Step: implement
+Status: PRODUCTION READY
+Step: stage_production_ready
 Risk Level: MEDIUM
-Last Updated: 2026-04-12T14:25:00Z
+Closure Date: 2026-04-12
 
-Status: BACKEND CLOSED
+Scope Closed: In-app messaging (conversations, participants, messages, read receipts, optional attachments), Laravel broadcasting hooks, REST API under `/api/v1/conversations`, Nuxt inbox and thread pages, feature tests. Tasks 14 / 14 completed.
 
-Implementation: COMPLETE
+Deferred Scope: Mobile push notifications, typing indicators, Echo client wiring per environment (see `specs/runtime/023-messaging/guides/TESTING_GUIDE.md`).
 
-Tasks: 14 / 14 completed
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR changes)
+- RBAC enforcement confirmed (`auth:sanctum` + participant policy and route binding)
+- Service layer architecture maintained
+- Error contract compliance verified
+
+Notes: Stage is production ready. Modifications require a new stage or amendment protocol.
 
 ## Objective
 
