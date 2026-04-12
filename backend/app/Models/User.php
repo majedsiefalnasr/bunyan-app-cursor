@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -82,6 +83,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function supplierProfile(): HasOne
     {
         return $this->hasOne(SupplierProfile::class);
+    }
+
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(PlatformDatabaseNotification::class, 'notifiable')
+            ->orderByDesc('created_at');
+    }
+
+    public function notificationPreferences(): HasMany
+    {
+        return $this->hasMany(NotificationPreference::class);
     }
 
     public function roles(): BelongsToMany

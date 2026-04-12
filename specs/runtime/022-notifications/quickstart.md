@@ -13,13 +13,13 @@ php artisan test --filter=Notification
 Seed a notification locally (tinker):
 
 ```php
-$user = User::first();
+$user = \App\Models\User::first();
 $user->notify(new \App\Notifications\GenericDatabaseNotification(
-    type: \App\Enums\NotificationType::General,
-    titleAr: 'مرحبا',
-    titleEn: 'Hello',
-    bodyAr: 'جرب الإشعارات',
-    bodyEn: 'Try notifications',
+    \App\Enums\NotificationType::General,
+    'مرحبا',
+    'Hello',
+    'جرب الإشعارات',
+    'Try notifications',
 ));
 ```
 
