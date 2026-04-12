@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\WorkflowConfiguration;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,5 +55,13 @@ class WorkflowConfigurationRepository extends BaseRepository
             ->where('project_id', $projectId)
             ->with(['approvalRules'])
             ->get();
+    }
+
+    public function paginateAll(int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->newQuery()
+            ->with(['project', 'approvalRules'])
+            ->orderByDesc('id')
+            ->paginate($perPage);
     }
 }

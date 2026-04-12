@@ -262,6 +262,15 @@
         "when": "التاريخ",
         "project_activity_title": "سجل نشاط المشروع"
     },
+    "workflow": {
+        "admin_title": "سير العمل",
+        "load_error": "تعذر تحميل تكوينات سير العمل",
+        "col_id": "المعرّف",
+        "col_name": "الاسم",
+        "col_type": "النوع",
+        "col_global": "عام",
+        "col_active": "نشط"
+    },
     "errors": {
         "retry": "أعد المحاولة",
         "back": "العودة",

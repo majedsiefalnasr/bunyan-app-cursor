@@ -116,11 +116,34 @@ class DatabaseSchemaTest extends TestCase
     public function test_workflow_configurations_table_exists(): void
     {
         $this->assertTrue(Schema::hasTable('workflow_configurations'));
+        $this->assertTrue(Schema::hasColumns('workflow_configurations', [
+            'id', 'project_id', 'name', 'name_ar', 'name_en', 'description', 'type',
+            'status_transitions', 'approval_requirements', 'is_global', 'is_active',
+            'created_at', 'updated_at',
+        ]));
     }
 
     public function test_approval_rules_table_exists(): void
     {
         $this->assertTrue(Schema::hasTable('approval_rules'));
+    }
+
+    public function test_workflow_instances_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasTable('workflow_instances'));
+        $this->assertTrue(Schema::hasColumns('workflow_instances', [
+            'id', 'workflow_configuration_id', 'workflowable_type', 'workflowable_id', 'status',
+            'created_at', 'updated_at',
+        ]));
+    }
+
+    public function test_workflow_approvals_table_exists(): void
+    {
+        $this->assertTrue(Schema::hasTable('workflow_approvals'));
+        $this->assertTrue(Schema::hasColumns('workflow_approvals', [
+            'id', 'workflow_instance_id', 'approval_rule_id', 'approver_role', 'action',
+            'notes', 'acted_by', 'acted_at', 'created_at', 'updated_at',
+        ]));
     }
 
     public function test_activity_logs_table_exists(): void

@@ -262,6 +262,15 @@
         "when": "When",
         "project_activity_title": "Project activity"
     },
+    "workflow": {
+        "admin_title": "Workflow definitions",
+        "load_error": "Could not load workflow definitions",
+        "col_id": "ID",
+        "col_name": "Name",
+        "col_type": "Type",
+        "col_global": "Global",
+        "col_active": "Active"
+    },
     "errors": {
         "retry": "Retry",
         "back": "Go back",
