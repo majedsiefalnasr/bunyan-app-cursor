@@ -18,6 +18,7 @@ class PhaseFactory extends Factory
     {
         return [
             'project_id' => Project::factory(),
+            'sort_order' => 0,
             'name' => fake()->words(3, true),
             'description' => fake()->optional()->sentence(),
             'status' => PhaseStatus::Pending->value,

@@ -3,45 +3,47 @@
 namespace Tests\Unit\Enums;
 
 use App\Enums\ProjectStatus;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ProjectStatusTest extends TestCase
 {
-    public function test_has_five_cases(): void
+    public function test_all_cases_exist(): void
     {
-        $this->assertCount(5, ProjectStatus::cases());
+        $this->assertCount(6, ProjectStatus::cases());
     }
 
-    public function test_backing_values(): void
+    public function test_values(): void
     {
-        $this->assertSame('pending', ProjectStatus::Pending->value);
-        $this->assertSame('active', ProjectStatus::Active->value);
+        $this->assertSame('draft', ProjectStatus::Draft->value);
+        $this->assertSame('planning', ProjectStatus::Planning->value);
+        $this->assertSame('in_progress', ProjectStatus::InProgress->value);
         $this->assertSame('on_hold', ProjectStatus::OnHold->value);
         $this->assertSame('completed', ProjectStatus::Completed->value);
-        $this->assertSame('cancelled', ProjectStatus::Cancelled->value);
+        $this->assertSame('closed', ProjectStatus::Closed->value);
     }
 
-    public function test_arabic_labels(): void
+    public function test_labels_are_arabic(): void
     {
-        $this->assertSame('في الانتظار', ProjectStatus::Pending->label());
-        $this->assertSame('نشط', ProjectStatus::Active->label());
+        $this->assertSame('مسودة', ProjectStatus::Draft->label());
+        $this->assertSame('تخطيط', ProjectStatus::Planning->label());
+        $this->assertSame('قيد التنفيذ', ProjectStatus::InProgress->label());
         $this->assertSame('معلق', ProjectStatus::OnHold->label());
         $this->assertSame('مكتمل', ProjectStatus::Completed->label());
-        $this->assertSame('ملغى', ProjectStatus::Cancelled->label());
+        $this->assertSame('مغلق', ProjectStatus::Closed->label());
     }
 
-    public function test_values_returns_all_backing_values(): void
+    public function test_values_array(): void
     {
-        $expected = ['pending', 'active', 'on_hold', 'completed', 'cancelled'];
+        $expected = ['draft', 'planning', 'in_progress', 'on_hold', 'completed', 'closed'];
         $this->assertSame($expected, ProjectStatus::values());
     }
 
-    public function test_from_valid_value(): void
+    public function test_from_string(): void
     {
-        $this->assertSame(ProjectStatus::Active, ProjectStatus::from('active'));
+        $this->assertSame(ProjectStatus::InProgress, ProjectStatus::from('in_progress'));
     }
 
-    public function test_try_from_invalid_returns_null(): void
+    public function test_try_from_invalid(): void
     {
         $this->assertNull(ProjectStatus::tryFrom('unknown'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\UserRole;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,15 +36,30 @@ class ProjectRepository extends BaseRepository
         ])->findOrFail($id);
     }
 
+    public function paginateForIndex(User $user, int $perPage = 15, ?string $status = null): LengthAwarePaginator
+    {
+        $query = $this->newQuery()
+            ->with(['customer', 'contractor', 'supervisingArchitect'])
+            ->withCount(['phases', 'tasks']);
+
+        if ($user->role !== UserRole::Admin) {
+            $query->forUser($user);
+        }
+
+        if ($status !== null && $status !== '') {
+            $query->byStatus($status);
+        }
+
+        return $query->orderByDesc('created_at')->paginate($perPage);
+    }
+
     public function listForUser(User $user, array $filters = []): LengthAwarePaginator
     {
-        return $this->newQuery()
-            ->forUser($user)
-            ->with(['customer', 'contractor', 'supervisingArchitect'])
-            ->when($filters['status'] ?? null, fn ($q, $status) => $q->byStatus($status))
-            ->when($filters['search'] ?? null, fn ($q, $search) => $q->where('name', 'like', "%{$search}%"))
-            ->orderByDesc('created_at')
-            ->paginate((int) ($filters['per_page'] ?? 15));
+        return $this->paginateForIndex(
+            $user,
+            (int) ($filters['per_page'] ?? 15),
+            $filters['status'] ?? null
+        );
     }
 
     public function allActive(array $filters = []): Collection

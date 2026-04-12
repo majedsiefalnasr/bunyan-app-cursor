@@ -49,8 +49,9 @@ class DatabaseSchemaTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('projects'));
         $this->assertTrue(Schema::hasColumns('projects', [
-            'id', 'name', 'description', 'customer_id', 'contractor_id',
-            'supervising_architect_id', 'status', 'budget', 'location',
+            'id', 'name', 'name_ar', 'name_en', 'description', 'customer_id', 'contractor_id',
+            'supervising_architect_id', 'status', 'budget', 'budget_estimated', 'budget_actual',
+            'location', 'city', 'district', 'location_lat', 'location_lng', 'project_type',
             'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at',
         ]));
     }
@@ -59,7 +60,7 @@ class DatabaseSchemaTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('phases'));
         $this->assertTrue(Schema::hasColumns('phases', [
-            'id', 'project_id', 'name', 'status', 'budget', 'progress', 'deleted_at',
+            'id', 'project_id', 'sort_order', 'name', 'name_ar', 'name_en', 'status', 'budget', 'progress', 'deleted_at',
         ]));
     }
 

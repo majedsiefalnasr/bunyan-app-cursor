@@ -126,6 +126,22 @@
         "suspend": "Suspend",
         "rating": "Rating"
     },
+    "projects": {
+        "list_title": "Projects",
+        "list_subtitle": "Projects visible to you based on your role.",
+        "empty": "No projects to display.",
+        "new_title": "New project",
+        "new_subtitle": "Enter the basics to create a project.",
+        "name_label": "Project name",
+        "budget_label": "Estimated budget",
+        "location_label": "Location",
+        "submit": "Create project",
+        "detail_title": "Project details",
+        "status_label": "Status",
+        "timeline_title": "Timeline",
+        "phases_heading": "Phases",
+        "back_to_list": "Back to list"
+    },
     "errors": {
         "retry": "Retry",
         "back": "Go back",

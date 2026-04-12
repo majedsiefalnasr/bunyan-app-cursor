@@ -19,6 +19,10 @@ class ProjectPolicy
             return true;
         }
 
+        if ($user->role === UserRole::FieldEngineer) {
+            return $project->reports()->where('created_by', $user->id)->exists();
+        }
+
         return $project->customer_id === $user->id
             || $project->contractor_id === $user->id
             || $project->supervising_architect_id === $user->id;
@@ -48,9 +52,24 @@ class ProjectPolicy
         return $project->customer_id === $user->id;
     }
 
+    public function transitionStatus(User $user, Project $project): bool
+    {
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        if (! in_array($user->role, [UserRole::Customer, UserRole::Contractor, UserRole::SupervisingArchitect], true)) {
+            return false;
+        }
+
+        return $project->customer_id === $user->id
+            || $project->contractor_id === $user->id
+            || $project->supervising_architect_id === $user->id;
+    }
+
     public function approve(User $user, Project $project): bool
     {
-        return in_array($user->role, [UserRole::SupervisingArchitect, UserRole::Admin])
+        return in_array($user->role, [UserRole::SupervisingArchitect, UserRole::Admin], true)
             && ($project->supervising_architect_id === $user->id || $user->role === UserRole::Admin);
     }
 

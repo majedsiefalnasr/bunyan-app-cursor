@@ -4,20 +4,22 @@ namespace App\Enums;
 
 enum ProjectStatus: string
 {
-    case Pending = 'pending';
-    case Active = 'active';
+    case Draft = 'draft';
+    case Planning = 'planning';
+    case InProgress = 'in_progress';
     case OnHold = 'on_hold';
     case Completed = 'completed';
-    case Cancelled = 'cancelled';
+    case Closed = 'closed';
 
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'في الانتظار',
-            self::Active => 'نشط',
+            self::Draft => 'مسودة',
+            self::Planning => 'تخطيط',
+            self::InProgress => 'قيد التنفيذ',
             self::OnHold => 'معلق',
             self::Completed => 'مكتمل',
-            self::Cancelled => 'ملغى',
+            self::Closed => 'مغلق',
         };
     }
 
