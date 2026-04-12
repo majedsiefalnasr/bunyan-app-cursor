@@ -1,15 +1,27 @@
 # STAGE_14 — Workflow Engine
 
 > **Phase:** 03_PROJECT_MANAGEMENT
-> **Status:** NOT STARTED
+> **Status:** DRAFT
 > **Scope:** Approval workflows, state machine, configurable rules
 > **Risk Level:** HIGH
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
+Status: DRAFT
+Step: pre_step
 Risk Level: HIGH
+Initiated: 2026-04-12T15:30:00Z
+
+Scope Open:
+
+- Specification pending
+
+Architecture Governance Compliance:
+
+- Pending governance audit
+
+Notes:
+Stage initialized. Specification in progress.
 
 ## Objective
 
