@@ -137,6 +137,13 @@
             >
                 {{ $t('projects.open_documents') }}
             </UButton>
+            <UButton
+                :to="localePath(`/projects/${route.params.id}/estimates`)"
+                variant="soft"
+                color="gray"
+            >
+                {{ $t('projects.open_estimates') }}
+            </UButton>
         </div>
 
         <div v-if="isLoading" class="text-sm text-[#666666]">
