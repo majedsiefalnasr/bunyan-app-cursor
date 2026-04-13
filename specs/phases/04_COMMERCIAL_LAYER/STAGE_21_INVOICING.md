@@ -1,24 +1,30 @@
 # STAGE_21 — Invoicing
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** BACKEND CLOSED
+> **Status:** PRODUCTION READY
 > **Scope:** Invoice generation, VAT compliance, PDF export
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
 Status: DRAFT
-Step: implement
+Step: stage_production_ready
 Risk Level: LOW
-Last Updated: 2026-04-13T22:15:00Z
+Closure Date: 2026-04-13
 
-Implementation: COMPLETE
+Scope Closed: Invoice API (CRUD subset), PDF, email send, void, auto-generation on order completion, ZATCA Phase-1 TLV, Nuxt invoices UI, navigation — 20/20 tasks
 
-Tasks: 20 / 20 completed
+Deferred Scope: ZATCA clearance platform integration; automated overdue job
 
-Architecture Governance Compliance: RBAC, service layer, migrations, and tests delivered
+Architecture Governance Compliance:
 
-Notes: Backend and frontend invoicing slice merged; closure pending.
+- ADR alignment: no conflicting ADRs touched
+- RBAC enforcement confirmed on all invoice routes
+- Service layer architecture maintained (`InvoiceService` + repository)
+- Error contract compliance verified (existing API envelope)
+- i18n keys added for Arabic-first UI
+
+Notes: Stage is production ready. Further commercial changes should use a new stage branch.
 
 ## Objective
 
