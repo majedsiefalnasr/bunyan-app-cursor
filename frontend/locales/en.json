@@ -17,6 +17,7 @@
         "suppliers": "Suppliers",
         "rfqs": "RFQs",
         "orders": "Orders",
+        "invoices": "Invoices",
         "rfq_invitations": "RFQ invitations",
         "contact": "Contact",
         "admin": "Admin"
@@ -410,6 +411,29 @@
         "loading": "Loading…",
         "missing_order_id": "Add the order id to the URL (?orderId=)",
         "success_initiated": "Payment started"
+    },
+    "invoice": {
+        "list_title": "Invoices",
+        "list_subtitle": "View tax invoices and download PDF",
+        "empty": "No invoices yet",
+        "view": "View details",
+        "create": "New invoice",
+        "create_title": "Create manual invoice",
+        "submit_create": "Save invoice",
+        "back": "Back to invoices",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "vat": "VAT",
+        "currency": "SAR",
+        "items": "Line items",
+        "due": "Due",
+        "download_pdf": "Download PDF",
+        "send_email": "Send by email",
+        "zatca_payload": "ZATCA payload (phase 1)",
+        "zatca_hint": "The scannable QR code is embedded in the official PDF.",
+        "field_description": "Line description (Arabic)",
+        "field_quantity": "Quantity",
+        "field_unit_price": "Unit price"
     },
     "order": {
         "list_title": "Orders",

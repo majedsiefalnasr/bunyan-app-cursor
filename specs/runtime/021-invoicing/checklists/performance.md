@@ -1,5 +1,5 @@
 # Performance Checklist — Invoicing
 
-- [ ] Invoice index paginated; default per_page capped
-- [ ] Eager load `items`, `order`, `customer`, `supplierProfile` on show
-- [ ] PDF generation does not load unbounded relations
+- [x] Invoice index paginated; default per_page capped
+- [x] Eager load `items`, `order`, `customer`, `supplierProfile` on show
+- [x] PDF generation does not load unbounded relations

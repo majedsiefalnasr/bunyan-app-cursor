@@ -17,6 +17,7 @@
         "suppliers": "الموردون",
         "rfqs": "طلبات التسعير",
         "orders": "الطلبات",
+        "invoices": "الفواتير",
         "rfq_invitations": "دعوات التسعير",
         "contact": "اتصل بنا",
         "admin": "الإدارة"
@@ -410,6 +411,29 @@
         "loading": "جاري التحميل…",
         "missing_order_id": "أضف معرّف الطلب في الرابط (?orderId=)",
         "success_initiated": "تم بدء الدفع"
+    },
+    "invoice": {
+        "list_title": "الفواتير",
+        "list_subtitle": "عرض الفواتير الضريبية وتنزيل PDF",
+        "empty": "لا توجد فواتير بعد",
+        "view": "عرض التفاصيل",
+        "create": "فاتورة جديدة",
+        "create_title": "إنشاء فاتورة يدوية",
+        "submit_create": "حفظ الفاتورة",
+        "back": "رجوع إلى الفواتير",
+        "total": "الإجمالي",
+        "subtotal": "المجموع قبل الضريبة",
+        "vat": "ضريبة القيمة المضافة",
+        "currency": "ر.س",
+        "items": "البنود",
+        "due": "الاستحقاق",
+        "download_pdf": "تنزيل PDF",
+        "send_email": "إرسال بالبريد",
+        "zatca_payload": "حمولة ZATCA (مرحلة 1)",
+        "zatca_hint": "يظهر رمز الاستجابة السريعة ضمن ملف PDF الرسمي.",
+        "field_description": "وصف البند (عربي)",
+        "field_quantity": "الكمية",
+        "field_unit_price": "سعر الوحدة"
     },
     "order": {
         "list_title": "الطلبات",

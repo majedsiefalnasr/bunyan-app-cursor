@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\EstimateController;
 use App\Http\Controllers\Api\V1\EstimateItemController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InventoryController;
+use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
@@ -247,6 +248,21 @@ Route::prefix('v1')->group(function () {
         Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
             Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
             Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        });
+
+        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
+            Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+            Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+            Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+        });
+
+        Route::middleware(['role:customer,admin', 'throttle:30,1'])->group(function () {
+            Route::post('invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+            Route::post('invoices/{invoice}/send', [InvoiceController::class, 'send'])->name('invoices.send');
+        });
+
+        Route::middleware(['role:admin', 'throttle:30,1'])->group(function () {
+            Route::put('invoices/{invoice}/void', [InvoiceController::class, 'void'])->name('invoices.void');
         });
 
         Route::middleware(['role:customer,admin', 'throttle:30,1'])->group(function () {

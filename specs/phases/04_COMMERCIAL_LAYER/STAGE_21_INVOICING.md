@@ -1,24 +1,24 @@
 # STAGE_21 — Invoicing
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** DRAFT
+> **Status:** BACKEND CLOSED
 > **Scope:** Invoice generation, VAT compliance, PDF export
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
 Status: DRAFT
-Step: analyze
+Step: implement
 Risk Level: LOW
-Last Updated: 2026-04-13T12:30:00Z
+Last Updated: 2026-04-13T22:15:00Z
 
-Drift Analysis: PASSED (all criteria)
+Implementation: COMPLETE
 
-Implementation: AUTHORIZED
+Tasks: 20 / 20 completed
 
-Architecture Governance Compliance: Drift and guardian audits passed
+Architecture Governance Compliance: RBAC, service layer, migrations, and tests delivered
 
-Notes: Proceeding to implementation.
+Notes: Backend and frontend invoicing slice merged; closure pending.
 
 ## Objective
 

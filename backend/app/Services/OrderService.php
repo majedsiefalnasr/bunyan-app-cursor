@@ -19,6 +19,7 @@ class OrderService
     public function __construct(
         private readonly OrderRepository $orders,
         private readonly InventoryService $inventory,
+        private readonly InvoiceService $invoiceService,
     ) {
     }
 
@@ -233,6 +234,10 @@ class OrderService
                 $locked->delivered_at = now();
             }
             $locked->save();
+
+            if ($to === OrderStatus::Completed) {
+                $this->invoiceService->createFromOrderIfMissing($locked);
+            }
 
             Log::info('order.status_transition', [
                 'action' => 'order.status_transition',

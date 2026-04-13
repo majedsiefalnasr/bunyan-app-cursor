@@ -1,5 +1,5 @@
 # Accessibility Checklist — Invoicing
 
-- [ ] Tables use semantic headers and keyboard-focusable actions
-- [ ] Invoice totals announced with clear labels in Arabic
-- [ ] QR preview has text alternative (invoice number + total)
+- [x] Tables use semantic headers and keyboard-focusable actions
+- [x] Invoice totals announced with clear labels in Arabic
+- [x] QR preview has text alternative (invoice number + total)
