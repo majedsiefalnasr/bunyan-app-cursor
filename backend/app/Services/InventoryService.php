@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Inventory;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Repositories\InventoryRepository;
@@ -140,5 +141,96 @@ class InventoryService
         ]);
 
         return (int) $count;
+    }
+
+    public function reserveForOrder(User $actor, Order $order): void
+    {
+        foreach ($order->items as $item) {
+            $product = $item->relationLoaded('product') ? $item->product : $item->product()->first();
+            if ($product === null) {
+                throw ValidationException::withMessages([
+                    'items' => ['أحد بنود الطلب يشير إلى منتج غير موجود'],
+                ]);
+            }
+            $variantId = $item->variant_id !== null ? (int) $item->variant_id : null;
+            $this->applyReservedDelta($product, $variantId, (int) $item->quantity, $actor, $order, 'order_reserve');
+        }
+    }
+
+    public function releaseReservationsForOrder(User $actor, Order $order): void
+    {
+        foreach ($order->items as $item) {
+            $product = $item->relationLoaded('product') ? $item->product : $item->product()->first();
+            if ($product === null) {
+                continue;
+            }
+            $variantId = $item->variant_id !== null ? (int) $item->variant_id : null;
+            $this->applyReservedDelta($product, $variantId, -1 * (int) $item->quantity, $actor, $order, 'order_release');
+        }
+    }
+
+    /**
+     * @param  'order_reserve'|'order_release'  $movementType
+     */
+    private function applyReservedDelta(
+        Product $product,
+        ?int $variantId,
+        int $delta,
+        User $actor,
+        Order $order,
+        string $movementType,
+    ): void {
+        $warehouse = 'default';
+
+        DB::transaction(function () use ($product, $variantId, $delta, $actor, $order, $movementType, $warehouse) {
+            $this->inventories->lockProductForUpdate($product);
+
+            $line = $this->inventories->findLineForUpdate((int) $product->getKey(), $variantId, $warehouse);
+            if ($line === null) {
+                if ($delta > 0) {
+                    throw ValidationException::withMessages([
+                        'inventory' => ['لا يوجد سجل مخزون لهذا المنتج في المستودع الافتراضي'],
+                    ]);
+                }
+
+                return;
+            }
+
+            if ($delta > 0) {
+                $available = (int) $line->quantity - (int) $line->reserved_quantity;
+                if ($available < $delta) {
+                    throw ValidationException::withMessages([
+                        'inventory' => ['المخزون المتاح غير كافٍ لحجز الكمية المطلوبة'],
+                    ]);
+                }
+                $line->reserved_quantity = (int) $line->reserved_quantity + $delta;
+            } else {
+                $release = min((int) $line->reserved_quantity, abs($delta));
+                $line->reserved_quantity = (int) $line->reserved_quantity - $release;
+                $delta = -1 * $release;
+            }
+
+            $line->save();
+
+            $this->movements->record([
+                'product_id' => $product->id,
+                'variant_id' => $variantId,
+                'type' => $movementType,
+                'quantity' => $delta,
+                'reference_type' => Order::class,
+                'reference_id' => $order->id,
+                'notes' => null,
+                'created_by' => $actor->id,
+            ]);
+
+            Log::info('inventory.order_reservation', [
+                'action' => $movementType,
+                'product_id' => $product->id,
+                'variant_id' => $variantId,
+                'quantity_delta' => $delta,
+                'order_id' => $order->id,
+                'user_id' => $actor->id,
+            ]);
+        });
     }
 }

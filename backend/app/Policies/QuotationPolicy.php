@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\QuotationStatus;
 use App\Enums\UserRole;
 use App\Models\Quotation;
 use App\Models\Rfq;
@@ -60,5 +61,24 @@ class QuotationPolicy
         return $user->role === UserRole::Customer
             && $rfq->created_by === $user->id
             && $quotation->rfq_id === $rfq->id;
+    }
+
+    public function convertToOrder(User $user, Quotation $quotation): bool
+    {
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        if ($user->role !== UserRole::Customer) {
+            return false;
+        }
+
+        if ($quotation->status !== QuotationStatus::Accepted) {
+            return false;
+        }
+
+        $rfq = $quotation->rfq;
+
+        return $rfq !== null && (int) $rfq->created_by === (int) $user->id;
     }
 }

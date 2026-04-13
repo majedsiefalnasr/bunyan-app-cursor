@@ -2,28 +2,30 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\UserRole;
+use App\Enums\OrderStatus;
 use App\Http\Requests\Api\V1\CreateOrderRequest;
+use App\Http\Requests\Api\V1\UpdateOrderStatusRequest;
 use App\Http\Resources\Api\V1\OrderResource;
 use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrderController extends BaseController
 {
+    public function __construct(
+        private readonly OrderService $orderService,
+    ) {
+    }
+
     public function index(Request $request): JsonResponse
     {
-        $query = Order::query();
+        $this->authorize('viewAny', Order::class);
 
-        if ($request->user()->role !== UserRole::Admin) {
-            $query->where('customer_id', $request->user()->id);
-        }
-
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $orders = $query->paginate($request->per_page ?? 15);
+        $orders = $this->orderService->paginateForUser(
+            $request->user(),
+            $request->only(['status', 'per_page'])
+        );
 
         return $this->sendSuccess(
             OrderResource::collection($orders),
@@ -34,9 +36,8 @@ class OrderController extends BaseController
 
     public function show(Order $order): JsonResponse
     {
-        if ($order->customer_id !== auth()->id() && auth()->user()?->role !== UserRole::Admin) {
-            return $this->forbidden();
-        }
+        $this->authorize('view', $order);
+        $order->load(['items.product', 'items.variant', 'project', 'quotation', 'supplierProfile']);
 
         return $this->sendSuccess(
             new OrderResource($order),
@@ -47,30 +48,51 @@ class OrderController extends BaseController
 
     public function store(CreateOrderRequest $request): JsonResponse
     {
-        $order = Order::create([
-            'customer_id' => $request->user()->id,
-            'project_id' => $request->project_id,
-            'total_amount' => 0,
-            'status' => 'pending',
-        ]);
-
-        foreach ($request->items as $item) {
-            $unitPrice = (float) $item['price'];
-            $quantity = (int) $item['quantity'];
-            $order->items()->create([
-                'product_id' => $item['product_id'],
-                'quantity' => $quantity,
-                'unit_price' => $unitPrice,
-                'subtotal' => $unitPrice * $quantity,
-            ]);
-        }
-
-        $order->update(['total_amount' => $order->items()->sum('subtotal')]);
+        $this->authorize('create', Order::class);
+        $validated = $request->validated();
+        $order = $this->orderService->createFromItems($request->user(), $validated);
 
         return $this->sendSuccess(
             new OrderResource($order),
             'تم إنشاء الطلب بنجاح',
             201
+        );
+    }
+
+    public function confirm(Request $request, Order $order): JsonResponse
+    {
+        $this->authorize('confirm', $order);
+        $order = $this->orderService->confirm($request->user(), $order);
+
+        return $this->sendSuccess(
+            new OrderResource($order),
+            'تم تأكيد الطلب بنجاح',
+            200
+        );
+    }
+
+    public function cancel(Request $request, Order $order): JsonResponse
+    {
+        $this->authorize('cancel', $order);
+        $order = $this->orderService->cancel($request->user(), $order);
+
+        return $this->sendSuccess(
+            new OrderResource($order),
+            'تم إلغاء الطلب بنجاح',
+            200
+        );
+    }
+
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order): JsonResponse
+    {
+        $this->authorize('transitionStatus', $order);
+        $status = OrderStatus::from((string) $request->validated('status'));
+        $order = $this->orderService->transitionStatus($request->user(), $order, $status);
+
+        return $this->sendSuccess(
+            new OrderResource($order),
+            'تم تحديث حالة الطلب بنجاح',
+            200
         );
     }
 }

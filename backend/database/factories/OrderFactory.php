@@ -17,8 +17,14 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id' => User::factory(),
+            'supplier_id' => null,
             'project_id' => null,
+            'quotation_id' => null,
+            'order_number' => 'BNY-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'status' => 'pending',
+            'subtotal' => 0,
+            'tax_amount' => 0,
+            'shipping_amount' => 0,
             'total_amount' => fake()->randomFloat(2, 10, 5000),
             'notes' => null,
             'delivery_date' => null,

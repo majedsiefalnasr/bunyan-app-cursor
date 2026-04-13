@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
 use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
 use App\Http\Controllers\Api\V1\ProjectWorkflowController;
+use App\Http\Controllers\Api\V1\QuotationOrderController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\RfqController;
 use App\Http\Controllers\Api\V1\RfqQuotationController;
@@ -241,6 +242,7 @@ Route::prefix('v1')->group(function () {
         // Customer-specific routes
         Route::middleware('role:customer,admin')->group(function () {
             Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
+<<<<<<< spec/020-payments
             Route::apiResource('orders', OrderController::class)->names([
                 'index' => 'orders.index',
                 'store' => 'orders.store',
@@ -307,6 +309,24 @@ Route::prefix('v1')->group(function () {
                 ->whereNumber('quotation')
                 ->scopeBindings()
                 ->name('rfqs.quotations.accept');
+=======
+        });
+
+        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
+            Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+            Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        });
+
+        Route::middleware(['role:customer,admin', 'throttle:30,1'])->group(function () {
+            Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+            Route::put('orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
+            Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+            Route::post('quotations/{quotation}/to-order', [QuotationOrderController::class, 'store'])->name('quotations.to-order');
+        });
+
+        Route::middleware(['role:admin', 'throttle:60,1'])->group(function () {
+            Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+>>>>>>> develop
         });
 
         // Contractor-specific routes
