@@ -262,51 +262,51 @@ Route::prefix('v1')->group(function () {
                     ->whereNumber('payment')
                     ->name('payments.refund');
             });
+        });
 
-            // RFQs (customers create/manage; contractors quote; shared read where policy allows)
-            Route::middleware('role:customer,contractor,admin')->group(function () {
-                Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
-                Route::get('rfqs/{rfq}', [RfqController::class, 'show'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.show');
-                Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.compare');
-                Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.quotations.index');
-            });
+        // RFQs (customers create/manage; contractors quote; shared read where policy allows)
+        Route::middleware('role:customer,contractor,admin')->group(function () {
+            Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
+            Route::get('rfqs/{rfq}', [RfqController::class, 'show'])
+                ->whereNumber('rfq')
+                ->name('rfqs.show');
+            Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])
+                ->whereNumber('rfq')
+                ->name('rfqs.compare');
+            Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])
+                ->whereNumber('rfq')
+                ->name('rfqs.quotations.index');
+        });
 
-            Route::middleware('role:customer')->group(function () {
-                Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
-                Route::middleware('throttle:rfq-send')->group(function () {
-                    Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])
-                        ->whereNumber('rfq')
-                        ->name('rfqs.send');
-                });
-                Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])
+        Route::middleware('role:customer')->group(function () {
+            Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
+            Route::middleware('throttle:rfq-send')->group(function () {
+                Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])
                     ->whereNumber('rfq')
-                    ->name('rfqs.close');
-                Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.evaluate');
+                    ->name('rfqs.send');
             });
+            Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])
+                ->whereNumber('rfq')
+                ->name('rfqs.close');
+            Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])
+                ->whereNumber('rfq')
+                ->name('rfqs.evaluate');
+        });
 
-            Route::middleware('role:contractor')->group(function () {
-                Route::middleware('throttle:rfq-quote')->group(function () {
-                    Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])
-                        ->whereNumber('rfq')
-                        ->name('rfqs.quotations.store');
-                });
-            });
-
-            Route::middleware('role:customer')->group(function () {
-                Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])
+        Route::middleware('role:contractor')->group(function () {
+            Route::middleware('throttle:rfq-quote')->group(function () {
+                Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])
                     ->whereNumber('rfq')
-                    ->whereNumber('quotation')
-                    ->scopeBindings()
-                    ->name('rfqs.quotations.accept');
+                    ->name('rfqs.quotations.store');
             });
+        });
+
+        Route::middleware('role:customer')->group(function () {
+            Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])
+                ->whereNumber('rfq')
+                ->whereNumber('quotation')
+                ->scopeBindings()
+                ->name('rfqs.quotations.accept');
         });
 
         // Contractor-specific routes
