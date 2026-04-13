@@ -8,20 +8,18 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
-Risk Level: HIGH
+Step: specify
+Risk Level: UNKNOWN
 Initiated: 2026-04-13T15:30:00Z
+Last Updated: 2026-04-13T15:40:00Z
 
-Scope Open:
+Scope Defined: Order lifecycle, numbering, quotation conversion, inventory reservation, APIs, customer/supplier/admin UI
 
-- Specification pending
+Deferred Scope: Payments, invoicing, multi-warehouse fulfillment
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
