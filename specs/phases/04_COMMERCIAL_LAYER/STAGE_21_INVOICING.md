@@ -1,15 +1,27 @@
 # STAGE_21 — Invoicing
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** NOT STARTED
+> **Status:** DRAFT
 > **Scope:** Invoice generation, VAT compliance, PDF export
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: MEDIUM
+Status: DRAFT
+Step: pre_step
+Risk Level: UNKNOWN
+Initiated: 2026-04-13T12:00:00Z
+
+Scope Open:
+
+- Specification pending
+
+Architecture Governance Compliance:
+
+- Pending governance audit
+
+Notes:
+Stage initialized. Specification in progress.
 
 ## Objective
 
