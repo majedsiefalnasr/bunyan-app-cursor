@@ -15,8 +15,8 @@ Arabic-first UX (RTL) is required; server-side RBAC is mandatory on all endpoint
 ## Personas & Roles
 
 - **Customer (العميل)**: creates RFQs, sends to suppliers, views/compares quotations, awards a quotation, closes RFQ.
-- **Supplier (المورّد)**: receives RFQ invitations, submits/revises quotations, views its own submitted quotations.
-- **Admin (الإدارة)**: can view all RFQs/quotations for support and compliance (read-only by default; elevated actions via policy).
+- **Supplier (المورّد)**: implemented as **Contractor role** (`contractor`) with an active `SupplierProfile`; receives RFQ invitations, submits/revises quotations, views its own submitted quotations.
+- **Admin (الإدارة)**: can view all RFQs/quotations for support and compliance (**read-only in this stage**).
 
 ## In Scope
 
@@ -116,14 +116,14 @@ Required endpoints (from stage file):
 - `POST /api/v1/rfqs` — create RFQ (customer)
 - `GET /api/v1/rfqs/{id}` — RFQ details (customer owner, invited supplier, admin)
 - `POST /api/v1/rfqs/{id}/send` — send RFQ to suppliers (customer owner)
-- `POST /api/v1/rfqs/{id}/quotations` — submit quotation (supplier)
+- `POST /api/v1/rfqs/{id}/quotations` — submit quotation (contractor with supplier profile)
 - `GET /api/v1/rfqs/{id}/quotations` — list quotations (customer owner; supplier sees own; admin sees all)
 - `PUT /api/v1/rfqs/{id}/quotations/{qid}/accept` — accept (award) quotation (customer owner)
-- `GET /api/v1/rfqs/{id}/compare` — compare quotations (customer owner)
+- `GET /api/v1/rfqs/{id}/compare` — compare quotations (customer owner, admin read-only)
 
 ### Error Contract
 
-All responses MUST follow:
+All responses MUST include:
 
 ```json
 { "success": true, "data": {}, "message": "string", "errors": {} }
@@ -139,6 +139,16 @@ Error responses:
   "errors": { "field": ["validation message"] }
 }
 ```
+
+Notes:
+
+- Clients MUST rely on the presence of `success`, `data`, `message`, and `errors`.
+- The backend may include additional fields (for example, an `error` object with codes/details) without breaking the contract.
+
+### Localization
+
+- API `message` values are **Arabic by default**, aligned with existing backend translation usage.
+- Frontend UI copy is Arabic-first (RTL) and should not rely on English-only backend messages.
 
 ## Data Requirements (High-Level)
 
