@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
-Last Updated: 2026-04-13T22:10:00Z
+Last Updated: 2026-04-13T22:20:00Z
 
-Scope Defined: Admin analytics reports (JSON + PDF/XLSX), dedicated `/admin/analytics/reports` API, Nuxt admin hub MVP, row cap + export throttle
+Scope Planned: Admin controller + service + repository, Maatwebsite + DomPDF, admin Nuxt page, feature tests
 
-Deferred Scope: Scheduled delivery, supplier views, advanced charts
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
