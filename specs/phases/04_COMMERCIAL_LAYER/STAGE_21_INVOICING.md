@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-13T12:10:00Z
+Last Updated: 2026-04-13T12:20:00Z
 
-Scope Defined: Same as specify; clarifications locked for seller VAT config, Mail transport, overdue display
+Scope Planned: Migrations, InvoiceService, ZATCA TLV, Dompdf, API, OrderService hook, Nuxt pages
 
-Deferred Scope: ZATCA clearance platform, credit notes, overdue automation
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
