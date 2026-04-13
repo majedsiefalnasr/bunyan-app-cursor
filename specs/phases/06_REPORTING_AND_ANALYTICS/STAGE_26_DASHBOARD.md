@@ -8,17 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: LOW
-Last Updated: 2026-04-13T20:45:00Z
+Last Updated: 2026-04-13T20:55:00Z
 
-Scope Defined: Role-scoped dashboard APIs, 60s cache, revenue KPI rules, Nuxt KPI cards + activity list
+Scope Planned: DashboardRepository, DashboardService, three GET endpoints, Nuxt composable + page, feature tests, config TTL
 
-Deferred Scope: Dedicated dashboard tables, chart libraries, WebSocket
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
