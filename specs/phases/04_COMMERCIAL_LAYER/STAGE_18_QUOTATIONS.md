@@ -1,20 +1,21 @@
 # STAGE_18 — Quotations
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** IMPLEMENTATION COMPLETE
+> **Status:** PRODUCTION READY
 > **Scope:** RFQ, supplier quotes, quote comparison
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: IMPLEMENTATION COMPLETE
-Step: implement
+Status: PRODUCTION READY
+Step: stage_production_ready
 Risk Level: MEDIUM
 Initiated: 2026-04-13T09:43:25Z
+Closed: 2026-04-13T12:00:00Z
 
 Scope Open:
 
-- Closure / hardening (docs, optional E2E, production readiness) pending
+- None (SpecKit closure complete; optional post-merge E2E and notifications hardening)
 
 Architecture Governance Compliance:
 
@@ -22,7 +23,7 @@ Architecture Governance Compliance:
 - Implementation: AUTHORIZED
 
 Notes:
-Drift analysis passed. Implementation authorized.
+Drift analysis passed. Implementation authorized. Closure reports and testing guide added under `specs/runtime/018-quotations/`.
 
 ## Objective
 
