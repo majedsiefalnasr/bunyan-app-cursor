@@ -195,7 +195,7 @@ class ApplicationPoliciesTest extends TestCase
             'status' => OrderStatus::Pending,
         ]);
 
-        $this->assertFalse($policy->viewAny($customer));
+        $this->assertTrue($policy->viewAny($customer));
         $this->assertTrue($policy->viewAny($admin));
 
         $this->assertTrue($policy->view($customer, $order));
@@ -206,8 +206,9 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertTrue($policy->create(User::factory()->contractor()->create()));
         $this->assertFalse($policy->create(User::factory()->fieldEngineer()->create()));
 
-        $this->assertTrue($policy->update($customer, $order));
+        $this->assertFalse($policy->update($customer, $order));
         $this->assertFalse($policy->update($other, $order));
+        $this->assertTrue($policy->update($admin, $order));
 
         $this->assertTrue($policy->delete($customer, $order));
 

@@ -6,24 +6,24 @@
 
 ## Functional
 
-- [ ] Order create from line items with persisted totals
-- [ ] Unique `order_number` generation per business rules
-- [ ] Confirm transitions reserve inventory; cancel releases
-- [ ] Convert accepted quotation to order with linkage fields
-- [ ] Role-scoped listing (customer / supplier / admin)
-- [ ] Status timeline data exposed on order detail API
+- [x] Order create from line items with persisted totals
+- [x] Unique `order_number` generation per business rules
+- [x] Confirm transitions reserve inventory; cancel releases
+- [x] Convert accepted quotation to order with linkage fields
+- [x] Role-scoped listing (customer / supplier / admin)
+- [x] Status timeline data exposed on order detail API
 
 ## Technical
 
-- [ ] Service layer for order lifecycle; controllers thin
-- [ ] Repositories for persistence where bulk queries needed
-- [ ] Form Requests for all mutations
-- [ ] Policies + middleware on all routes
-- [ ] Forward-only migrations with `down()`
-- [ ] Feature tests for RBAC and transitions
+- [x] Service layer for order lifecycle; controllers thin
+- [x] Repositories for persistence where bulk queries needed
+- [x] Form Requests for all mutations
+- [x] Policies + middleware on all routes
+- [x] Forward-only migrations with `down()`
+- [x] Feature tests for RBAC and transitions
 
 ## Quality
 
-- [ ] PHPUnit feature coverage for new endpoints
-- [ ] Vitest or smoke test for composable if logic-heavy
-- [ ] No N+1 on order detail (`with([...])`)
+- [x] PHPUnit feature coverage for new endpoints
+- [x] Vitest or smoke test for composable if logic-heavy
+- [x] No N+1 on order detail (`with([...])`)

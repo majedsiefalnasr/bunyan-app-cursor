@@ -17,6 +17,7 @@ class CreateOrderRequest extends FormRequest
             'project_id' => ['nullable', 'exists:projects,id'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],
+            'items.*.variant_id' => ['nullable', 'exists:product_variants,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
             'items.*.price' => ['required', 'numeric', 'min:0.01'],
         ];

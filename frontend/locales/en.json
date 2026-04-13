@@ -15,6 +15,7 @@
         "categories": "Categories",
         "suppliers": "Suppliers",
         "rfqs": "RFQs",
+        "orders": "Orders",
         "rfq_invitations": "RFQ invitations",
         "contact": "Contact",
         "admin": "Admin"
@@ -389,6 +390,25 @@
         "col_type": "Type",
         "col_global": "Global",
         "col_active": "Active"
+    },
+    "order": {
+        "list_title": "Orders",
+        "list_subtitle": "Track material and supply orders",
+        "empty": "No orders yet",
+        "view": "View details",
+        "total": "Total",
+        "back": "Back to orders",
+        "not_found": "Order could not be found",
+        "status": "Status",
+        "items": "Line items",
+        "confirm": "Confirm order",
+        "cancel": "Cancel order",
+        "confirm_ok": "Order confirmed",
+        "cancel_ok": "Order cancelled",
+        "action_failed": "Action could not be completed",
+        "confirmed_at": "Confirmed at",
+        "shipped_at": "Shipped at",
+        "delivered_at": "Delivered at"
     },
     "errors": {
         "retry": "Retry",

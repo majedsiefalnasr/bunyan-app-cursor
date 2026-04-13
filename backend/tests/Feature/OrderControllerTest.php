@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -80,5 +81,43 @@ class OrderControllerTest extends TestCase
             ->getJson("/api/v1/orders/{$order->id}");
 
         $response->assertStatus(403);
+    }
+
+    public function test_confirm_reserves_inventory(): void
+    {
+        $user = User::factory()->create(['role' => 'customer']);
+        $product = Product::factory()->create();
+        Inventory::query()->create([
+            'product_id' => $product->id,
+            'variant_id' => null,
+            'warehouse_location' => 'default',
+            'quantity' => 100,
+            'reserved_quantity' => 0,
+            'min_quantity' => 0,
+        ]);
+
+        $create = $this->actingAs($user)
+            ->postJson('/api/v1/orders', [
+                'items' => [
+                    [
+                        'product_id' => $product->id,
+                        'quantity' => 3,
+                        'price' => 10.00,
+                    ],
+                ],
+            ]);
+
+        $create->assertStatus(201);
+        $orderId = (int) $create->json('data.id');
+
+        $confirm = $this->actingAs($user)
+            ->putJson("/api/v1/orders/{$orderId}/confirm");
+
+        $confirm->assertStatus(200)
+            ->assertJsonPath('data.status', 'confirmed');
+
+        $line = Inventory::query()->where('product_id', $product->id)->first();
+        $this->assertNotNull($line);
+        $this->assertSame(3, (int) $line->reserved_quantity);
     }
 }

@@ -13,13 +13,14 @@ use PHPUnit\Framework\TestCase;
 
 class OtherEnumsTest extends TestCase
 {
-    public function test_order_status_has_six_cases(): void
+    public function test_order_status_has_eight_cases(): void
     {
-        $this->assertCount(6, OrderStatus::cases());
+        $this->assertCount(8, OrderStatus::cases());
         $this->assertSame('pending', OrderStatus::Pending->value);
+        $this->assertSame('confirmed', OrderStatus::Confirmed->value);
         $this->assertSame('delivered', OrderStatus::Delivered->value);
         $this->assertSame('في الانتظار', OrderStatus::Pending->label());
-        $this->assertCount(6, OrderStatus::values());
+        $this->assertCount(8, OrderStatus::values());
     }
 
     public function test_transaction_type_has_four_cases(): void
