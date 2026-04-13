@@ -1,0 +1,33 @@
+{
+  "stage": "Quotations",
+  "phase": "04_COMMERCIAL_LAYER",
+  "stage_dir": "specs/runtime/018-quotations",
+  "stage_file": "specs/phases/04_COMMERCIAL_LAYER/STAGE_18_QUOTATIONS.md",
+  "branch": "spec/018-quotations",
+  "base_branch": "develop",
+  "pkg_manager": "composer",
+  "auto_advance": true,
+  "current_step": "pre_step",
+  "stage_status": "DRAFT",
+  "clarifications_resolved": false,
+  "drift_passed": false,
+  "implementation_allowed": false,
+  "plan_completed": false,
+  "tasks_total": null,
+  "tasks_completed": null,
+  "deferred_tasks": [],
+  "guardian_verdicts": {},
+  "parallel_task_groups": [],
+  "current_parallel_group": null,
+  "session_started_at": "2026-04-13T09:43:25Z",
+  "last_updated": "2026-04-13T09:43:25Z",
+  "step_timings": {},
+  "history": [
+    {
+      "event": "branch_created",
+      "branch": "spec/018-quotations",
+      "timestamp": "2026-04-13T09:43:25Z"
+    }
+  ]
+}
+
