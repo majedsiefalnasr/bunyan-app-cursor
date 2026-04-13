@@ -1,15 +1,29 @@
 # STAGE_17 — Cost Estimator
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** Cost estimation tool, BOQ, material calculations
 > **Risk Level:** HIGH
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: HIGH
+Status: PRODUCTION READY
+Step: stage_production_ready
+Risk Level: MEDIUM
+Closure Date: 2026-04-12
+
+Scope Closed: Project cost estimates with line items, calculation, approval, compare (2–5 ids), CSV export, admin BOQ templates CRUD, Nuxt list/detail pages, feature tests — 18/18 tasks.
+
+Deferred Scope: PDF binary export, XLSX styling, auto-apply BOQ template to estimate lines, multi-currency.
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no new ADR required; follows existing API/service/repository patterns)
+- RBAC enforcement confirmed (role middleware + `EstimatePolicy` / `BoqTemplatePolicy`)
+- Service layer architecture maintained
+- Error contract compliance verified
+
+Notes: Stage is production ready. Modifications require a new stage or amendment protocol.
 
 ## Objective
 

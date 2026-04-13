@@ -110,6 +110,11 @@ class Project extends BaseModel
         return $this->morphMany(Document::class, 'documentable');
     }
 
+    public function estimates(): HasMany
+    {
+        return $this->hasMany(Estimate::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', ProjectStatus::InProgress->value);

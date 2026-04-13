@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\Api\ErrorHandlingTestController;
 use App\Http\Controllers\Api\V1\ActivityLogController;
+use App\Http\Controllers\Api\V1\Admin\BoqTemplateController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\EstimateController;
+use App\Http\Controllers\Api\V1\EstimateItemController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\MediaController;
@@ -20,6 +23,8 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProductPricingController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\ProjectDocumentController;
+use App\Http\Controllers\Api\V1\ProjectEstimateCompareController;
+use App\Http\Controllers\Api\V1\ProjectEstimateController;
 use App\Http\Controllers\Api\V1\ProjectInvitationAcceptController;
 use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
@@ -155,6 +160,28 @@ Route::prefix('v1')->group(function () {
             Route::get('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'show'])->name('projects.phases.tasks.show');
             Route::get('projects/{project}/tasks', [ProjectTaskController::class, 'index'])->name('projects.tasks.index');
             Route::get('tasks/{task}', [TaskWorkspaceController::class, 'show'])->name('tasks.show');
+
+            Route::middleware('throttle:60,1')->group(function () {
+                Route::get('projects/{project}/estimates', [ProjectEstimateController::class, 'index'])->name('projects.estimates.index');
+                Route::get('projects/{project}/estimates/compare', [ProjectEstimateCompareController::class, 'compare'])->name('projects.estimates.compare');
+                Route::get('estimates/{estimate}', [EstimateController::class, 'show'])->name('estimates.show');
+                Route::get('estimates/{estimate}/export', [EstimateController::class, 'export'])->name('estimates.export');
+            });
+        });
+
+        Route::middleware('role:customer,contractor,supervising_architect,admin')->group(function () {
+            Route::middleware('throttle:30,1')->group(function () {
+                Route::post('projects/{project}/estimates', [ProjectEstimateController::class, 'store'])->name('projects.estimates.store');
+                Route::post('estimates/{estimate}/calculate', [EstimateController::class, 'calculate'])->name('estimates.calculate');
+                Route::post('estimates/{estimate}/approve', [EstimateController::class, 'approve'])->name('estimates.approve');
+                Route::post('estimates/{estimate}/reject', [EstimateController::class, 'reject'])->name('estimates.reject');
+                Route::post('estimates/{estimate}/items', [EstimateItemController::class, 'store'])->name('estimates.items.store');
+            });
+            Route::put('estimates/{estimate}', [EstimateController::class, 'update'])->name('estimates.update');
+            Route::scopeBindings()->group(function () {
+                Route::put('estimates/{estimate}/items/{estimateItem}', [EstimateItemController::class, 'update'])->name('estimates.items.update');
+                Route::delete('estimates/{estimate}/items/{estimateItem}', [EstimateItemController::class, 'destroy'])->name('estimates.items.destroy');
+            });
         });
 
         // Reports (read — roles with report.view)
@@ -259,6 +286,14 @@ Route::prefix('v1')->group(function () {
             Route::get('suppliers', [SupplierProfileController::class, 'adminIndex'])->name('admin.suppliers.index');
 
             Route::get('activity-log', [ActivityLogController::class, 'adminIndex'])->name('admin.activity-log.index');
+
+            Route::apiResource('boq-templates', BoqTemplateController::class)->names([
+                'index' => 'admin.boq-templates.index',
+                'store' => 'admin.boq-templates.store',
+                'show' => 'admin.boq-templates.show',
+                'update' => 'admin.boq-templates.update',
+                'destroy' => 'admin.boq-templates.destroy',
+            ]);
         });
     });
 
