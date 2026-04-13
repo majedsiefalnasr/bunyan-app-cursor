@@ -8,16 +8,16 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
+Step: clarify
+Risk Level: MEDIUM
 
-Scope Defined: Order checkout payments, sandbox gateway, payment_attempts audit, webhook, Nuxt payment pages
+Scope Defined: Order checkout payments, sandbox gateway, `payment_attempts` audit trail, webhook with secret, customer Nuxt payment surfaces
 
-Deferred Scope: Production gateways, invoicing PDFs, multi-currency
+Deferred Scope: Production Saudi gateways, invoicing PDFs, multi-currency, admin-only refunds
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
