@@ -392,7 +392,6 @@
         "col_global": "Global",
         "col_active": "Active"
     },
-<<<<<<< spec/020-payments
     "payments": {
         "list_title": "Payments",
         "list_subtitle": "Payments linked to your account",
@@ -411,7 +410,7 @@
         "loading": "Loading…",
         "missing_order_id": "Add the order id to the URL (?orderId=)",
         "success_initiated": "Payment started"
-=======
+    },
     "order": {
         "list_title": "Orders",
         "list_subtitle": "Track material and supply orders",
@@ -430,7 +429,6 @@
         "confirmed_at": "Confirmed at",
         "shipped_at": "Shipped at",
         "delivered_at": "Delivered at"
->>>>>>> develop
     },
     "errors": {
         "retry": "Retry",

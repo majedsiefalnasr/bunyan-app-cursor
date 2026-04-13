@@ -392,7 +392,6 @@
         "col_global": "عام",
         "col_active": "نشط"
     },
-<<<<<<< spec/020-payments
     "payments": {
         "list_title": "المدفوعات",
         "list_subtitle": "عرض عمليات الدفع المرتبطة بحسابك",
@@ -411,7 +410,7 @@
         "loading": "جاري التحميل…",
         "missing_order_id": "أضف معرّف الطلب في الرابط (?orderId=)",
         "success_initiated": "تم بدء الدفع"
-=======
+    },
     "order": {
         "list_title": "الطلبات",
         "list_subtitle": "تتبع طلبات المواد والتوريد",
@@ -430,7 +429,6 @@
         "confirmed_at": "تاريخ التأكيد",
         "shipped_at": "تاريخ الشحن",
         "delivered_at": "تاريخ التسليم"
->>>>>>> develop
     },
     "errors": {
         "retry": "أعد المحاولة",

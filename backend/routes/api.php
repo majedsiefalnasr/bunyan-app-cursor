@@ -242,14 +242,18 @@ Route::prefix('v1')->group(function () {
         // Customer-specific routes
         Route::middleware('role:customer,admin')->group(function () {
             Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
-<<<<<<< spec/020-payments
-            Route::apiResource('orders', OrderController::class)->names([
-                'index' => 'orders.index',
-                'store' => 'orders.store',
-                'show' => 'orders.show',
-                'update' => 'orders.update',
-                'destroy' => 'orders.destroy',
-            ]);
+        });
+
+        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
+            Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+            Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        });
+
+        Route::middleware(['role:customer,admin', 'throttle:30,1'])->group(function () {
+            Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+            Route::put('orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
+            Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+            Route::post('quotations/{quotation}/to-order', [QuotationOrderController::class, 'store'])->name('quotations.to-order');
 
             Route::middleware('throttle:60,1')->prefix('payments')->group(function () {
                 Route::post('initiate', [PaymentController::class, 'initiate'])->name('payments.initiate');
@@ -266,67 +270,8 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-        // RFQs (customers create/manage; contractors quote; shared read where policy allows)
-        Route::middleware('role:customer,contractor,admin')->group(function () {
-            Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
-            Route::get('rfqs/{rfq}', [RfqController::class, 'show'])
-                ->whereNumber('rfq')
-                ->name('rfqs.show');
-            Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])
-                ->whereNumber('rfq')
-                ->name('rfqs.compare');
-            Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])
-                ->whereNumber('rfq')
-                ->name('rfqs.quotations.index');
-        });
-
-        Route::middleware('role:customer')->group(function () {
-            Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
-            Route::middleware('throttle:rfq-send')->group(function () {
-                Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.send');
-            });
-            Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])
-                ->whereNumber('rfq')
-                ->name('rfqs.close');
-            Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])
-                ->whereNumber('rfq')
-                ->name('rfqs.evaluate');
-        });
-
-        Route::middleware('role:contractor')->group(function () {
-            Route::middleware('throttle:rfq-quote')->group(function () {
-                Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])
-                    ->whereNumber('rfq')
-                    ->name('rfqs.quotations.store');
-            });
-        });
-
-        Route::middleware('role:customer')->group(function () {
-            Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])
-                ->whereNumber('rfq')
-                ->whereNumber('quotation')
-                ->scopeBindings()
-                ->name('rfqs.quotations.accept');
-=======
-        });
-
-        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
-            Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-            Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-        });
-
-        Route::middleware(['role:customer,admin', 'throttle:30,1'])->group(function () {
-            Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
-            Route::put('orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
-            Route::put('orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
-            Route::post('quotations/{quotation}/to-order', [QuotationOrderController::class, 'store'])->name('quotations.to-order');
-        });
-
         Route::middleware(['role:admin', 'throttle:60,1'])->group(function () {
             Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
->>>>>>> develop
         });
 
         // Contractor-specific routes
