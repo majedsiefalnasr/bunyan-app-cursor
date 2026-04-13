@@ -1,20 +1,29 @@
 # STAGE_27 — Reports
 
 > **Phase:** 06_REPORTING_AND_ANALYTICS
-> **Status:** DRAFT
+> **Status:** PRODUCTION READY
 > **Scope:** Business reports, export (PDF, Excel)
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: BACKEND CLOSED
-Step: implement
+Status: PRODUCTION READY
+Step: stage_production_ready
 Risk Level: MEDIUM
-Last Updated: 2026-04-13T22:45:00Z
+Closure Date: 2026-04-13
 
-Implementation: COMPLETE
+Scope Closed: Admin analytics API (six report types), PDF/XLSX export, repository/service layering, admin Nuxt reports hub, feature tests, i18n — 12/12 tasks
 
-Tasks: 12 / 12 completed
+Deferred Scope: Scheduled delivery, supplier-facing analytics, advanced charting
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR changes)
+- RBAC enforcement confirmed (`role:admin` on analytics routes)
+- Service layer architecture maintained
+- Error contract compliance verified on JSON endpoints
+
+Notes: Stage is production ready. Further changes should follow a new stage or amendment protocol.
 
 ## Objective
 

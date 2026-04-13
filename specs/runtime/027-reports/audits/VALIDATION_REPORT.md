@@ -25,10 +25,10 @@
 
 ## Static Analysis
 
-| Tool           | Status | Issues                  |
-| -------------- | ------ | ----------------------- |
-| PHPStan        | —      | Not run in this session |
-| Nuxt Typecheck | ✅     | 0                       |
+| Tool           | Status | Issues                                |
+| -------------- | ------ | ------------------------------------- |
+| PHPStan        | ✅     | 0 (full `vendor/bin/phpstan analyse`) |
+| Nuxt Typecheck | ✅     | 0                                     |
 
 ## Migration Validation
 
