@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-13T20:31:59Z
+Last Updated: 2026-04-13T20:40:00Z
 
-Scope Open:
+Scope Defined: Role-scoped dashboard APIs, aggregation service/repository, Nuxt dashboard KPI UI
 
-- Specification pending
+Deferred Scope: Dedicated dashboard tables, advanced charts, WebSocket updates
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
