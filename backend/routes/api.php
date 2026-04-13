@@ -32,6 +32,8 @@ use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
 use App\Http\Controllers\Api\V1\ProjectWorkflowController;
 use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\RfqController;
+use App\Http\Controllers\Api\V1\RfqQuotationController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TaskWorkspaceController;
@@ -95,6 +97,28 @@ Route::prefix('v1')->group(function () {
 
         Route::middleware('role:admin')->group(function () {
             Route::put('suppliers/{supplierProfile}/verify', [SupplierProfileController::class, 'verify'])->name('suppliers.verify');
+        });
+
+        // RFQs & supplier quotations (طلبات التسعير وعروض الأسعار)
+        Route::middleware('role:customer,contractor,admin')->group(function () {
+            Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
+            Route::get('rfqs/{rfq}', [RfqController::class, 'show'])->name('rfqs.show');
+            Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])->name('rfqs.compare');
+            Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])->name('rfqs.quotations.index');
+        });
+
+        Route::middleware('role:customer')->group(function () {
+            Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
+            Route::middleware('throttle:rfq-send')->post('rfqs/{rfq}/send', [RfqController::class, 'send'])->name('rfqs.send');
+            Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])->name('rfqs.evaluate');
+            Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])->name('rfqs.close');
+            Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])
+                ->name('rfqs.quotations.accept')
+                ->scopeBindings();
+        });
+
+        Route::middleware(['role:contractor', 'throttle:rfq-quote'])->group(function () {
+            Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])->name('rfqs.quotations.store');
         });
 
         Route::post('auth/email/resend', [UserController::class, 'resendVerification'])
@@ -237,6 +261,51 @@ Route::prefix('v1')->group(function () {
                 Route::post('{payment}/refund', [PaymentController::class, 'refund'])
                     ->whereNumber('payment')
                     ->name('payments.refund');
+            });
+
+            // RFQs (customers create/manage; contractors quote; shared read where policy allows)
+            Route::middleware('role:customer,contractor,admin')->group(function () {
+                Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
+                Route::get('rfqs/{rfq}', [RfqController::class, 'show'])
+                    ->whereNumber('rfq')
+                    ->name('rfqs.show');
+                Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])
+                    ->whereNumber('rfq')
+                    ->name('rfqs.compare');
+                Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])
+                    ->whereNumber('rfq')
+                    ->name('rfqs.quotations.index');
+            });
+
+            Route::middleware('role:customer')->group(function () {
+                Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
+                Route::middleware('throttle:rfq-send')->group(function () {
+                    Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])
+                        ->whereNumber('rfq')
+                        ->name('rfqs.send');
+                });
+                Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])
+                    ->whereNumber('rfq')
+                    ->name('rfqs.close');
+                Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])
+                    ->whereNumber('rfq')
+                    ->name('rfqs.evaluate');
+            });
+
+            Route::middleware('role:contractor')->group(function () {
+                Route::middleware('throttle:rfq-quote')->group(function () {
+                    Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])
+                        ->whereNumber('rfq')
+                        ->name('rfqs.quotations.store');
+                });
+            });
+
+            Route::middleware('role:customer')->group(function () {
+                Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])
+                    ->whereNumber('rfq')
+                    ->whereNumber('quotation')
+                    ->scopeBindings()
+                    ->name('rfqs.quotations.accept');
             });
         });
 
