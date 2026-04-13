@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ErrorHandlingTestController;
 use App\Http\Controllers\Api\V1\ActivityLogController;
 use App\Http\Controllers\Api\V1\Admin\BoqTemplateController;
+use App\Http\Controllers\Api\V1\Admin\BusinessAnalyticsReportController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
@@ -356,6 +357,17 @@ Route::prefix('v1')->group(function () {
             Route::get('suppliers', [SupplierProfileController::class, 'adminIndex'])->name('admin.suppliers.index');
 
             Route::get('activity-log', [ActivityLogController::class, 'adminIndex'])->name('admin.activity-log.index');
+
+            Route::get('analytics/reports/types', [BusinessAnalyticsReportController::class, 'types'])
+                ->name('admin.analytics.reports.types');
+            Route::get('analytics/reports/{type}', [BusinessAnalyticsReportController::class, 'show'])
+                ->where('type', 'sales_summary|orders_summary|project_status|inventory_low_stock|supplier_performance|financial_summary')
+                ->name('admin.analytics.reports.show');
+            Route::middleware('throttle:30,1')->group(function () {
+                Route::get('analytics/reports/{type}/export', [BusinessAnalyticsReportController::class, 'export'])
+                    ->where('type', 'sales_summary|orders_summary|project_status|inventory_low_stock|supplier_performance|financial_summary')
+                    ->name('admin.analytics.reports.export');
+            });
 
             Route::apiResource('boq-templates', BoqTemplateController::class)->names([
                 'index' => 'admin.boq-templates.index',

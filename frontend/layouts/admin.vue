@@ -49,6 +49,14 @@
                     </li>
                     <li>
                         <NuxtLink
+                            to="/admin/reports"
+                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                        >
+                            {{ $t('analyticsReports.nav_link') }}
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink
                             to="/admin/activity-log"
                             class="block px-4 py-2 rounded hover:bg-slate-700 transition"
                         >

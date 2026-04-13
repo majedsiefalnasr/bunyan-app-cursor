@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <title>{{ $title }}</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; font-size: 11px; color: #111; }
+        h1 { font-size: 16px; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 4px 6px; text-align: right; }
+        th { background: #f4f4f4; }
+        .summary { margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <h1>{{ $title }}</h1>
+    @if (!empty($summary))
+        <div class="summary">
+            <strong>ملخص</strong>
+            <pre style="white-space: pre-wrap;">{{ json_encode($summary, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) }}</pre>
+        </div>
+    @endif
+    @if (count($headers) > 0)
+        <table>
+            <thead>
+            <tr>
+                @foreach ($headers as $h)
+                    <th>{{ $h }}</th>
+                @endforeach
+            </tr>
+            </thead>
+            <tbody>
+            @foreach ($rows as $row)
+                <tr>
+                    @foreach ($row as $cell)
+                        <td>{{ $cell }}</td>
+                    @endforeach
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @else
+        <p>لا توجد صفوف لهذا التقرير.</p>
+    @endif
+</body>
+</html>
