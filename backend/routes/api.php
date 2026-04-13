@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\EstimateController;
 use App\Http\Controllers\Api\V1\EstimateItemController;
@@ -223,6 +224,14 @@ Route::prefix('v1')->group(function () {
         // Transactions (read-only for users)
         Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
         Route::get('transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+
+        Route::middleware(['role:customer,contractor,supervising_architect,field_engineer,admin', 'throttle:60,1'])
+            ->prefix('dashboard')
+            ->group(function () {
+                Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+                Route::get('/metrics', [DashboardController::class, 'metrics'])->name('dashboard.metrics');
+                Route::get('/recent-activity', [DashboardController::class, 'recentActivity'])->name('dashboard.recent-activity');
+            });
 
         Route::middleware('throttle:60,1')->group(function () {
             Route::get('conversations', [ConversationController::class, 'index'])->name('conversations.index');

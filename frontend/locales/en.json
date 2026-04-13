@@ -136,7 +136,15 @@
         "welcome_hint": "Start here to access your account and profile.",
         "profile_cta": "Update your personal details anytime.",
         "rfq_customer_cta": "Create RFQs for materials and compare supplier quotes.",
-        "rfq_contractor_cta": "Review RFQ invitations sent to your supplier profile."
+        "rfq_contractor_cta": "Review RFQ invitations sent to your supplier profile.",
+        "loading": "Loading your dashboard…",
+        "recent_activity": "Recent activity",
+        "kpi_users": "Active users",
+        "kpi_projects": "Projects",
+        "kpi_orders": "Orders",
+        "kpi_revenue_sar": "Order revenue (SAR)",
+        "kpi_tasks_assigned": "Assigned tasks",
+        "kpi_reports": "Reports"
     },
     "rfq": {
         "list_title": "RFQs",
