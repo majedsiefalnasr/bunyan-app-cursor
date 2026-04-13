@@ -1,0 +1,22 @@
+# Tasks — Invoicing
+
+- [ ] T001 Add `barryvdh/laravel-dompdf` to `backend/composer.json` and install
+- [ ] T002 [P] Add `config/invoicing.php` with seller name, VAT number, default rate
+- [ ] T003 Create migration `backend/database/migrations/*_create_invoices_tables.php` for `invoices` and `invoice_items`
+- [ ] T004 Add `InvoiceStatus` enum in `backend/app/Enums/InvoiceStatus.php`
+- [ ] T005 Add models `Invoice`, `InvoiceItem` in `backend/app/Models/`
+- [ ] T006 Add `InvoiceRepository` in `backend/app/Repositories/InvoiceRepository.php`
+- [ ] T007 Add `ZatcaQrPayloadBuilder` in `backend/app/Services/ZatcaQrPayloadBuilder.php`
+- [ ] T008 Add `InvoiceService` in `backend/app/Services/InvoiceService.php`
+- [ ] T009 Wire `OrderService` to call invoice generation on `completed` in `backend/app/Services/OrderService.php`
+- [ ] T010 Add `InvoicePolicy` and register discovery in `backend/app/Providers/AppServiceProvider.php` if needed
+- [ ] T011 Add Form Requests under `backend/app/Http/Requests/Api/V1/` for invoice actions
+- [ ] T012 Add `InvoiceResource` (+ item) under `backend/app/Http/Resources/Api/V1/`
+- [ ] T013 Add `InvoiceController` and routes in `backend/routes/api.php`
+- [ ] T014 Add `InvoiceMail` mailable + blade template under `backend/resources/views/mail/`
+- [ ] T015 Add PDF blade `backend/resources/views/invoices/pdf.blade.php`
+- [ ] T016 Add PHPUnit feature tests `backend/tests/Feature/Api/V1/InvoiceApiTest.php`
+- [ ] T017 Add `frontend/composables/useInvoices.ts`
+- [ ] T018 Add pages `frontend/pages/invoices/index.vue`, `frontend/pages/invoices/[id].vue`, `frontend/pages/invoices/create.vue`
+- [ ] T019 [P] Extend `frontend/i18n/locales/ar.json` and `en.json` with `invoice.*` keys
+- [ ] T020 [P] Add invoice nav entry in `frontend/layouts/` or dashboard sidebar if present

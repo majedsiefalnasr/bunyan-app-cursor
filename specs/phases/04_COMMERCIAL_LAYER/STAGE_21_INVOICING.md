@@ -8,15 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: plan
+Step: tasks
 Risk Level: LOW
-Last Updated: 2026-04-13T12:20:00Z
+Last Updated: 2026-04-13T12:25:00Z
 
-Scope Planned: Migrations, InvoiceService, ZATCA TLV, Dompdf, API, OrderService hook, Nuxt pages
+Tasks Generated: Total: 20 atomic tasks
 
-Architecture Governance Compliance: Technical plan compliant — task generation authorized
+Architecture Governance Compliance: Task set compliant — drift analysis required
 
-Notes: Technical plan complete. Task breakdown in progress.
+Notes: Ready for analyze step.
 
 ## Objective
 
