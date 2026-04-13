@@ -8,17 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
-Last Updated: 2026-04-13T20:40:00Z
+Step: clarify
+Risk Level: LOW
+Last Updated: 2026-04-13T20:45:00Z
 
-Scope Defined: Role-scoped dashboard APIs, aggregation service/repository, Nuxt dashboard KPI UI
+Scope Defined: Role-scoped dashboard APIs, 60s cache, revenue KPI rules, Nuxt KPI cards + activity list
 
-Deferred Scope: Dedicated dashboard tables, advanced charts, WebSocket updates
+Deferred Scope: Dedicated dashboard tables, chart libraries, WebSocket
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 
