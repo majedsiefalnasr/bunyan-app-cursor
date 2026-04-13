@@ -7,15 +7,23 @@
 
 ## Stage Status
 
-Status: BACKEND CLOSED
-Step: implement
+Status: PRODUCTION READY
 Risk Level: MEDIUM
+Closure Date: 2026-04-13
 
-Implementation: COMPLETE
+Scope Closed: Payments API (initiate, history, show, capture, refund), webhook with shared secret, `payments` + `payment_attempts` schema, sandbox gateway, Nuxt payment pages and composable, feature tests, i18n keys. Tasks 17 / 17.
 
-Tasks: 17 / 17 completed
+Deferred Scope: Live Saudi payment providers; ledger `Transaction` auto-sync; admin-only refund tightening.
 
-Notes: Validation artifacts recorded; closure pending.
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR changes)
+- RBAC enforcement confirmed (`role:customer,admin` + policies)
+- Service layer architecture maintained
+- Error contract compliance verified
+- Migration forward-only with `down()`
+
+Notes: Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
