@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Bunyan Payments API (v1 sketch)
+  version: 0.1.0
+paths:
+  /api/v1/payments/initiate:
+    post:
+      summary: Initiate payment
+      security:
+        - sanctum: []
+  /api/v1/payments/history:
+    get:
+      summary: List payments
+      security:
+        - sanctum: []
+  /api/v1/payments/{payment}:
+    get:
+      summary: Show payment
+      security:
+        - sanctum: []
+  /api/v1/payments/{payment}/capture:
+    post:
+      summary: Capture payment
+      security:
+        - sanctum: []
+  /api/v1/payments/{payment}/refund:
+    post:
+      summary: Refund payment
+      security:
+        - sanctum: []
+  /api/v1/webhooks/payment:
+    post:
+      summary: Gateway webhook
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer

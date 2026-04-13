@@ -8,16 +8,14 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
 
-Scope Defined: Order checkout payments, sandbox gateway, `payment_attempts` audit trail, webhook with secret, customer Nuxt payment surfaces
+Scope Planned: Migrations, enums, gateway contract, service/repositories, policies, controllers, routes, webhook, Nuxt payment pages, feature tests
 
-Deferred Scope: Production Saudi gateways, invoicing PDFs, multi-currency, admin-only refunds
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
