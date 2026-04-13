@@ -87,4 +87,24 @@ class ProductRepository extends BaseRepository
         $new = max(0, (int) $product->quantity_in_stock + $delta);
         $this->newQuery()->whereKey($productId)->update(['quantity_in_stock' => $new]);
     }
+
+    /**
+     * @return array<int>
+     */
+    public function supplierIdsForProductIds(array $productIds): array
+    {
+        if ($productIds === []) {
+            return [];
+        }
+
+        /** @var array<int> */
+        return $this->newQuery()
+            ->whereIn('id', $productIds)
+            ->whereNotNull('supplier_id')
+            ->distinct()
+            ->pluck('supplier_id')
+            ->map(fn ($v) => (int) $v)
+            ->values()
+            ->all();
+    }
 }

@@ -1,15 +1,29 @@
 # STAGE_18 — Quotations
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** RFQ, supplier quotes, quote comparison
 > **Risk Level:** MEDIUM
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
+Status: PRODUCTION READY
+Step: stage_production_ready
 Risk Level: MEDIUM
+Initiated: 2026-04-13T09:43:25Z
+Closed: 2026-04-13T12:00:00Z
+
+Scope Open:
+
+- None (SpecKit closure complete; optional post-merge E2E and notifications hardening)
+
+Architecture Governance Compliance:
+
+- Drift Analysis: PASSED (all criteria)
+- Implementation: AUTHORIZED
+
+Notes:
+Drift analysis passed. Implementation authorized. Closure reports and testing guide added under `specs/runtime/018-quotations/`.
 
 ## Objective
 

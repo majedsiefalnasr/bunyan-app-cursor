@@ -30,6 +30,8 @@ use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
 use App\Http\Controllers\Api\V1\ProjectWorkflowController;
 use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\RfqController;
+use App\Http\Controllers\Api\V1\RfqQuotationController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TaskWorkspaceController;
@@ -100,6 +102,29 @@ Route::prefix('v1')->group(function () {
         Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
         Route::get('products/{product}/pricing', [ProductPricingController::class, 'show'])->name('products.pricing.show');
         Route::post('pricing/calculate', PricingCalculationController::class)->name('pricing.calculate');
+
+        // RFQs (Quotations)
+        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
+            Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
+            Route::get('rfqs/{rfq}', [RfqController::class, 'show'])->name('rfqs.show');
+            Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])->name('rfqs.compare');
+            Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])->name('rfqs.quotations.index');
+        });
+
+        Route::middleware(['role:customer', 'throttle:30,1'])->group(function () {
+            Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
+            Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])->middleware('throttle:rfq-send')->name('rfqs.send');
+            Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])->name('rfqs.evaluate');
+            Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])->name('rfqs.close');
+        });
+
+        Route::middleware(['role:contractor', 'throttle:rfq-quote'])->group(function () {
+            Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])->name('rfqs.quotations.store');
+        });
+
+        Route::scopeBindings()->middleware(['role:customer', 'throttle:30,1'])->group(function () {
+            Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])->name('rfqs.quotations.accept');
+        });
 
         Route::middleware(['role:admin,contractor', 'throttle:120,1'])->prefix('inventory')->group(function () {
             Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
