@@ -53,7 +53,7 @@
     "lint:fix": "pint",
     "analyze": "phpstan analyse --memory-limit=512M",
     "test": "php artisan test",
-    "test:coverage": "php artisan test --coverage",
+    "test:coverage": "php artisan test --coverage --min=80",
     "dev": "php artisan serve"
   },
   "config": {
