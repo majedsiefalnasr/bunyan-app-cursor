@@ -8,18 +8,18 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
+Step: clarify
+Risk Level: MEDIUM
 Initiated: 2026-04-13T15:30:00Z
-Last Updated: 2026-04-13T15:40:00Z
+Last Updated: 2026-04-13T15:45:00Z
 
-Scope Defined: Order lifecycle, numbering, quotation conversion, inventory reservation, APIs, customer/supplier/admin UI
+Scope Defined: Order lifecycle, numbering, quotation conversion, inventory reservation, APIs, customer/supplier/admin UI; admin-only bulk status; supplier read list
 
 Deferred Scope: Payments, invoicing, multi-warehouse fulfillment
 
-Architecture Governance Compliance: Specification drafted — governance audit pending
+Architecture Governance Compliance: Clarifications resolved — planning authorized
 
-Notes: Specification complete. Clarification step pending.
+Notes: All specification ambiguities resolved. Ready for technical planning.
 
 ## Objective
 

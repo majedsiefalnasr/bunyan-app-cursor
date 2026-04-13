@@ -106,3 +106,16 @@ Allowed transitions (simplified matrix in `OrderService`):
 
 - Upstream: products, inventory (`reserved_quantity`), RFQ/quotations (accepted path).
 - Downstream: payments, invoicing.
+
+## Clarifications
+
+### Session 2026-04-13
+
+| Topic                           | Resolution                                                                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Supplier visibility             | Contractors with an active `SupplierProfile` see orders where `orders.supplier_id` equals their profile id; they do not gain customer cancel/confirm rights. |
+| `PUT /orders/{id}/status` actor | v1 restricts this route to **admin** only to avoid suppliers/customers bypassing business rules; customers use confirm/cancel.                               |
+| Order total fields              | `total_amount` remains the persisted monetary total; `subtotal` / `tax_amount` / `shipping_amount` are additive breakdown columns with defaults 0.           |
+| Inventory warehouse             | Reservations target `warehouse_location = 'default'` and `variant_id` null unless line specifies variant.                                                    |
+| Quotation conversion guard      | Only when quotation status is **ACCEPTED** and RFQ `customer_id` matches authenticated customer (or admin).                                                  |
+| `refunded` enum                 | Kept for downstream payment reversal; not used by merchant fulfillment transitions in this stage.                                                            |
