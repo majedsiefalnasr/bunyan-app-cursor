@@ -8,14 +8,14 @@
 ## Stage Status
 
 Status: DRAFT
-Step: plan
+Step: tasks
 Risk Level: MEDIUM
 
-Scope Planned: Migrations, enums, gateway contract, service/repositories, policies, controllers, routes, webhook, Nuxt payment pages, feature tests
+Scope Planned: 17 atomic implementation tasks (backend domain, tests, Nuxt surfaces)
 
-Architecture Governance Compliance: Technical plan compliant — task generation authorized
+Architecture Governance Compliance: Task set compliant — drift analysis required
 
-Notes: Technical plan complete. Task breakdown in progress.
+Notes: Tasks generated; analyze step next.
 
 ## Objective
 
