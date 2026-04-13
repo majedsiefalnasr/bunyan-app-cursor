@@ -8,18 +8,16 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: MEDIUM
 Initiated: 2026-04-13T15:30:00Z
-Last Updated: 2026-04-13T15:45:00Z
+Last Updated: 2026-04-13T16:00:00Z
 
-Scope Defined: Order lifecycle, numbering, quotation conversion, inventory reservation, APIs, customer/supplier/admin UI; admin-only bulk status; supplier read list
+Scope Planned: Migrations, OrderService, inventory integration, APIs, policies, tests, Nuxt orders UI
 
-Deferred Scope: Payments, invoicing, multi-warehouse fulfillment
+Architecture Governance Compliance: Technical plan compliant — task generation authorized
 
-Architecture Governance Compliance: Clarifications resolved — planning authorized
-
-Notes: All specification ambiguities resolved. Ready for technical planning.
+Notes: Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
