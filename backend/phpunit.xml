@@ -35,6 +35,7 @@
         <!-- Avoid 500s when CI/.env sets an empty or invalid MAIL_MAILER (Registered → verification mail). -->
         <env name="MAIL_MAILER" value="array"/>
         <env name="BROADCAST_CONNECTION" value="log"/>
+        <env name="PAYMENTS_WEBHOOK_SECRET" value="test-webhook-secret"/>
     </php>
     <source>
         <include>

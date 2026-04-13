@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Contracts\Payments\PaymentGatewayContract;
 use App\Enums\UserRole;
 use App\Models\Conversation;
 use App\Models\User;
+use App\Services\Payments\Gateways\SandboxPaymentGateway;
 use App\Services\RoleService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentGatewayContract::class, SandboxPaymentGateway::class);
     }
 
     public function boot(): void

@@ -6,6 +6,7 @@ use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\ErrorDetailFiltering;
 use App\Http\Middleware\InjectCorrelationId;
 use App\Http\Middleware\LogApiActivity;
+use App\Http\Middleware\ValidatePaymentWebhookSignature;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -36,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => CheckRole::class,
             'permission' => CheckPermission::class,
+            'payment.webhook' => ValidatePaymentWebhookSignature::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

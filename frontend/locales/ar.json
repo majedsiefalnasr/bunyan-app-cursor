@@ -8,6 +8,7 @@
         "dashboard": "لوحة التحكم",
         "projects": "المشاريع",
         "messages": "الرسائل",
+        "payments": "المدفوعات",
         "media": "مكتبة الوسائط",
         "reports": "التقارير",
         "services": "الخدمات",
@@ -390,6 +391,25 @@
         "col_type": "النوع",
         "col_global": "عام",
         "col_active": "نشط"
+    },
+    "payments": {
+        "list_title": "المدفوعات",
+        "list_subtitle": "عرض عمليات الدفع المرتبطة بحسابك",
+        "empty": "لا توجد مدفوعات بعد",
+        "detail_title": "تفاصيل الدفع",
+        "status": "الحالة",
+        "amount": "المبلغ",
+        "method": "طريقة الدفع",
+        "order": "الطلب",
+        "checkout_title": "إتمام الدفع",
+        "checkout_hint": "اختر طريقة الدفع ثم أكمل العملية من واجهة الـ API",
+        "method_mada": "مدى",
+        "method_card": "بطاقة",
+        "method_bank": "تحويل بنكي",
+        "submit": "بدء الدفع",
+        "loading": "جاري التحميل…",
+        "missing_order_id": "أضف معرّف الطلب في الرابط (?orderId=)",
+        "success_initiated": "تم بدء الدفع"
     },
     "order": {
         "list_title": "الطلبات",

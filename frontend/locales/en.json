@@ -8,6 +8,7 @@
         "dashboard": "Dashboard",
         "projects": "Projects",
         "messages": "Messages",
+        "payments": "Payments",
         "media": "Media library",
         "reports": "Reports",
         "services": "Services",
@@ -390,6 +391,25 @@
         "col_type": "Type",
         "col_global": "Global",
         "col_active": "Active"
+    },
+    "payments": {
+        "list_title": "Payments",
+        "list_subtitle": "Payments linked to your account",
+        "empty": "No payments yet",
+        "detail_title": "Payment details",
+        "status": "Status",
+        "amount": "Amount",
+        "method": "Method",
+        "order": "Order",
+        "checkout_title": "Checkout",
+        "checkout_hint": "Choose a method and complete payment via the API",
+        "method_mada": "Mada",
+        "method_card": "Card",
+        "method_bank": "Bank transfer",
+        "submit": "Start payment",
+        "loading": "Loading…",
+        "missing_order_id": "Add the order id to the URL (?orderId=)",
+        "success_initiated": "Payment started"
     },
     "order": {
         "list_title": "Orders",

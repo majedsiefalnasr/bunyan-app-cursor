@@ -1,15 +1,29 @@
 # STAGE_20 — Payments
 
 > **Phase:** 04_COMMERCIAL_LAYER
-> **Status:** NOT STARTED
+> **Status:** PRODUCTION READY
 > **Scope:** Payment processing, gateway integration, payment tracking
 > **Risk Level:** HIGH
 
 ## Stage Status
 
-Status: NOT STARTED
-Step: —
-Risk Level: HIGH
+Status: PRODUCTION READY
+Risk Level: MEDIUM
+Closure Date: 2026-04-13
+
+Scope Closed: Payments API (initiate, history, show, capture, refund), webhook with shared secret, `payments` + `payment_attempts` schema, sandbox gateway, Nuxt payment pages and composable, feature tests, i18n keys. Tasks 17 / 17.
+
+Deferred Scope: Live Saudi payment providers; ledger `Transaction` auto-sync; admin-only refund tightening.
+
+Architecture Governance Compliance:
+
+- ADR alignment verified (no conflicting ADR changes)
+- RBAC enforcement confirmed (`role:customer,admin` + policies)
+- Service layer architecture maintained
+- Error contract compliance verified
+- Migration forward-only with `down()`
+
+Notes: Stage is production ready. Modifications require a new stage.
 
 ## Objective
 
