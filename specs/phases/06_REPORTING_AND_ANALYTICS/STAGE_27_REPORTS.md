@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-13T22:00:00Z
+Last Updated: 2026-04-13T22:05:00Z
 
-Scope Open:
+Scope Defined: Admin analytics reports (JSON + PDF/XLSX), dedicated `/admin/analytics/reports` API, Nuxt admin hub MVP
 
-- Specification pending
+Deferred Scope: Scheduled delivery, supplier views, advanced charts
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
