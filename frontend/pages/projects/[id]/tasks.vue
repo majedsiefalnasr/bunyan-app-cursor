@@ -2,40 +2,32 @@
     definePageMeta({
         layout: 'default',
         middleware: 'auth',
+        requiresAuth: true,
     });
 
     const route = useRoute();
-    const localePath = useLocalePath();
+    const { t } = useI18n();
     const { apiFetch } = useApi();
 
-    interface TaskRow {
-        id: number;
-        title_ar: string | null;
-        title_en: string | null;
-        name: string;
-        status: string;
-        priority: string;
-        phase_id: number;
-    }
-
     const projectId = computed(() => String(route.params.id));
-    const tasks = ref<TaskRow[]>([]);
+    const tasks = ref<TaskBoardRow[]>([]);
     const isLoading = ref(true);
     const loadError = ref<string | null>(null);
 
-    const columns = ['todo', 'in_progress', 'in_review', 'done', 'blocked'] as const;
-
-    function tasksByStatus(status: (typeof columns)[number]): TaskRow[] {
-        return tasks.value.filter((t) => t.status === status);
-    }
+    const columnLabels: Record<TaskBoardColumn, string> = {
+        todo: 'projects.tasks_col_todo',
+        in_progress: 'projects.tasks_col_in_progress',
+        in_review: 'projects.tasks_col_in_review',
+        done: 'projects.tasks_col_done',
+        blocked: 'projects.tasks_col_blocked',
+    };
 
     onMounted(async () => {
         try {
-            const res = await apiFetch<{ data: TaskRow[] | { data: TaskRow[] } }>(
+            const res = await apiFetch<{ data: unknown }>(
                 `/v1/projects/${projectId.value}/tasks?per_page=100`
             );
-            const payload = res.data as TaskRow[] | { data: TaskRow[] };
-            tasks.value = Array.isArray(payload) ? payload : (payload?.data ?? []);
+            tasks.value = normalizeProjectTasksPayload(res.data);
         } catch {
             loadError.value = 'load_failed';
         } finally {
@@ -45,18 +37,14 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-6xl space-y-6">
-        <UButton :to="localePath(`/projects/${projectId}`)" variant="soft" color="gray">
-            {{ $t('projects.back_to_list') }}
-        </UButton>
-
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
+            <h2
+                class="text-xl font-semibold tracking-tight text-[#171717] dark:text-white"
+                style="letter-spacing: -0.04em"
             >
                 {{ $t('projects.tasks_title') }}
-            </h1>
+            </h2>
             <p class="mt-2 text-sm text-[#4d4d4d]">
                 {{ $t('projects.tasks_subtitle') }}
             </p>
@@ -69,24 +57,29 @@
 
         <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-5">
             <UCard
-                v-for="col in columns"
+                v-for="col in TASK_BOARD_COLUMNS"
                 :key="col"
                 class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
             >
                 <template #header>
                     <span class="text-sm font-medium text-[#171717] dark:text-white">{{
-                        col
+                        t(columnLabels[col])
                     }}</span>
                 </template>
                 <ul class="space-y-2">
                     <li
-                        v-for="t in tasksByStatus(col)"
-                        :key="t.id"
+                        v-for="task in tasksForColumn(tasks, col)"
+                        :key="task.id"
                         class="rounded-md bg-[#fafafa] px-2 py-1.5 text-xs text-[#171717] dark:bg-neutral-900 dark:text-white"
                     >
-                        {{ t.title_ar || t.name }}
+                        {{ task.title_ar || task.name }}
                     </li>
-                    <li v-if="tasksByStatus(col).length === 0" class="text-xs text-[#666666]">—</li>
+                    <li
+                        v-if="tasksForColumn(tasks, col).length === 0"
+                        class="text-xs text-[#666666]"
+                    >
+                        —
+                    </li>
                 </ul>
             </UCard>
         </div>
