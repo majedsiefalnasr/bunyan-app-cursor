@@ -26,9 +26,10 @@ Arabic-first UX (RTL) is required; server-side RBAC is mandatory on all endpoint
 - RFQ items persistence
 - Quotation submission lifecycle and persistence
 - Quotation items persistence (per RFQ item)
-- Supplier targeting (relevant suppliers by category / catalog linkage)
+- Supplier targeting (relevant suppliers by category / catalog linkage) **snapshotted at send time**
 - Comparison endpoint (normalized comparison view)
 - Award flow (accept one quotation; set others to rejected; record award metadata)
+- Close RFQ (transition to `CLOSED`)
 - Notifications/events hooks (trigger points defined; implementations can be async jobs)
 - Strict error contract across all endpoints
 
@@ -62,7 +63,7 @@ As a supplier, I can submit a quotation for an RFQ I’m eligible to quote on, i
 
 ### US4 — Supplier revises a quotation
 
-As a supplier, I can revise my quotation before the response deadline, leaving an audit trail of revisions.
+As a supplier, I can revise my quotation before the response deadline. For this stage, the audit trail is **timestamps only** (`submitted_at`, `updated_at`).
 
 ### US5 — Customer compares quotations
 
@@ -116,6 +117,7 @@ Required endpoints (from stage file):
 - `POST /api/v1/rfqs` — create RFQ (customer)
 - `GET /api/v1/rfqs/{id}` — RFQ details (customer owner, invited supplier, admin)
 - `POST /api/v1/rfqs/{id}/send` — send RFQ to suppliers (customer owner)
+- `POST /api/v1/rfqs/{id}/close` — close RFQ (customer owner)
 - `POST /api/v1/rfqs/{id}/quotations` — submit quotation (contractor with supplier profile)
 - `GET /api/v1/rfqs/{id}/quotations` — list quotations (customer owner; supplier sees own; admin sees all)
 - `PUT /api/v1/rfqs/{id}/quotations/{qid}/accept` — accept (award) quotation (customer owner)
@@ -164,6 +166,7 @@ Minimum fields (aligned with stage file):
 - Policies enforce: customer can only act on their RFQs; suppliers only on eligible RFQs and their own quotations.
 - Rate limits on send + submit endpoints to prevent abuse.
 - Input validation via Form Requests everywhere.
+- Money integrity: server computes and stores totals from quotation items; client-sent totals are ignored.
 
 ## Non-Functional Requirements
 
@@ -175,12 +178,12 @@ Minimum fields (aligned with stage file):
 
 ### Session 2026-04-13
 
-| #   | Topic                | Decision                                                                                                                                                             | Rationale / Notes                                           |
-| --- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| 1   | Supplier eligibility | RFQ is visible to suppliers that match the RFQ’s derived categories (from RFQ items’ `product_id` when present), falling back to supplier catalog defaults.          | Keeps eligibility deterministic and aligned with catalog.   |
-| 2   | Project linkage      | `project_id` is nullable on RFQ. If present, RFQ inherits project visibility rules for customer ownership.                                                           | Supports both “general procurement” and project-bound RFQs. |
-| 3   | Deadline behavior    | `response_deadline` is authoritative for submit/revise; after it passes, supplier submit/revise is rejected server-side (409).                                       | Prevents late quotes and simplifies comparisons.            |
-| 4   | Award semantics      | Awarding a quotation sets RFQ to `AWARDED`, winning quotation `ACCEPTED`, and all other quotations `REJECTED` in one DB transaction.                                 | Financial-safety pattern; avoids partial state.             |
-| 5   | Supplier revisions   | Supplier revises by updating the same quotation record (status becomes `REVISED`) and overwriting items; revision timestamps tracked (`submitted_at`, `updated_at`). | Simple model; audit trail can be expanded later.            |
+| #   | Topic                | Decision                                                                                                                                                                               | Rationale / Notes                                                 |
+| --- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | Supplier eligibility | RFQ eligibility is derived from RFQ items’ product categories (fallback to supplier catalog defaults). Eligible suppliers are **snapshotted** into `rfq_targets` when the RFQ is sent. | Prevents eligibility drift and keeps authorization deterministic. |
+| 2   | Project linkage      | `project_id` is nullable on RFQ. If present, RFQ inherits project visibility rules for customer ownership.                                                                             | Supports both “general procurement” and project-bound RFQs.       |
+| 3   | Deadline behavior    | `response_deadline` is authoritative for submit/revise; after it passes, supplier submit/revise is rejected server-side (409).                                                         | Prevents late quotes and simplifies comparisons.                  |
+| 4   | Award semantics      | Awarding a quotation sets RFQ to `AWARDED`, winning quotation `ACCEPTED`, and all other quotations `REJECTED` in one DB transaction.                                                   | Financial-safety pattern; avoids partial state.                   |
+| 5   | Supplier revisions   | Supplier revises by updating the same quotation record (status becomes `REVISED`) and overwriting items; revision timestamps tracked (`submitted_at`, `updated_at`).                   | Simple model; audit trail can be expanded later.                  |
 
 **Ambiguities remaining**: None.

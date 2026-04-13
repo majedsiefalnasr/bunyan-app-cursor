@@ -22,6 +22,8 @@
 Indexes:
 
 - `(created_by, status, created_at)`
+- `(status, sent_at)`
+- `(status, created_at)`
 - `project_id`
 - `awarded_quotation_id`
 
@@ -42,7 +44,25 @@ Indexes:
 Indexes:
 
 - `rfq_id`
+- `(rfq_id, sort_order)`
 - `product_id`
+
+## rfq_targets
+
+Snapshot of eligible suppliers for an RFQ at send-time.
+
+| Column      | Type                   | Notes                     |
+| ----------- | ---------------------- | ------------------------- |
+| id          | bigint PK              |                           |
+| rfq_id      | FK → rfqs              | cascade delete            |
+| supplier_id | FK → supplier_profiles | invited/eligible supplier |
+| invited_at  | datetime               | set on send               |
+| timestamps  |                        |                           |
+
+Indexes & constraints:
+
+- unique `(rfq_id, supplier_id)`
+- index `(supplier_id, rfq_id)`
 
 ## quotations
 
@@ -65,6 +85,7 @@ Indexes & constraints:
 - `rfq_id`
 - `supplier_id`
 - `status`
+- `(rfq_id, total_price, submitted_at, id)`
 
 ## quotation_items
 

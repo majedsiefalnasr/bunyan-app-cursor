@@ -32,6 +32,7 @@ Create a single forward-only migration:
 - `create_rfqs_quotations_tables`
   - `rfqs`
   - `rfq_items`
+  - `rfq_targets` (send-time snapshot of eligible suppliers)
   - `quotations`
   - `quotation_items`
 
@@ -51,6 +52,7 @@ All endpoints under `/api/v1/` and protected by `auth:sanctum`.
 | POST   | `/rfqs`                                     | customer                                     |
 | GET    | `/rfqs/{rfq}`                               | customer(owner), contractor(eligible), admin |
 | POST   | `/rfqs/{rfq}/send`                          | customer(owner)                              |
+| POST   | `/rfqs/{rfq}/close`                         | customer(owner)                              |
 | GET    | `/rfqs/{rfq}/quotations`                    | customer(owner), contractor(own), admin      |
 | POST   | `/rfqs/{rfq}/quotations`                    | contractor                                   |
 | PUT    | `/rfqs/{rfq}/quotations/{quotation}/accept` | customer(owner)                              |
@@ -64,8 +66,8 @@ All endpoints under `/api/v1/` and protected by `auth:sanctum`.
 
 - `send` allowed only from `DRAFT` and only by owner.
 - `submit/revise` allowed only while RFQ is in `QUOTING` and before `response_deadline`.
-- `accept` allowed only from `EVALUATION` (or `QUOTING` if decision made early), sets RFQ → `AWARDED`.
-- `close` is planned as a service method; endpoint can be added later if needed (out of the stage’s published endpoints).
+- `accept` allowed only from `EVALUATION`, sets RFQ → `AWARDED`.
+- `close` allowed only from `AWARDED`, sets RFQ → `CLOSED`.
 
 ## Frontend
 
@@ -95,9 +97,20 @@ Log key state transitions using structured context:
 
 Backend:
 
-- `backend/tests/Feature/Api/V1/RfqApiTest.php` — RBAC matrix for list/show/send/compare
-- `backend/tests/Feature/Api/V1/QuotationApiTest.php` — RBAC for submit/list/accept + deadline rules
+- `backend/tests/Feature/Api/V1/RfqApiTest.php` — RBAC matrix for list/show/send/close/compare
+- `backend/tests/Feature/Api/V1/QuotationApiTest.php` — RBAC for submit/list/accept + deadline rules + mismatched IDs (scoped binding)
 - Factories: `RfqFactory`, `RfqItemFactory`, `QuotationFactory`, `QuotationItemFactory`
+
+Minimum coverage requirements:
+
+- Admin write attempts must return 403 on all mutating endpoints
+- Ineligible contractor must not view RFQ or submit quotation (403/404 per convention)
+- Mismatched `{rfq}/{quotation}` must return 404/403 (no IDOR)
+- Send from non-draft returns 409
+- Accept from non-evaluation returns 409
+- Submit/revise after deadline returns 409
+- Award flow is atomic: on failure, no partial status updates persist
+- Rate limit send and submit endpoints return 429 when exceeded
 
 Frontend (Vitest):
 
