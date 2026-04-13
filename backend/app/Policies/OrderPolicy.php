@@ -23,6 +23,19 @@ class OrderPolicy
         return $order->customer_id === $user->id;
     }
 
+    public function pay(User $user, Order $order): bool
+    {
+        if ($order->status !== OrderStatus::Pending) {
+            return false;
+        }
+
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        return $order->customer_id === $user->id;
+    }
+
     public function create(User $user): bool
     {
         return in_array($user->role, [UserRole::Customer, UserRole::Contractor, UserRole::Admin]);

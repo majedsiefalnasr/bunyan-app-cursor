@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\PaymentWebhookController;
 use App\Http\Controllers\Api\V1\PendingApprovalController;
 use App\Http\Controllers\Api\V1\PhaseController;
 use App\Http\Controllers\Api\V1\PricingCalculationController;
@@ -30,8 +32,6 @@ use App\Http\Controllers\Api\V1\ProjectTaskController;
 use App\Http\Controllers\Api\V1\ProjectTeamController;
 use App\Http\Controllers\Api\V1\ProjectWorkflowController;
 use App\Http\Controllers\Api\V1\ReportController;
-use App\Http\Controllers\Api\V1\RfqController;
-use App\Http\Controllers\Api\V1\RfqQuotationController;
 use App\Http\Controllers\Api\V1\SupplierProfileController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TaskWorkspaceController;
@@ -68,6 +68,10 @@ Route::prefix('v1')->group(function () {
             ->name('verification.verify');
     });
 
+    Route::middleware(['throttle:30,1', 'payment.webhook'])->group(function () {
+        Route::post('webhooks/payment', [PaymentWebhookController::class, 'handle'])->name('webhooks.payment');
+    });
+
     // Protected Routes (Require Authentication)
     Route::middleware('auth:sanctum')->group(function () {
         // User Profile Routes (all authenticated users)
@@ -102,29 +106,6 @@ Route::prefix('v1')->group(function () {
         Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
         Route::get('products/{product}/pricing', [ProductPricingController::class, 'show'])->name('products.pricing.show');
         Route::post('pricing/calculate', PricingCalculationController::class)->name('pricing.calculate');
-
-        // RFQs (Quotations)
-        Route::middleware(['role:customer,contractor,admin', 'throttle:60,1'])->group(function () {
-            Route::get('rfqs', [RfqController::class, 'index'])->name('rfqs.index');
-            Route::get('rfqs/{rfq}', [RfqController::class, 'show'])->name('rfqs.show');
-            Route::get('rfqs/{rfq}/compare', [RfqController::class, 'compare'])->name('rfqs.compare');
-            Route::get('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'index'])->name('rfqs.quotations.index');
-        });
-
-        Route::middleware(['role:customer', 'throttle:30,1'])->group(function () {
-            Route::post('rfqs', [RfqController::class, 'store'])->name('rfqs.store');
-            Route::post('rfqs/{rfq}/send', [RfqController::class, 'send'])->middleware('throttle:rfq-send')->name('rfqs.send');
-            Route::post('rfqs/{rfq}/evaluate', [RfqController::class, 'beginEvaluation'])->name('rfqs.evaluate');
-            Route::post('rfqs/{rfq}/close', [RfqController::class, 'close'])->name('rfqs.close');
-        });
-
-        Route::middleware(['role:contractor', 'throttle:rfq-quote'])->group(function () {
-            Route::post('rfqs/{rfq}/quotations', [RfqQuotationController::class, 'store'])->name('rfqs.quotations.store');
-        });
-
-        Route::scopeBindings()->middleware(['role:customer', 'throttle:30,1'])->group(function () {
-            Route::put('rfqs/{rfq}/quotations/{quotation}/accept', [RfqQuotationController::class, 'accept'])->name('rfqs.quotations.accept');
-        });
 
         Route::middleware(['role:admin,contractor', 'throttle:120,1'])->prefix('inventory')->group(function () {
             Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
@@ -243,6 +224,20 @@ Route::prefix('v1')->group(function () {
                 'update' => 'orders.update',
                 'destroy' => 'orders.destroy',
             ]);
+
+            Route::middleware('throttle:60,1')->prefix('payments')->group(function () {
+                Route::post('initiate', [PaymentController::class, 'initiate'])->name('payments.initiate');
+                Route::get('history', [PaymentController::class, 'history'])->name('payments.history');
+                Route::get('{payment}', [PaymentController::class, 'show'])
+                    ->whereNumber('payment')
+                    ->name('payments.show');
+                Route::post('{payment}/capture', [PaymentController::class, 'capture'])
+                    ->whereNumber('payment')
+                    ->name('payments.capture');
+                Route::post('{payment}/refund', [PaymentController::class, 'refund'])
+                    ->whereNumber('payment')
+                    ->name('payments.refund');
+            });
         });
 
         // Contractor-specific routes
