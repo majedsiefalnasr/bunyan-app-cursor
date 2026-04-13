@@ -8,20 +8,17 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-13T12:00:00Z
+Last Updated: 2026-04-13T12:05:00Z
 
-Scope Open:
+Scope Defined: Invoicing API, models, VAT/ZATCA Phase-1 QR, PDF, auto-generation on order completion, Nuxt UI
 
-- Specification pending
+Deferred Scope: ZATCA clearance platform, credit notes, overdue automation
 
-Architecture Governance Compliance:
+Architecture Governance Compliance: Specification drafted — governance audit pending
 
-- Pending governance audit
-
-Notes:
-Stage initialized. Specification in progress.
+Notes: Specification complete. Clarification step pending.
 
 ## Objective
 
