@@ -69,6 +69,8 @@ Deliver **admin-facing business and analytics reports** with filterable JSON pay
 1. **Route collision:** Business analytics MUST NOT use `GET /api/v1/reports/{type}` because `reports/{report}` is the field report resource. **Decision:** Use prefix `/api/v1/admin/analytics/reports/...` under admin middleware.
 2. **Excel stack:** Add `maatwebsite/excel` to backend for XLSX generation (DomPDF already present).
 3. **Financial summary:** May return structured placeholder until full GL; spec treats as **stubbed metrics** with `meta.stub = true` when applicable.
+4. **Row limits:** Default cap **5000** rows per report generation; clients receive `meta.truncated` when capped.
+5. **Throttle:** Export routes use `throttle:30,1` per authenticated admin.
 
 ## Traceability
 
