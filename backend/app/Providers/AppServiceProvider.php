@@ -6,7 +6,9 @@ use App\Enums\UserRole;
 use App\Models\Conversation;
 use App\Models\User;
 use App\Services\RoleService;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerPermissionGates();
         $this->registerRouteModelBindings();
+        $this->registerRateLimiters();
     }
 
     private function registerRouteModelBindings(): void
@@ -52,6 +55,25 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return null;
+        });
+    }
+
+    private function registerRateLimiters(): void
+    {
+        RateLimiter::for('rfq-send', function ($request) {
+            $userId = (string) ($request->user()?->id ?? 'guest');
+            $rfqParam = $request->route('rfq');
+            $rfqId = is_object($rfqParam) ? (string) $rfqParam->id : (string) ($rfqParam ?? '0');
+
+            return Limit::perMinute(5)->by("rfq-send:{$userId}:{$rfqId}");
+        });
+
+        RateLimiter::for('rfq-quote', function ($request) {
+            $userId = (string) ($request->user()?->id ?? 'guest');
+            $rfqParam = $request->route('rfq');
+            $rfqId = is_object($rfqParam) ? (string) $rfqParam->id : (string) ($rfqParam ?? '0');
+
+            return Limit::perMinute(10)->by("rfq-quote:{$userId}:{$rfqId}");
         });
     }
 }

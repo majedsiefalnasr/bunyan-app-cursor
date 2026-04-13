@@ -76,4 +76,37 @@ class SupplierProfileRepository extends BaseRepository
 
         return $profile->fresh(['user:id,name,email']) ?? $profile;
     }
+
+    /**
+     * @return array<int>
+     */
+    public function verifiedIdsByIds(array $supplierProfileIds): array
+    {
+        if ($supplierProfileIds === []) {
+            return [];
+        }
+
+        /** @var array<int> */
+        return $this->newQuery()
+            ->whereIn('id', $supplierProfileIds)
+            ->where('verification_status', SupplierVerificationStatus::Verified->value)
+            ->pluck('id')
+            ->map(fn ($v) => (int) $v)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return array<int>
+     */
+    public function allVerifiedIds(): array
+    {
+        /** @var array<int> */
+        return $this->newQuery()
+            ->where('verification_status', SupplierVerificationStatus::Verified->value)
+            ->pluck('id')
+            ->map(fn ($v) => (int) $v)
+            ->values()
+            ->all();
+    }
 }

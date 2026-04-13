@@ -29,6 +29,18 @@ export const navigationItems: NavItem[] = [
         roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
     },
     {
+        labelKey: 'nav.rfqs',
+        to: '/rfqs',
+        icon: 'i-heroicons-clipboard-document-list',
+        roles: ['customer'],
+    },
+    {
+        labelKey: 'nav.rfq_invitations',
+        to: '/contractor/rfqs',
+        icon: 'i-heroicons-inbox',
+        roles: ['contractor'],
+    },
+    {
         labelKey: 'nav.messages',
         to: '/messages',
         icon: 'i-heroicons-chat-bubble-left-right',
