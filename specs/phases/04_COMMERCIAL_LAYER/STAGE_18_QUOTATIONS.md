@@ -8,8 +8,8 @@
 ## Stage Status
 
 Status: DRAFT
-Step: specify
-Risk Level: UNKNOWN
+Step: clarify
+Risk Level: MEDIUM
 Initiated: 2026-04-13T09:43:25Z
 
 Scope Open:
@@ -21,7 +21,7 @@ Architecture Governance Compliance:
 - Pending governance audit
 
 Notes:
-Specification drafted. Clarification step pending.
+Clarifications resolved. Planning authorized.
 
 ## Objective
 

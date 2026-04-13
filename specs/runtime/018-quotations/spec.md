@@ -160,3 +160,17 @@ Minimum fields (aligned with stage file):
 - **Arabic-first**: RTL layouts, Arabic labels/messages; formatting for dates and currency.
 - **Performance**: avoid N+1 queries; always eager-load rfq items + quotations when needed; paginate lists.
 - **Auditability**: record award action (who, when), quotation submission timestamps, and revision timestamps.
+
+## Clarifications
+
+### Session 2026-04-13
+
+| #   | Topic                | Decision                                                                                                                                                             | Rationale / Notes                                           |
+| --- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| 1   | Supplier eligibility | RFQ is visible to suppliers that match the RFQ’s derived categories (from RFQ items’ `product_id` when present), falling back to supplier catalog defaults.          | Keeps eligibility deterministic and aligned with catalog.   |
+| 2   | Project linkage      | `project_id` is nullable on RFQ. If present, RFQ inherits project visibility rules for customer ownership.                                                           | Supports both “general procurement” and project-bound RFQs. |
+| 3   | Deadline behavior    | `response_deadline` is authoritative for submit/revise; after it passes, supplier submit/revise is rejected server-side (409).                                       | Prevents late quotes and simplifies comparisons.            |
+| 4   | Award semantics      | Awarding a quotation sets RFQ to `AWARDED`, winning quotation `ACCEPTED`, and all other quotations `REJECTED` in one DB transaction.                                 | Financial-safety pattern; avoids partial state.             |
+| 5   | Supplier revisions   | Supplier revises by updating the same quotation record (status becomes `REVISED`) and overwriting items; revision timestamps tracked (`submitted_at`, `updated_at`). | Simple model; audit trail can be expanded later.            |
+
+**Ambiguities remaining**: None.
