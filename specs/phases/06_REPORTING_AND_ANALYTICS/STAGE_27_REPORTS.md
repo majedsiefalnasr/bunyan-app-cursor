@@ -8,15 +8,15 @@
 ## Stage Status
 
 Status: DRAFT
-Step: plan
+Step: tasks
 Risk Level: MEDIUM
-Last Updated: 2026-04-13T22:20:00Z
+Last Updated: 2026-04-13T22:25:00Z
 
-Scope Planned: Admin controller + service + repository, Maatwebsite + DomPDF, admin Nuxt page, feature tests
+Tasks Generated: Total: 12 atomic tasks
 
-Architecture Governance Compliance: Technical plan compliant — task generation authorized
+Architecture Governance Compliance: Task set compliant — drift analysis required
 
-Notes: Technical plan complete. Task breakdown in progress.
+Notes: Ready for analyze gate.
 
 ## Objective
 
