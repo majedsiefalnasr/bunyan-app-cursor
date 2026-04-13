@@ -7,7 +7,7 @@
   "base_branch": "develop",
   "pkg_manager": "composer",
   "auto_advance": true,
-  "current_step": "pre_step",
+  "current_step": "specify",
   "stage_status": "DRAFT",
   "clarifications_resolved": false,
   "drift_passed": false,
@@ -20,13 +20,22 @@
   "parallel_task_groups": [],
   "current_parallel_group": null,
   "session_started_at": "2026-04-13T09:43:25Z",
-  "last_updated": "2026-04-13T09:43:25Z",
-  "step_timings": {},
+  "last_updated": "2026-04-13T09:46:56Z",
+  "step_timings": {
+    "specify": {
+      "started_at": "2026-04-13T09:43:25Z",
+      "completed_at": "2026-04-13T09:46:56Z"
+    }
+  },
   "history": [
     {
       "event": "branch_created",
       "branch": "spec/018-quotations",
       "timestamp": "2026-04-13T09:43:25Z"
+    },
+    {
+      "event": "specify_complete",
+      "timestamp": "2026-04-13T09:46:56Z"
     }
   ]
 }
