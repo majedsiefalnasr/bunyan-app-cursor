@@ -41,6 +41,12 @@ export const navigationItems: NavItem[] = [
         roles: ['customer', 'contractor', 'admin'],
     },
     {
+        labelKey: 'nav.invoices',
+        to: '/invoices',
+        icon: 'i-heroicons-document-currency-dollar',
+        roles: ['customer', 'contractor', 'admin'],
+    },
+    {
         labelKey: 'nav.rfq_invitations',
         to: '/contractor/rfqs',
         icon: 'i-heroicons-inbox',

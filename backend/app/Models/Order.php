@@ -79,6 +79,11 @@ class Order extends BaseModel
         return $this->morphMany(Payment::class, 'payable');
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function scopeByCustomer(Builder $query, int $customerId): Builder
     {
         return $query->where('customer_id', $customerId);
