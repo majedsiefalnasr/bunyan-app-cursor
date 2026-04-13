@@ -1,0 +1,32 @@
+{
+  "stage": "Orders",
+  "phase": "04_COMMERCIAL_LAYER",
+  "stage_dir": "specs/runtime/019-orders",
+  "stage_file": "specs/phases/04_COMMERCIAL_LAYER/STAGE_19_ORDERS.md",
+  "branch": "spec/019-orders",
+  "base_branch": "develop",
+  "pkg_manager": "composer",
+  "auto_advance": true,
+  "current_step": "pre_step",
+  "stage_status": "DRAFT",
+  "clarifications_resolved": false,
+  "drift_passed": false,
+  "implementation_allowed": false,
+  "plan_completed": false,
+  "tasks_total": null,
+  "tasks_completed": null,
+  "deferred_tasks": [],
+  "guardian_verdicts": {},
+  "parallel_task_groups": [],
+  "current_parallel_group": null,
+  "session_started_at": "2026-04-13T15:30:00Z",
+  "last_updated": "2026-04-13T15:30:00Z",
+  "step_timings": {},
+  "history": [
+    {
+      "event": "branch_created",
+      "branch": "spec/019-orders",
+      "timestamp": "2026-04-13T15:30:00Z"
+    }
+  ]
+}
