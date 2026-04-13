@@ -9,6 +9,7 @@ use App\Models\Phase;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\Report;
+use App\Models\SupplierProfile;
 use App\Models\Task;
 use App\Models\Transaction;
 use App\Models\User;
@@ -195,7 +196,7 @@ class ApplicationPoliciesTest extends TestCase
             'status' => OrderStatus::Pending,
         ]);
 
-        $this->assertFalse($policy->viewAny($customer));
+        $this->assertTrue($policy->viewAny($customer));
         $this->assertTrue($policy->viewAny($admin));
 
         $this->assertTrue($policy->view($customer, $order));
@@ -206,8 +207,9 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertTrue($policy->create(User::factory()->contractor()->create()));
         $this->assertFalse($policy->create(User::factory()->fieldEngineer()->create()));
 
-        $this->assertTrue($policy->update($customer, $order));
+        $this->assertFalse($policy->update($customer, $order));
         $this->assertFalse($policy->update($other, $order));
+        $this->assertTrue($policy->update($admin, $order));
 
         $this->assertTrue($policy->delete($customer, $order));
 
@@ -219,6 +221,54 @@ class ApplicationPoliciesTest extends TestCase
 
         $this->assertTrue($policy->restore($customer, $order));
         $this->assertTrue($policy->forceDelete($admin, $order));
+    }
+
+    public function test_order_policy_contractor_supplier_confirm_cancel_and_status(): void
+    {
+        $policy = new OrderPolicy;
+        $customer = User::factory()->customer()->create();
+        $supplierProfile = SupplierProfile::factory()->verified()->create();
+        $contractor = $supplierProfile->user;
+
+        $orderForSupplier = Order::factory()->create([
+            'customer_id' => $customer->id,
+            'supplier_id' => $supplierProfile->id,
+            'status' => OrderStatus::Processing,
+        ]);
+        $this->assertTrue($policy->view($contractor, $orderForSupplier));
+
+        $otherSupplier = SupplierProfile::factory()->verified()->create();
+        $orderOtherSupplier = Order::factory()->create([
+            'customer_id' => $customer->id,
+            'supplier_id' => $otherSupplier->id,
+            'status' => OrderStatus::Processing,
+        ]);
+        $this->assertFalse($policy->view($contractor, $orderOtherSupplier));
+
+        $pending = Order::factory()->create([
+            'customer_id' => $customer->id,
+            'status' => OrderStatus::Pending,
+        ]);
+        $this->assertTrue($policy->confirm($customer, $pending));
+        $this->assertFalse($policy->confirm($customer, $orderForSupplier));
+
+        $admin = User::factory()->admin()->create();
+        $this->assertTrue($policy->confirm($admin, $pending));
+
+        $confirmed = Order::factory()->create([
+            'customer_id' => $customer->id,
+            'status' => OrderStatus::Confirmed,
+        ]);
+        $this->assertTrue($policy->cancel($customer, $confirmed));
+
+        $completed = Order::factory()->create([
+            'customer_id' => $customer->id,
+            'status' => OrderStatus::Completed,
+        ]);
+        $this->assertFalse($policy->cancel($customer, $completed));
+
+        $this->assertTrue($policy->transitionStatus($admin, $pending));
+        $this->assertFalse($policy->transitionStatus($customer, $pending));
     }
 
     public function test_category_policy_matrix(): void

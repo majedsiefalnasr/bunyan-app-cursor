@@ -15,6 +15,7 @@
         "categories": "التصنيفات",
         "suppliers": "الموردون",
         "rfqs": "طلبات التسعير",
+        "orders": "الطلبات",
         "rfq_invitations": "دعوات التسعير",
         "contact": "اتصل بنا",
         "admin": "الإدارة"
@@ -389,6 +390,25 @@
         "col_type": "النوع",
         "col_global": "عام",
         "col_active": "نشط"
+    },
+    "order": {
+        "list_title": "الطلبات",
+        "list_subtitle": "تتبع طلبات المواد والتوريد",
+        "empty": "لا توجد طلبات بعد",
+        "view": "عرض التفاصيل",
+        "total": "الإجمالي",
+        "back": "رجوع إلى الطلبات",
+        "not_found": "تعذر العثور على الطلب",
+        "status": "الحالة",
+        "items": "البنود",
+        "confirm": "تأكيد الطلب",
+        "cancel": "إلغاء الطلب",
+        "confirm_ok": "تم تأكيد الطلب",
+        "cancel_ok": "تم إلغاء الطلب",
+        "action_failed": "تعذر تنفيذ الإجراء",
+        "confirmed_at": "تاريخ التأكيد",
+        "shipped_at": "تاريخ الشحن",
+        "delivered_at": "تاريخ التسليم"
     },
     "errors": {
         "retry": "أعد المحاولة",
