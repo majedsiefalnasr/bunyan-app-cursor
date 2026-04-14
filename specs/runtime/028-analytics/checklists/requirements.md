@@ -1,6 +1,6 @@
 # Requirements Checklist — Analytics
 
-- [ ] Spec has no unresolved `[NEEDS CLARIFICATION]` items
+- [x] Spec has no unresolved `[NEEDS CLARIFICATION]` items
 - [ ] RBAC is enforced server-side for every analytics endpoint
 - [ ] All inputs are validated via Form Requests
 - [ ] Controllers are thin; all business logic lives in Services

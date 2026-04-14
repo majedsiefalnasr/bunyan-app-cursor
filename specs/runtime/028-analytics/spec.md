@@ -19,7 +19,8 @@ Build an analytics module that exposes platform usage metrics and business KPIs 
 ## Users & RBAC
 
 - **Admin**: full access to analytics dashboard and endpoints.
-- **[NEEDS CLARIFICATION]**: Should Supervising Architect or other roles have access to any subset of analytics?
+- **Supervising Architect**: access to analytics dashboard and endpoints.
+  - Notes: No customer/contractor analytics access in this stage.
 
 ## Backend Scope
 
@@ -39,7 +40,7 @@ Build an analytics module that exposes platform usage metrics and business KPIs 
 ### Storage
 
 - Aggregated metrics tables (time-bucketed)
-- **[NEEDS CLARIFICATION]**: Do we need raw event storage, or only aggregated rollups?
+- Raw analytics events table (append-only) to support re-aggregation and new metrics.
 
 ### API Endpoints (v1)
 
@@ -61,7 +62,7 @@ Response contract must follow Bunyan error/success format.
   - KPI cards (current period + delta vs comparison)
   - Trend charts (line/bar/area depending on metric)
   - Period-over-period comparison toggle
-  - “Real-time” snapshot (best-effort; can be near-real-time from cache)
+  - “Real-time” snapshot (near-real-time from cache; target freshness: ~5 minutes)
 
 ## Key Metrics (initial)
 
@@ -97,6 +98,6 @@ Response contract must follow Bunyan error/success format.
 
 ### Session 2026-04-14
 
-- [NEEDS CLARIFICATION] Access model: which roles besides Admin can see analytics?
-- [NEEDS CLARIFICATION] Raw event storage: required or aggregated-only?
-- [NEEDS CLARIFICATION] “Real-time” definition: acceptable freshness (e.g., 60s / 5m)?
+- **Access model**: Admin + Supervising Architect.
+- **Data retention**: Store raw analytics events + aggregated rollups.
+- **Freshness target**: Near-real-time is acceptable at ~5 minutes.
