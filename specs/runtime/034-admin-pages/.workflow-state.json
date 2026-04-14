@@ -6,8 +6,8 @@
   "branch": "spec/034-admin-pages",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "implement",
-  "stage_status": "BACKEND CLOSED",
+  "current_step": "stage_production_ready",
+  "stage_status": "PRODUCTION READY",
   "clarifications_resolved": true,
   "drift_passed": true,
   "implementation_allowed": true,
@@ -52,6 +52,10 @@
     "implement": {
       "started_at": "2026-04-14T14:40:49Z",
       "completed_at": "2026-04-14T14:40:49Z"
+    },
+    "closure": {
+      "started_at": "2026-04-14T14:47:30Z",
+      "completed_at": "2026-04-14T14:47:30Z"
     }
   },
   "history": [
@@ -84,6 +88,14 @@
     {
       "event": "stage_backend_closed",
       "timestamp": "2026-04-14T14:40:49Z"
+    },
+    {
+      "event": "pre_closure_review_approved",
+      "timestamp": "2026-04-14T14:47:30Z"
+    },
+    {
+      "event": "stage_production_ready",
+      "timestamp": "2026-04-14T14:47:30Z"
     }
   ]
 }

@@ -7,26 +7,21 @@
 
 ## Stage Status
 
-Status: IN PROGRESS
-Step: implement
+Status: PRODUCTION READY
 Risk Level: MEDIUM
-Last Updated: 2026-04-14T14:40:49Z
-
-Tasks Generated: Total: 18 atomic tasks
-
-Drift Analysis: PASSED (all criteria)
-Implementation: AUTHORIZED
-
-Scope Open:
-
-- Admin pages specification drafted (Nuxt UI + RTL + RBAC UX gate)
-
+Closure Date: 2026-04-14
+Scope Closed: Admin shell refactor + admin pages additions, 17 / 18 tasks
+Deferred Scope: T017 (Playwright e2e coverage) — requires stable fixtures/users
 Architecture Governance Compliance:
 
-- Pending governance audit
+- ADR alignment verified (no new ADR required; frontend-only change)
+- RBAC enforcement confirmed (Nuxt `auth` + `role` middleware for `/admin/**` as UX gate; backend remains authoritative)
+- Service layer architecture maintained (N/A — frontend stage)
+- Error contract compliance verified (frontend uses centralized `useApi` error handling)
+- i18n/RTL support verified (added `admin.*` translations and RTL layout default)
 
 Notes:
-Implementation complete (with 1 deferred e2e task). Ready for closure.
+Stage is production ready. Further changes should be a new stage.
 
 ## Objective
 
