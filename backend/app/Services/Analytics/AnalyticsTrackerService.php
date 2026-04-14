@@ -71,6 +71,7 @@ final class AnalyticsTrackerService
             }
 
             $value = (string) $v;
+            $value = $this->normalizeUtf8($value);
             $value = mb_substr($value, 0, self::METADATA_MAX_VALUE_LEN);
             $trimmed[(string) $k] = $value;
         }
@@ -88,5 +89,15 @@ final class AnalyticsTrackerService
         }
 
         return $trimmed;
+    }
+
+    private function normalizeUtf8(string $value): string
+    {
+        if (mb_check_encoding($value, 'UTF-8')) {
+            return $value;
+        }
+
+        // Ensure invalid byte sequences don't break Eloquent JSON casts.
+        return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
     }
 }
