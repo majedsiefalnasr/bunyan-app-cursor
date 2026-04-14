@@ -8,7 +8,7 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
 Initiated: 2026-04-14T08:59:00Z
 
@@ -21,7 +21,7 @@ Architecture Governance Compliance:
 - Pending governance audit
 
 Notes:
-Stage initialized. Specification in progress.
+Specification drafted. Clarification step pending.
 
 ## Objective
 
