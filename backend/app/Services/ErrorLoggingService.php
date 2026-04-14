@@ -23,7 +23,10 @@ class ErrorLoggingService
     public function findByCorrelationId(string $correlationId)
     {
         if (! Schema::hasTable('error_logs')) {
-            return ErrorLog::query()->whereRaw('1 = 0')->get();
+            /** @var Collection<int, ErrorLog> $empty */
+            $empty = new Collection;
+
+            return $empty;
         }
 
         return ErrorLog::query()->where('correlation_id', $correlationId)->orderByDesc('id')->get();
