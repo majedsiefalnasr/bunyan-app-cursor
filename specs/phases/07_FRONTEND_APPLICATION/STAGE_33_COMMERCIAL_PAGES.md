@@ -8,20 +8,20 @@
 ## Stage Status
 
 Status: DRAFT
-Step: clarify
+Step: plan
 Risk Level: UNKNOWN
 Initiated: 2026-04-14T08:59:00Z
 
 Scope Open:
 
-- Specification pending
+- Route-aligned commercial pages plan (frontend-only)
 
 Architecture Governance Compliance:
 
 - Pending governance audit
 
 Notes:
-Clarifications resolved. Ready for technical planning.
+Technical plan complete. Task breakdown in progress.
 
 ## Objective
 
