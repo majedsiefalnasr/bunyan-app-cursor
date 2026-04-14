@@ -6,8 +6,8 @@
   "branch": "spec/033-commercial-pages",
   "base_branch": "develop",
   "pkg_manager": "npm",
-  "current_step": "implement",
-  "stage_status": "BACKEND CLOSED",
+  "current_step": "stage_production_ready",
+  "stage_status": "PRODUCTION READY",
   "clarifications_resolved": true,
   "drift_passed": true,
   "implementation_allowed": true,
@@ -48,6 +48,10 @@
     "implement": {
       "started_at": "2026-04-14T08:59:00Z",
       "completed_at": "2026-04-14T08:59:00Z"
+    },
+    "closure": {
+      "started_at": "2026-04-14T08:59:00Z",
+      "completed_at": "2026-04-14T08:59:00Z"
     }
   },
   "history": [
@@ -79,6 +83,14 @@
     },
     {
       "event": "stage_backend_closed",
+      "timestamp": "2026-04-14T08:59:00Z"
+    },
+    {
+      "event": "pre_closure_review_approved",
+      "timestamp": "2026-04-14T08:59:00Z"
+    },
+    {
+      "event": "stage_production_ready",
       "timestamp": "2026-04-14T08:59:00Z"
     }
   ]
