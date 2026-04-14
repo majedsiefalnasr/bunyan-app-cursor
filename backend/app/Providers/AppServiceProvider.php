@@ -58,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
 
             return null;
         });
+
+        Gate::define('viewAnalytics', fn (User $user) => $user->role === UserRole::SupervisingArchitect);
     }
 
     private function registerRateLimiters(): void

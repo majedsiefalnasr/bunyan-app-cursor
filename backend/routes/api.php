@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ActivityLogController;
 use App\Http\Controllers\Api\V1\Admin\BoqTemplateController;
 use App\Http\Controllers\Api\V1\Admin\BusinessAnalyticsReportController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
+use App\Http\Controllers\Api\V1\Analytics\AnalyticsController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ConversationController;
 use App\Http\Controllers\Api\V1\ConversationMessageController;
@@ -92,6 +93,12 @@ Route::prefix('v1')->group(function () {
             Route::put('notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
             Route::get('notification-preferences', [NotificationPreferenceController::class, 'show'])->name('notification-preferences.show');
             Route::put('notification-preferences', [NotificationPreferenceController::class, 'update'])->name('notification-preferences.update');
+        });
+
+        Route::middleware(['throttle:60,1'])->prefix('analytics')->group(function () {
+            Route::get('overview', [AnalyticsController::class, 'overview'])->name('analytics.overview');
+            Route::get('metrics/{metric}', [AnalyticsController::class, 'metric'])->name('analytics.metric');
+            Route::get('trends', [AnalyticsController::class, 'trends'])->name('analytics.trends');
         });
 
         Route::middleware('role:contractor,admin')->group(function () {
