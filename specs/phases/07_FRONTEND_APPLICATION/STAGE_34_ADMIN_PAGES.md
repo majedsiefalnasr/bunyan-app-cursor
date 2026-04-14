@@ -8,20 +8,20 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
-Initiated: 2026-04-14T13:57:27Z
+Last Updated: 2026-04-14T13:58:31Z
 
 Scope Open:
 
-- Specification pending
+- Admin pages specification drafted (Nuxt UI + RTL + RBAC UX gate)
 
 Architecture Governance Compliance:
 
 - Pending governance audit
 
 Notes:
-Stage initialized. Specification in progress.
+Specification complete. Clarification step pending.
 
 ## Objective
 
