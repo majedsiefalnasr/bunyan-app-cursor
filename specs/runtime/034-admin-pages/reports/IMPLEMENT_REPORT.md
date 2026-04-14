@@ -4,14 +4,14 @@
 
 ## Implementation Summary
 
-| Metric           | Value                                        |
-| ---------------- | -------------------------------------------- |
-| Tasks Completed  | 17 / 18                                      |
-| Files Created    | 9 (admin pages/components/composables/tests) |
-| Files Modified   | 10                                           |
-| Migrations Added | 0                                            |
-| Tests Written    | 1 unit test (admin users query builder)      |
-| Deferred Tasks   | 1                                            |
+| Metric           | Value                                                                   |
+| ---------------- | ----------------------------------------------------------------------- |
+| Tasks Completed  | 18 / 18                                                                 |
+| Files Created    | 9 (admin pages/components/composables/tests)                            |
+| Files Modified   | 10                                                                      |
+| Migrations Added | 0                                                                       |
+| Tests Written    | 1 unit test (admin users query builder) + Playwright admin e2e coverage |
+| Deferred Tasks   | 0                                                                       |
 
 ## Validation Results
 
@@ -24,6 +24,7 @@
 | PHPStan           | ✅     | `composer run lint` (project script)         |
 | ESLint            | ✅     | `npm run lint`                               |
 | Migration Pretend | ✅     | N/A (no migrations)                          |
+| Playwright (E2E)  | ✅     | `npm run test:e2e`                           |
 
 ## Guardian Verdicts
 
@@ -35,6 +36,6 @@
 
 ## Deferred Tasks
 
-| Task ID | Description                             | Reason                                                     |
-| ------- | --------------------------------------- | ---------------------------------------------------------- |
-| T017    | Playwright e2e coverage for admin flows | Requires stable test fixtures/users and environment wiring |
+| Task ID | Description | Reason |
+| ------- | ----------- | ------ |
+| None    | —           | —      |

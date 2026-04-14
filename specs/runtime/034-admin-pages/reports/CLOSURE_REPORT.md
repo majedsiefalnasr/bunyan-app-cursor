@@ -9,7 +9,7 @@
 | Stage  | Admin Pages             |
 | Phase  | 07_FRONTEND_APPLICATION |
 | Branch | spec/034-admin-pages    |
-| Tasks  | 17 / 18                 |
+| Tasks  | 18 / 18                 |
 | Status | PRODUCTION READY        |
 
 ## Workflow Timeline
@@ -36,7 +36,7 @@
 
 ## Deferred Scope
 
-- T017: Playwright e2e coverage for admin flows (requires stable fixtures/users and environment wiring).
+- None.
 
 ## Architecture Compliance
 
@@ -54,4 +54,4 @@
 ## Next Steps
 
 - Add a backend stage to expose missing admin endpoints (user detail, settings, notification templates) if required.
-- Implement Playwright e2e once fixtures/test accounts are standardized (complete T017).
+- Continue expanding e2e scenarios with deeper assertions (beyond route-level coverage) as admin APIs evolve.

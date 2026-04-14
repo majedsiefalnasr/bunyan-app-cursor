@@ -20,5 +20,5 @@
 - [x] T014 Add composables under `frontend/composables/admin/` (e.g. `useAdminUsers`, `useAdminRoles`, `useAdminActivityLog`, `useAdminSuppliers`, `useAdminReports`) to centralize endpoint URLs + params
 - [x] T015 Add/update translations keys for admin nav + page titles (Arabic-first) under `frontend/locales/ar.json` (and `en.json` if required by conventions)
 - [x] T016 [P] Vitest: add unit tests for admin composables param building + permission matrix toggle behavior (`frontend/tests/unit/`)
-- [ ] T017 [P] Playwright: add e2e coverage for admin access vs non-admin redirect, supplier verify, users list render (`frontend/tests/e2e/`) **DEFERRED** (requires stable test users/fixtures)
+- [x] T017 [P] Playwright: add e2e coverage for admin access vs non-admin redirect, supplier verify, users list render (`frontend/tests/e2e/`)
 - [x] T018 Run frontend lint + typecheck + tests; fix any regressions introduced by admin shell refactor
