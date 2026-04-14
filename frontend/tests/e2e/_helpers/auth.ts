@@ -46,31 +46,34 @@ export async function e2eLoginAs(
         },
     ]);
 
-    await page.route('**/*', async (route) => {
-        if (matchesProfileGet(route.request())) {
-            await route.fulfill(
-                json({
-                    success: true,
-                    data: {
-                        id: userId,
-                        name: `Playwright ${opts.role}`,
-                        email: `pw-${opts.role}@example.com`,
-                        role: opts.role,
-                        phone: null,
-                        active: true,
-                        permissions: [],
-                        email_verified_at: null,
-                        created_at: '2020-01-01T00:00:00.000000Z',
-                        updated_at: '2020-01-01T00:00:00.000000Z',
-                    },
-                    message: null,
-                    errors: [],
-                    error: null,
-                })
-            );
+    // Important: don't use a catch-all route here.
+    // Tests often register their own `**/*` mocks; in Playwright the newest route wins,
+    // which would bypass this auth stub and cause RBAC redirects (e.g. `/admin` → `/dashboard`).
+    await page.route(/\/(?:api\/)?v1\/auth\/profile(?:\?|$)/, async (route) => {
+        if (!matchesProfileGet(route.request())) {
+            await route.continue();
             return;
         }
 
-        await route.continue();
+        await route.fulfill(
+            json({
+                success: true,
+                data: {
+                    id: userId,
+                    name: `Playwright ${opts.role}`,
+                    email: `pw-${opts.role}@example.com`,
+                    role: opts.role,
+                    phone: null,
+                    active: true,
+                    permissions: [],
+                    email_verified_at: null,
+                    created_at: '2020-01-01T00:00:00.000000Z',
+                    updated_at: '2020-01-01T00:00:00.000000Z',
+                },
+                message: null,
+                errors: [],
+                error: null,
+            })
+        );
     });
 }
