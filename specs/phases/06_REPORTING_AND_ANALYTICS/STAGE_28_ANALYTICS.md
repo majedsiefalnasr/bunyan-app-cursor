@@ -8,20 +8,21 @@
 ## Stage Status
 
 Status: DRAFT
-Step: pre_step
+Step: specify
 Risk Level: UNKNOWN
 Initiated: 2026-04-14T08:58:51Z
+Last Updated: 2026-04-14T09:00:14Z
 
 Scope Open:
 
-- Specification pending
+- Usage analytics, business KPIs, and trend analysis
 
 Architecture Governance Compliance:
 
-- Pending governance audit
+- Specification drafted — governance audit pending
 
 Notes:
-Stage initialized. Specification in progress.
+Specification drafted. Clarification step pending.
 
 ## Objective
 
