@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\EstimateService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Tests\TestCase;
 
 class EstimateServiceTest extends TestCase
@@ -121,5 +122,118 @@ class EstimateServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
         $this->service->compare($projectA, [$a->id, $b->id]);
+    }
+
+    public function test_approve_and_reject_require_submitted_and_authorized_role(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $admin = User::factory()->create(['role' => 'admin']);
+        $contractor = User::factory()->create(['role' => 'contractor']);
+        $project = Project::factory()->create(['customer_id' => $customer->id]);
+
+        $estimate = Estimate::factory()->create([
+            'project_id' => $project->id,
+            'status' => EstimateStatus::Draft,
+            'markup_percentage' => 0,
+            'created_by' => $customer->id,
+        ]);
+
+        $this->service->addItem($estimate->fresh(), [
+            'description_ar' => 'بند',
+            'description_en' => 'Item',
+            'category' => EstimateItemCategory::Material->value,
+            'quantity' => 1,
+            'unit' => 'u',
+            'unit_price' => 10,
+        ]);
+
+        $estimate = $this->service->updateEstimate($customer, $estimate->fresh(), ['status' => EstimateStatus::Submitted->value]);
+
+        $this->expectException(ValidationException::class);
+        $this->service->approve($contractor, $estimate);
+
+        $approved = $this->service->approve($admin, $estimate->fresh());
+        $this->assertSame(EstimateStatus::Approved, $approved->status);
+
+        $estimate2 = Estimate::factory()->create([
+            'project_id' => $project->id,
+            'status' => EstimateStatus::Submitted,
+            'created_by' => $customer->id,
+        ]);
+
+        $rejected = $this->service->reject($admin, $estimate2);
+        $this->assertSame(EstimateStatus::Rejected, $rejected->status);
+        $this->assertNull($rejected->approved_by);
+        $this->assertNull($rejected->approved_at);
+    }
+
+    public function test_item_update_recalculates_total_and_delete_validates_estimate_ownership(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $project = Project::factory()->create(['customer_id' => $customer->id]);
+
+        $estimateA = Estimate::factory()->create([
+            'project_id' => $project->id,
+            'status' => EstimateStatus::Draft,
+            'created_by' => $customer->id,
+        ]);
+        $estimateB = Estimate::factory()->create([
+            'project_id' => $project->id,
+            'status' => EstimateStatus::Draft,
+            'created_by' => $customer->id,
+        ]);
+
+        $item = $this->service->addItem($estimateA, [
+            'description_ar' => 'مواد',
+            'description_en' => 'Materials',
+            'category' => EstimateItemCategory::Material->value,
+            'quantity' => 2,
+            'unit' => 'u',
+            'unit_price' => 50,
+        ]);
+
+        $updated = $this->service->updateItem($estimateA, $item->fresh(), [
+            'quantity' => 3,
+            'unit_price' => 20,
+        ]);
+        $this->assertSame(60.0, (float) $updated->total_price);
+
+        $this->expectException(ValidationException::class);
+        $this->service->deleteItem($estimateB, $item->fresh());
+
+        $this->service->deleteItem($estimateA, $item->fresh());
+        $this->assertDatabaseMissing('estimate_items', ['id' => $item->id]);
+    }
+
+    public function test_export_csv_stream_includes_bom_and_headers(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $project = Project::factory()->create(['customer_id' => $customer->id]);
+        $estimate = Estimate::factory()->create([
+            'project_id' => $project->id,
+            'status' => EstimateStatus::Draft,
+            'created_by' => $customer->id,
+        ]);
+
+        $this->service->addItem($estimate, [
+            'description_ar' => 'خرسانة',
+            'description_en' => 'Concrete',
+            'category' => EstimateItemCategory::Material->value,
+            'quantity' => 1,
+            'unit' => 'm3',
+            'unit_price' => 100,
+        ]);
+
+        $response = $this->service->exportCsvStream($estimate->fresh());
+        $this->assertInstanceOf(StreamedResponse::class, $response);
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertIsString($content);
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $content);
+        $this->assertStringContainsString('description_ar', $content);
+        $this->assertStringContainsString('خرسانة', $content);
     }
 }
