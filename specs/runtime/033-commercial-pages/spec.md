@@ -115,3 +115,32 @@ All page UI must prefer these Nuxt UI components (or existing project equivalent
 ## Dependencies
 
 - Upstream stages: `STAGE_29_NUXT_SHELL` and existing commercial backend stages (17–21) per stage file.
+
+## Clarifications
+
+### Session 2026-04-14
+
+1. **API contract source of truth**
+
+- **Resolution**: Use existing frontend composables as the integration contract surface, backed by Laravel `/v1/*` routes (as implemented in `frontend/composables/useRfqs.ts`, `useOrders.ts`, `usePayments.ts`, `useInvoices.ts`). This stage should **not** invent new endpoints.
+- **Impact**: Align page routes and payloads to existing composables; any missing endpoint becomes a separate backend stage.
+
+2. **RFQ visibility and roles**
+
+- **Resolution**: Support **Customer** and **Supplier** RFQ experiences, and preserve the existing **Contractor** RFQ area if already present (e.g. `frontend/pages/contractor/rfqs/*`). Final visibility is API-scoped; UI should render safely for each role.
+- **Impact**: Pages should use role-aware navigation and guard actions (UX only).
+
+3. **Payment flow behavior**
+
+- **Resolution**: Implement an **instructional + API-driven** payment initiation flow (no real gateway integration): initiate via `POST /v1/payments/initiate` (see `usePayments.initiate`) and drive the UI from returned status/reference.
+- **Impact**: Payment success page should reflect the resulting status, but gateway redirects are out of scope.
+
+4. **Invoice requirements**
+
+- **Resolution**: Include **VAT breakdown + ZATCA QR display** (when provided) as indicated by existing `InvoiceDetail.zatca_qr_data`.
+- **Impact**: Invoice detail should render QR when present and remain printable.
+
+5. **i18n scope**
+
+- **Resolution**: Implement **Arabic-first with i18n-ready keys for all user-facing strings**, leveraging existing `frontend/locales/ar.json` and `frontend/locales/en.json`.
+- **Impact**: Avoid hardcoded UI strings in new pages/components; wire translation keys.
