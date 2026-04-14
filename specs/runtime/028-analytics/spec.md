@@ -45,7 +45,7 @@ Build an analytics module that exposes platform usage metrics and business KPIs 
 ### API Endpoints (v1)
 
 - `GET /api/v1/analytics/overview`
-- `GET /api/v1/analytics/{metric}`
+- `GET /api/v1/analytics/metrics/{metric}`
 - `GET /api/v1/analytics/trends`
 
 Common query params:
@@ -55,6 +55,11 @@ Common query params:
 - `compare` = `previous_period|previous_year|none` (default `none`)
 
 Response contract must follow Bunyan error/success format.
+
+Migration discipline:
+
+- Forward-only migrations (never edit existing migration files)
+- Always include `down()` rollback methods
 
 ## Frontend Scope
 
