@@ -78,3 +78,25 @@ We need a full **Admin Panel** experience in the Nuxt 3 frontend that enables pl
 - Which exact API endpoints already exist for each admin page (and their request/response contracts)?
 - What is the canonical roles/permissions model exposed to the frontend (role keys, permission keys)?
 - What admin navigation information architecture is preferred (grouping + labels in Arabic/English)?
+
+## Clarifications
+
+### Session 2026-04-14
+
+1. **Backend API availability (admin scope)**
+   - **Resolved**: Admin-only backend routes exist under `/api/v1/admin/*` for:
+     - Roles: `GET /api/v1/admin/roles`, `GET /api/v1/admin/roles/{role}/permissions`
+     - Role assignment: `GET /api/v1/admin/users`, `POST /api/v1/admin/users/{user}/role`, `DELETE /api/v1/admin/users/{user}/role`
+     - Suppliers review: `GET /api/v1/admin/suppliers` + verify action available at `PUT /api/v1/suppliers/{supplierProfile}/verify` (admin-only)
+     - Activity log: `GET /api/v1/admin/activity-log`
+     - Analytics reports: `GET /api/v1/admin/analytics/reports/types`, `GET /api/v1/admin/analytics/reports/{type}`, `GET /api/v1/admin/analytics/reports/{type}/export`
+     - Categories: public read (`GET /api/v1/categories*`) and admin write (`POST/PUT/DELETE` + reorder) exist at `/api/v1/categories/*` guarded by `role:admin`
+   - **Impact**: Plan/implementation should bind the admin UI to these existing endpoints first, and only add missing endpoints as explicitly scoped follow-ups if required.
+
+2. **Authorization model**
+   - **Resolved**: Backend authorization uses Sanctum + `role:*` middleware. For frontend, we must implement admin route middleware as a **UX guard** and rely on server responses as the source of truth.
+   - **Impact**: Admin pages must gracefully handle 401/403 (redirect + toast) and avoid assuming privileges client-side.
+
+3. **Admin route map alignment**
+   - **Resolved**: Backend uses `/api/v1/admin/*` for admin lists (roles/users/activity-log/analytics) and non-admin-prefixed routes for some admin actions (e.g., supplier verify, category CRUD) with `role:admin`.
+   - **Impact**: Frontend API client should encapsulate these differences behind composables (e.g. `useAdminUsers`, `useAdminRoles`, `useAdminSuppliers`).
