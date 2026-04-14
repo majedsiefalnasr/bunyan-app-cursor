@@ -2,6 +2,7 @@
     import type { UserRole } from '~/types/auth';
 
     definePageMeta({
+        layout: 'admin',
         middleware: ['auth', 'role'],
         roles: ['admin'],
     });
@@ -100,8 +101,11 @@
 
 <template>
     <div class="space-y-6">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-semibold tracking-tight" style="color: #171717">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1
+                class="text-2xl font-semibold tracking-tight text-[#171717]"
+                style="letter-spacing: -0.06em"
+            >
                 إدارة المستخدمين
             </h1>
             <USelect

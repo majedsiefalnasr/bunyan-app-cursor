@@ -22,6 +22,57 @@
         "contact": "Contact",
         "admin": "Admin"
     },
+    "admin": {
+        "title": "Admin",
+        "nav": {
+            "dashboard": "Overview",
+            "users": "Users",
+            "roles": "Roles & permissions",
+            "categories": "Categories",
+            "suppliers": "Suppliers",
+            "settings": "Settings",
+            "notifications": "Notification templates",
+            "activity_log": "Activity log",
+            "reports": "Reports center",
+            "analytics": "Analytics"
+        },
+        "dashboard": {
+            "title": "Admin dashboard",
+            "subtitle": "Quick overview and shortcuts",
+            "quick_links": "Quick links"
+        },
+        "roles": {
+            "title": "Roles & permissions",
+            "subtitle": "View role permissions (editing depends on backend support)",
+            "role_label": "Role",
+            "select_role": "Select a role",
+            "load_error": "Failed to load roles",
+            "permissions_load_error": "Failed to load permissions"
+        },
+        "settings": {
+            "title": "Platform settings",
+            "subtitle": "Manage platform-wide settings",
+            "api_missing_note": "UI is ready. This page will be wired once settings endpoints are available."
+        },
+        "notifications": {
+            "title": "Notification templates",
+            "subtitle": "Manage email/SMS templates",
+            "api_missing_note": "UI is ready. This page will be wired once template endpoints are available."
+        },
+        "user_detail": {
+            "title": "User details",
+            "back_to_users": "Back to users",
+            "not_found": "User not found",
+            "api_missing_title": "Not available yet",
+            "api_missing_note": "User detail API is not available yet. This page will be enabled once the endpoint exists.",
+            "fields": {
+                "name": "Name",
+                "email": "Email",
+                "role": "Role",
+                "phone": "Phone"
+            }
+        }
+    },
     "shell": {
         "direction": {
             "rtl": "Arabic (RTL)",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
     definePageMeta({
+        layout: 'admin',
         middleware: ['auth', 'role'],
         roles: ['admin'],
     });
@@ -72,21 +73,24 @@
 
 <template>
     <div class="space-y-6">
-        <h1 class="text-2xl font-semibold tracking-tight text-white">
+        <h1
+            class="text-2xl font-semibold tracking-tight text-[#171717]"
+            style="letter-spacing: -0.06em"
+        >
             {{ t('activityLog.admin_title') }}
         </h1>
 
-        <div class="rounded-lg bg-slate-800 p-4 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]">
+        <UCard>
             <UTable :rows="rows" :columns="columns" :loading="isLoading">
                 <template #action-data="{ row }">
-                    <span class="text-slate-100">{{ row.action }}</span>
+                    <span class="text-[#171717]">{{ row.action }}</span>
                 </template>
                 <template #subject-data="{ row }">
-                    <span class="text-slate-300">{{ rowSubject(row) }}</span>
+                    <span class="text-[#666666]">{{ rowSubject(row) }}</span>
                 </template>
                 <template #created_at-data="{ row }">
-                    <span v-if="row.created_at" class="text-slate-400 text-xs">{{
-                        new Date(row.created_at).toLocaleString()
+                    <span v-if="row.created_at" class="text-[#808080] text-xs">{{
+                        new Date(row.created_at).toLocaleString('ar-SA')
                     }}</span>
                 </template>
             </UTable>
@@ -94,6 +98,6 @@
             <div v-if="lastPage > 1" class="mt-4 flex justify-center">
                 <UPagination v-model="page" :total="total" :page-count="perPage" />
             </div>
-        </div>
+        </UCard>
     </div>
 </template>

@@ -2,6 +2,7 @@
     import type { CategoryNode } from '~/types/category';
 
     definePageMeta({
+        layout: 'admin',
         middleware: ['auth', 'role'],
         roles: ['admin'],
     });
