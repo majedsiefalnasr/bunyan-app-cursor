@@ -382,6 +382,30 @@
         "wizard_next": "Next",
         "wizard_submit": "Create project"
     },
+    "analyticsReports": {
+        "nav_link": "Reports",
+        "title": "Business reports",
+        "subtitle": "Generate admin analytics and export to PDF or Excel.",
+        "load_types_error": "Could not load report types",
+        "load_report_error": "Could not generate report",
+        "export_error": "Export failed",
+        "run": "Run report",
+        "export_pdf": "Export PDF",
+        "export_xlsx": "Export Excel",
+        "date_from": "From date",
+        "date_to": "To date",
+        "type_label": "Report type",
+        "summary_title": "Summary",
+        "empty_rows": "No rows for the selected filters.",
+        "types": {
+            "sales_summary": "Sales summary",
+            "orders_summary": "Orders summary",
+            "project_status": "Project status",
+            "inventory_low_stock": "Low stock inventory",
+            "supplier_performance": "Supplier performance",
+            "financial_summary": "Financial summary"
+        }
+    },
     "activityLog": {
         "admin_title": "Activity log",
         "empty": "No activity recorded",

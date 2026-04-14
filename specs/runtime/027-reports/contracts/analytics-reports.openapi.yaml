@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Bunyan Admin Analytics Reports
+  version: 0.1.0
+paths:
+  /api/v1/admin/analytics/reports/types:
+    get:
+      summary: List report types
+      security:
+        - sanctum: []
+  /api/v1/admin/analytics/reports/{type}:
+    get:
+      summary: Generate report JSON
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+            enum:
+              - sales_summary
+              - orders_summary
+              - project_status
+              - inventory_low_stock
+              - supplier_performance
+              - financial_summary
+        - in: query
+          name: date_from
+          schema: { type: string, format: date }
+        - in: query
+          name: date_to
+          schema: { type: string, format: date }
+  /api/v1/admin/analytics/reports/{type}/export:
+    get:
+      summary: Export report
+      parameters:
+        - in: path
+          name: type
+          schema: { type: string }
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [pdf, xlsx]

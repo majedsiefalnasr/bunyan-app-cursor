@@ -382,6 +382,30 @@
         "wizard_next": "التالي",
         "wizard_submit": "إنشاء المشروع"
     },
+    "analyticsReports": {
+        "nav_link": "التقارير",
+        "title": "التقارير التحليلية",
+        "subtitle": "إنشاء تقارير إدارية وتصدير PDF أو Excel.",
+        "load_types_error": "تعذر تحميل أنواع التقارير",
+        "load_report_error": "تعذر إنشاء التقرير",
+        "export_error": "فشل التصدير",
+        "run": "تشغيل التقرير",
+        "export_pdf": "تصدير PDF",
+        "export_xlsx": "تصدير Excel",
+        "date_from": "من تاريخ",
+        "date_to": "إلى تاريخ",
+        "type_label": "نوع التقرير",
+        "summary_title": "الملخص",
+        "empty_rows": "لا توجد صفوف للمرشحات المحددة.",
+        "types": {
+            "sales_summary": "ملخص المبيعات",
+            "orders_summary": "ملخص الطلبات",
+            "project_status": "حالة المشاريع",
+            "inventory_low_stock": "مخزون منخفض",
+            "supplier_performance": "أداء الموردين",
+            "financial_summary": "ملخص مالي"
+        }
+    },
     "activityLog": {
         "admin_title": "سجل النشاط",
         "empty": "لا توجد أحداث مسجلة",

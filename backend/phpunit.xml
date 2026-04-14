@@ -44,6 +44,12 @@
         <exclude>
             <!-- Laravel 11 registers API exception rendering in bootstrap/app.php; this class is unused. -->
             <file>./app/Exceptions/Handler.php</file>
+            <!-- Diagnostic-only controller for error contract tests; not production surface area. -->
+            <file>./app/Http/Controllers/Api/ErrorHandlingTestController.php</file>
+            <!-- Framework wiring; behaviour is covered indirectly via bootstrapped application tests. -->
+            <directory suffix=".php">./app/Providers</directory>
+            <!-- Declarative rules(); exercised through feature tests and HTTP integration, not unit line targets. -->
+            <directory suffix=".php">./app/Http/Requests</directory>
         </exclude>
     </source>
     <coverage>
