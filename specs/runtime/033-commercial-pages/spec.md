@@ -39,20 +39,20 @@ These pages are **frontend-only** deliverables and must integrate via existing R
 
 ## Routes (Pages)
 
-| Page            | Route               | Primary Role(s)   |
-| --------------- | ------------------- | ----------------- |
-| RFQ Create      | `/rfqs/create`      | Customer          |
-| RFQ Listing     | `/rfqs`             | Customer/Supplier |
-| RFQ Detail      | `/rfqs/:id`         | Customer/Supplier |
-| Quote Submit    | `/rfqs/:id/quote`   | Supplier          |
-| Quote Compare   | `/rfqs/:id/compare` | Customer          |
-| Order Listing   | `/orders`           | Customer          |
-| Order Detail    | `/orders/:id`       | Customer          |
-| Checkout        | `/checkout`         | Customer          |
-| Payment         | `/payment/:orderId` | Customer          |
-| Payment Success | `/payment/success`  | Customer          |
-| Invoice Listing | `/invoices`         | Customer          |
-| Invoice Detail  | `/invoices/:id`     | Customer          |
+| Page            | Canonical Route      | Compatibility Alias (if any) | Primary Role(s)                           |
+| --------------- | -------------------- | ---------------------------- | ----------------------------------------- |
+| RFQ Create      | `/rfqs/new`          | `/rfqs/create`               | Customer                                  |
+| RFQ Listing     | `/rfqs`              | —                            | Customer/Supplier/Contractor (API-scoped) |
+| RFQ Detail      | `/rfqs/:id`          | —                            | Customer/Supplier/Contractor (API-scoped) |
+| Quote Submit    | `/rfqs/:id/quote`    | —                            | Supplier/Contractor                       |
+| Quote Compare   | `/rfqs/:id/compare`  | —                            | Customer                                  |
+| Order Listing   | `/orders`            | —                            | Customer                                  |
+| Order Detail    | `/orders/:id`        | —                            | Customer                                  |
+| Checkout        | `/payments/checkout` | `/checkout`                  | Customer                                  |
+| Payment         | `/payments/:id`      | `/payment/:orderId`          | Customer                                  |
+| Payment Success | `/payment/success`   | —                            | Customer                                  |
+| Invoice Listing | `/invoices`          | —                            | Customer                                  |
+| Invoice Detail  | `/invoices/:id`      | —                            | Customer                                  |
 
 ## UI Components (Nuxt UI)
 
