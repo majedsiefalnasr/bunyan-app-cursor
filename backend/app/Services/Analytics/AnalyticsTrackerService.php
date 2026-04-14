@@ -78,7 +78,7 @@ final class AnalyticsTrackerService
         $trimmed = array_slice($trimmed, 0, self::METADATA_MAX_KEYS, true);
 
         // Enforce total bytes cap (best-effort, deterministic)
-        $json = json_encode($trimmed, JSON_UNESCAPED_UNICODE);
+        $json = json_encode($trimmed, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
         if ($json === false) {
             return [];
         }
