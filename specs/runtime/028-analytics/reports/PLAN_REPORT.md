@@ -10,7 +10,7 @@
 | New Endpoints  | 3 (`/analytics/overview`, `/analytics/metrics/{metric}`, `/analytics/trends`) |
 | New Services   | 3 (tracking, aggregation, read/cache)                                         |
 | New Pages      | 1 (admin analytics dashboard page)                                            |
-| New Components | TBD (KPI cards + chart containers)                                            |
+| New Components | KPI cards + chart containers (ECharts via `vue-echarts`)                      |
 
 ## Architecture Decisions
 

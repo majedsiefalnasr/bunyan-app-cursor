@@ -10,6 +10,12 @@ RBAC: Admin + Supervising Architect (server-side enforced via middleware + polic
 
 - All numeric metric fields (`value`, `delta.value`, `delta.pct`, series `v`) are returned as **JSON numbers**.
 - Backend implementation must normalize DB decimals to numbers in API Resources.
+- Money metrics (e.g., GMV, avg order value) are rounded to **2 decimals** in API responses.
+- For defined edge cases, some numeric fields may be `null`:
+  - `delta.pct`: baseline 0 or missing
+  - `delta.value`: baseline missing
+  - ratio metric values: denominator 0
+- If the requested range/bucket would exceed the max points cap, return **422** with a validation error advising a larger bucket or narrower range.
 
 ## Error Contract (canonical)
 
@@ -46,6 +52,21 @@ RBAC: Admin + Supervising Architect (server-side enforced via middleware + polic
 }
 ```
 
+429 (rate limited):
+
+```json
+{
+  "success": false,
+  "data": null,
+  "message": "Too many requests.",
+  "errors": {}
+}
+```
+
+Notes:
+
+- The exact 429 `message` string may vary by implementation, but the envelope shape MUST match this contract.
+
 ## `GET /analytics/overview`
 
 Query:
@@ -54,6 +75,22 @@ Query:
 - `to` (date, optional)
 - `bucket` (`day|week|month`, optional, default `day`)
 - `compare` (`none|previous_period|previous_year`, optional, default `none`)
+
+Defaults:
+
+- If `from/to` are omitted, default to the **last 14 days ending today (UTC)**.
+
+Constraints:
+
+- `from/to` max range: 180 days
+- Dates are interpreted as UTC dates for bucketing (week starts Monday; ISO-8601)
+- Max points returned: 400 per series
+
+Notes:
+
+- Responses contain **aggregated metrics only** (no PII).
+- Requests are **audit-logged** (who/endpoint/range).
+- Range normalization: treat inputs as dates and query the half-open range \([from@00:00:00Z, (to+1 day)@00:00:00Z)\).
 
 Response (success):
 
@@ -87,6 +124,15 @@ Query:
 
 - `from`, `to`, `bucket`
 
+Defaults:
+
+- If `from/to` are omitted, default to the **last 14 days ending today (UTC)**.
+
+Constraints:
+
+- `from/to` max range: 180 days
+- Max points returned: 400 points
+
 Response (success):
 
 ```json
@@ -112,6 +158,16 @@ Query:
 
 - `keys[]` (array of metric keys)
 - `from`, `to`, `bucket`
+
+Defaults:
+
+- If `from/to` are omitted, default to the **last 14 days ending today (UTC)**.
+
+Constraints:
+
+- `keys[]` max length: 10
+- `from/to` max range: 180 days
+- Max points returned: 400 per series
 
 Response (success):
 

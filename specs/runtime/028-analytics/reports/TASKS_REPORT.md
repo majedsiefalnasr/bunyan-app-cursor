@@ -54,9 +54,9 @@
 
 ## External Dependencies
 
-| Task ID | Package/Library        | Version | Purpose                    |
-| ------- | ---------------------- | ------- | -------------------------- |
-| T021    | (TBD) charting library | (TBD)   | Interactive charts in Nuxt |
+| Task ID | Package/Library           | Version | Purpose                    |
+| ------- | ------------------------- | ------- | -------------------------- |
+| T021    | `echarts` + `vue-echarts` | latest  | Interactive charts in Nuxt |
 
 ## High-Downstream-Impact Tasks
 
