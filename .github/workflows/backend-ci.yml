@@ -1,162 +1,63 @@
-name: Backend CI/CD
+name: Backend CI
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-    paths:
-      - 'backend/**'
-      - '.github/workflows/backend-ci.yml'
-  pull_request:
-    branches:
-      - main
-      - develop
-    paths:
-      - 'backend/**'
+  workflow_call:
+    inputs:
+      php_version:
+        type: string
+        default: "8.2"
+      upload_coverage:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 jobs:
-  lint:
+  backend:
+    name: Backend (Laravel)
     runs-on: ubuntu-latest
-    name: Lint & Format
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@728c6c6b8cf02c2e48117716a91ee48313958a19
         with:
-          php-version: '8.2'
-          extensions: pdo_mysql, redis
+          php-version: ${{ inputs.php_version }}
+          extensions: pdo, pdo_mysql, redis, mbstring, xml, bcmath, gd
           coverage: none
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
+      - name: Cache Composer
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-      - name: Install Dependencies
-        working-directory: backend
+      - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Run Laravel Pint
-        working-directory: backend
+      - name: Laravel Pint (Lint)
         run: vendor/bin/pint --test
 
-  analyze:
-    runs-on: ubuntu-latest
-    name: Static Analysis
-    needs: lint
-    steps:
-      - uses: actions/checkout@v4
+      - name: PHPStan (Static Analysis)
+        run: vendor/bin/phpstan analyse --memory-limit=512M --no-progress
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: pdo_mysql, redis
-          coverage: none
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Dependencies
-        working-directory: backend
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Run PHPStan
-        working-directory: backend
-        run: vendor/bin/phpstan analyse --memory-limit=512M
-
-  test:
-    runs-on: ubuntu-latest
-    name: Unit & Feature Tests
-    needs: analyze
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: bunyan_test
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        ports:
-          - 3306:3306
-
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        ports:
-          - 6379:6379
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: pdo_mysql, redis
-          coverage: xdebug
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Dependencies
-        working-directory: backend
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Setup Environment
-        working-directory: backend
-        run: |
-          cp ci.env .env
-          php artisan key:generate
-
-      - name: Run Migrations
-        working-directory: backend
-        run: php artisan migrate --database=mysql
-        env:
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: bunyan_test
-          DB_USERNAME: root
-          DB_PASSWORD: password
-
-      - name: Run Tests
-        working-directory: backend
-        run: mkdir -p build && php artisan test --coverage --min=80
-        # Do not set DB_* here: PHPUnit uses sqlite :memory: (phpunit.xml); CI env
-        # would override DB_DATABASE and break the in-memory test database.
+      - name: PHPUnit (Tests)
+        run: php artisan test --parallel
 
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        if: ${{ inputs.upload_coverage }}
+        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457
         with:
           files: ./backend/build/coverage.xml

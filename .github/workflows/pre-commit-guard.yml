@@ -10,63 +10,43 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   guard:
     runs-on: ubuntu-latest
-    name: Validate PR Commits
+    name: PR Guardrails (fast)
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           fetch-depth: 0
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: pdo_mysql, redis
-          coverage: none
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Backend Dependencies
-        working-directory: backend
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Install Frontend Dependencies
-        working-directory: frontend
+      - name: Block WIP PRs
         run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          title='${{ github.event.pull_request.title }}'
+          if echo "$title" | grep -Eiq '(^\\s*wip\\b|\\bwip\\b)'; then
+            echo "✗ PR title contains WIP; mark it ready before merging."
+            exit 1
+          fi
+          echo "✓ PR title looks merge-ready"
 
-      - name: Check PHP Formatting
-        working-directory: backend
-        run: vendor/bin/pint --test
+      - name: Validate branch naming (soft)
+        run: |
+          BRANCH="${GITHUB_HEAD_REF}"
+          echo "Branch: ${BRANCH}"
+          if [[ "$BRANCH" =~ ^(feature|fix|chore|spec)/.+$ ]]; then
+            echo "✓ Branch naming looks good"
+          else
+            echo "⚠ Warning: unexpected branch prefix (expected feature/*, fix/*, chore/*, spec/*)"
+          fi
 
-      - name: Check JavaScript/Vue Formatting
-        working-directory: frontend
-        run: npx prettier --check .
-
-      - name: Check TypeScript
-        working-directory: frontend
-        run: npm run typecheck
-
-      - name: Lint JavaScript
-        working-directory: frontend
-        run: npm run lint
-
-      - name: Lint PHP
-        working-directory: backend
-        run: vendor/bin/phpstan analyse --memory-limit=512M --no-progress
+      - name: Ensure no secrets committed (quick scan)
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -Eiq '(^|/)(\\.env|\\.env\\..+|credentials\\.json|id_rsa|\\.pem)$'; then
+            echo "✗ Potential secret file detected in PR changes."
+            exit 1
+          fi
+          echo "✓ No obvious secret files detected"

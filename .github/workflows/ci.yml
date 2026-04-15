@@ -10,122 +10,64 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
-  backend:
-    name: Backend (Laravel)
+  changes:
+    name: Detect changes
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: bunyan_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-    defaults:
-      run:
-        working-directory: backend
-
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      e2e: ${{ steps.filter.outputs.e2e }}
+      ci: ${{ steps.filter.outputs.ci }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Paths filter
+        id: filter
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
         with:
-          php-version: "8.2"
-          extensions: pdo, pdo_mysql, redis, mbstring, xml, bcmath, gd
-          coverage: xdebug
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+            e2e:
+              - 'frontend/tests/e2e/**'
+              - 'backend/routes/**'
+              - 'backend/app/**'
+              - 'backend/database/**'
+            ci:
+              - '.github/workflows/**'
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: backend/vendor
-          key: composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Copy environment file
-        run: cp ci.env .env
-
-      - name: Generate application key
-        run: php artisan key:generate
-
-      - name: Run migrations
-        run: php artisan migrate --force
-        env:
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: bunyan_test
-          DB_USERNAME: root
-          DB_PASSWORD: password
-
-      - name: Laravel Pint (Lint)
-        run: vendor/bin/pint --test
-
-      - name: PHPStan (Static Analysis)
-        run: vendor/bin/phpstan analyse --memory-limit=512M
-
-      - name: PHPUnit (Tests)
-        run: php artisan test --parallel
-        # Do not set DB_* here: PHPUnit uses sqlite :memory: (phpunit.xml).
+  backend:
+    name: Backend
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.ci == 'true' }}
+    uses: ./.github/workflows/backend-ci.yml
+    with:
+      php_version: "8.2"
+      upload_coverage: false
 
   frontend:
-    name: Frontend (Nuxt.js)
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        working-directory: frontend
-        run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
-
-      - name: ESLint
-        run: npm run lint
-        working-directory: frontend
-
-      - name: TypeScript Check
-        run: npx nuxi typecheck
-        working-directory: frontend
-
-      - name: Vitest (Unit + Component Tests)
-        run: npm run test
-        working-directory: frontend
-
-      - name: Build
-        run: npm run build
-        working-directory: frontend
+    name: Frontend
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.ci == 'true' }}
+    uses: ./.github/workflows/frontend-ci.yml
+    with:
+      node_version: "20"
+      upload_coverage: false
 
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    needs: [backend, frontend]
+    needs: changes
+    if: ${{ needs.changes.outputs.e2e == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' }}
     defaults:
       run:
         working-directory: backend
@@ -155,16 +97,17 @@ jobs:
           --health-retries=3
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@728c6c6b8cf02c2e48117716a91ee48313958a19
         with:
           php-version: "8.2"
           extensions: pdo, pdo_mysql, redis, mbstring, xml, bcmath, gd
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
         with:
           path: backend/vendor
           key: composer-e2e-${{ hashFiles('backend/composer.lock') }}
@@ -208,14 +151,24 @@ jobs:
           exit 1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a
         with:
           node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install frontend dependencies
         working-directory: frontend
         run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}-chromium
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -231,7 +184,7 @@ jobs:
           CI: true
 
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
         if: failure()
         with:
           name: playwright-report

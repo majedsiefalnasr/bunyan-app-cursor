@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [develop, main]
 
+permissions:
+  contents: read
+
 jobs:
   governance:
     name: Architecture Governance
@@ -13,13 +16,14 @@ jobs:
         working-directory: backend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
 
       - name: Validate layer boundaries
         run: |
           echo "Checking controller layer boundaries..."
           # Controllers should not contain Eloquent queries directly
-          VIOLATIONS=$(grep -rn "DB::\|::query()\|->where(" app/Http/Controllers/ --include="*.php" 2>/dev/null | grep -v "// @allow-query" || true)
+          VIOLATIONS=$(rg -n --glob="*.php" "DB::|::query\\(\\)|->where\\(" app/Http/Controllers/ 2>/dev/null | rg -v "// @allow-query" || true)
           if [[ -n "$VIOLATIONS" ]]; then
             echo "⚠ Warning: Direct DB queries found in controllers:"
             echo "$VIOLATIONS"
@@ -33,7 +37,7 @@ jobs:
         run: |
           echo "Checking route RBAC middleware..."
           # Check that API routes have auth/RBAC middleware
-          UNPROTECTED=$(grep -n "Route::" routes/api.php 2>/dev/null | grep -v "middleware\|auth\|// public" || true)
+          UNPROTECTED=$(rg -n "Route::" routes/api.php 2>/dev/null | rg -v "middleware|auth|// public" || true)
           if [[ -n "$UNPROTECTED" ]]; then
             echo "⚠ Warning: Potentially unprotected API routes:"
             echo "$UNPROTECTED"
@@ -45,7 +49,7 @@ jobs:
         run: |
           echo "Checking migration safety..."
           # Check for destructive operations in migrations
-          DESTRUCTIVE=$(grep -rn "dropColumn\|dropTable\|drop(" database/migrations/ --include="*.php" 2>/dev/null || true)
+          DESTRUCTIVE=$(rg -n --glob="*.php" "dropColumn|dropTable|drop\\(" database/migrations/ 2>/dev/null || true)
           if [[ -n "$DESTRUCTIVE" ]]; then
             echo "⚠ Warning: Destructive operations in migrations:"
             echo "$DESTRUCTIVE"
