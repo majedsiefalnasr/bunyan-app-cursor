@@ -1,10 +1,13 @@
 import { expect, test } from '@playwright/test';
 
+import { isAppRestApiUrl } from './_helpers/apiPath';
+import { gotoAuthForm } from './_helpers/nuxtReady';
+
 test.describe('Accessibility basics', () => {
     test('login form fields are keyboard reachable', async ({ page }) => {
         await page.goto('/ar/auth/login', { waitUntil: 'domcontentloaded' });
-        const email = page.getByPlaceholder('أدخل بريدك الإلكتروني');
-        const pwd = page.getByPlaceholder('أدخل كلمة المرور');
+        const email = page.getByRole('textbox', { name: 'البريد الإلكتروني' });
+        const pwd = page.getByRole('textbox', { name: 'كلمة المرور' });
         await email.focus();
         await expect(email).toBeFocused();
         await page.keyboard.press('Tab');
@@ -12,7 +15,14 @@ test.describe('Accessibility basics', () => {
     });
 
     test('auth error alert exposes role=alert when present', async ({ page }) => {
-        await page.route('**/*', async (route) => {
+        await gotoAuthForm(page, '/ar/auth/login');
+        const email = page.getByRole('textbox', { name: 'البريد الإلكتروني' });
+        const pwd = page.getByRole('textbox', { name: 'كلمة المرور' });
+        await email.fill('x@y.com');
+        await pwd.fill('password12');
+        await pwd.blur();
+        // Mock API only after fields are set — registering a route can remount HMR clients and clear `UForm` state.
+        await page.route(isAppRestApiUrl, async (route) => {
             const req = route.request();
             if (
                 req.method() === 'POST' &&
@@ -37,13 +47,9 @@ test.describe('Accessibility basics', () => {
             }
             await route.continue();
         });
-
-        await page.goto('/ar/auth/login', { waitUntil: 'domcontentloaded' });
-        await page.getByPlaceholder('أدخل بريدك الإلكتروني').fill('x@y.com');
-        await page.getByPlaceholder('أدخل كلمة المرور').fill('password12');
         await page.getByRole('button', { name: 'تسجيل الدخول' }).click();
-        await expect(page.getByTestId('auth-error-alert')).toHaveAttribute('role', 'alert', {
-            timeout: 15_000,
-        });
+        const alert = page.getByTestId('auth-error-alert');
+        await expect(alert).toBeVisible({ timeout: 15_000 });
+        await expect(alert).toHaveAttribute('role', 'alert');
     });
 });

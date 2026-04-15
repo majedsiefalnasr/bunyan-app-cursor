@@ -32,11 +32,13 @@
         error.value = null;
 
         try {
+            const pwd = event.data?.password ?? state.password;
+            const pwd2 = event.data?.password_confirmation ?? state.password_confirmation;
             await authApi.resetPassword({
                 token: token.value,
                 email: email.value,
-                password: event.data.password,
-                password_confirmation: event.data.password_confirmation,
+                password: pwd,
+                password_confirmation: pwd2,
             });
             success.value = true;
             setTimeout(() => {
@@ -73,7 +75,7 @@
         />
 
         <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormField :label="$t('auth.new_password')" name="password">
+            <UFormGroup :label="$t('auth.new_password')" name="password">
                 <UInput
                     v-model="state.password"
                     type="password"
@@ -81,11 +83,11 @@
                     icon="i-heroicons-lock-closed"
                     size="lg"
                 />
-            </UFormField>
+            </UFormGroup>
 
             <PasswordStrength :password="state.password || ''" />
 
-            <UFormField :label="$t('auth.password_confirmation')" name="password_confirmation">
+            <UFormGroup :label="$t('auth.password_confirmation')" name="password_confirmation">
                 <UInput
                     v-model="state.password_confirmation"
                     type="password"
@@ -93,7 +95,7 @@
                     icon="i-heroicons-lock-closed"
                     size="lg"
                 />
-            </UFormField>
+            </UFormGroup>
 
             <UButton type="submit" block size="lg" :loading="loading">
                 {{ $t('auth.reset_password') }}

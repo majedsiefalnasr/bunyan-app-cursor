@@ -1,88 +1,121 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-        <nav class="border-b border-slate-700 px-6 py-4">
-            <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold">{{ $t('app.name') }} Admin</h1>
-                <button
-                    class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md transition"
-                    @click="logout"
-                >
-                    {{ $t('auth.logout') }}
-                </button>
+    <div
+        class="flex h-screen flex-col overflow-hidden bg-[#fafafa] font-sans dark:bg-[#0a0a0a]"
+        style="box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06)"
+    >
+        <header
+            class="flex w-full flex-shrink-0 items-center justify-between gap-3 border-b border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-[#171717]"
+        >
+            <div class="flex items-center gap-3 rtl:flex-row-reverse">
+                <div class="text-sm font-medium text-[#171717] dark:text-white">
+                    {{ $t('app.name') }}
+                </div>
+                <UBadge color="gray" variant="subtle" size="sm">
+                    {{ $t('admin.title') }}
+                </UBadge>
             </div>
-        </nav>
 
-        <div class="container mx-auto px-6 py-8 flex gap-8">
-            <aside class="w-64 bg-slate-800 rounded-lg p-6 h-fit">
-                <ul class="space-y-2">
-                    <li>
-                        <NuxtLink
-                            to="/admin/dashboard"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+            <UButton
+                color="gray"
+                variant="ghost"
+                icon="i-heroicons-arrow-right-on-rectangle"
+                @click="logout"
+            >
+                {{ $t('auth.logout') }}
+            </UButton>
+        </header>
+
+        <div class="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+            <aside
+                class="hidden w-64 shrink-0 overflow-y-auto border-s border-gray-200 bg-white dark:border-gray-800 dark:bg-[#171717] lg:block"
+            >
+                <div class="space-y-2 p-3">
+                    <NuxtLink :to="localePath('/admin')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-squares-2x2">
+                            {{ $t('admin.nav.dashboard') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/users')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-users">
+                            {{ $t('admin.nav.users') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/roles')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-shield-check">
+                            {{ $t('admin.nav.roles') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/categories')" class="block">
+                        <UButton
+                            block
+                            color="gray"
+                            variant="ghost"
+                            icon="i-heroicons-rectangle-stack"
                         >
-                            Dashboard
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/users"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                            {{ $t('admin.nav.categories') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/suppliers')" class="block">
+                        <UButton
+                            block
+                            color="gray"
+                            variant="ghost"
+                            icon="i-heroicons-building-storefront"
                         >
-                            Users
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/categories"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
+                            {{ $t('admin.nav.suppliers') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/settings')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-cog-6-tooth">
+                            {{ $t('admin.nav.settings') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/notifications')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-bell">
+                            {{ $t('admin.nav.notifications') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/activity-log')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-clock">
+                            {{ $t('admin.nav.activity_log') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/reports')" class="block">
+                        <UButton
+                            block
+                            color="gray"
+                            variant="ghost"
+                            icon="i-heroicons-document-chart-bar"
                         >
-                            Categories
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/inventory"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
-                        >
-                            Inventory
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/reports"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
-                        >
-                            {{ $t('analyticsReports.nav_link') }}
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/activity-log"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
-                        >
-                            Activity log
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink
-                            to="/admin/workflows"
-                            class="block px-4 py-2 rounded hover:bg-slate-700 transition"
-                        >
-                            Workflows
-                        </NuxtLink>
-                    </li>
-                </ul>
+                            {{ $t('admin.nav.reports') }}
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink :to="localePath('/admin/analytics')" class="block">
+                        <UButton block color="gray" variant="ghost" icon="i-heroicons-chart-bar">
+                            {{ $t('admin.nav.analytics') }}
+                        </UButton>
+                    </NuxtLink>
+                </div>
             </aside>
 
-            <main class="flex-1">
-                <slot />
+            <main
+                id="main-content"
+                class="min-h-0 min-w-0 flex-1 overflow-y-auto bg-[#fafafa] dark:bg-[#0a0a0a]"
+            >
+                <div class="mx-auto w-full max-w-6xl p-4">
+                    <slot />
+                </div>
             </main>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+    const auth = useAuthStore();
+    const localePath = useLocalePath();
+
     async function logout() {
-        // TODO: Implement logout
+        await auth.logout();
+        await navigateTo(localePath('/auth/login'));
     }
 </script>

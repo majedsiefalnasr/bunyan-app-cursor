@@ -1,34 +1,51 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const ci = !!process.env.CI;
+const isTruthy = (value: string | undefined) =>
+    value === '1' || value === 'true' || value === 'yes' || value === 'on';
+
 /**
  * Always use IPv4 loopback for `baseURL` and `nuxt dev --host`.
  * `localhost` can resolve to `::1` while Vite/Nuxt listens on `127.0.0.1` only,
  * which makes Playwright's webServer health check hang until timeout.
  */
-const serverHost = '127.0.0.1';
-const baseURL = `http://${serverHost}:3000`;
-const devServerCommand = `npm run dev -- --host ${serverHost} --port 3000`;
+const serverHost = process.env.PW_SERVER_HOST || '127.0.0.1';
+const serverPort = Number(process.env.PW_SERVER_PORT || '3000');
+const baseURL = process.env.PW_BASE_URL || `http://${serverHost}:${serverPort}`;
+const devServerCommand =
+    process.env.PW_WEB_SERVER_COMMAND || `npm run dev -- --host ${serverHost} --port ${serverPort}`;
+
+const headless = !isTruthy(process.env.PW_HEADED);
+const browsers = (process.env.PW_BROWSERS || '').trim().toLowerCase(); // "" | "all"
+
+const defaultBrowserProjects = [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }];
+const allBrowserProjects = [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+];
 
 export default defineConfig({
     testDir: './tests/e2e',
+
     // One shared `nuxt dev` — parallel workers corrupt HMR / SSR and flake badly.
     fullyParallel: false,
+    workers: 1,
+
     forbidOnly: ci,
     retries: ci ? 2 : 0,
-    workers: 1,
     globalTimeout: ci ? 15 * 60 * 1000 : 0,
-    reporter: 'html',
+
+    reporter: ci ? [['dot'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
     use: {
         baseURL,
+        headless,
         trace: 'on-first-retry',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
     },
-    projects: ci
-        ? [{ name: 'chromium', use: { ...devices.chromium } }]
-        : [
-              { name: 'chromium', use: { ...devices.chromium } },
-              { name: 'firefox', use: { ...devices.firefox } },
-          ],
+    // Fast-by-default: run Chromium only unless explicitly opting into "all".
+    // Example: `PW_BROWSERS=all npx playwright test`
+    projects: browsers === 'all' ? allBrowserProjects : defaultBrowserProjects,
     webServer: {
         command: devServerCommand,
         url: baseURL,

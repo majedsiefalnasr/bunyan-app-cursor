@@ -116,15 +116,15 @@
         >
             <div class="space-y-4">
                 <div class="grid gap-4 md:grid-cols-3">
-                    <UFormField :label="$t('rfq.field_deadline')">
+                    <UFormGroup :label="$t('rfq.field_deadline')">
                         <UInput v-model="form.valid_until" type="date" />
-                    </UFormField>
-                    <UFormField :label="$t('rfq.quote_delivery_days')">
+                    </UFormGroup>
+                    <UFormGroup :label="$t('rfq.quote_delivery_days')">
                         <UInput v-model.number="form.delivery_days" type="number" min="0" />
-                    </UFormField>
-                    <UFormField :label="$t('rfq.quote_notes')">
+                    </UFormGroup>
+                    <UFormGroup :label="$t('rfq.quote_notes')">
                         <UInput v-model="form.notes" />
-                    </UFormField>
+                    </UFormGroup>
                 </div>
 
                 <div class="space-y-2">

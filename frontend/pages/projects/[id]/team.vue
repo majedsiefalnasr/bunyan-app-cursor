@@ -134,17 +134,17 @@
                 v-if="canManageTeam"
                 class="space-y-2 border-t border-[#ebebeb] pt-4 dark:border-neutral-800"
             >
-                <UFormField :label="$t('projects.team_email')" name="invite_email">
+                <UFormGroup :label="$t('projects.team_email')" name="invite_email">
                     <UInput v-model="inviteEmail" type="email" autocomplete="email" />
-                </UFormField>
-                <UFormField :label="$t('projects.team_role')" name="invite_role">
+                </UFormGroup>
+                <UFormGroup :label="$t('projects.team_role')" name="invite_role">
                     <USelect
                         v-model="inviteRole"
                         :options="inviteRoleOptions"
                         option-attribute="label"
                         value-attribute="value"
                     />
-                </UFormField>
+                </UFormGroup>
                 <UButton :loading="isInviteSubmitting" class="font-medium" @click="submitInvite">
                     {{ $t('projects.team_invite') }}
                 </UButton>

@@ -100,15 +100,15 @@
                     :key="row.id"
                     class="grid gap-3 sm:grid-cols-12 sm:items-end"
                 >
-                    <UFormField class="sm:col-span-5" :label="$t('projects.estimates_col_label')">
+                    <UFormGroup class="sm:col-span-5" :label="$t('projects.estimates_col_label')">
                         <UInput v-model="row.label" />
-                    </UFormField>
-                    <UFormField class="sm:col-span-2" :label="$t('projects.estimates_col_qty')">
+                    </UFormGroup>
+                    <UFormGroup class="sm:col-span-2" :label="$t('projects.estimates_col_qty')">
                         <UInput v-model.number="row.quantity" type="number" min="0" step="0.01" />
-                    </UFormField>
-                    <UFormField class="sm:col-span-3" :label="$t('projects.estimates_col_price')">
+                    </UFormGroup>
+                    <UFormGroup class="sm:col-span-3" :label="$t('projects.estimates_col_price')">
                         <UInput v-model.number="row.unit_price" type="number" min="0" step="0.01" />
-                    </UFormField>
+                    </UFormGroup>
                     <div class="flex sm:col-span-2">
                         <UButton color="red" variant="soft" @click="removeRow(row.id)">
                             {{ $t('projects.estimates_remove') }}

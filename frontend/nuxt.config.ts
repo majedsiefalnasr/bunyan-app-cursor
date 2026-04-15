@@ -58,6 +58,11 @@ export default defineNuxtConfig({
         public: {
             /** Set via `NUXT_PUBLIC_API_BASE_URL` in `.env` (see `.env.example`). */
             apiBaseUrl: '',
+            /**
+             * True when `nuxt dev` is started with `PLAYWRIGHT_TEST=1` (Playwright webServer).
+             * Used by route middleware for SSR/client e2e RBAC edge cases only.
+             */
+            playwrightTest: process.env.PLAYWRIGHT_TEST === '1',
         },
     },
 

@@ -49,12 +49,12 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <form class="space-y-4" @submit.prevent="onSubmit">
-                <UFormField :label="$t('suppliers.company_name_ar')" required>
+                <UFormGroup :label="$t('suppliers.company_name_ar')" required>
                     <UInput v-model="companyNameAr" />
-                </UFormField>
-                <UFormField :label="$t('suppliers.city')">
+                </UFormGroup>
+                <UFormGroup :label="$t('suppliers.city')">
                     <UInput v-model="city" />
-                </UFormField>
+                </UFormGroup>
                 <UButton
                     type="submit"
                     block

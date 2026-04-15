@@ -1,5 +1,6 @@
 <script setup lang="ts">
     definePageMeta({
+        layout: 'admin',
         middleware: ['auth', 'role'],
         roles: ['admin'],
     });
@@ -68,23 +69,26 @@
 
 <template>
     <div class="space-y-6">
-        <h1 class="text-2xl font-semibold tracking-tight text-white">
+        <h1
+            class="text-2xl font-semibold tracking-tight text-[#171717]"
+            style="letter-spacing: -0.06em"
+        >
             {{ t('workflow.admin_title') }}
         </h1>
 
-        <div class="rounded-lg bg-slate-800 p-4 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]">
+        <UCard>
             <UTable :rows="rows" :columns="columns" :loading="isLoading">
                 <template #is_global-data="{ row }">
-                    <span class="text-slate-300">{{ row.is_global ? '✓' : '—' }}</span>
+                    <span class="text-[#666666]">{{ row.is_global ? '✓' : '—' }}</span>
                 </template>
                 <template #is_active-data="{ row }">
-                    <span class="text-slate-300">{{ row.is_active ? '✓' : '—' }}</span>
+                    <span class="text-[#666666]">{{ row.is_active ? '✓' : '—' }}</span>
                 </template>
             </UTable>
 
             <div v-if="lastPage > 1" class="mt-4 flex justify-center">
                 <UPagination v-model="page" :total="total" :page-count="perPage" />
             </div>
-        </div>
+        </UCard>
     </div>
 </template>

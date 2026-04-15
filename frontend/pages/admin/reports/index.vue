@@ -153,17 +153,15 @@
     <div class="space-y-6">
         <div>
             <h1
-                class="text-2xl font-semibold tracking-tight text-white"
+                class="text-2xl font-semibold tracking-tight text-[#171717]"
                 style="letter-spacing: -0.06em"
             >
                 {{ t('analyticsReports.title') }}
             </h1>
-            <p class="mt-1 text-slate-300">{{ t('analyticsReports.subtitle') }}</p>
+            <p class="mt-1 text-sm text-[#4d4d4d]">{{ t('analyticsReports.subtitle') }}</p>
         </div>
 
-        <div
-            class="rounded-lg bg-slate-800 p-4 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)] space-y-4"
-        >
+        <UCard class="space-y-4">
             <UFormGroup :label="t('analyticsReports.type_label')">
                 <USelect
                     v-model="selectedType"
@@ -208,25 +206,22 @@
             <p v-if="meta?.stub" class="text-amber-300 text-sm">
                 Financial figures may be partial (stub mode).
             </p>
-        </div>
+        </UCard>
 
-        <div
-            v-if="summary"
-            class="rounded-lg bg-slate-800 p-4 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]"
-        >
+        <UCard v-if="summary">
             <h2 class="text-lg font-medium text-white mb-2">
                 {{ t('analyticsReports.summary_title') }}
             </h2>
             <pre class="text-sm text-slate-200 overflow-x-auto">{{
                 JSON.stringify(summary, null, 2)
             }}</pre>
-        </div>
+        </UCard>
 
-        <div class="rounded-lg bg-slate-800 p-4 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.08)]">
+        <UCard>
             <UTable :rows="rows" :columns="columns" :loading="isLoadingReport" />
             <p v-if="!isLoadingReport && rows.length === 0" class="text-slate-400 mt-2 text-sm">
                 {{ t('analyticsReports.empty_rows') }}
             </p>
-        </div>
+        </UCard>
     </div>
 </template>

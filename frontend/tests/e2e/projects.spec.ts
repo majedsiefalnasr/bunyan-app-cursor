@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+import { isAppRestApiUrl } from './_helpers/apiPath';
+
 const apiProfile = {
     id: 42,
     name: 'Playwright User',
@@ -46,7 +48,7 @@ async function withAuthProfile(page: Page, baseURL: string | undefined) {
         },
     ]);
 
-    await page.route('**/*', async (route) => {
+    await page.route(isAppRestApiUrl, async (route) => {
         if (matchesProfileGet(route.request())) {
             await route.fulfill(
                 json({

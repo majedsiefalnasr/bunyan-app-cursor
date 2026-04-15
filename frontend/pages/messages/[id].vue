@@ -93,13 +93,13 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
-                <UFormField :label="$t('messages.composer_placeholder')" class="flex-1">
+                <UFormGroup :label="$t('messages.composer_placeholder')" class="flex-1">
                     <UTextarea
                         v-model="body"
                         :rows="3"
                         :placeholder="$t('messages.composer_placeholder')"
                     />
-                </UFormField>
+                </UFormGroup>
                 <UButton color="primary" :loading="isSending" @click="sendMessage">
                     {{ $t('messages.send') }}
                 </UButton>

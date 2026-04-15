@@ -63,7 +63,7 @@
             class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
         >
             <div class="space-y-4">
-                <UFormField :label="$t('payments.method')">
+                <UFormGroup :label="$t('payments.method')">
                     <USelect
                         v-model="method"
                         :options="[
@@ -75,7 +75,7 @@
                         option-attribute="label"
                         class="w-full"
                     />
-                </UFormField>
+                </UFormGroup>
                 <UButton :loading="isSubmitting" color="primary" @click="submit">
                     {{ $t('payments.submit') }}
                 </UButton>

@@ -22,7 +22,7 @@
 </script>
 
 <template>
-    <UFormField :label="$t('auth.otp_label')" name="otp">
+    <UFormGroup :label="$t('auth.otp_label')" name="otp">
         <UInput
             v-model="model"
             maxlength="6"
@@ -32,5 +32,5 @@
             size="lg"
             class="text-center tracking-widest"
         />
-    </UFormField>
+    </UFormGroup>
 </template>

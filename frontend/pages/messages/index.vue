@@ -84,14 +84,14 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
-                <UFormField :label="$t('messages.partner_id_label')" class="flex-1">
+                <UFormGroup :label="$t('messages.partner_id_label')" class="flex-1">
                     <UInput
                         v-model="partnerId"
                         type="number"
                         min="1"
                         :placeholder="$t('messages.partner_id_label')"
                     />
-                </UFormField>
+                </UFormGroup>
                 <UButton color="primary" :loading="isCreating" @click="startDirect">
                     {{ $t('messages.send') }}
                 </UButton>
