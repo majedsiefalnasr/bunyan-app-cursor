@@ -2,6 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 
 async function gotoArHome(page: Page) {
     await page.goto('/ar/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-pw-hydrated', '1', {
+        timeout: 15_000,
+    });
     await page.waitForLoadState('networkidle').catch(() => {
         /* dev server may keep sockets open; domcontentloaded + visible shell is enough */
     });

@@ -6,6 +6,11 @@ import { expect, type Page } from '@playwright/test';
  */
 export async function gotoAuthForm(page: Page, path: string) {
     await page.goto(path, { waitUntil: 'load' });
+    // In CI, hydration can lag behind the initial `load` event. Wait for a deterministic marker
+    // set by `app.vue` when Playwright starts the dev server with `PLAYWRIGHT_TEST=1`.
+    await expect(page.locator('html')).toHaveAttribute('data-pw-hydrated', '1', {
+        timeout: 15_000,
+    });
     await page.locator('form').first().waitFor({ state: 'visible' });
     await expect(page.locator('form input').first()).toBeVisible({ timeout: 15_000 });
 }
