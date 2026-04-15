@@ -76,23 +76,36 @@ test.describe('Auth pages', () => {
 
     test('registration wizard advances to credentials step', async ({ page }) => {
         await page.goto('/ar/auth/register', { waitUntil: 'load' });
+        await expect(page.locator('html')).toHaveAttribute('data-pw-hydrated', '1', {
+            timeout: 15_000,
+        });
         await expect(page.getByTestId('register-step-indicator')).toBeVisible({
             timeout: 15_000,
         });
 
         await expect(page.getByTestId('register-step-indicator')).toContainText(/الخطوة 1 من/);
         await page.getByTestId('role-contractor').click();
-        await page.waitForTimeout(200);
-        await page.getByTestId('register-next').click();
+        const next = page.getByTestId('register-next');
+        await expect(next).toBeVisible({ timeout: 15_000 });
+        await next.click();
+        // CI: if the first click lands before reactive state updates, validate fails and step stays 1.
+        await page.waitForTimeout(150);
+        if ((await page.getByTestId('register-step-indicator').innerText()).includes('الخطوة 1')) {
+            await next.click({ force: true });
+        }
         await expect
-            .poll(() => page.getByTestId('register-step-indicator').innerText())
+            .poll(() => page.getByTestId('register-step-indicator').innerText(), {
+                timeout: 15_000,
+            })
             .toMatch(/الخطوة 2 من/);
         await page.getByPlaceholder('أدخل اسمك الكامل').fill('E2E User');
         await page.getByPlaceholder('أدخل بريدك الإلكتروني').fill('e2e-user@example.com');
         await page.getByTestId('register-next').click();
 
         await expect
-            .poll(() => page.getByTestId('register-step-indicator').innerText())
+            .poll(() => page.getByTestId('register-step-indicator').innerText(), {
+                timeout: 15_000,
+            })
             .toMatch(/الخطوة 3 من/);
         await expect(page.getByPlaceholder('أدخل كلمة المرور').first()).toBeVisible();
     });

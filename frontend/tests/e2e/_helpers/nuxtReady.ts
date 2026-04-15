@@ -6,6 +6,8 @@ import { expect, type Page } from '@playwright/test';
  */
 export async function gotoAuthForm(page: Page, path: string) {
     await page.goto(path, { waitUntil: 'load' });
+    // Reduce motion to avoid flakiness in CI/headless transitions (Nuxt UI slideovers, toasts, etc.).
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     // In CI, hydration can lag behind the initial `load` event. Wait for a deterministic marker
     // set by `app.vue` when Playwright starts the dev server with `PLAYWRIGHT_TEST=1`.
     await expect(page.locator('html')).toHaveAttribute('data-pw-hydrated', '1', {
