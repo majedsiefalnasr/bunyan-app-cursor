@@ -109,13 +109,13 @@
             />
 
             <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-                <UFormField :label="$t('auth.name')" name="name">
+                <UFormGroup :label="$t('auth.name')" name="name">
                     <UInput v-model="state.name" icon="i-heroicons-user" size="lg" />
-                </UFormField>
+                </UFormGroup>
 
-                <UFormField :label="$t('auth.phone')" name="phone">
+                <UFormGroup :label="$t('auth.phone')" name="phone">
                     <UInput v-model="state.phone" type="tel" icon="i-heroicons-phone" size="lg" />
-                </UFormField>
+                </UFormGroup>
 
                 <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
                     <UButton

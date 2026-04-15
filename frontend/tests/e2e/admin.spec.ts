@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-import { e2eLoginAs } from './_helpers/auth';
+import { isAppRestApiUrl } from './_helpers/apiPath';
+import { e2eLoginAs, e2eProfileFulfill, matchesE2eProfileGet } from './_helpers/auth';
 
 function json(body: unknown, status = 200) {
     return {
@@ -79,8 +80,13 @@ test.describe('Admin e2e', () => {
     test('admin scoped routes render (route coverage > 95%)', async ({ page, baseURL }) => {
         await e2eLoginAs(page, { baseURL, role: 'admin' });
 
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             const req = route.request();
+
+            if (matchesE2eProfileGet(req)) {
+                await route.fulfill(e2eProfileFulfill({ role: 'admin' }));
+                return;
+            }
 
             if (matchesAdminUsersGet(req)) {
                 await route.fulfill(
@@ -311,7 +317,7 @@ test.describe('Admin e2e', () => {
         for (const path of scopedAdminRoutes) {
             await page.goto(path, { waitUntil: 'domcontentloaded' });
             await expect(page).toHaveURL(new RegExp(path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-            await expect(page.locator('main, body')).toBeVisible();
+            await expect(page.locator('#main-content')).toBeVisible();
             visited += 1;
         }
 
@@ -339,8 +345,15 @@ test.describe('Admin e2e', () => {
     test('admin users list renders rows from mocked API', async ({ page, baseURL }) => {
         await e2eLoginAs(page, { baseURL, role: 'admin' });
 
-        await page.route('**/*', async (route) => {
-            if (matchesAdminUsersGet(route.request())) {
+        await page.route(isAppRestApiUrl, async (route) => {
+            const req = route.request();
+
+            if (matchesE2eProfileGet(req)) {
+                await route.fulfill(e2eProfileFulfill({ role: 'admin' }));
+                return;
+            }
+
+            if (matchesAdminUsersGet(req)) {
                 await route.fulfill(
                     json({
                         success: true,
@@ -370,6 +383,7 @@ test.describe('Admin e2e', () => {
             await route.continue();
         });
 
+        await page.goto('/ar/admin', { waitUntil: 'domcontentloaded' });
         await page.goto('/ar/admin/users', { waitUntil: 'domcontentloaded' });
         await expect(page.getByRole('heading', { name: 'إدارة المستخدمين' })).toBeVisible();
         await expect(page.getByText('Admin Test User')).toBeVisible();
@@ -381,8 +395,13 @@ test.describe('Admin e2e', () => {
 
         let verifyCalled = false;
 
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             const req = route.request();
+
+            if (matchesE2eProfileGet(req)) {
+                await route.fulfill(e2eProfileFulfill({ role: 'admin' }));
+                return;
+            }
 
             if (matchesAdminSuppliersGet(req)) {
                 await route.fulfill(
@@ -417,10 +436,11 @@ test.describe('Admin e2e', () => {
             await route.continue();
         });
 
+        await page.goto('/ar/admin', { waitUntil: 'domcontentloaded' });
         await page.goto('/ar/admin/suppliers', { waitUntil: 'domcontentloaded' });
         await expect(page.getByText('مورد اختبار')).toBeVisible();
 
-        await page.getByRole('button', { name: 'تحقق' }).click();
+        await page.getByRole('button', { name: /توثيق|Verify/ }).click();
 
         await expect.poll(() => verifyCalled).toBe(true);
     });

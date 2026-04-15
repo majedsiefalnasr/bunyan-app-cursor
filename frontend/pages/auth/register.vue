@@ -253,15 +253,15 @@
 
         <!-- Step 2: personal -->
         <div v-else-if="wizard.step === 1" class="space-y-4">
-            <UFormField :label="$t('auth.name')" name="name">
+            <UFormGroup :label="$t('auth.name')" name="name">
                 <UInput
                     v-model="wizard.name"
                     :placeholder="$t('auth.name_placeholder')"
                     icon="i-heroicons-user"
                     size="lg"
                 />
-            </UFormField>
-            <UFormField :label="$t('auth.email')" name="email">
+            </UFormGroup>
+            <UFormGroup :label="$t('auth.email')" name="email">
                 <UInput
                     v-model="wizard.email"
                     type="email"
@@ -269,7 +269,7 @@
                     icon="i-heroicons-envelope"
                     size="lg"
                 />
-            </UFormField>
+            </UFormGroup>
             <div class="flex justify-between gap-2">
                 <UButton color="gray" variant="ghost" @click="goBack">
                     {{ $t('auth.register_back') }}
@@ -288,7 +288,7 @@
                 class="space-y-4"
                 @submit="onCredentialsSubmit"
             >
-                <UFormField :label="$t('auth.phone')" name="phone">
+                <UFormGroup :label="$t('auth.phone')" name="phone">
                     <UInput
                         v-model="credentialsState.phone"
                         type="tel"
@@ -296,9 +296,9 @@
                         icon="i-heroicons-phone"
                         size="lg"
                     />
-                </UFormField>
+                </UFormGroup>
 
-                <UFormField :label="$t('auth.password')" name="password">
+                <UFormGroup :label="$t('auth.password')" name="password">
                     <UInput
                         v-model="credentialsState.password"
                         type="password"
@@ -306,11 +306,11 @@
                         icon="i-heroicons-lock-closed"
                         size="lg"
                     />
-                </UFormField>
+                </UFormGroup>
 
                 <PasswordStrength :password="credentialsState.password || ''" />
 
-                <UFormField :label="$t('auth.password_confirmation')" name="password_confirmation">
+                <UFormGroup :label="$t('auth.password_confirmation')" name="password_confirmation">
                     <UInput
                         v-model="credentialsState.password_confirmation"
                         type="password"
@@ -318,7 +318,7 @@
                         icon="i-heroicons-lock-closed"
                         size="lg"
                     />
-                </UFormField>
+                </UFormGroup>
 
                 <div class="flex justify-between gap-2 pt-2">
                     <UButton type="button" color="gray" variant="ghost" @click="goBack">

@@ -7,7 +7,7 @@
         layout: 'auth',
     });
 
-    const { login } = useAuth();
+    const authStore = useAuthStore();
     const localePath = useLocalePath();
 
     const schema = loginSchema;
@@ -22,15 +22,37 @@
     const showPassword = ref(false);
     const rememberMe = ref(false);
 
+    /** Normalize `$fetch` / ofetch error shapes (body on `data` or `response._data`). */
+    function messageFromAuthCatch(err: unknown): string | null {
+        if (!err || typeof err !== 'object') return null;
+        const o = err as Record<string, unknown>;
+        const fromData = (payload: unknown): string | null => {
+            if (!payload || typeof payload !== 'object') return null;
+            const p = payload as { error?: { message?: string } };
+            return p.error?.message ?? null;
+        };
+        const direct = fromData(o.data);
+        if (direct) return direct;
+        const res = o.response;
+        if (res && typeof res === 'object' && '_data' in res) {
+            return fromData((res as { _data?: unknown })._data);
+        }
+        return null;
+    }
+
     async function onSubmit(event: NuxtUiFormSubmitEvent<LoginFormValues>) {
         loading.value = true;
         error.value = null;
 
         try {
-            await login(event.data);
+            const payload = event.data ?? {
+                email: state.email,
+                password: state.password,
+            };
+            await authStore.login(payload);
+            await navigateTo(localePath('/dashboard'));
         } catch (e: unknown) {
-            const err = e as { data?: { error?: { message?: string } } };
-            error.value = err?.data?.error?.message || 'حدث خطأ غير متوقع';
+            error.value = messageFromAuthCatch(e) || 'حدث خطأ غير متوقع';
         } finally {
             loading.value = false;
         }
@@ -39,19 +61,12 @@
 
 <template>
     <AuthCard :title="$t('auth.login')">
-        <UAlert
-            v-if="error"
-            color="red"
-            variant="subtle"
-            role="alert"
-            :title="error"
-            class="mb-4"
-            data-testid="auth-error-alert"
-            @close="error = null"
-        />
+        <div v-if="error" role="alert" data-testid="auth-error-alert" class="mb-4">
+            <UAlert color="red" variant="subtle" :title="error" @close="error = null" />
+        </div>
 
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormField :label="$t('auth.email')" name="email">
+            <UFormGroup :label="$t('auth.email')" name="email">
                 <UInput
                     v-model="state.email"
                     type="email"
@@ -59,9 +74,9 @@
                     icon="i-heroicons-envelope"
                     size="lg"
                 />
-            </UFormField>
+            </UFormGroup>
 
-            <UFormField :label="$t('auth.password')" name="password">
+            <UFormGroup :label="$t('auth.password')" name="password">
                 <div class="flex items-stretch gap-2">
                     <UInput
                         v-model="state.password"
@@ -83,7 +98,7 @@
                         @click="showPassword = !showPassword"
                     />
                 </div>
-            </UFormField>
+            </UFormGroup>
 
             <div class="flex items-center justify-between gap-3">
                 <UCheckbox v-model="rememberMe" :label="$t('auth.remember_me')" />

@@ -21,7 +21,7 @@ describe('auth components', () => {
                     $t: (key: string) => key,
                 },
                 stubs: {
-                    UFormField: { template: '<div><slot /></div>' },
+                    UFormGroup: { template: '<div><slot /></div>' },
                     UButton: {
                         inheritAttrs: false,
                         template:

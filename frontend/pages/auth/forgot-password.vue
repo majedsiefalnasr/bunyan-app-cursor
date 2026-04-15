@@ -27,7 +27,8 @@
         error.value = null;
 
         try {
-            await authApi.forgotPassword(event.data.email);
+            const email = event.data?.email ?? state.email;
+            await authApi.forgotPassword(email);
             success.value = true;
         } catch (e: unknown) {
             const err = e as { data?: { error?: { message?: string } } };
@@ -62,7 +63,7 @@
         />
 
         <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormField :label="$t('auth.email')" name="email">
+            <UFormGroup :label="$t('auth.email')" name="email">
                 <UInput
                     v-model="state.email"
                     type="email"
@@ -70,7 +71,7 @@
                     icon="i-heroicons-envelope"
                     size="lg"
                 />
-            </UFormField>
+            </UFormGroup>
 
             <UButton type="submit" block size="lg" :loading="loading">
                 {{ $t('auth.send_reset_link') }}

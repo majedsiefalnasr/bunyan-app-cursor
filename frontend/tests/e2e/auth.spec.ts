@@ -1,5 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 
+import { isAppRestApiUrl } from './_helpers/apiPath';
+import { gotoAuthForm } from './_helpers/nuxtReady';
+
 const apiProfile = {
     id: 42,
     name: 'Playwright User',
@@ -64,31 +67,38 @@ test.describe('Auth pages', () => {
     });
 
     test('login password visibility toggles input type', async ({ page }) => {
-        await page.goto('/ar/auth/login', { waitUntil: 'domcontentloaded' });
-        const pwd = page.locator('input[type="password"]').first();
-        await expect(pwd).toBeVisible();
+        await gotoAuthForm(page, '/ar/auth/login');
+        const pwd = page.getByPlaceholder('أدخل كلمة المرور');
+        await expect(pwd).toHaveAttribute('type', 'password');
         await page.getByRole('button', { name: 'إظهار كلمة المرور' }).click();
-        await expect(page.locator('input[type="text"]').first()).toBeVisible();
+        await expect(pwd).toHaveAttribute('type', 'text');
     });
 
     test('registration wizard advances to credentials step', async ({ page }) => {
-        await page.goto('/ar/auth/register', { waitUntil: 'domcontentloaded' });
+        await page.goto('/ar/auth/register', { waitUntil: 'load' });
+        await expect(page.getByTestId('register-step-indicator')).toBeVisible({
+            timeout: 15_000,
+        });
 
-        await expect(page.getByTestId('register-step-indicator')).toContainText('1');
+        await expect(page.getByTestId('register-step-indicator')).toContainText(/الخطوة 1 من/);
         await page.getByTestId('role-contractor').click();
+        await page.waitForTimeout(200);
         await page.getByTestId('register-next').click();
-
-        await expect(page.getByTestId('register-step-indicator')).toContainText('2');
+        await expect
+            .poll(() => page.getByTestId('register-step-indicator').innerText())
+            .toMatch(/الخطوة 2 من/);
         await page.getByPlaceholder('أدخل اسمك الكامل').fill('E2E User');
         await page.getByPlaceholder('أدخل بريدك الإلكتروني').fill('e2e-user@example.com');
         await page.getByTestId('register-next').click();
 
-        await expect(page.getByTestId('register-step-indicator')).toContainText('3');
+        await expect
+            .poll(() => page.getByTestId('register-step-indicator').innerText())
+            .toMatch(/الخطوة 3 من/);
         await expect(page.getByPlaceholder('أدخل كلمة المرور').first()).toBeVisible();
     });
 
     test('forgot password shows success after API accepts email', async ({ page }) => {
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             if (matchesForgotPost(route.request())) {
                 await route.fulfill(
                     json({
@@ -104,16 +114,24 @@ test.describe('Auth pages', () => {
             await route.continue();
         });
 
-        await page.goto('/ar/auth/forgot-password', { waitUntil: 'domcontentloaded' });
-        await page.getByPlaceholder('أدخل بريدك الإلكتروني').fill('pw@example.com');
+        await gotoAuthForm(page, '/ar/auth/forgot-password');
+        const forgotEmail = page.getByRole('textbox', { name: 'البريد الإلكتروني' });
+        await forgotEmail.fill('pw@example.com');
+        await forgotEmail.blur();
+        const forgotPost = page.waitForResponse(
+            (r) =>
+                r.request().method() === 'POST' &&
+                /\/(?:api\/)?v1\/auth\/forgot-password/.test(r.url())
+        );
         await page.getByRole('button', { name: 'إرسال رابط إعادة التعيين' }).click();
+        await forgotPost;
         await expect(page.getByText(/تم إرسال رابط إعادة تعيين كلمة المرور/)).toBeVisible({
             timeout: 15_000,
         });
     });
 
     test('reset password submits and shows success', async ({ page }) => {
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             if (matchesResetPost(route.request())) {
                 await route.fulfill(
                     json({
@@ -129,12 +147,19 @@ test.describe('Auth pages', () => {
             await route.continue();
         });
 
-        await page.goto('/ar/auth/reset-password?token=fake-token&email=pw%40example.com', {
-            waitUntil: 'domcontentloaded',
-        });
-        await page.locator('input[type="password"]').nth(0).fill('Newpass1!');
-        await page.locator('input[type="password"]').nth(1).fill('Newpass1!');
+        await gotoAuthForm(page, '/ar/auth/reset-password?token=fake-token&email=pw%40example.com');
+        const p0 = page.locator('input[type="password"]').nth(0);
+        const p1 = page.locator('input[type="password"]').nth(1);
+        await p0.fill('Newpass1!');
+        await p1.fill('Newpass1!');
+        await p1.blur();
+        const resetPost = page.waitForResponse(
+            (r) =>
+                r.request().method() === 'POST' &&
+                /\/(?:api\/)?v1\/auth\/reset-password/.test(r.url())
+        );
         await page.getByRole('button', { name: 'إعادة تعيين كلمة المرور' }).click();
+        await resetPost;
         await expect(page.getByText('تم إعادة تعيين كلمة المرور بنجاح')).toBeVisible({
             timeout: 15_000,
         });
@@ -144,7 +169,7 @@ test.describe('Auth pages', () => {
         page,
         baseURL,
     }) => {
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             if (matchesProfileGet(route.request())) {
                 await route.fulfill(
                     json({
@@ -187,7 +212,7 @@ test.describe('Auth pages', () => {
             },
         ]);
 
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             const req = route.request();
             if (matchesProfileGet(req)) {
                 await route.fulfill(
@@ -235,7 +260,7 @@ test.describe('Auth pages', () => {
             },
         ]);
 
-        await page.route('**/*', async (route) => {
+        await page.route(isAppRestApiUrl, async (route) => {
             if (matchesProfileGet(route.request())) {
                 await route.fulfill(
                     json({

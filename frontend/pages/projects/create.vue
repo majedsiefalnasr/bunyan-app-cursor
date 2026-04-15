@@ -79,34 +79,34 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <div v-if="step === 0" class="space-y-4">
-                <UFormField :label="$t('projects.name_label')" name="name">
+                <UFormGroup :label="$t('projects.name_label')" name="name">
                     <UInput
                         v-model="name"
                         data-testid="project-name"
                         class="w-full"
                         autocomplete="organization"
                     />
-                </UFormField>
-                <UFormField :label="$t('projects.budget_label')" name="budget">
+                </UFormGroup>
+                <UFormGroup :label="$t('projects.budget_label')" name="budget">
                     <UInput v-model="budget" type="number" min="0" step="0.01" class="w-full" />
-                </UFormField>
-                <UFormField :label="$t('projects.location_label')" name="location">
+                </UFormGroup>
+                <UFormGroup :label="$t('projects.location_label')" name="location">
                     <UInput v-model="location" class="w-full" autocomplete="street-address" />
-                </UFormField>
+                </UFormGroup>
             </div>
 
             <div v-else-if="step === 1" class="space-y-3">
                 <p class="text-sm text-[#4d4d4d]">{{ $t('projects.wizard_team_hint') }}</p>
-                <UFormField :label="$t('projects.wizard_team_notes')" name="team_note">
+                <UFormGroup :label="$t('projects.wizard_team_notes')" name="team_note">
                     <UTextarea v-model="teamNote" class="w-full" :rows="4" />
-                </UFormField>
+                </UFormGroup>
             </div>
 
             <div v-else-if="step === 2" class="space-y-3">
                 <p class="text-sm text-[#4d4d4d]">{{ $t('projects.wizard_phases_hint') }}</p>
-                <UFormField :label="$t('projects.wizard_phases_notes')" name="phases_note">
+                <UFormGroup :label="$t('projects.wizard_phases_notes')" name="phases_note">
                     <UTextarea v-model="phasesNote" class="w-full" :rows="4" />
-                </UFormField>
+                </UFormGroup>
             </div>
 
             <div v-else class="space-y-3 text-sm text-[#4d4d4d]">

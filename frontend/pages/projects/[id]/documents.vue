@@ -192,10 +192,10 @@
                 }}</span>
             </template>
             <div class="space-y-4">
-                <UFormField :label="$t('projects.documents_title_label')">
+                <UFormGroup :label="$t('projects.documents_title_label')">
                     <UInput v-model="title" class="w-full" />
-                </UFormField>
-                <UFormField :label="$t('projects.documents_category_label')">
+                </UFormGroup>
+                <UFormGroup :label="$t('projects.documents_category_label')">
                     <USelect
                         v-model="category"
                         :options="
@@ -208,7 +208,7 @@
                         value-attribute="value"
                         class="w-full"
                     />
-                </UFormField>
+                </UFormGroup>
                 <div
                     class="rounded-lg bg-[#fafafa] p-6 text-center text-sm text-[#666666] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
                     @dragover.prevent="isDragging = true"

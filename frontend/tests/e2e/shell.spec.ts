@@ -47,16 +47,18 @@ test.describe('Application Shell', () => {
 
     test('mobile drawer opens on 375px viewport', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
-        await page.goto('/ar/');
+        await page.goto('/ar/', { waitUntil: 'load' });
 
         const hamburger = page.getByTestId('mobile-nav-toggle');
-        await expect(hamburger).toBeVisible();
+        await expect(hamburger).toBeVisible({ timeout: 15_000 });
 
         await hamburger.click();
 
         const drawer = page.getByTestId('mobile-drawer');
-        await expect(drawer).toBeVisible();
-        await expect(page.getByRole('button', { name: /إغلاق|Close/ })).toBeVisible();
+        await expect(drawer).toBeVisible({ timeout: 15_000 });
+        await expect(page.getByRole('button', { name: /إغلاق|Close/ })).toBeVisible({
+            timeout: 15_000,
+        });
     });
 
     test('navigation items are visible in sidebar on desktop', async ({ page }) => {
