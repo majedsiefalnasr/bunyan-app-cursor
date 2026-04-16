@@ -46,7 +46,7 @@
 
 <template>
     <div class="space-y-6">
-        <div class="flex items-center justify-between gap-3 rtl:flex-row-reverse">
+        <div class="flex items-center justify-between gap-3">
             <div>
                 <h1
                     class="text-2xl font-semibold tracking-tight text-[#171717]"

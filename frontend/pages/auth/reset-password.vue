@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import type { FormSubmitEvent } from '@nuxt/ui';
     import { resetPasswordSchema } from '~/schemas/auth';
     import type { ResetPasswordFormValues } from '~/schemas/auth';
 
@@ -15,11 +15,6 @@
 
     type ResetSchema = ResetPasswordFormValues;
 
-    const state = reactive<Partial<ResetSchema>>({
-        password: '',
-        password_confirmation: '',
-    });
-
     const loading = ref(false);
     const success = ref(false);
     const error = ref<string | null>(null);
@@ -27,13 +22,13 @@
     const token = computed(() => (route.query.token as string) || '');
     const email = computed(() => (route.query.email as string) || '');
 
-    async function onSubmit(event: NuxtUiFormSubmitEvent<ResetSchema>) {
+    async function onSubmit(event: FormSubmitEvent<ResetSchema>) {
         loading.value = true;
         error.value = null;
 
         try {
-            const pwd = event.data?.password ?? state.password;
-            const pwd2 = event.data?.password_confirmation ?? state.password_confirmation;
+            const pwd = event.data.password;
+            const pwd2 = event.data.password_confirmation;
             await authApi.resetPassword({
                 token: token.value,
                 email: email.value,
@@ -57,7 +52,7 @@
     <AuthCard :title="$t('auth.reset_password')">
         <UAlert
             v-if="success"
-            color="green"
+            color="success"
             variant="subtle"
             :title="$t('auth.password_reset_success')"
             :description="$t('auth.redirecting_to_login')"
@@ -66,7 +61,7 @@
 
         <UAlert
             v-if="error"
-            color="red"
+            color="error"
             variant="subtle"
             role="alert"
             :title="error"
@@ -74,33 +69,41 @@
             @close="error = null"
         />
 
-        <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormGroup :label="$t('auth.new_password')" name="password">
-                <UInput
-                    v-model="state.password"
-                    type="password"
-                    :placeholder="$t('auth.password_placeholder')"
-                    icon="i-heroicons-lock-closed"
-                    size="lg"
+        <UAuthForm
+            v-if="!success"
+            :schema="schema"
+            :fields="[
+                {
+                    name: 'password',
+                    type: 'password',
+                    label: $t('auth.new_password'),
+                    placeholder: $t('auth.password_placeholder'),
+                    required: true,
+                },
+                {
+                    name: 'password_confirmation',
+                    type: 'password',
+                    label: $t('auth.password_confirmation'),
+                    placeholder: $t('auth.password_confirmation_placeholder'),
+                    required: true,
+                },
+            ]"
+            :submit="{ label: $t('auth.reset_password'), block: true, size: 'lg', loading }"
+            :ui="{ root: 'space-y-4' }"
+            @submit="onSubmit"
+        >
+            <template #validation>
+                <UAlert
+                    v-if="error"
+                    color="error"
+                    variant="subtle"
+                    role="alert"
+                    :title="error"
+                    class="mb-2"
+                    @close="error = null"
                 />
-            </UFormGroup>
-
-            <PasswordStrength :password="state.password || ''" />
-
-            <UFormGroup :label="$t('auth.password_confirmation')" name="password_confirmation">
-                <UInput
-                    v-model="state.password_confirmation"
-                    type="password"
-                    :placeholder="$t('auth.password_confirmation_placeholder')"
-                    icon="i-heroicons-lock-closed"
-                    size="lg"
-                />
-            </UFormGroup>
-
-            <UButton type="submit" block size="lg" :loading="loading">
-                {{ $t('auth.reset_password') }}
-            </UButton>
-        </UForm>
+            </template>
+        </UAuthForm>
 
         <div class="mt-6 text-center text-sm text-[#666666]">
             <NuxtLink

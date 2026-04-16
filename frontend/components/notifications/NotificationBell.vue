@@ -74,20 +74,19 @@
 
 <template>
     <div class="relative inline-flex">
-        <UDropdown :items="dropdownItems">
+        <UDropdownMenu :items="dropdownItems">
             <UButton
-                as="div"
-                color="gray"
+                color="neutral"
                 variant="ghost"
                 icon="i-heroicons-bell"
                 size="sm"
                 :aria-label="$t('shell.notifications.open')"
                 data-testid="notification-bell"
             />
-        </UDropdown>
+        </UDropdownMenu>
         <span
             v-if="unread > 0"
-            class="pointer-events-none absolute -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#171717] px-1 text-[10px] font-medium text-white end-0 dark:bg-white dark:text-[#171717]"
+            class="pointer-events-none absolute -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#171717] px-1 text-[10px] font-medium text-white inset-e-0 dark:bg-white dark:text-[#171717]"
             :aria-label="$t('shell.notifications.badge')"
         >
             {{ unread > 99 ? '99+' : unread }}

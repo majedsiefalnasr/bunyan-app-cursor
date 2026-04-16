@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import type { FormSubmitEvent } from '@nuxt/ui';
     import { forgotPasswordSchema } from '~/schemas/auth';
     import type { ForgotPasswordFormValues } from '~/schemas/auth';
 
@@ -14,20 +14,16 @@
 
     type ForgotSchema = ForgotPasswordFormValues;
 
-    const state = reactive<ForgotSchema>({
-        email: '',
-    });
-
     const loading = ref(false);
     const success = ref(false);
     const error = ref<string | null>(null);
 
-    async function onSubmit(event: NuxtUiFormSubmitEvent<ForgotSchema>) {
+    async function onSubmit(event: FormSubmitEvent<ForgotSchema>) {
         loading.value = true;
         error.value = null;
 
         try {
-            const email = event.data?.email ?? state.email;
+            const email = event.data.email;
             await authApi.forgotPassword(email);
             success.value = true;
         } catch (e: unknown) {
@@ -46,7 +42,7 @@
     >
         <UAlert
             v-if="success"
-            color="green"
+            color="success"
             variant="subtle"
             :title="$t('auth.reset_link_sent')"
             class="mb-4"
@@ -54,7 +50,7 @@
 
         <UAlert
             v-if="error"
-            color="red"
+            color="error"
             variant="subtle"
             role="alert"
             :title="error"
@@ -62,21 +58,34 @@
             @close="error = null"
         />
 
-        <UForm v-if="!success" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormGroup :label="$t('auth.email')" name="email">
-                <UInput
-                    v-model="state.email"
-                    type="email"
-                    :placeholder="$t('auth.email_placeholder')"
-                    icon="i-heroicons-envelope"
-                    size="lg"
+        <UAuthForm
+            v-if="!success"
+            :schema="schema"
+            :fields="[
+                {
+                    name: 'email',
+                    type: 'email',
+                    label: $t('auth.email'),
+                    placeholder: $t('auth.email_placeholder'),
+                    required: true,
+                },
+            ]"
+            :submit="{ label: $t('auth.send_reset_link'), block: true, size: 'lg', loading }"
+            :ui="{ root: 'space-y-4' }"
+            @submit="onSubmit"
+        >
+            <template #validation>
+                <UAlert
+                    v-if="error"
+                    color="error"
+                    variant="subtle"
+                    role="alert"
+                    :title="error"
+                    class="mb-2"
+                    @close="error = null"
                 />
-            </UFormGroup>
-
-            <UButton type="submit" block size="lg" :loading="loading">
-                {{ $t('auth.send_reset_link') }}
-            </UButton>
-        </UForm>
+            </template>
+        </UAuthForm>
 
         <div class="mt-6 text-center text-sm text-[#666666]">
             <NuxtLink

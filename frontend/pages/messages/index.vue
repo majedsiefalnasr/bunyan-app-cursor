@@ -69,12 +69,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-4xl space-y-6">
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('messages.list_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">
@@ -109,24 +106,32 @@
             {{ $t('messages.empty') }}
         </p>
 
-        <div v-else class="grid gap-4 sm:grid-cols-2">
-            <UCard
+        <UPageGrid v-else class="gap-4 sm:gap-6 lg:grid-cols-3">
+            <UPageCard
                 v-for="c in conversations"
                 :key="c.id"
-                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
+                variant="subtle"
+                :title="previewTitle(c)"
+                :ui="{
+                    container: 'gap-y-2',
+                    title: 'font-medium text-[#171717] dark:text-white',
+                }"
+                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
             >
                 <div class="space-y-2">
-                    <h2 class="text-lg font-semibold text-[#171717] dark:text-white">
-                        {{ previewTitle(c) }}
-                    </h2>
                     <p v-if="c.latest_message?.body" class="line-clamp-2 text-sm text-[#4d4d4d]">
                         {{ c.latest_message.body }}
                     </p>
-                    <UButton :to="localePath(`/messages/${c.id}`)" variant="soft" color="gray">
+                    <UButton
+                        :to="localePath(`/messages/${c.id}`)"
+                        variant="soft"
+                        color="gray"
+                        size="xs"
+                    >
                         {{ $t('messages.thread_title') }}
                     </UButton>
                 </div>
-            </UCard>
-        </div>
+            </UPageCard>
+        </UPageGrid>
     </div>
 </template>

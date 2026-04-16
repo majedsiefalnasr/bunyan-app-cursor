@@ -62,24 +62,33 @@ export const useCartStore = defineStore('cart', () => {
         lines.value.reduce((sum, l) => sum + Number(l.price) * l.quantity, 0)
     );
 
-    function add(line: Omit<CartLine, 'quantity'>, quantity = 1) {
+    function add(line: Partial<Omit<CartLine, 'quantity'>>, quantity = 1) {
+        if (!line.product_id || !line.name || !line.price) return;
         const q = clampQty(quantity);
         const idx = lines.value.findIndex((l) => l.product_id === line.product_id);
         if (idx !== -1) {
+            const existing = lines.value[idx]!;
             lines.value[idx] = {
-                ...lines.value[idx],
-                quantity: clampQty(lines.value[idx].quantity + q),
+                ...existing,
+                quantity: clampQty(existing.quantity + q),
             };
             return;
         }
-        lines.value.push({ ...line, quantity: q });
+        lines.value.push({
+            product_id: line.product_id,
+            name: line.name,
+            price: line.price,
+            sku: line.sku ?? null,
+            quantity: q,
+        });
     }
 
     function setQuantity(productId: number, quantity: number) {
         const q = clampQty(quantity);
         const idx = lines.value.findIndex((l) => l.product_id === productId);
         if (idx === -1) return;
-        lines.value[idx] = { ...lines.value[idx], quantity: q };
+        const existing = lines.value[idx]!;
+        lines.value[idx] = { ...existing, quantity: q };
     }
 
     function remove(productId: number) {

@@ -11,17 +11,17 @@
 </script>
 
 <template>
-    <UTable :rows="props.rows" :columns="columns" :loading="props.loading">
+    <UTable :rows="props.rows as any" :columns="columns as any" :loading="props.loading">
         <template #label-data="{ row }">
             <div class="text-sm text-[#171717]">
-                {{ row.label || row.key }}
+                {{ (row as any).label || (row as any).key }}
             </div>
             <div class="text-xs text-[#808080] font-mono" style="direction: ltr">
-                {{ row.key }}
+                {{ (row as any).key }}
             </div>
         </template>
         <template #enabled-data="{ row }">
-            <UCheckbox :model-value="row.enabled" disabled />
+            <UCheckbox :model-value="(row as any).enabled" disabled />
         </template>
     </UTable>
     <p v-if="!props.loading && props.rows.length === 0" class="mt-2 text-sm text-[#808080]">

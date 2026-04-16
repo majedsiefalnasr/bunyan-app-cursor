@@ -26,10 +26,8 @@ export default defineNuxtConfig({
         },
     },
 
-    ui: {
-        // @ts-expect-error Nuxt UI adds `icons`; default Nuxt `ModuleOptions` typing omits it here.
-        icons: ['heroicons'],
-    },
+    // Nuxt UI v4 registers @nuxt/icon/@nuxt/fonts/@nuxtjs/color-mode automatically.
+    // Configure these via `icon`, `fonts`, `colorMode` keys if needed.
 
     i18n: {
         restructureDir: false,

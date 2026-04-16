@@ -55,7 +55,7 @@
             toast.add({
                 title: t('errors.codes.SERVER_ERROR.message'),
                 description: t('activityLog.load_error'),
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;
@@ -81,16 +81,16 @@
         </h1>
 
         <UCard>
-            <UTable :rows="rows" :columns="columns" :loading="isLoading">
+            <UTable :rows="rows as any" :columns="columns as any" :loading="isLoading">
                 <template #action-data="{ row }">
-                    <span class="text-[#171717]">{{ row.action }}</span>
+                    <span class="text-[#171717]">{{ (row as any).action }}</span>
                 </template>
                 <template #subject-data="{ row }">
-                    <span class="text-[#666666]">{{ rowSubject(row) }}</span>
+                    <span class="text-[#666666]">{{ rowSubject(row as any) }}</span>
                 </template>
                 <template #created_at-data="{ row }">
-                    <span v-if="row.created_at" class="text-[#808080] text-xs">{{
-                        new Date(row.created_at).toLocaleString('ar-SA')
+                    <span v-if="(row as any).created_at" class="text-[#808080] text-xs">{{
+                        new Date((row as any).created_at).toLocaleString('ar-SA')
                     }}</span>
                 </template>
             </UTable>

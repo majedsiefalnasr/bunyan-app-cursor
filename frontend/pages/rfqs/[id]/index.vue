@@ -90,7 +90,7 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-3xl space-y-6">
+    <div class="space-y-6">
         <div v-if="loading" class="text-sm text-[#666666]">
             {{ $t('shell.loading') }}
         </div>
@@ -100,7 +100,6 @@
                 <div>
                     <h1
                         class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                        style="letter-spacing: -0.06em"
                     >
                         {{ rfq.title }}
                     </h1>
@@ -118,6 +117,7 @@
                         v-if="rfq.status === 'draft'"
                         color="primary"
                         :loading="busy"
+                        size="sm"
                         @click="onSend"
                     >
                         {{ $t('rfq.send') }}
@@ -127,6 +127,7 @@
                         color="primary"
                         variant="soft"
                         :loading="busy"
+                        size="sm"
                         @click="onEvaluate"
                     >
                         {{ $t('rfq.begin_eval') }}
@@ -136,17 +137,19 @@
                         variant="soft"
                         color="gray"
                         :loading="busy"
+                        size="sm"
                         @click="onClose"
                     >
                         {{ $t('rfq.close') }}
                     </UButton>
-                    <UButton variant="soft" color="gray" :to="localePath('/rfqs')">
+                    <UButton variant="soft" color="gray" :to="localePath('/rfqs')" size="sm">
                         {{ $t('rfq.back_list') }}
                     </UButton>
                     <UButton
                         variant="soft"
                         color="gray"
                         :to="localePath(`/rfqs/${rfq.id}/compare`)"
+                        size="sm"
                     >
                         {{ $t('rfq.compare_link') }}
                     </UButton>

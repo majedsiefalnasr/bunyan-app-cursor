@@ -79,6 +79,13 @@
         }
     },
     "shell": {
+        "search": "Search",
+        "support": "Support",
+        "feedback": "Feedback",
+        "teams": {
+            "platform": "Bunyan platform",
+            "marketplace": "Marketplace"
+        },
         "direction": {
             "rtl": "Arabic (RTL)",
             "ltr": "English (LTR)"
@@ -94,6 +101,8 @@
         },
         "user": {
             "profile": "Profile",
+            "guest": "Guest",
+            "appearance": "Appearance",
             "logout": "Sign out"
         },
         "loading": "Loading...",
@@ -123,6 +132,9 @@
         "saved": "Preferences saved"
     },
     "reports": {
+        "hub_title": "Reports",
+        "hub_subtitle": "Choose a project to view its reports and manage attachments.",
+        "open_project_reports": "View reports",
         "title": "Project reports",
         "empty": "No reports yet.",
         "load_error": "Could not load reports",
@@ -193,7 +205,13 @@
         "register_go_verify_page": "Open email verification page",
         "validation_failed": "Validation failed",
         "unexpected_error": "Something went wrong",
-        "otp_label": "Verification code"
+        "otp_label": "Verification code",
+        "password_rules": {
+            "title": "Password must include:",
+            "min_length": "At least 8 characters",
+            "upper_lower": "One uppercase and one lowercase letter",
+            "number": "At least one number"
+        }
     },
     "profile": {
         "title": "Profile",
@@ -318,6 +336,10 @@
         "not_found": "Category not found."
     },
     "search": {
+        "palette_title": "Quick search",
+        "palette_placeholder": "Search for a product…",
+        "palette_hint": "Type your query then press Enter, or pick a quick shortcut.",
+        "palette_open_full": "Open search page",
         "page_title": "Search results",
         "page_subtitle": "Browse products matching your query."
     },

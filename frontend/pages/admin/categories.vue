@@ -45,7 +45,7 @@
             toast.add({
                 title: 'خطأ',
                 description: 'تعذر تحميل التصنيفات',
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;
@@ -59,7 +59,7 @@
                 toast.add({
                     title: 'خطأ',
                     description: 'تعذر العثور على التصنيف',
-                    color: 'red',
+                    color: 'error',
                 });
                 return;
             }
@@ -67,10 +67,10 @@
                 method: 'PUT',
                 body: { sort_order: payload.newIndex },
             });
-            toast.add({ title: 'تم', description: 'تم تحديث الترتيب', color: 'green' });
+            toast.add({ title: 'تم', description: 'تم تحديث الترتيب', color: 'success' });
             await fetchTree();
         } catch {
-            toast.add({ title: 'خطأ', description: 'فشل إعادة الترتيب', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'فشل إعادة الترتيب', color: 'error' });
         }
     }
 
@@ -84,14 +84,14 @@
                     parent_id: form.parent_id,
                 },
             });
-            toast.add({ title: 'تم', description: 'تم إنشاء التصنيف', color: 'green' });
+            toast.add({ title: 'تم', description: 'تم إنشاء التصنيف', color: 'success' });
             modalOpen.value = false;
             form.name_ar = '';
             form.name_en = '';
             form.parent_id = null;
             await fetchTree();
         } catch {
-            toast.add({ title: 'خطأ', description: 'فشل إنشاء التصنيف', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'فشل إنشاء التصنيف', color: 'error' });
         }
     }
 
@@ -115,7 +115,7 @@
                     :current="{ name_ar: 'إدارة الشجرة' }"
                 />
             </div>
-            <UButton color="gray" @click="modalOpen = true">تصنيف جديد</UButton>
+            <UButton color="neutral" @click="modalOpen = true">تصنيف جديد</UButton>
         </div>
 
         <UCard v-if="isLoading">
@@ -146,7 +146,7 @@
                         <EcommerceCategorySelect v-model="form.parent_id" :categories="tree" />
                     </UFormGroup>
                     <div class="flex justify-end gap-2">
-                        <UButton color="gray" variant="ghost" @click="modalOpen = false"
+                        <UButton color="neutral" variant="ghost" @click="modalOpen = false"
                             >إلغاء</UButton
                         >
                         <UButton type="submit">حفظ</UButton>

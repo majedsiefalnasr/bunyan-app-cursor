@@ -26,20 +26,17 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-6xl space-y-6">
-        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div class="space-y-6">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div>
-                <h1
-                    class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                    style="letter-spacing: -0.06em"
-                >
+                <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                     {{ $t('rfq.compare_title') }}
                 </h1>
                 <p class="mt-1 text-sm text-[#666666]">
                     {{ $t('rfq.compare_subtitle') }}
                 </p>
             </div>
-            <UButton variant="soft" color="gray" :to="localePath(`/rfqs/${id}`)">
+            <UButton variant="soft" color="gray" size="sm" :to="localePath(`/rfqs/${id}`)">
                 {{ $t('rfq.detail_link') }}
             </UButton>
         </div>

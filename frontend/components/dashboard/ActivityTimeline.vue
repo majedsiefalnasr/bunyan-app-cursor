@@ -48,7 +48,7 @@
             toast.add({
                 title: t('errors.codes.SERVER_ERROR.message'),
                 description: t('activityLog.load_error'),
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;

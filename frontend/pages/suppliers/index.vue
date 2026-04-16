@@ -29,12 +29,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-4xl space-y-6">
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('suppliers.directory_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">
@@ -50,25 +47,33 @@
             {{ $t('suppliers.empty') }}
         </p>
 
-        <div v-else class="grid gap-4 sm:grid-cols-2">
-            <UCard
+        <UPageGrid v-else class="gap-4 sm:gap-6 lg:grid-cols-3">
+            <UPageCard
                 v-for="s in suppliers"
                 :key="s.id"
-                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
+                variant="subtle"
+                :title="s.company_name_ar"
+                :ui="{
+                    container: 'gap-y-2',
+                    title: 'font-medium text-[#171717] dark:text-white',
+                }"
+                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
             >
                 <div class="space-y-2">
-                    <h2 class="text-lg font-semibold text-[#171717] dark:text-white">
-                        {{ s.company_name_ar }}
-                    </h2>
                     <p v-if="s.city" class="text-sm text-[#4d4d4d]">{{ s.city }}</p>
                     <p class="text-xs text-[#666666]">
                         {{ $t('suppliers.rating') }}: {{ s.rating_avg }}
                     </p>
-                    <UButton :to="localePath(`/suppliers/${s.id}`)" variant="soft" color="gray">
+                    <UButton
+                        :to="localePath(`/suppliers/${s.id}`)"
+                        variant="soft"
+                        color="gray"
+                        size="xs"
+                    >
                         {{ $t('suppliers.view_products') }}
                     </UButton>
                 </div>
-            </UCard>
-        </div>
+            </UPageCard>
+        </UPageGrid>
     </div>
 </template>

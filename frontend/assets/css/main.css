@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
 :root {
     --color-primary: #000;
@@ -17,5 +14,18 @@ html {
 }
 
 body {
-    @apply bg-white dark:bg-slate-950 text-slate-900 dark:text-white;
+    font-family: Geist, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-feature-settings: 'liga' 1;
+    @apply bg-white text-[#171717] dark:bg-[#0a0a0a] dark:text-white;
+}
+
+/* Default text alignment by document direction */
+[dir='rtl'] body {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir='ltr'] body {
+    direction: ltr;
+    text-align: left;
 }

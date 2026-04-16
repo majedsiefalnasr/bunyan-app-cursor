@@ -54,7 +54,7 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-3xl space-y-6">
+    <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ t('notifications.title') }}

@@ -24,12 +24,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-4xl space-y-6">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+    <div class="space-y-6">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('payments.list_title') }}
             </h1>
             <div class="flex items-center gap-2">
@@ -38,6 +35,7 @@
                     color="gray"
                     variant="ghost"
                     icon="i-heroicons-arrow-right"
+                    size="sm"
                 >
                     {{ $t('payments.go_to_orders') }}
                 </UButton>
@@ -55,34 +53,47 @@
             {{ $t('payments.empty') }}
         </p>
 
-        <div v-else class="grid gap-4 sm:grid-cols-2">
-            <UCard
+        <UPageGrid v-else class="gap-4 sm:gap-6 lg:grid-cols-3">
+            <UPageCard
                 v-for="p in rows"
                 :key="p.id"
-                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
+                variant="subtle"
+                :title="`${$t('payments.order')} #${p.payable_id}`"
+                :ui="{
+                    container: 'gap-y-2',
+                    title: 'font-medium text-[#171717] dark:text-white',
+                }"
+                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
             >
                 <div class="space-y-2">
-                    <p class="text-sm text-[#4d4d4d]">
-                        {{ $t('payments.order') }} #{{ p.payable_id }}
-                    </p>
                     <p class="text-lg font-semibold text-[#171717] dark:text-white">
                         {{ p.amount }} {{ p.currency }}
                     </p>
                     <p class="text-sm text-[#666666]">
                         {{ $t('payments.status') }}: {{ p.status }}
                     </p>
-                    <UButton :to="localePath(`/payments/${p.id}`)" variant="soft" color="gray">
+                    <UButton
+                        :to="localePath(`/payments/${p.id}`)"
+                        variant="soft"
+                        color="gray"
+                        size="xs"
+                    >
                         {{ $t('payments.detail_title') }}
                     </UButton>
                 </div>
-            </UCard>
-        </div>
+            </UPageCard>
+        </UPageGrid>
 
         <div class="flex flex-wrap gap-2">
-            <UButton :to="localePath('/orders')" variant="outline" color="gray">
+            <UButton :to="localePath('/orders')" variant="outline" color="gray" size="sm">
                 {{ $t('payments.go_to_orders') }}
             </UButton>
-            <UButton :to="localePath('/payments/checkout')" variant="outline" color="gray">
+            <UButton
+                :to="localePath('/payments/checkout')"
+                variant="outline"
+                color="gray"
+                size="sm"
+            >
                 {{ $t('payments.checkout_title') }}
             </UButton>
         </div>

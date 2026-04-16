@@ -9,7 +9,7 @@
             <p class="text-xl text-slate-600 dark:text-slate-400 mb-8">
                 {{ $t('app.description') }}
             </p>
-            <div class="flex gap-4 justify-center rtl:flex-row-reverse">
+            <div class="flex gap-4 justify-center">
                 <NuxtLink
                     :to="localePath('/auth/login')"
                     class="rounded-md bg-slate-900 px-6 py-3 text-white hover:bg-slate-800"

@@ -1,22 +1,8 @@
 <script setup lang="ts">
-    import type { ZodError } from 'zod';
+    import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui';
+    import { registerSchema } from '~/schemas/auth';
+    import type { RegisterFormValues } from '~/schemas/auth';
     import type { UserRole } from '~/types/auth';
-    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
-    import {
-        registerWizardAccountSchema,
-        registerWizardCredentialsSchema,
-        registerWizardPersonalSchema,
-    } from '~/schemas/auth';
-
-    type WizardState = {
-        step: number;
-        accountType: Extract<UserRole, 'customer' | 'contractor'> | null;
-        name: string;
-        email: string;
-        phone: string;
-        password: string;
-        password_confirmation: string;
-    };
 
     definePageMeta({
         layout: 'auth',
@@ -27,19 +13,15 @@
     const localePath = useLocalePath();
     const { t } = useI18n();
 
-    const wizard = useState<WizardState>('auth-register-wizard', () => ({
-        step: 0,
-        accountType: null,
-        name: '',
-        email: '',
-        phone: '',
-        password: '',
-        password_confirmation: '',
-    }));
+    const schema = registerSchema;
 
-    const stepError = ref<string | null>(null);
-    const submitError = ref<string | null>(null);
     const loading = ref(false);
+    const submitError = ref<string | null>(null);
+    const success = ref(false);
+    const submittedEmail = ref('');
+    const accountType = ref<Extract<UserRole, 'customer' | 'contractor'> | null>(null);
+    const accountTypeError = ref<string | null>(null);
+
     const resendLoading = ref(false);
     const resendSuccess = ref(false);
     const resendError = ref<string | null>(null);
@@ -47,112 +29,180 @@
 
     let cooldownTimer: ReturnType<typeof setInterval> | null = null;
 
-    const totalSteps = 4;
+    const authForm = ref<{ state?: Record<string, unknown> } | null>(null);
+    const formState = computed<Record<string, unknown>>(
+        () => (authForm.value?.state ?? {}) as Record<string, unknown>
+    );
+    const passwordValue = computed<string>(() => String(formState.value.password ?? ''));
+    const passwordConfirmationValue = computed<string>(() =>
+        String(formState.value.password_confirmation ?? '')
+    );
 
-    const bannerError = computed(() => stepError.value || submitError.value || '');
-
-    const stepHeadline = computed(() => {
-        switch (wizard.value.step) {
-            case 0:
-                return t('auth.register_step_account');
-            case 1:
-                return t('auth.register_step_personal');
-            case 2:
-                return t('auth.register_step_credentials');
-            default:
-                return t('auth.register_step_done');
-        }
+    const passwordChecks = computed<{
+        minLength: boolean;
+        hasLower: boolean;
+        hasUpper: boolean;
+        hasNumber: boolean;
+        matches: boolean;
+    }>(() => {
+        const pwd = passwordValue.value;
+        return {
+            minLength: pwd.length >= 8,
+            hasLower: /[a-z]/.test(pwd),
+            hasUpper: /[A-Z]/.test(pwd),
+            hasNumber: /[0-9]/.test(pwd),
+            matches: pwd.length > 0 && pwd === passwordConfirmationValue.value,
+        };
     });
 
-    function firstZodMessage(err: ZodError) {
-        const { fieldErrors, formErrors } = err.flatten();
-        for (const messages of Object.values(fieldErrors)) {
-            if (messages?.[0]) {
-                return messages[0];
+    const passwordCheckItems = computed<
+        Array<{ key: 'minLength' | 'hasUpperLower' | 'hasNumber'; label: string; ok: boolean }>
+    >(() => [
+        {
+            key: 'minLength',
+            label: t('auth.password_rules.min_length'),
+            ok: passwordChecks.value.minLength,
+        },
+        {
+            key: 'hasUpperLower',
+            label: t('auth.password_rules.upper_lower'),
+            ok: passwordChecks.value.hasLower && passwordChecks.value.hasUpper,
+        },
+        {
+            key: 'hasNumber',
+            label: t('auth.password_rules.number'),
+            ok: passwordChecks.value.hasNumber,
+        },
+    ]);
+
+    const canSubmit = computed(() => {
+        const c = passwordChecks.value;
+        return (
+            !!accountType.value &&
+            c.minLength &&
+            c.hasLower &&
+            c.hasUpper &&
+            c.hasNumber &&
+            c.matches
+        );
+    });
+
+    const fields = computed<AuthFormField[]>(() => [
+        {
+            name: 'name',
+            type: 'text',
+            label: t('auth.name'),
+            placeholder: t('auth.name_placeholder'),
+            required: true,
+        },
+        {
+            name: 'email',
+            type: 'email',
+            label: t('auth.email'),
+            placeholder: t('auth.email_placeholder'),
+            required: true,
+        },
+        {
+            name: 'phone',
+            type: 'tel',
+            label: t('auth.phone'),
+            placeholder: t('auth.phone_placeholder'),
+            required: false,
+        },
+        {
+            name: 'password',
+            type: 'password',
+            label: t('auth.password'),
+            placeholder: t('auth.password_placeholder'),
+            required: true,
+        },
+        {
+            name: 'password_confirmation',
+            type: 'password',
+            label: t('auth.password_confirmation'),
+            placeholder: t('auth.password_confirmation_placeholder'),
+            required: true,
+        },
+    ]);
+
+    /** Normalize `$fetch` / ofetch error shapes (body on `data` or `response._data`). */
+    function messageFromAuthCatch(err: unknown): string | null {
+        if (!err || typeof err !== 'object') return null;
+        const o = err as Record<string, unknown>;
+        const fromData = (payload: unknown): string | null => {
+            if (!payload || typeof payload !== 'object') return null;
+            const p = payload as {
+                message?: string | null;
+                errors?: Record<string, unknown> | null;
+                error?: {
+                    code?: string;
+                    message?: string;
+                    details?: Record<string, unknown> | null;
+                } | null;
+            };
+            // Prefer first validation detail if present (especially for VALIDATION_ERROR).
+            const details = p.error?.details;
+            if (details && typeof details === 'object') {
+                const first = Object.values(details)[0];
+                if (typeof first === 'string' && first) return first;
+                if (Array.isArray(first) && typeof first[0] === 'string') return first[0];
             }
+            const errors = p.errors;
+            if (errors && typeof errors === 'object') {
+                const first = Object.values(errors)[0];
+                if (typeof first === 'string' && first) return first;
+                if (Array.isArray(first) && typeof first[0] === 'string') return first[0];
+            }
+
+            if (typeof p.error?.message === 'string' && p.error.message) return p.error.message;
+            if (typeof p.message === 'string' && p.message) return p.message;
+            return null;
+        };
+
+        const direct = fromData(o.data);
+        if (direct) return direct;
+        const res = o.response;
+        if (res && typeof res === 'object' && '_data' in res) {
+            return fromData((res as { _data?: unknown })._data);
         }
-        if (formErrors.length) {
-            return formErrors[0];
-        }
-        return t('auth.validation_failed');
+        if (typeof o.message === 'string' && o.message) return o.message;
+        return null;
     }
 
-    function goBack() {
-        stepError.value = null;
-        submitError.value = null;
-        if (wizard.value.step > 0) {
-            wizard.value.step -= 1;
-        }
-    }
-
-    function validateCurrentStep(): boolean {
-        stepError.value = null;
-        const w = wizard.value;
-        if (w.step === 0) {
-            const r = registerWizardAccountSchema.safeParse({ accountType: w.accountType });
-            if (!r.success) {
-                stepError.value = firstZodMessage(r.error);
-                return false;
-            }
-        } else if (w.step === 1) {
-            const r = registerWizardPersonalSchema.safeParse({ name: w.name, email: w.email });
-            if (!r.success) {
-                stepError.value = firstZodMessage(r.error);
-                return false;
-            }
-        } else if (w.step === 2) {
-            const r = registerWizardCredentialsSchema.safeParse({
-                phone: credentialsState.phone,
-                password: credentialsState.password,
-                password_confirmation: credentialsState.password_confirmation,
-            });
-            if (!r.success) {
-                stepError.value = firstZodMessage(r.error);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function goNext() {
-        if (!validateCurrentStep()) return;
-        if (wizard.value.step === 1) {
-            credentialsState.phone = wizard.value.phone || '';
-            credentialsState.password = '';
-            credentialsState.password_confirmation = '';
-        }
-        wizard.value.step += 1;
-    }
-
-    async function submitRegistration() {
-        wizard.value.phone = credentialsState.phone;
-        wizard.value.password = credentialsState.password;
-        wizard.value.password_confirmation = credentialsState.password_confirmation;
-        if (!validateCurrentStep()) return;
+    async function onSubmit(
+        event: FormSubmitEvent<RegisterFormValues & { account_type?: string }>
+    ) {
         loading.value = true;
         submitError.value = null;
+        accountTypeError.value = null;
+        resendSuccess.value = false;
+        resendError.value = null;
         try {
-            const w = wizard.value;
+            if (!accountType.value) {
+                accountTypeError.value = t('auth.account_type');
+                return;
+            }
             await register(
                 {
-                    name: w.name,
-                    email: w.email,
-                    password: w.password,
-                    password_confirmation: w.password_confirmation,
-                    phone: w.phone || undefined,
+                    name: event.data.name,
+                    email: event.data.email,
+                    password: event.data.password,
+                    password_confirmation: event.data.password_confirmation,
+                    phone: event.data.phone || undefined,
                 },
                 { skipPostRegisterNavigation: true }
             );
-            wizard.value.step = 3;
+
+            submittedEmail.value = event.data.email;
+            success.value = true;
         } catch (e: unknown) {
-            const err = e as { data?: { error?: { message?: string } } };
-            submitError.value = err?.data?.error?.message || t('auth.unexpected_error');
+            submitError.value = messageFromAuthCatch(e) || t('auth.unexpected_error');
         } finally {
             loading.value = false;
         }
     }
 
-    async function resendFromWizard() {
+    async function resendVerification() {
         if (cooldown.value > 0) return;
         resendLoading.value = true;
         resendError.value = null;
@@ -181,181 +231,31 @@
     }
 
     onUnmounted(() => {
-        if (cooldownTimer) {
-            clearInterval(cooldownTimer);
-        }
+        if (cooldownTimer) clearInterval(cooldownTimer);
     });
-
-    type CredentialsForm = {
-        phone: string;
-        password: string;
-        password_confirmation: string;
-    };
-
-    const credentialsState = reactive<CredentialsForm>({
-        phone: '',
-        password: '',
-        password_confirmation: '',
-    });
-
-    onMounted(() => {
-        if (wizard.value.step === 2) {
-            credentialsState.phone = wizard.value.phone || '';
-            credentialsState.password = wizard.value.password || '';
-            credentialsState.password_confirmation = wizard.value.password_confirmation || '';
-        }
-    });
-
-    async function onCredentialsSubmit(_event: NuxtUiFormSubmitEvent<CredentialsForm>) {
-        await submitRegistration();
-    }
 </script>
 
 <template>
-    <AuthCard :title="$t('auth.register')" :description="stepHeadline">
-        <p class="mb-4 text-center text-sm text-[#666666]" data-testid="register-step-indicator">
-            {{ $t('auth.register_step_of', { current: wizard.step + 1, total: totalSteps }) }}
-        </p>
-
-        <div class="mb-6 flex justify-center gap-2" role="list" aria-label="Registration progress">
-            <span
-                v-for="i in totalSteps"
-                :key="i"
-                class="h-2 w-8 rounded-full transition-colors"
-                :class="i - 1 <= wizard.step ? 'bg-[#0072f5]' : 'bg-[#e5e5e5] dark:bg-neutral-700'"
-                :data-active="i - 1 === wizard.step"
-                :data-testid="'register-step-dot-' + (i - 1)"
-            />
-        </div>
-
-        <UAlert
-            v-if="bannerError"
-            color="red"
-            variant="subtle"
-            role="alert"
-            :title="bannerError"
-            class="mb-4"
-            @close="
-                stepError = null;
-                submitError = null;
-            "
-        />
-
-        <!-- Step 1: account type -->
-        <div v-if="wizard.step === 0" class="space-y-4">
-            <RoleSelector v-model="wizard.accountType" />
-            <div class="flex justify-end gap-2">
-                <UButton color="primary" data-testid="register-next" @click="goNext">
-                    {{ $t('auth.register_next') }}
-                </UButton>
-            </div>
-        </div>
-
-        <!-- Step 2: personal -->
-        <div v-else-if="wizard.step === 1" class="space-y-4">
-            <UFormGroup :label="$t('auth.name')" name="name">
-                <UInput
-                    v-model="wizard.name"
-                    :placeholder="$t('auth.name_placeholder')"
-                    icon="i-heroicons-user"
-                    size="lg"
-                />
-            </UFormGroup>
-            <UFormGroup :label="$t('auth.email')" name="email">
-                <UInput
-                    v-model="wizard.email"
-                    type="email"
-                    :placeholder="$t('auth.email_placeholder')"
-                    icon="i-heroicons-envelope"
-                    size="lg"
-                />
-            </UFormGroup>
-            <div class="flex justify-between gap-2">
-                <UButton color="gray" variant="ghost" @click="goBack">
-                    {{ $t('auth.register_back') }}
-                </UButton>
-                <UButton color="primary" data-testid="register-next" @click="goNext">
-                    {{ $t('auth.register_next') }}
-                </UButton>
-            </div>
-        </div>
-
-        <!-- Step 3: contact + password -->
-        <div v-else-if="wizard.step === 2">
-            <UForm
-                :schema="registerWizardCredentialsSchema"
-                :state="credentialsState"
-                class="space-y-4"
-                @submit="onCredentialsSubmit"
-            >
-                <UFormGroup :label="$t('auth.phone')" name="phone">
-                    <UInput
-                        v-model="credentialsState.phone"
-                        type="tel"
-                        :placeholder="$t('auth.phone_placeholder')"
-                        icon="i-heroicons-phone"
-                        size="lg"
-                    />
-                </UFormGroup>
-
-                <UFormGroup :label="$t('auth.password')" name="password">
-                    <UInput
-                        v-model="credentialsState.password"
-                        type="password"
-                        :placeholder="$t('auth.password_placeholder')"
-                        icon="i-heroicons-lock-closed"
-                        size="lg"
-                    />
-                </UFormGroup>
-
-                <PasswordStrength :password="credentialsState.password || ''" />
-
-                <UFormGroup :label="$t('auth.password_confirmation')" name="password_confirmation">
-                    <UInput
-                        v-model="credentialsState.password_confirmation"
-                        type="password"
-                        :placeholder="$t('auth.password_confirmation_placeholder')"
-                        icon="i-heroicons-lock-closed"
-                        size="lg"
-                    />
-                </UFormGroup>
-
-                <div class="flex justify-between gap-2 pt-2">
-                    <UButton type="button" color="gray" variant="ghost" @click="goBack">
-                        {{ $t('auth.register_back') }}
-                    </UButton>
-                    <UButton
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                        data-testid="register-submit"
-                    >
-                        {{ $t('auth.register_submit') }}
-                    </UButton>
-                </div>
-            </UForm>
-        </div>
-
-        <!-- Step 4: pending verification -->
-        <div v-else class="space-y-4 text-center" data-testid="register-step-done">
+    <AuthCard :title="$t('auth.register')" :description="$t('auth.role_customer_description')">
+        <div v-if="success" class="space-y-4 text-center" data-testid="register-step-done">
             <div class="flex justify-center">
                 <UIcon name="i-heroicons-envelope" class="h-12 w-12 text-[#0072f5]" />
             </div>
             <p class="text-sm text-[#666666]">
                 {{ $t('auth.register_check_email_hint') }}
-                <span class="font-medium text-[#171717] dark:text-white">{{ wizard.email }}</span>
+                <span class="font-medium text-[#171717] dark:text-white">{{ submittedEmail }}</span>
             </p>
 
             <UAlert
                 v-if="resendSuccess"
-                color="green"
+                color="success"
                 variant="subtle"
                 :title="$t('auth.verification_sent')"
                 class="text-start"
             />
             <UAlert
                 v-if="resendError"
-                color="red"
+                color="error"
                 variant="subtle"
                 role="alert"
                 :title="resendError"
@@ -368,7 +268,7 @@
                 size="lg"
                 :loading="resendLoading"
                 :disabled="cooldown > 0"
-                @click="resendFromWizard"
+                @click="resendVerification"
             >
                 <template v-if="cooldown > 0">
                     {{ $t('auth.resend_in', { seconds: cooldown }) }}
@@ -392,16 +292,84 @@
             </div>
         </div>
 
-        <div v-if="wizard.step < 3" class="mt-6 text-center text-sm text-[#666666]">
-            <p>
-                {{ $t('auth.has_account') }}
-                <NuxtLink
-                    :to="localePath('/auth/login')"
-                    class="font-medium text-[#171717] hover:underline dark:text-white"
-                >
-                    {{ $t('auth.login') }}
-                </NuxtLink>
-            </p>
-        </div>
+        <UAuthForm
+            v-else
+            ref="authForm"
+            :schema="schema"
+            :fields="fields"
+            :submit="{
+                label: $t('auth.register_submit'),
+                block: true,
+                size: 'lg',
+                loading,
+                disabled: !canSubmit,
+            }"
+            :ui="{ root: 'space-y-4' }"
+            @submit="onSubmit"
+        >
+            <template #validation>
+                <UAlert
+                    v-if="accountTypeError"
+                    color="error"
+                    variant="subtle"
+                    role="alert"
+                    :title="$t('auth.validation_failed')"
+                    :description="$t('auth.account_type')"
+                    class="mb-2"
+                    @close="accountTypeError = null"
+                />
+                <UAlert
+                    v-if="submitError"
+                    color="error"
+                    variant="subtle"
+                    role="alert"
+                    :title="submitError"
+                    class="mb-2"
+                    @close="submitError = null"
+                />
+            </template>
+
+            <template #header>
+                <RoleSelector v-model="accountType" />
+            </template>
+
+            <template #password-help>
+                <div class="mt-2 space-y-2">
+                    <p class="text-xs text-[#666666]">
+                        {{ $t('auth.password_rules.title') }}
+                    </p>
+                    <ul class="space-y-1">
+                        <li
+                            v-for="item in passwordCheckItems"
+                            :key="item.key"
+                            class="flex items-center gap-2 text-xs"
+                            :class="item.ok ? 'text-[#16a34a]' : 'text-[#808080]'"
+                        >
+                            <UIcon
+                                :name="
+                                    item.ok ? 'i-heroicons-check-circle' : 'i-heroicons-x-circle'
+                                "
+                                class="h-4 w-4"
+                            />
+                            <span>{{ item.label }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </template>
+
+            <template #footer>
+                <div class="text-center text-sm text-[#666666]">
+                    <p>
+                        {{ $t('auth.has_account') }}
+                        <NuxtLink
+                            :to="localePath('/auth/login')"
+                            class="font-medium text-[#171717] hover:underline dark:text-white"
+                        >
+                            {{ $t('auth.login') }}
+                        </NuxtLink>
+                    </p>
+                </div>
+            </template>
+        </UAuthForm>
     </AuthCard>
 </template>

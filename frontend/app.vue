@@ -11,16 +11,20 @@
     useHead({
         htmlAttrs: {
             dir: direction,
-            lang: computed(() => (direction.value === 'rtl' ? 'ar' : locale.value)),
+            lang: computed(() => locale.value),
         },
     });
 </script>
 
 <template>
-    <AppToastProvider />
-    <AppErrorBoundary>
-        <NuxtLayout>
-            <NuxtPage />
-        </NuxtLayout>
-    </AppErrorBoundary>
+    <UApp
+        :dir="direction"
+        :locale="{ code: locale, name: locale, dir: direction, messages: {} as any }"
+    >
+        <AppErrorBoundary>
+            <NuxtLayout>
+                <NuxtPage />
+            </NuxtLayout>
+        </AppErrorBoundary>
+    </UApp>
 </template>

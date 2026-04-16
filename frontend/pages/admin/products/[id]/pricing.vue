@@ -58,7 +58,7 @@
                 });
             }
         } catch {
-            toast.add({ title: 'خطأ', description: 'تعذر تحميل التسعير', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'تعذر تحميل التسعير', color: 'error' });
             tiers.value = [];
         } finally {
             isLoading.value = false;
@@ -73,10 +73,10 @@
                 method: 'PUT',
                 body: { tiers: normalizeTiersForApi(tiers.value) },
             });
-            toast.add({ title: 'تم', description: 'تم حفظ شرائح السعر', color: 'green' });
+            toast.add({ title: 'تم', description: 'تم حفظ شرائح السعر', color: 'success' });
             await load();
         } catch {
-            toast.add({ title: 'خطأ', description: 'تعذر حفظ التسعير', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'تعذر حفظ التسعير', color: 'error' });
         } finally {
             isSaving.value = false;
         }
@@ -140,7 +140,9 @@
                                 <td class="py-2 pe-4">
                                     <UInput
                                         :model-value="
-                                            row.max_quantity === null ? '' : row.max_quantity
+                                            row.max_quantity === null
+                                                ? ''
+                                                : String(row.max_quantity)
                                         "
                                         type="number"
                                         min="1"
@@ -148,8 +150,11 @@
                                         :placeholder="$t('catalog.tier_max_open')"
                                         @update:model-value="
                                             (v) => {
+                                                const raw = typeof v === 'number' ? String(v) : v;
                                                 row.max_quantity =
-                                                    v === '' || v === undefined ? null : Number(v);
+                                                    raw === '' || raw === undefined
+                                                        ? null
+                                                        : Number(raw);
                                             }
                                         "
                                     />
@@ -159,14 +164,21 @@
                                 </td>
                                 <td class="py-2 pe-4">
                                     <UInput
-                                        :model-value="row.product_variant_id ?? ''"
+                                        :model-value="
+                                            row.product_variant_id === null
+                                                ? ''
+                                                : String(row.product_variant_id)
+                                        "
                                         type="number"
                                         size="sm"
                                         :placeholder="$t('catalog.tier_variant_null')"
                                         @update:model-value="
                                             (v) => {
+                                                const raw = typeof v === 'number' ? String(v) : v;
                                                 row.product_variant_id =
-                                                    v === '' || v === undefined ? null : Number(v);
+                                                    raw === '' || raw === undefined
+                                                        ? null
+                                                        : Number(raw);
                                             }
                                         "
                                     />
@@ -176,7 +188,7 @@
                     </table>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <UButton color="gray" variant="soft" @click="addRow">
+                    <UButton color="neutral" variant="soft" @click="addRow">
                         {{ $t('catalog.tier_add') }}
                     </UButton>
                     <UButton :loading="isSaving" @click="save">

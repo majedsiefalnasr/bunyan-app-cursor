@@ -67,7 +67,7 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-3xl space-y-6">
+    <div class="mx-auto max-w-5xl space-y-6">
         <div>
             <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('nav.dashboard') }}
@@ -77,25 +77,54 @@
             </p>
         </div>
 
-        <div v-if="loading" class="text-sm text-[#666666]">
-            {{ $t('dashboard.loading') }}
+        <div v-if="loading" class="space-y-4">
+            <UPageGrid class="gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-3">
+                <UCard
+                    v-for="i in 6"
+                    :key="i"
+                    class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
+                >
+                    <div class="space-y-3">
+                        <USkeleton class="h-3 w-24" />
+                        <USkeleton class="h-8 w-20" />
+                    </div>
+                </UCard>
+            </UPageGrid>
+
+            <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                <div class="space-y-3">
+                    <USkeleton class="h-5 w-40" />
+                    <div class="space-y-3">
+                        <div v-for="i in 5" :key="i" class="space-y-2">
+                            <USkeleton class="h-4 w-3/4" />
+                            <USkeleton class="h-3 w-32" />
+                        </div>
+                    </div>
+                </div>
+            </UCard>
         </div>
 
         <template v-else>
-            <div v-if="kpiEntries.length" class="grid gap-3 sm:grid-cols-2">
-                <UCard
+            <UPageGrid
+                v-if="kpiEntries.length"
+                class="gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-3"
+            >
+                <UPageCard
                     v-for="row in kpiEntries"
                     :key="row.key"
-                    class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
+                    variant="subtle"
+                    :title="row.label"
+                    :ui="{
+                        container: 'gap-y-1.5',
+                        title: 'font-normal text-[#666666] text-xs uppercase',
+                    }"
+                    class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
                 >
-                    <p class="text-xs font-medium text-[#666666]">{{ row.label }}</p>
-                    <p
-                        class="mt-1 text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                    >
+                    <p class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                         {{ row.value }}
                     </p>
-                </UCard>
-            </div>
+                </UPageCard>
+            </UPageGrid>
 
             <UCard v-if="activityRows.length" class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
                 <template #header>

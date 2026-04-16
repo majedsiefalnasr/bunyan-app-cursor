@@ -57,8 +57,8 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-5xl space-y-6">
-        <UButton :to="localePath('/projects')" variant="soft" color="gray">
+    <div class="space-y-6">
+        <UButton :to="localePath('/projects')" variant="soft" color="gray" size="sm">
             {{ $t('projects.back_to_list') }}
         </UButton>
 
@@ -75,10 +75,7 @@
 
         <template v-else>
             <div class="space-y-2">
-                <h1
-                    class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                    style="letter-spacing: -0.06em"
-                >
+                <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                     {{ project.name }}
                 </h1>
                 <p class="text-sm text-[#4d4d4d]">
@@ -98,7 +95,8 @@
                     v-for="item in navItems"
                     :key="item.to"
                     :to="item.to"
-                    size="sm"
+                    size="xs"
+                    class="rounded-full"
                     :variant="isNavActive(item.to) ? 'solid' : 'soft'"
                     :color="isNavActive(item.to) ? 'primary' : 'gray'"
                 >

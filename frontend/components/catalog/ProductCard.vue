@@ -32,7 +32,7 @@
             },
             1
         );
-        toast.add({ title: t('catalog.added_to_cart'), color: 'green' });
+        toast.add({ title: t('catalog.added_to_cart'), color: 'success' });
     }
 
     const thumbnailUrl = computed(() => {

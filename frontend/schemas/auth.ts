@@ -11,7 +11,12 @@ export const registerSchema = z
     .object({
         name: z.string().min(1, 'الاسم مطلوب').max(255),
         email: z.string().email('البريد الإلكتروني غير صحيح'),
-        password: z.string().min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'),
+        password: z
+            .string()
+            .min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل')
+            .refine((v) => /[a-z]/.test(v), 'كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل')
+            .refine((v) => /[A-Z]/.test(v), 'كلمة المرور لا تطابق المتطلبات')
+            .refine((v) => /[0-9]/.test(v), 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل'),
         password_confirmation: z.string().min(8, 'تأكيد كلمة المرور مطلوب'),
         phone: z.string().max(20).optional().or(z.literal('')),
     })

@@ -104,7 +104,7 @@
         >
             <div class="flex items-center justify-between gap-2">
                 <span class="font-medium tracking-tight text-[#171717]">{{ row.name_ar }}</span>
-                <UBadge v-if="!row.is_active" color="gray" variant="subtle">غير نشط</UBadge>
+                <UBadge v-if="!row.is_active" color="neutral" variant="subtle">غير نشط</UBadge>
             </div>
         </li>
     </ul>

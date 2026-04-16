@@ -53,7 +53,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
         toast.add({
             title: 'غير مصرح',
             description: 'ليس لديك الصلاحية للوصول لهذه الصفحة',
-            color: 'red',
+            color: 'error',
             icon: 'i-heroicons-exclamation-triangle',
         });
 

@@ -46,10 +46,10 @@
             </p>
             <p v-else class="mb-4 text-sm text-[#4d4d4d]">يرجى المحاولة مرة أخرى.</p>
             <div class="flex flex-col gap-2">
-                <UButton color="black" block @click="resetError">
+                <UButton color="primary" block @click="resetError">
                     {{ $t('errors.back') }}
                 </UButton>
-                <UButton color="white" variant="outline" block @click="reloadNuxtApp()">
+                <UButton color="neutral" variant="outline" block @click="reloadNuxtApp()">
                     {{ $t('errors.refresh') }}
                 </UButton>
             </div>

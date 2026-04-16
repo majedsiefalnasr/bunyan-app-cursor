@@ -32,6 +32,7 @@
     const isLoading = ref(true);
     const loadError = ref<string | null>(null);
     const categoryTree = ref<CategoryNode[]>([]);
+    const isCategoriesLoading = ref(true);
 
     const categoryOptions = computed(() => {
         const out: { id: number; name_ar: string }[] = [];
@@ -48,11 +49,14 @@
     });
 
     async function loadCategories() {
+        isCategoriesLoading.value = true;
         try {
             const res = await apiFetch<{ data: CategoryNode[] }>('/v1/categories');
             categoryTree.value = res.data ?? [];
         } catch {
             categoryTree.value = [];
+        } finally {
+            isCategoriesLoading.value = false;
         }
     }
 
@@ -100,12 +104,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-6xl space-y-6">
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('catalog.list_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">
@@ -118,6 +119,7 @@
                 <ProductFilterSidebar
                     v-model="filters"
                     :category-options="categoryOptions"
+                    :is-categories-loading="isCategoriesLoading"
                     @apply="onFilterApply"
                 />
             </aside>
@@ -140,8 +142,23 @@
                     </UButton>
                 </div>
 
-                <div v-if="isLoading" class="text-sm text-[#666666]">
-                    {{ $t('shell.loading') }}
+                <div v-if="isLoading" class="space-y-4">
+                    <div class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        <UCard
+                            v-for="i in 9"
+                            :key="i"
+                            class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
+                        >
+                            <div class="space-y-3">
+                                <USkeleton class="h-40 w-full rounded-lg" />
+                                <div class="space-y-2">
+                                    <USkeleton class="h-4 w-3/4" />
+                                    <USkeleton class="h-4 w-1/2" />
+                                </div>
+                                <USkeleton class="h-8 w-28 rounded-md" />
+                            </div>
+                        </UCard>
+                    </div>
                 </div>
 
                 <UAlert
@@ -156,7 +173,7 @@
                     {{ $t('catalog.empty') }}
                 </p>
 
-                <div v-else class="grid gap-4 sm:grid-cols-2">
+                <div v-else class="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     <CatalogProductCard v-for="p in products" :key="p.id" :product="p" />
                 </div>
 

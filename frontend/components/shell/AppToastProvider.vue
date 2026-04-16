@@ -1,3 +1,0 @@
-<template>
-    <UNotifications />
-</template>

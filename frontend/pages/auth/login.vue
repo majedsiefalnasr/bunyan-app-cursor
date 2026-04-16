@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { NuxtUiFormSubmitEvent } from '~/types/nuxt-ui-form';
+    import type { FormSubmitEvent } from '@nuxt/ui';
     import { loginSchema } from '~/schemas/auth';
     import type { LoginFormValues } from '~/schemas/auth';
 
@@ -14,15 +14,8 @@
 
     const schema = loginSchema;
 
-    const state = reactive<LoginFormValues>({
-        email: '',
-        password: '',
-    });
-
     const loading = ref(false);
     const error = ref<string | null>(null);
-    const showPassword = ref(false);
-    const rememberMe = ref(false);
 
     /** Normalize `$fetch` / ofetch error shapes (body on `data` or `response._data`). */
     function messageFromAuthCatch(err: unknown): string | null {
@@ -30,13 +23,42 @@
         const o = err as Record<string, unknown>;
         const fromData = (payload: unknown): string | null => {
             if (!payload || typeof payload !== 'object') return null;
-            const p = payload as { error?: { code?: string; message?: string } };
+            const p = payload as {
+                message?: string | null;
+                errors?: Record<string, unknown> | null;
+                error?: {
+                    code?: string;
+                    message?: string;
+                    details?: Record<string, unknown> | null;
+                } | null;
+            };
             const code = p.error?.code;
             if (code) {
                 const key = `errors.codes.${code}.message`;
                 if (te(key)) return t(key);
             }
-            return p.error?.message ?? null;
+            if (typeof p.error?.message === 'string' && p.error.message) {
+                return p.error.message;
+            }
+            if (typeof p.message === 'string' && p.message) {
+                return p.message;
+            }
+            // Validation: show first detail if present.
+            const details = p.error?.details;
+            if (details && typeof details === 'object') {
+                const first = Object.values(details)[0];
+                if (Array.isArray(first) && typeof first[0] === 'string') {
+                    return first[0];
+                }
+            }
+            const errors = p.errors;
+            if (errors && typeof errors === 'object') {
+                const first = Object.values(errors)[0];
+                if (Array.isArray(first) && typeof first[0] === 'string') {
+                    return first[0];
+                }
+            }
+            return null;
         };
         const direct = fromData(o.data);
         if (direct) return direct;
@@ -48,16 +70,13 @@
         return null;
     }
 
-    async function onSubmit(event: NuxtUiFormSubmitEvent<LoginFormValues>) {
+    async function onSubmit(event: FormSubmitEvent<LoginFormValues & { remember?: boolean }>) {
         loading.value = true;
         error.value = null;
 
         try {
-            const payload = event.data ?? {
-                email: state.email,
-                password: state.password,
-            };
-            await authStore.login(payload);
+            const { email, password } = event.data;
+            await authStore.login({ email, password });
             const redirectRaw = route.query.redirect;
             const redirect =
                 typeof redirectRaw === 'string' && redirectRaw.startsWith('/') ? redirectRaw : null;
@@ -72,70 +91,62 @@
 
 <template>
     <AuthCard :title="$t('auth.login')">
-        <div v-if="error" role="alert" data-testid="auth-error-alert" class="mb-4">
-            <UAlert color="red" variant="subtle" :title="error" @close="error = null" />
-        </div>
-
-        <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormGroup :label="$t('auth.email')" name="email">
-                <UInput
-                    v-model="state.email"
-                    type="email"
-                    :placeholder="$t('auth.email_placeholder')"
-                    icon="i-heroicons-envelope"
-                    size="lg"
-                />
-            </UFormGroup>
-
-            <UFormGroup :label="$t('auth.password')" name="password">
-                <div class="flex items-stretch gap-2">
-                    <UInput
-                        v-model="state.password"
-                        :type="showPassword ? 'text' : 'password'"
-                        :placeholder="$t('auth.password_placeholder')"
-                        icon="i-heroicons-lock-closed"
-                        size="lg"
-                        class="min-w-0 flex-1"
-                    />
-                    <UButton
-                        color="gray"
-                        variant="outline"
-                        type="button"
-                        size="lg"
-                        :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                        :aria-label="
-                            showPassword ? $t('auth.hide_password') : $t('auth.show_password')
-                        "
-                        @click="showPassword = !showPassword"
-                    />
+        <UAuthForm
+            :schema="schema"
+            :fields="[
+                {
+                    name: 'email',
+                    type: 'email',
+                    label: $t('auth.email'),
+                    placeholder: $t('auth.email_placeholder'),
+                    required: true,
+                },
+                {
+                    name: 'password',
+                    type: 'password',
+                    label: $t('auth.password'),
+                    placeholder: $t('auth.password_placeholder'),
+                    required: true,
+                },
+                {
+                    name: 'remember',
+                    type: 'checkbox',
+                    label: $t('auth.remember_me'),
+                },
+            ]"
+            :submit="{ label: $t('auth.login'), block: true, size: 'lg', loading }"
+            :ui="{ root: 'space-y-4' }"
+            @submit="onSubmit"
+        >
+            <template #validation>
+                <div v-if="error" role="alert" data-testid="auth-error-alert" class="mb-2">
+                    <UAlert color="error" variant="subtle" :title="error" @close="error = null" />
                 </div>
-            </UFormGroup>
+            </template>
 
-            <div class="flex items-center justify-between gap-3">
-                <UCheckbox v-model="rememberMe" :label="$t('auth.remember_me')" />
+            <template #password-hint>
                 <NuxtLink
                     :to="localePath('/auth/forgot-password')"
                     class="text-sm text-[#0072f5] hover:underline"
+                    tabindex="-1"
                 >
                     {{ $t('auth.forgot_password') }}
                 </NuxtLink>
-            </div>
+            </template>
 
-            <UButton type="submit" block size="lg" :loading="loading">
-                {{ $t('auth.login') }}
-            </UButton>
-        </UForm>
-
-        <div class="mt-6 text-center text-sm text-[#666666]">
-            <p>
-                {{ $t('auth.no_account') }}
-                <NuxtLink
-                    :to="localePath('/auth/register')"
-                    class="font-medium text-[#171717] hover:underline dark:text-white"
-                >
-                    {{ $t('auth.register') }}
-                </NuxtLink>
-            </p>
-        </div>
+            <template #footer>
+                <div class="text-center text-sm text-[#666666]">
+                    <p>
+                        {{ $t('auth.no_account') }}
+                        <NuxtLink
+                            :to="localePath('/auth/register')"
+                            class="font-medium text-[#171717] hover:underline dark:text-white"
+                        >
+                            {{ $t('auth.register') }}
+                        </NuxtLink>
+                    </p>
+                </div>
+            </template>
+        </UAuthForm>
     </AuthCard>
 </template>

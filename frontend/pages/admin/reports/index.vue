@@ -45,12 +45,12 @@
             const res = await apiFetch<{ success: boolean; data: { types: ReportTypeMeta[] } }>(
                 '/v1/admin/analytics/reports/types'
             );
-            types.value = res.data.types;
+            types.value = res.data?.types ?? [];
             if (types.value.length > 0) {
                 selectedType.value = types.value[0].type;
             }
         } catch {
-            toast.add({ title: t('analyticsReports.load_types_error'), color: 'red' });
+            toast.add({ title: t('analyticsReports.load_types_error'), color: 'error' });
         } finally {
             isLoadingTypes.value = false;
         }
@@ -92,7 +92,7 @@
             summary.value = res.data.summary;
             rows.value = res.data.rows;
         } catch {
-            toast.add({ title: t('analyticsReports.load_report_error'), color: 'red' });
+            toast.add({ title: t('analyticsReports.load_report_error'), color: 'error' });
         } finally {
             isLoadingReport.value = false;
         }
@@ -125,7 +125,7 @@
                 },
             });
             if (!res.ok) {
-                toast.add({ title: t('analyticsReports.export_error'), color: 'red' });
+                toast.add({ title: t('analyticsReports.export_error'), color: 'error' });
 
                 return;
             }
@@ -138,7 +138,7 @@
             a.click();
             URL.revokeObjectURL(href);
         } catch {
-            toast.add({ title: t('analyticsReports.export_error'), color: 'red' });
+            toast.add({ title: t('analyticsReports.export_error'), color: 'error' });
         } finally {
             isExporting.value = false;
         }
@@ -185,7 +185,7 @@
                 }}</UButton>
                 <UButton
                     variant="outline"
-                    color="gray"
+                    color="neutral"
                     :loading="isExporting"
                     @click="exportReport('pdf')"
                 >
@@ -193,7 +193,7 @@
                 </UButton>
                 <UButton
                     variant="outline"
-                    color="gray"
+                    color="neutral"
                     :loading="isExporting"
                     @click="exportReport('xlsx')"
                 >
@@ -218,7 +218,7 @@
         </UCard>
 
         <UCard>
-            <UTable :rows="rows" :columns="columns" :loading="isLoadingReport" />
+            <UTable :rows="rows as any" :columns="columns as any" :loading="isLoadingReport" />
             <p v-if="!isLoadingReport && rows.length === 0" class="text-slate-400 mt-2 text-sm">
                 {{ t('analyticsReports.empty_rows') }}
             </p>

@@ -56,7 +56,7 @@ export default defineEventHandler((event) => {
         };
     }
 
-    const key = m[1];
+    const key = m[1] ?? '';
     if (isE2ERole(key)) {
         return {
             success: true,

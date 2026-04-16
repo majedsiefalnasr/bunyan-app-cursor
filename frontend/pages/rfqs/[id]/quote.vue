@@ -85,12 +85,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-4xl space-y-6">
+    <div class="space-y-6">
         <div class="space-y-1">
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('rfq.quote_heading') }}
             </h1>
             <p class="text-sm text-[#4d4d4d] dark:text-white/70">
@@ -173,10 +170,10 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2">
-                    <UButton :loading="isSubmitting" @click="onSubmit">
+                    <UButton :loading="isSubmitting" size="sm" @click="onSubmit">
                         {{ $t('rfq.submit_quote') }}
                     </UButton>
-                    <UButton color="gray" variant="soft" to="/rfqs">
+                    <UButton color="gray" variant="soft" size="sm" to="/rfqs">
                         {{ $t('rfq.back_list') }}
                     </UButton>
                 </div>

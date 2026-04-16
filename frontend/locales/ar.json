@@ -79,6 +79,13 @@
         }
     },
     "shell": {
+        "search": "بحث",
+        "support": "الدعم",
+        "feedback": "ملاحظات",
+        "teams": {
+            "platform": "منصة بنيان",
+            "marketplace": "المتجر"
+        },
         "direction": {
             "rtl": "عربي (يمين لشمال)",
             "ltr": "إنجليزي (يسار لشمال)"
@@ -94,6 +101,8 @@
         },
         "user": {
             "profile": "الملف الشخصي",
+            "guest": "زائر",
+            "appearance": "المظهر",
             "logout": "تسجيل الخروج"
         },
         "loading": "جاري التحميل...",
@@ -123,6 +132,9 @@
         "saved": "تم حفظ التفضيلات"
     },
     "reports": {
+        "hub_title": "التقارير",
+        "hub_subtitle": "اختر مشروعًا لعرض تقاريره وإدارة المرفقات.",
+        "open_project_reports": "عرض التقارير",
         "title": "تقارير المشروع",
         "empty": "لا توجد تقارير بعد.",
         "load_error": "تعذر تحميل التقارير",
@@ -193,7 +205,13 @@
         "register_go_verify_page": "صفحة التحقق من البريد",
         "validation_failed": "تعذر التحقق من البيانات",
         "unexpected_error": "حدث خطأ غير متوقع",
-        "otp_label": "رمز التحقق"
+        "otp_label": "رمز التحقق",
+        "password_rules": {
+            "title": "يجب أن تحتوي كلمة المرور على:",
+            "min_length": "٨ أحرف على الأقل",
+            "upper_lower": "حرف كبير وحرف صغير",
+            "number": "رقم واحد على الأقل"
+        }
     },
     "profile": {
         "title": "الملف الشخصي",
@@ -318,6 +336,10 @@
         "not_found": "التصنيف غير موجود."
     },
     "search": {
+        "palette_title": "بحث سريع",
+        "palette_placeholder": "ابحث عن منتج…",
+        "palette_hint": "اكتب عبارة البحث ثم اضغط Enter، أو اختر اختصارًا سريعًا.",
+        "palette_open_full": "فتح صفحة البحث",
         "page_title": "نتائج البحث",
         "page_subtitle": "تصفح المنتجات المطابقة لعبارة البحث."
     },

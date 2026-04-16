@@ -22,7 +22,7 @@
 
         <!-- Mobile hamburger -->
         <UButton
-            color="gray"
+            color="neutral"
             variant="ghost"
             icon="i-heroicons-bars-3"
             :aria-label="$t('shell.sidebar.toggle')"
@@ -49,7 +49,7 @@
 
             <!-- Dark mode toggle -->
             <UButton
-                color="gray"
+                color="neutral"
                 variant="ghost"
                 :icon="themeIcon"
                 :aria-label="$t(themeLabel)"
@@ -57,9 +57,6 @@
                 data-testid="theme-toggle"
                 @click="toggleColorMode"
             />
-
-            <!-- Language switcher -->
-            <LanguageSwitcher />
 
             <NotificationBell v-if="authStore.isAuthenticated" />
 

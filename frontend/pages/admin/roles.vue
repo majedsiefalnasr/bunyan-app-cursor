@@ -39,7 +39,7 @@
             toast.add({
                 title: t('errors.codes.SERVER_ERROR.message'),
                 description: t('admin.roles.load_error'),
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoadingRoles.value = false;
@@ -58,7 +58,7 @@
             toast.add({
                 title: t('errors.codes.SERVER_ERROR.message'),
                 description: t('admin.roles.permissions_load_error'),
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoadingPermissions.value = false;

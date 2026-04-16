@@ -29,12 +29,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-5xl space-y-6">
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('categories.list_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">

@@ -11,7 +11,13 @@ export function useApi() {
     const auth = useAuthStore();
     const errorStore = useErrorStore();
     const { showErrorNotification } = useErrorNotification();
-    const localePath = useLocalePath();
+    // `useLocalePath()` (nuxt-i18n) must be called within component `setup()`. This composable is
+    // also used from stores, so we use the Nuxt-injected helper instead.
+    const nuxtApp = useNuxtApp() as unknown;
+    const localePath: (path: string) => string = (() => {
+        const candidate = (nuxtApp as { $localePath?: unknown }).$localePath;
+        return typeof candidate === 'function' ? (candidate as (path: string) => string) : (p) => p;
+    })();
 
     const rawBaseUrl = (config.public.apiBaseUrl || '').toString().replace(/\/$/, '');
     const baseURL = rawBaseUrl
@@ -22,16 +28,24 @@ export function useApi() {
 
     const apiFetch = $fetch.create({
         baseURL,
-        headers: {
-            Accept: 'application/json',
-            'Accept-Language': 'ar',
-        },
+        headers: { Accept: 'application/json' },
         onRequest({ options }) {
             const headers = new Headers(options.headers as HeadersInit | undefined);
             const token = auth.token;
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
             }
+
+            const app = nuxtApp as { $i18n?: unknown; $locale?: unknown };
+            const i18n = app.$i18n as { locale?: unknown } | undefined;
+            const localeRaw = i18n?.locale;
+            const localeValue =
+                localeRaw && typeof localeRaw === 'object' && 'value' in localeRaw
+                    ? (localeRaw as { value?: unknown }).value
+                    : undefined;
+            const currentLocale = localeValue ?? localeRaw ?? app.$locale ?? 'ar';
+            headers.set('Accept-Language', String(currentLocale));
+
             headers.set('X-Correlation-ID', generateCorrelationId());
             options.headers = headers;
         },

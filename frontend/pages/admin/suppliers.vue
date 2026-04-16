@@ -67,7 +67,7 @@
                 <span class="text-sm">{{ row.verification_status }}</span>
             </template>
             <template #actions-data="{ row }">
-                <div class="flex gap-2 rtl:flex-row-reverse">
+                <div class="flex gap-2">
                     <UButton size="xs" @click="setStatus(row.id, 'verified')">
                         {{ $t('suppliers.verify') }}
                     </UButton>

@@ -44,7 +44,7 @@ describe('useBreadcrumb', () => {
         setBreadcrumb([{ label: 'First' }]);
         setBreadcrumb([{ label: 'Second' }, { label: 'Third' }]);
         expect(getItems(items)).toHaveLength(2);
-        expect(getItems(items)[0].label).toBe('Second');
+        expect(getItems(items)[0]?.label).toBe('Second');
     });
 
     it('setBreadcrumb with empty array clears breadcrumb', () => {

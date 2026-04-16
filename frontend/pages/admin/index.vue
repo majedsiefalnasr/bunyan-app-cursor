@@ -28,12 +28,12 @@
                     {{ t('admin.dashboard.quick_links') }}
                 </div>
             </template>
-            <div class="flex flex-wrap gap-2 rtl:flex-row-reverse">
-                <UButton color="gray" variant="soft" to="/admin/users" icon="i-heroicons-users">
+            <div class="flex flex-wrap gap-2">
+                <UButton color="neutral" variant="soft" to="/admin/users" icon="i-heroicons-users">
                     {{ t('admin.nav.users') }}
                 </UButton>
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     to="/admin/roles"
                     icon="i-heroicons-shield-check"
@@ -41,7 +41,7 @@
                     {{ t('admin.nav.roles') }}
                 </UButton>
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     to="/admin/categories"
                     icon="i-heroicons-rectangle-stack"
@@ -49,7 +49,7 @@
                     {{ t('admin.nav.categories') }}
                 </UButton>
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     to="/admin/activity-log"
                     icon="i-heroicons-clock"
@@ -57,7 +57,7 @@
                     {{ t('admin.nav.activity_log') }}
                 </UButton>
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     to="/admin/reports"
                     icon="i-heroicons-document-chart-bar"
@@ -65,7 +65,7 @@
                     {{ t('admin.nav.reports') }}
                 </UButton>
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     to="/admin/analytics"
                     icon="i-heroicons-chart-bar"

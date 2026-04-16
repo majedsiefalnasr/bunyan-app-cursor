@@ -18,18 +18,18 @@
     const color = computed(() => {
         switch (props.status) {
             case 'draft':
-                return 'gray';
+                return 'neutral';
             case 'sent':
             case 'quoting':
-                return 'blue';
+                return 'info';
             case 'evaluation':
-                return 'amber';
+                return 'warning';
             case 'awarded':
-                return 'green';
+                return 'success';
             case 'closed':
-                return 'gray';
+                return 'neutral';
             default:
-                return 'gray';
+                return 'neutral';
         }
     });
 </script>

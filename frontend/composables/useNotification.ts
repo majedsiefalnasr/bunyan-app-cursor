@@ -6,7 +6,7 @@ export function useNotification() {
             toast.add({
                 title: title ?? '',
                 description: message,
-                color: 'green' as const,
+                color: 'success',
                 icon: 'i-heroicons-check-circle',
             });
         },
@@ -14,7 +14,7 @@ export function useNotification() {
             toast.add({
                 title: title ?? '',
                 description: message,
-                color: 'red' as const,
+                color: 'error',
                 icon: 'i-heroicons-x-circle',
             });
         },
@@ -22,7 +22,7 @@ export function useNotification() {
             toast.add({
                 title: title ?? '',
                 description: message,
-                color: 'blue' as const,
+                color: 'info',
                 icon: 'i-heroicons-information-circle',
             });
         },
@@ -30,7 +30,7 @@ export function useNotification() {
             toast.add({
                 title: title ?? '',
                 description: message,
-                color: 'amber' as const,
+                color: 'warning',
                 icon: 'i-heroicons-exclamation-triangle',
             });
         },

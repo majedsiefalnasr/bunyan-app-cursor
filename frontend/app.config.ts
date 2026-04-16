@@ -1,6 +1,11 @@
 export default defineAppConfig({
     ui: {
-        primary: 'neutral',
-        gray: 'neutral',
+        colors: {
+            primary: 'neutral',
+            neutral: 'neutral',
+        },
+        skeleton: {
+            base: 'animate-pulse rounded-md bg-elevated',
+        },
     },
 });

@@ -52,7 +52,7 @@
             toast.add({
                 title: 'خطأ',
                 description: 'تعذر تحميل المخزون',
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;
@@ -78,15 +78,15 @@
                     notes: notes.value || undefined,
                 },
             });
-            toast.add({ title: 'تم', description: 'تم تحديث المخزون', color: 'green' });
+            toast.add({ title: 'تم', description: 'تم تحديث المخزون', color: 'success' });
             adjustOpen.value = false;
             await load();
         } catch {
-            toast.add({ title: 'خطأ', description: 'فشل تعديل المخزون', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'فشل تعديل المخزون', color: 'error' });
         }
     }
 
-    const columns = [
+    const columns: Array<{ key: string; label: string }> = [
         { key: 'product', label: 'المنتج' },
         { key: 'warehouse_location', label: 'الموقع' },
         { key: 'quantity', label: 'الكمية' },
@@ -100,25 +100,44 @@
 
 <template>
     <div class="mx-auto max-w-6xl space-y-6">
-        <div
-            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rtl:flex-row-reverse"
-        >
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 إدارة المخزون
             </h1>
-            <UButton color="gray" variant="soft" :loading="isLoading" @click="load">تحديث</UButton>
+            <UButton color="neutral" variant="soft" :loading="isLoading" @click="load"
+                >تحديث</UButton
+            >
         </div>
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]">
-            <div v-if="isLoading" class="text-sm text-[#666666]">جاري التحميل…</div>
-            <UTable v-else :rows="rows" :columns="columns">
+            <div v-if="isLoading" class="space-y-3">
+                <div class="grid grid-cols-6 gap-3">
+                    <USkeleton class="h-4 w-24" />
+                    <USkeleton class="h-4 w-20" />
+                    <USkeleton class="h-4 w-16" />
+                    <USkeleton class="h-4 w-16" />
+                    <USkeleton class="h-4 w-20" />
+                    <USkeleton class="h-4 w-12" />
+                </div>
+                <div class="space-y-3">
+                    <div v-for="i in 8" :key="i" class="grid grid-cols-6 items-center gap-3">
+                        <USkeleton class="h-4 w-40" />
+                        <USkeleton class="h-4 w-28" />
+                        <USkeleton class="h-4 w-16" />
+                        <USkeleton class="h-4 w-16" />
+                        <USkeleton class="h-4 w-20" />
+                        <USkeleton class="h-7 w-16 rounded-md" />
+                    </div>
+                </div>
+            </div>
+            <UTable v-else :rows="rows as any" :columns="columns as any">
                 <template #product-data="{ row }">
                     <span class="text-sm text-[#171717]">{{
-                        row.product?.name ?? `#${row.product_id}`
+                        (row as any).product?.name ?? `#${(row as any).product_id}`
                     }}</span>
                 </template>
                 <template #actions-data="{ row }">
-                    <UButton size="xs" @click="openAdjust(row)">تعديل</UButton>
+                    <UButton size="xs" @click="openAdjust(row as any)">تعديل</UButton>
                 </template>
             </UTable>
         </UCard>
@@ -138,8 +157,8 @@
                     <UFormGroup label="ملاحظات (اختياري)">
                         <UTextarea v-model="notes" />
                     </UFormGroup>
-                    <div class="flex justify-end gap-2 rtl:flex-row-reverse">
-                        <UButton variant="soft" color="gray" @click="adjustOpen = false"
+                    <div class="flex justify-end gap-2">
+                        <UButton variant="soft" color="neutral" @click="adjustOpen = false"
                             >إلغاء</UButton
                         >
                         <UButton :disabled="delta === 0" @click="submitAdjust">حفظ</UButton>

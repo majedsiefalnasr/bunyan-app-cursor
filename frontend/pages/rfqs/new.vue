@@ -39,12 +39,9 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-2xl space-y-6">
+    <div class="space-y-6">
         <div>
-            <h1
-                class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
-                style="letter-spacing: -0.06em"
-            >
+            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('rfq.new_title') }}
             </h1>
             <p class="mt-1 text-sm text-[#666666]">
@@ -88,16 +85,22 @@
                             <UInput v-model="it.unit" required />
                         </UFormGroup>
                     </div>
-                    <UButton type="button" variant="soft" color="gray" @click="addItem">
+                    <UButton type="button" variant="soft" color="gray" size="sm" @click="addItem">
                         {{ $t('rfq.add_item') }}
                     </UButton>
                 </div>
 
                 <div class="flex flex-wrap gap-2">
-                    <UButton type="submit" color="primary" :loading="saving">
+                    <UButton type="submit" color="primary" :loading="saving" size="sm">
                         {{ $t('rfq.create_submit') }}
                     </UButton>
-                    <UButton type="button" variant="soft" color="gray" :to="localePath('/rfqs')">
+                    <UButton
+                        type="button"
+                        variant="soft"
+                        color="gray"
+                        size="sm"
+                        :to="localePath('/rfqs')"
+                    >
                         {{ $t('rfq.back_list') }}
                     </UButton>
                 </div>

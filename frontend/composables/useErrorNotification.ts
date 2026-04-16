@@ -2,10 +2,12 @@ import type { ErrorPayload } from '~/types/errors';
 
 export function useErrorNotification() {
     const toast = useToast();
-    const composer = (typeof useI18n === 'function' ? useI18n() : undefined) as unknown as {
-        t?: (...args: unknown[]) => unknown;
-        te?: (...args: unknown[]) => unknown;
-    };
+    // `useI18n()` must be called within a component `setup()`. This composable can be used from
+    // `$fetch` hooks / stores, so we rely on Nuxt-injected i18n instead.
+    const nuxtApp = useNuxtApp() as unknown;
+    const composer = (nuxtApp as { $i18n?: unknown }).$i18n as
+        | { t?: (...args: unknown[]) => unknown; te?: (...args: unknown[]) => unknown }
+        | undefined;
     const t = (key: string) => {
         if (typeof composer?.t !== 'function') {
             return key;
@@ -41,8 +43,8 @@ export function useErrorNotification() {
         toast.add({
             title,
             description: '',
-            color: sev === 'error' ? 'red' : 'yellow',
-            timeout: sev === 'error' ? 8000 : 5000,
+            color: sev === 'error' ? 'error' : 'warning',
+            duration: sev === 'error' ? 8000 : 5000,
         });
     }
 

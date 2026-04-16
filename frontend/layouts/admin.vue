@@ -6,17 +6,17 @@
         <header
             class="flex w-full flex-shrink-0 items-center justify-between gap-3 border-b border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-[#171717]"
         >
-            <div class="flex items-center gap-3 rtl:flex-row-reverse">
+            <div class="flex items-center gap-3">
                 <div class="text-sm font-medium text-[#171717] dark:text-white">
                     {{ $t('app.name') }}
                 </div>
-                <UBadge color="gray" variant="subtle" size="sm">
+                <UBadge color="neutral" variant="subtle" size="sm">
                     {{ $t('admin.title') }}
                 </UBadge>
             </div>
 
             <UButton
-                color="gray"
+                color="neutral"
                 variant="ghost"
                 icon="i-heroicons-arrow-right-on-rectangle"
                 @click="logout"
@@ -31,24 +31,34 @@
             >
                 <div class="space-y-2 p-3">
                     <NuxtLink :to="localePath('/admin')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-squares-2x2">
+                        <UButton
+                            block
+                            color="neutral"
+                            variant="ghost"
+                            icon="i-heroicons-squares-2x2"
+                        >
                             {{ $t('admin.nav.dashboard') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/users')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-users">
+                        <UButton block color="neutral" variant="ghost" icon="i-heroicons-users">
                             {{ $t('admin.nav.users') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/roles')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-shield-check">
+                        <UButton
+                            block
+                            color="neutral"
+                            variant="ghost"
+                            icon="i-heroicons-shield-check"
+                        >
                             {{ $t('admin.nav.roles') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/categories')" class="block">
                         <UButton
                             block
-                            color="gray"
+                            color="neutral"
                             variant="ghost"
                             icon="i-heroicons-rectangle-stack"
                         >
@@ -58,7 +68,7 @@
                     <NuxtLink :to="localePath('/admin/suppliers')" class="block">
                         <UButton
                             block
-                            color="gray"
+                            color="neutral"
                             variant="ghost"
                             icon="i-heroicons-building-storefront"
                         >
@@ -66,24 +76,29 @@
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/settings')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-cog-6-tooth">
+                        <UButton
+                            block
+                            color="neutral"
+                            variant="ghost"
+                            icon="i-heroicons-cog-6-tooth"
+                        >
                             {{ $t('admin.nav.settings') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/notifications')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-bell">
+                        <UButton block color="neutral" variant="ghost" icon="i-heroicons-bell">
                             {{ $t('admin.nav.notifications') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/activity-log')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-clock">
+                        <UButton block color="neutral" variant="ghost" icon="i-heroicons-clock">
                             {{ $t('admin.nav.activity_log') }}
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/reports')" class="block">
                         <UButton
                             block
-                            color="gray"
+                            color="neutral"
                             variant="ghost"
                             icon="i-heroicons-document-chart-bar"
                         >
@@ -91,7 +106,7 @@
                         </UButton>
                     </NuxtLink>
                     <NuxtLink :to="localePath('/admin/analytics')" class="block">
-                        <UButton block color="gray" variant="ghost" icon="i-heroicons-chart-bar">
+                        <UButton block color="neutral" variant="ghost" icon="i-heroicons-chart-bar">
                             {{ $t('admin.nav.analytics') }}
                         </UButton>
                     </NuxtLink>

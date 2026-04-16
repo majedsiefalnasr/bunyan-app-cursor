@@ -35,7 +35,7 @@
         <div class="w-full max-w-lg">
             <UAlert
                 role="alert"
-                color="red"
+                color="error"
                 variant="subtle"
                 :title="$t(titleKey)"
                 :description="$t(descriptionKey)"
@@ -47,7 +47,7 @@
                 <UButton color="primary" icon="i-heroicons-arrow-path" @click="handleRetry">
                     {{ $t('errors.retry') }}
                 </UButton>
-                <UButton color="gray" variant="outline" icon="i-heroicons-home" to="/">
+                <UButton color="neutral" variant="outline" icon="i-heroicons-home" to="/">
                     {{ $t('errors.goHome') }}
                 </UButton>
             </div>

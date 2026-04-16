@@ -28,11 +28,9 @@
 </script>
 
 <template>
-    <UDropdown :items="[availableLocales]">
-        <!-- as="div": avoid <button> inside Headless UI MenuButton (div[role=button]); nested controls break menus on Linux CI. -->
+    <UDropdownMenu :items="[availableLocales]">
         <UButton
-            as="div"
-            color="gray"
+            color="neutral"
             variant="ghost"
             :aria-label="$t('shell.nav.main')"
             icon="i-heroicons-language"
@@ -42,5 +40,5 @@
         >
             {{ currentLocaleName }}
         </UButton>
-    </UDropdown>
+    </UDropdownMenu>
 </template>
