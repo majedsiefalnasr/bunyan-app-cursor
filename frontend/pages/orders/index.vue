@@ -62,7 +62,7 @@
 
         <UAlert
             v-else-if="loadError"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('shell.error')"
             :description="loadError"
@@ -86,7 +86,7 @@
             >
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between gap-2">
-                        <UBadge color="gray" variant="soft" size="sm">
+                        <UBadge color="neutral" variant="soft" size="sm">
                             {{ o.status }}
                         </UBadge>
                     </div>

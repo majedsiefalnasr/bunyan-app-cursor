@@ -27,7 +27,7 @@
             toast.add({
                 title: 'تم',
                 description: 'تم إرسال طلب ملف المورد',
-                color: 'green',
+                color: 'success',
             });
             await navigateTo(localePath('/dashboard'));
         } finally {

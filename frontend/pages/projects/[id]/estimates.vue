@@ -76,7 +76,7 @@
 
 <template>
     <div class="space-y-4">
-        <UAlert color="blue" variant="soft" :title="$t('projects.estimates_disclaimer')" />
+        <UAlert color="info" variant="soft" :title="$t('projects.estimates_disclaimer')" />
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
@@ -84,7 +84,7 @@
                     <span class="font-medium text-[#171717] dark:text-white">{{
                         $t('projects.estimates_title')
                     }}</span>
-                    <UButton size="sm" variant="soft" color="gray" @click="addRow">
+                    <UButton size="sm" variant="soft" color="neutral" @click="addRow">
                         {{ $t('projects.estimates_add_line') }}
                     </UButton>
                 </div>
@@ -110,7 +110,7 @@
                         <UInput v-model.number="row.unit_price" type="number" min="0" step="0.01" />
                     </UFormGroup>
                     <div class="flex sm:col-span-2">
-                        <UButton color="red" variant="soft" @click="removeRow(row.id)">
+                        <UButton color="error" variant="soft" @click="removeRow(row.id)">
                             {{ $t('projects.estimates_remove') }}
                         </UButton>
                     </div>

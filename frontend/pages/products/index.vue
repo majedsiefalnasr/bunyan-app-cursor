@@ -163,7 +163,7 @@
 
                 <UAlert
                     v-else-if="loadError"
-                    color="red"
+                    color="error"
                     variant="soft"
                     :title="$t('shell.error')"
                     :description="loadError"

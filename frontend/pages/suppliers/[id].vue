@@ -47,7 +47,7 @@
 
 <template>
     <div class="mx-auto max-w-3xl space-y-6">
-        <UButton :to="localePath('/suppliers')" variant="ghost" color="gray" class="mb-2">
+        <UButton :to="localePath('/suppliers')" variant="ghost" color="neutral" class="mb-2">
             ← {{ $t('nav.suppliers') }}
         </UButton>
 

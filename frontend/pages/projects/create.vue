@@ -135,7 +135,7 @@
             <UButton
                 v-if="step > 0"
                 variant="soft"
-                color="gray"
+                color="neutral"
                 data-testid="wizard-back"
                 @click="prevStep"
             >

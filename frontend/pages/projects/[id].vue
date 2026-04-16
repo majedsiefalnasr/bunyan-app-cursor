@@ -58,7 +58,7 @@
 
 <template>
     <div class="space-y-6">
-        <UButton :to="localePath('/projects')" variant="soft" color="gray" size="sm">
+        <UButton :to="localePath('/projects')" variant="soft" color="neutral" size="sm">
             {{ $t('projects.back_to_list') }}
         </UButton>
 
@@ -68,7 +68,7 @@
 
         <UAlert
             v-else-if="loadError || !project"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('projects.shell_load_error')"
         />
@@ -82,7 +82,7 @@
                     {{ $t('projects.status_label') }}:
                     <UBadge
                         class="ms-1"
-                        :color="projectStatusBadgeColor(project.status)"
+                        :color="projectStatusBadgeColor(project.status) as any"
                         variant="soft"
                     >
                         {{ project.status }}
@@ -98,7 +98,7 @@
                     size="xs"
                     class="rounded-full"
                     :variant="isNavActive(item.to) ? 'solid' : 'soft'"
-                    :color="isNavActive(item.to) ? 'primary' : 'gray'"
+                    :color="isNavActive(item.to) ? 'primary' : 'neutral'"
                 >
                     {{ item.label }}
                 </UButton>

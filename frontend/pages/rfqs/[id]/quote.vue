@@ -30,6 +30,14 @@
         items: [],
     });
 
+    function ensureQuoteItem(idx: number, rfqItemId: number): QuoteItem {
+        const existing = form.items[idx];
+        if (existing) return existing;
+        const created: QuoteItem = { rfq_item_id: rfqItemId, unit_price: 0, notes: '' };
+        form.items[idx] = created;
+        return created;
+    }
+
     async function load() {
         errorMessage.value = null;
         isLoading.value = true;
@@ -97,7 +105,7 @@
 
         <UAlert
             v-if="errorMessage"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('rfq.error_title')"
             :description="errorMessage"
@@ -155,13 +163,27 @@
                                     <td class="px-3 py-2">{{ it.unit }}</td>
                                     <td class="px-3 py-2">
                                         <UInput
-                                            v-model.number="form.items[idx].unit_price"
+                                            :model-value="String(form.items[idx]?.unit_price ?? '')"
                                             type="number"
                                             min="0"
+                                            @update:model-value="
+                                                (v) => {
+                                                    const row = ensureQuoteItem(idx, it.id);
+                                                    row.unit_price = v === '' ? 0 : Number(v);
+                                                }
+                                            "
                                         />
                                     </td>
                                     <td class="px-3 py-2">
-                                        <UInput v-model="form.items[idx].notes" />
+                                        <UInput
+                                            :model-value="form.items[idx]?.notes ?? ''"
+                                            @update:model-value="
+                                                (v) => {
+                                                    const row = ensureQuoteItem(idx, it.id);
+                                                    row.notes = v;
+                                                }
+                                            "
+                                        />
                                     </td>
                                 </tr>
                             </tbody>
@@ -173,7 +195,7 @@
                     <UButton :loading="isSubmitting" size="sm" @click="onSubmit">
                         {{ $t('rfq.submit_quote') }}
                     </UButton>
-                    <UButton color="gray" variant="soft" size="sm" to="/rfqs">
+                    <UButton color="neutral" variant="soft" size="sm" to="/rfqs">
                         {{ $t('rfq.back_list') }}
                     </UButton>
                 </div>

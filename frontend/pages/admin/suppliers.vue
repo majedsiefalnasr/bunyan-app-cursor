@@ -36,7 +36,7 @@
                 method: 'PUT',
                 body: { verification_status: status },
             });
-            toast.add({ title: 'تم', description: 'تم تحديث الحالة', color: 'green' });
+            toast.add({ title: 'تم', description: 'تم تحديث الحالة', color: 'success' });
             await load();
         } catch {
             /* useApi surfaces toast */
@@ -62,20 +62,20 @@
             {{ $t('shell.loading') }}
         </div>
 
-        <UTable v-else :rows="rows" :columns="columns">
+        <UTable v-else :rows="rows as any" :columns="columns as any">
             <template #verification_status-data="{ row }">
-                <span class="text-sm">{{ row.verification_status }}</span>
+                <span class="text-sm">{{ (row as any).verification_status }}</span>
             </template>
             <template #actions-data="{ row }">
                 <div class="flex gap-2">
-                    <UButton size="xs" @click="setStatus(row.id, 'verified')">
+                    <UButton size="xs" @click="setStatus((row as any).id, 'verified')">
                         {{ $t('suppliers.verify') }}
                     </UButton>
                     <UButton
                         size="xs"
-                        color="red"
+                        color="error"
                         variant="soft"
-                        @click="setStatus(row.id, 'suspended')"
+                        @click="setStatus((row as any).id, 'suspended')"
                     >
                         {{ $t('suppliers.suspend') }}
                     </UButton>

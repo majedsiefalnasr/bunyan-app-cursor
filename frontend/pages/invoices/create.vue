@@ -16,7 +16,7 @@
     async function onSubmit() {
         const price = unitPrice.value;
         if (price === undefined || price <= 0) {
-            toast.add({ title: 'خطأ', description: 'أدخل سعراً صحيحاً', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'أدخل سعراً صحيحاً', color: 'error' });
             return;
         }
         loading.value = true;
@@ -32,7 +32,7 @@
             });
             await navigateTo(localePath(`/invoices/${inv.id}`));
         } catch {
-            toast.add({ title: 'خطأ', description: 'تعذر إنشاء الفاتورة', color: 'red' });
+            toast.add({ title: 'خطأ', description: 'تعذر إنشاء الفاتورة', color: 'error' });
         } finally {
             loading.value = false;
         }
@@ -41,7 +41,7 @@
 
 <template>
     <div class="mx-auto max-w-lg space-y-6">
-        <UButton variant="soft" color="gray" :to="localePath('/invoices')" size="sm">
+        <UButton variant="soft" color="neutral" :to="localePath('/invoices')" size="sm">
             {{ $t('invoice.back') }}
         </UButton>
 
@@ -54,24 +54,23 @@
             </h1>
         </div>
 
-        <UCard
-            class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
-            :ui="{ body: { padding: 'p-4 sm:p-5' } }"
-        >
-            <form class="space-y-4" @submit.prevent="onSubmit">
-                <UFormGroup :label="$t('invoice.field_description')">
-                    <UInput v-model="descriptionAr" />
-                </UFormGroup>
-                <UFormGroup :label="$t('invoice.field_quantity')">
-                    <UInput v-model.number="quantity" type="number" min="1" />
-                </UFormGroup>
-                <UFormGroup :label="$t('invoice.field_unit_price')">
-                    <UInput v-model.number="unitPrice" type="number" step="0.01" min="0" />
-                </UFormGroup>
-                <UButton type="submit" color="primary" block :loading="loading">
-                    {{ $t('invoice.submit_create') }}
-                </UButton>
-            </form>
+        <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+            <div class="p-4 sm:p-5">
+                <form class="space-y-4" @submit.prevent="onSubmit">
+                    <UFormGroup :label="$t('invoice.field_description')">
+                        <UInput v-model="descriptionAr" />
+                    </UFormGroup>
+                    <UFormGroup :label="$t('invoice.field_quantity')">
+                        <UInput v-model.number="quantity" type="number" min="1" />
+                    </UFormGroup>
+                    <UFormGroup :label="$t('invoice.field_unit_price')">
+                        <UInput v-model.number="unitPrice" type="number" step="0.01" min="0" />
+                    </UFormGroup>
+                    <UButton type="submit" color="primary" block :loading="loading">
+                        {{ $t('invoice.submit_create') }}
+                    </UButton>
+                </form>
+            </div>
         </UCard>
     </div>
 </template>

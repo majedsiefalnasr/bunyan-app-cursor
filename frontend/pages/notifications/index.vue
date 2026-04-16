@@ -61,7 +61,7 @@
             </h1>
             <div class="flex gap-2">
                 <UButton
-                    color="gray"
+                    color="neutral"
                     variant="soft"
                     size="sm"
                     :to="localePath('/notifications/settings')"
@@ -100,7 +100,7 @@
                     <UButton
                         v-if="!n.read_at"
                         size="xs"
-                        color="gray"
+                        color="neutral"
                         variant="soft"
                         @click="markRead(n.id)"
                     >

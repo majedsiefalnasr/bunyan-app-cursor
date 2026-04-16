@@ -59,7 +59,7 @@
                     <UButton
                         :to="localePath(`/contractor/rfqs/${r.id}`)"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                     >
                         {{ $t('rfq.quote_heading') }}
                     </UButton>

@@ -30,7 +30,7 @@
                     unit: i.unit,
                 })),
             });
-            toast.add({ title: created.title, color: 'green' });
+            toast.add({ title: created.title, color: 'success' });
             await navigateTo(localePath(`/rfqs/${created.id}`));
         } finally {
             saving.value = false;
@@ -85,7 +85,13 @@
                             <UInput v-model="it.unit" required />
                         </UFormGroup>
                     </div>
-                    <UButton type="button" variant="soft" color="gray" size="sm" @click="addItem">
+                    <UButton
+                        type="button"
+                        variant="soft"
+                        color="neutral"
+                        size="sm"
+                        @click="addItem"
+                    >
                         {{ $t('rfq.add_item') }}
                     </UButton>
                 </div>
@@ -97,7 +103,7 @@
                     <UButton
                         type="button"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         size="sm"
                         :to="localePath('/rfqs')"
                     >

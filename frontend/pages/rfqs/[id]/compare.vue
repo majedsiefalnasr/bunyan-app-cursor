@@ -36,7 +36,7 @@
                     {{ $t('rfq.compare_subtitle') }}
                 </p>
             </div>
-            <UButton variant="soft" color="gray" size="sm" :to="localePath(`/rfqs/${id}`)">
+            <UButton variant="soft" color="neutral" size="sm" :to="localePath(`/rfqs/${id}`)">
                 {{ $t('rfq.detail_link') }}
             </UButton>
         </div>

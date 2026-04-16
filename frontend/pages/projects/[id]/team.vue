@@ -75,7 +75,7 @@
                 },
             });
             inviteEmail.value = '';
-            toast.add({ title: t('projects.team_invite_success'), color: 'green' });
+            toast.add({ title: t('projects.team_invite_success'), color: 'success' });
             await loadTeam();
         } finally {
             isInviteSubmitting.value = false;
@@ -113,7 +113,7 @@
                         class="flex flex-wrap items-center justify-between gap-2"
                     >
                         <span>{{ m.user.name }} — {{ m.user.email }}</span>
-                        <UBadge color="gray" variant="soft">{{ m.project_role_label }}</UBadge>
+                        <UBadge color="neutral" variant="soft">{{ m.project_role_label }}</UBadge>
                     </li>
                 </ul>
             </div>

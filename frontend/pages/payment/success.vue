@@ -61,7 +61,7 @@
 
         <UAlert
             v-if="loadError"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('payments.success_error_title')"
             :description="$t('payments.success_error_description')"
@@ -80,7 +80,7 @@
                     <span class="text-sm font-medium text-[#171717] dark:text-white">
                         {{ $t('payments.success_details') }}
                     </span>
-                    <UBadge color="green" variant="soft">
+                    <UBadge color="success" variant="soft">
                         {{ $t('payments.success_badge') }}
                     </UBadge>
                 </div>
@@ -117,10 +117,10 @@
 
             <template #footer>
                 <div class="flex flex-wrap gap-2">
-                    <UButton to="/payments" color="gray" variant="soft">
+                    <UButton to="/payments" color="neutral" variant="soft">
                         {{ $t('payments.back_to_list') }}
                     </UButton>
-                    <UButton to="/orders" color="gray" variant="ghost">
+                    <UButton to="/orders" color="neutral" variant="ghost">
                         {{ $t('payments.go_to_orders') }}
                     </UButton>
                 </div>

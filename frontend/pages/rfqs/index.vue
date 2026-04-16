@@ -65,7 +65,7 @@
                         <UButton
                             :to="localePath(`/rfqs/${r.id}`)"
                             variant="soft"
-                            color="gray"
+                            color="neutral"
                             size="xs"
                         >
                             {{ $t('rfq.detail_link') }}
@@ -73,7 +73,7 @@
                         <UButton
                             :to="localePath(`/rfqs/${r.id}/compare`)"
                             variant="soft"
-                            color="gray"
+                            color="neutral"
                             size="xs"
                         >
                             {{ $t('rfq.compare_link') }}

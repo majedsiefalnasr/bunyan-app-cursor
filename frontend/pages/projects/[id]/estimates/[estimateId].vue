@@ -103,7 +103,7 @@
         <UButton
             :to="localePath(`/projects/${route.params.id}/estimates`)"
             variant="soft"
-            color="gray"
+            color="neutral"
         >
             {{ t('projects.open_estimates') }}
         </UButton>
@@ -132,7 +132,7 @@
                 <UButton :loading="isBusy" class="font-medium" @click="recalculate">
                     {{ t('projects.estimates_calculate') }}
                 </UButton>
-                <UButton variant="soft" color="gray" :loading="isBusy" @click="exportCsv">
+                <UButton variant="soft" color="neutral" :loading="isBusy" @click="exportCsv">
                     {{ t('projects.estimates_export') }}
                 </UButton>
             </div>

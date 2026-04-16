@@ -105,7 +105,7 @@
             form.content = '';
             files.value = [];
             isCreateModalOpen.value = false;
-            toast.add({ title: t('reports.create_success'), color: 'green' });
+            toast.add({ title: t('reports.create_success'), color: 'success' });
             await loadReports();
         } finally {
             isSubmitting.value = false;
@@ -134,7 +134,7 @@
                         <span class="font-medium text-[#171717] dark:text-white">
                             {{ $t('reports.title') }}
                         </span>
-                        <UBadge color="gray" variant="soft">{{ reports.length }}</UBadge>
+                        <UBadge color="neutral" variant="soft">{{ reports.length }}</UBadge>
                     </div>
                     <UButton
                         v-if="canCreateReport"
@@ -151,7 +151,7 @@
             <div v-if="isLoading" class="text-sm text-[#666666]">{{ $t('shell.loading') }}</div>
             <UAlert
                 v-else-if="loadError"
-                color="red"
+                color="error"
                 variant="soft"
                 :title="$t('reports.load_error')"
                 :description="loadError"
@@ -167,7 +167,7 @@
                                 <span class="font-medium text-[#171717] dark:text-white">{{
                                     r.title
                                 }}</span>
-                                <UBadge color="gray" variant="soft">{{ r.status }}</UBadge>
+                                <UBadge color="neutral" variant="soft">{{ r.status }}</UBadge>
                             </div>
                         </template>
                         <p class="whitespace-pre-wrap text-sm text-[#4d4d4d]">{{ r.content }}</p>
@@ -205,7 +205,7 @@
 
         <UAlert
             v-if="!canCreateReport"
-            color="amber"
+            color="warning"
             variant="soft"
             :title="$t('reports.role_hint')"
             class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
@@ -219,7 +219,7 @@
                             {{ $t('reports.create_title') }}
                         </span>
                         <UButton
-                            color="gray"
+                            color="neutral"
                             variant="ghost"
                             icon="i-heroicons-x-mark"
                             @click="isCreateModalOpen = false"
@@ -253,7 +253,7 @@
                     </UFormGroup>
                     <div class="flex justify-end gap-2">
                         <UButton
-                            color="gray"
+                            color="neutral"
                             variant="outline"
                             :disabled="isSubmitting"
                             @click="isCreateModalOpen = false"

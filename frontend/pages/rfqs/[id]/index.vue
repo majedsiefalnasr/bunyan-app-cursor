@@ -48,7 +48,7 @@
                     ? { response_deadline: new Date(sendDeadline.value).toISOString() }
                     : {};
             rfq.value = await sendRfq(id.value, body);
-            toast.add({ title: t('rfq.send'), color: 'green' });
+            toast.add({ title: t('rfq.send'), color: 'success' });
             await refresh();
         } finally {
             busy.value = false;
@@ -59,7 +59,7 @@
         busy.value = true;
         try {
             rfq.value = await beginEvaluation(id.value);
-            toast.add({ title: t('rfq.begin_eval'), color: 'green' });
+            toast.add({ title: t('rfq.begin_eval'), color: 'success' });
             await refresh();
         } finally {
             busy.value = false;
@@ -70,7 +70,7 @@
         busy.value = true;
         try {
             rfq.value = await closeRfq(id.value);
-            toast.add({ title: t('rfq.close'), color: 'green' });
+            toast.add({ title: t('rfq.close'), color: 'success' });
             await refresh();
         } finally {
             busy.value = false;
@@ -81,7 +81,7 @@
         busy.value = true;
         try {
             rfq.value = await acceptQuotation(id.value, qid);
-            toast.add({ title: t('rfq.accept'), color: 'green' });
+            toast.add({ title: t('rfq.accept'), color: 'success' });
             await refresh();
         } finally {
             busy.value = false;
@@ -135,19 +135,19 @@
                     <UButton
                         v-if="rfq.status === 'awarded'"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         :loading="busy"
                         size="sm"
                         @click="onClose"
                     >
                         {{ $t('rfq.close') }}
                     </UButton>
-                    <UButton variant="soft" color="gray" :to="localePath('/rfqs')" size="sm">
+                    <UButton variant="soft" color="neutral" :to="localePath('/rfqs')" size="sm">
                         {{ $t('rfq.back_list') }}
                     </UButton>
                     <UButton
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         :to="localePath(`/rfqs/${rfq.id}/compare`)"
                         size="sm"
                     >

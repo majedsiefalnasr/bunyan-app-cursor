@@ -37,9 +37,9 @@
         actionLoading.value = true;
         try {
             order.value = await confirmOrder(order.value.id);
-            toast.add({ title: t('order.confirm_ok'), color: 'green' });
+            toast.add({ title: t('order.confirm_ok'), color: 'success' });
         } catch {
-            toast.add({ title: t('order.action_failed'), color: 'red' });
+            toast.add({ title: t('order.action_failed'), color: 'error' });
         } finally {
             actionLoading.value = false;
         }
@@ -52,9 +52,9 @@
         actionLoading.value = true;
         try {
             order.value = await cancelOrder(order.value.id);
-            toast.add({ title: t('order.cancel_ok'), color: 'green' });
+            toast.add({ title: t('order.cancel_ok'), color: 'success' });
         } catch {
-            toast.add({ title: t('order.action_failed'), color: 'red' });
+            toast.add({ title: t('order.action_failed'), color: 'error' });
         } finally {
             actionLoading.value = false;
         }
@@ -63,7 +63,7 @@
 
 <template>
     <div class="mx-auto max-w-3xl space-y-6">
-        <UButton variant="soft" color="gray" :to="localePath('/orders')" size="sm">
+        <UButton variant="soft" color="neutral" :to="localePath('/orders')" size="sm">
             {{ $t('order.back') }}
         </UButton>
 
@@ -88,11 +88,8 @@
                 </p>
             </div>
 
-            <UCard
-                class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
-                :ui="{ body: { padding: 'p-4 sm:p-5' } }"
-            >
-                <div class="space-y-2 text-sm text-[#171717] dark:text-white">
+            <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                <div class="space-y-2 p-4 sm:p-5 text-sm text-[#171717] dark:text-white">
                     <p>{{ $t('order.total') }}: {{ order.total_price }}</p>
                     <p v-if="order.confirmed_at">
                         {{ $t('order.confirmed_at') }}: {{ order.confirmed_at }}
@@ -121,7 +118,7 @@
                 <UButton color="primary" :loading="actionLoading" @click="onConfirm">
                     {{ $t('order.confirm') }}
                 </UButton>
-                <UButton color="gray" variant="soft" :loading="actionLoading" @click="onCancel">
+                <UButton color="neutral" variant="soft" :loading="actionLoading" @click="onCancel">
                     {{ $t('order.cancel') }}
                 </UButton>
             </div>

@@ -51,7 +51,7 @@
             toast.add({
                 title: t('errors.codes.SERVER_ERROR.message'),
                 description: t('workflow.load_error'),
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;
@@ -77,12 +77,12 @@
         </h1>
 
         <UCard>
-            <UTable :rows="rows" :columns="columns" :loading="isLoading">
+            <UTable :rows="rows as any" :columns="columns as any" :loading="isLoading">
                 <template #is_global-data="{ row }">
-                    <span class="text-[#666666]">{{ row.is_global ? '✓' : '—' }}</span>
+                    <span class="text-[#666666]">{{ (row as any).is_global ? '✓' : '—' }}</span>
                 </template>
                 <template #is_active-data="{ row }">
-                    <span class="text-[#666666]">{{ row.is_active ? '✓' : '—' }}</span>
+                    <span class="text-[#666666]">{{ (row as any).is_active ? '✓' : '—' }}</span>
                 </template>
             </UTable>
 

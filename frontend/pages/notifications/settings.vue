@@ -37,7 +37,7 @@
                 method: 'PUT',
                 body: { preferences: rows.value },
             });
-            toast.add({ title: t('notifications.saved'), color: 'green' });
+            toast.add({ title: t('notifications.saved'), color: 'success' });
             await load();
         } finally {
             saving.value = false;
@@ -55,7 +55,7 @@
             <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
                 {{ t('notifications.settings') }}
             </h1>
-            <UButton color="gray" variant="soft" size="sm" :to="localePath('/notifications')">
+            <UButton color="neutral" variant="soft" size="sm" :to="localePath('/notifications')">
                 {{ t('notifications.history') }}
             </UButton>
         </div>

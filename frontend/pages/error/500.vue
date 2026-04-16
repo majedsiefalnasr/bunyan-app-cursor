@@ -16,10 +16,10 @@
             {{ $t('errors.pages.500.description') }}
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-            <UButton color="black" to="/">
+            <UButton color="primary" to="/">
                 {{ $t('errors.goHome') }}
             </UButton>
-            <UButton color="white" variant="outline" @click="reloadNuxtApp()">
+            <UButton color="neutral" variant="outline" @click="reloadNuxtApp()">
                 {{ $t('errors.refresh') }}
             </UButton>
         </div>

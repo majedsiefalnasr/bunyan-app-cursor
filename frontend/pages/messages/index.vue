@@ -125,7 +125,7 @@
                     <UButton
                         :to="localePath(`/messages/${c.id}`)"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         size="xs"
                     >
                         {{ $t('messages.thread_title') }}

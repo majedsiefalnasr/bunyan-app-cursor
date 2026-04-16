@@ -77,7 +77,7 @@
 
 <template>
     <div class="mx-auto max-w-3xl space-y-6">
-        <UButton :to="localePath(`/projects/${route.params.id}`)" variant="soft" color="gray">
+        <UButton :to="localePath(`/projects/${route.params.id}`)" variant="soft" color="neutral">
             {{ t('projects.estimates_back_project') }}
         </UButton>
 
@@ -132,7 +132,7 @@
                 >
                     <span class="font-medium text-[#171717] dark:text-white">{{ e.title }}</span>
                     <div class="flex flex-wrap items-center gap-2">
-                        <UBadge color="gray" variant="soft">{{ e.status }}</UBadge>
+                        <UBadge color="neutral" variant="soft">{{ e.status }}</UBadge>
                         <span class="text-xs text-[#666666]">{{ e.grand_total }}</span>
                         <UButton
                             size="xs"

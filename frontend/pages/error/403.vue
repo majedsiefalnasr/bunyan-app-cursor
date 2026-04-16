@@ -14,10 +14,10 @@
             {{ $t('errors.pages.403.description') }}
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-            <UButton color="black" to="/">
+            <UButton color="primary" to="/">
                 {{ $t('errors.goHome') }}
             </UButton>
-            <UButton color="white" variant="outline" to="/auth/login">
+            <UButton color="neutral" variant="outline" to="/auth/login">
                 {{ $t('auth.login') }}
             </UButton>
         </div>

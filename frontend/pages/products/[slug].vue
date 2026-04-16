@@ -76,7 +76,7 @@
             },
             qty.value
         );
-        toast.add({ title: t('catalog.added_to_cart'), color: 'green' });
+        toast.add({ title: t('catalog.added_to_cart'), color: 'success' });
     }
 
     const heroUrl = computed(() => {
@@ -87,7 +87,7 @@
 
 <template>
     <div class="mx-auto max-w-3xl space-y-6">
-        <UButton :to="localePath('/products')" color="gray" variant="ghost" class="px-0">
+        <UButton :to="localePath('/products')" color="neutral" variant="ghost" class="px-0">
             {{ $t('catalog.back_list') }}
         </UButton>
 

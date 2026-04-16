@@ -91,7 +91,7 @@
 
             <UAlert
                 v-if="success"
-                color="green"
+                color="success"
                 variant="subtle"
                 :title="$t('profile.save_success')"
                 class="mb-4"
@@ -100,7 +100,7 @@
 
             <UAlert
                 v-if="error"
-                color="red"
+                color="error"
                 variant="subtle"
                 role="alert"
                 :title="error"
@@ -120,7 +120,7 @@
                 <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
                     <UButton
                         type="button"
-                        color="gray"
+                        color="neutral"
                         variant="ghost"
                         class="min-h-11"
                         @click="revertForm"

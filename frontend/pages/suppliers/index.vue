@@ -67,7 +67,7 @@
                     <UButton
                         :to="localePath(`/suppliers/${s.id}`)"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         size="xs"
                     >
                         {{ $t('suppliers.view_products') }}

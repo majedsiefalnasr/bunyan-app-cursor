@@ -43,7 +43,7 @@
                 unit_price: Number(prices.value[it.id] ?? 0),
             }));
             await submitQuotation(id.value, { items });
-            toast.add({ title: t('rfq.submit_quote'), color: 'green' });
+            toast.add({ title: t('rfq.submit_quote'), color: 'success' });
         } finally {
             saving.value = false;
         }
@@ -52,7 +52,7 @@
 
 <template>
     <div class="mx-auto max-w-2xl space-y-6">
-        <UButton variant="soft" color="gray" :to="localePath('/contractor/rfqs')">
+        <UButton variant="soft" color="neutral" :to="localePath('/contractor/rfqs')">
             {{ $t('rfq.back_list') }}
         </UButton>
 

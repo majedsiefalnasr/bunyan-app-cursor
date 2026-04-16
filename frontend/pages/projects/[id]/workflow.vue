@@ -29,10 +29,10 @@
             } | null;
             const msg = res?.message?.trim() ? res.message : t('projects.workflow_started');
             lastMessage.value = msg ?? t('projects.workflow_started');
-            toast.add({ title: lastMessage.value, color: 'green' });
+            toast.add({ title: lastMessage.value, color: 'success' });
         } catch {
             lastMessage.value = t('projects.workflow_start_error');
-            toast.add({ title: lastMessage.value, color: 'red' });
+            toast.add({ title: lastMessage.value, color: 'error' });
         } finally {
             submitting.value = false;
         }
@@ -49,7 +49,9 @@
             </template>
             <p v-if="projectShell" class="text-sm text-[#4d4d4d]">
                 {{ $t('projects.workflow_status_label') }}
-                <UBadge class="ms-1" color="gray" variant="soft">{{ projectShell.status }}</UBadge>
+                <UBadge class="ms-1" color="neutral" variant="soft">{{
+                    projectShell.status
+                }}</UBadge>
             </p>
             <p class="mt-3 text-sm text-[#666666]">
                 {{ $t('projects.workflow_body') }}
@@ -65,7 +67,7 @@
             <UAlert
                 v-else
                 class="mt-4"
-                color="amber"
+                color="warning"
                 variant="soft"
                 :title="$t('projects.workflow_role_hint')"
             />

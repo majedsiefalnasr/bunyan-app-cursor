@@ -59,7 +59,7 @@
 
         <UAlert
             v-else-if="loadError"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('shell.error')"
             :description="loadError"
@@ -82,13 +82,17 @@
                 class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
             >
                 <div class="flex items-center justify-between gap-2">
-                    <UBadge :color="projectStatusBadgeColor(p.status)" variant="soft" size="sm">
+                    <UBadge
+                        :color="projectStatusBadgeColor(p.status) as any"
+                        variant="soft"
+                        size="sm"
+                    >
                         {{ p.status }}
                     </UBadge>
                     <UButton
                         :to="localePath(`/projects/${p.id}`)"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         size="xs"
                     >
                         {{ $t('projects.detail_title') }}

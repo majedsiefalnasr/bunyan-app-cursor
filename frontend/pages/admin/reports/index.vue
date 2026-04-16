@@ -46,9 +46,8 @@
                 '/v1/admin/analytics/reports/types'
             );
             types.value = res.data?.types ?? [];
-            if (types.value.length > 0) {
-                selectedType.value = types.value[0].type;
-            }
+            const first = types.value[0];
+            if (first) selectedType.value = first.type;
         } catch {
             toast.add({ title: t('analyticsReports.load_types_error'), color: 'error' });
         } finally {

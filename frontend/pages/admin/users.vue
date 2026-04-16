@@ -86,7 +86,7 @@
             toast.add({
                 title: 'خطأ',
                 description: 'فشل في تحميل قائمة المستخدمين',
-                color: 'red',
+                color: 'error',
             });
         } finally {
             isLoading.value = false;
@@ -137,7 +137,7 @@
 
         <UAlert
             v-if="loadError"
-            color="red"
+            color="error"
             variant="soft"
             :title="$t('shell.error')"
             :description="loadError"
@@ -148,24 +148,24 @@
             {{ $t('shell.empty') }}
         </p>
 
-        <UTable v-else :rows="users" :columns="columns" :loading="isLoading">
+        <UTable v-else :rows="users as any" :columns="columns as any" :loading="isLoading">
             <template #active-data="{ row }">
-                <UBadge :color="row.active ? 'green' : 'red'" variant="subtle">
-                    {{ row.active ? 'نشط' : 'غير نشط' }}
+                <UBadge :color="(row as any).active ? 'success' : 'error'" variant="subtle">
+                    {{ (row as any).active ? 'نشط' : 'غير نشط' }}
                 </UBadge>
             </template>
 
             <template #created_at-data="{ row }">
-                {{ new Date(row.created_at).toLocaleDateString('ar-SA') }}
+                {{ new Date((row as any).created_at).toLocaleDateString('ar-SA') }}
             </template>
 
             <template #actions-data="{ row }">
                 <UButton
                     size="xs"
-                    color="gray"
+                    color="neutral"
                     variant="ghost"
                     icon="i-heroicons-pencil-square"
-                    @click.stop.prevent="openAssignModal(row)"
+                    @click.stop.prevent="openAssignModal(row as any)"
                 >
                     تعيين دور
                 </UButton>

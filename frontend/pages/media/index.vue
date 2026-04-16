@@ -96,32 +96,33 @@
             </p>
         </div>
 
-        <UCard
-            class="mb-8 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
-            :ui="{ body: { padding: 'p-6' } }"
-        >
-            <div
-                class="flex min-h-[140px] cursor-pointer flex-col items-center justify-center gap-3 rounded-lg bg-[#fafafa] p-6 text-center transition"
-                :class="isDragging ? 'ring-2 ring-[#0a72ef] ring-offset-2' : ''"
-                role="button"
-                tabindex="0"
-                @dragover.prevent="isDragging = true"
-                @dragleave.prevent="isDragging = false"
-                @drop.prevent="onDrop"
-                @click="fileInput?.click()"
-                @keydown.enter.prevent="fileInput?.click()"
-            >
-                <input
-                    ref="fileInput"
-                    type="file"
-                    class="sr-only"
-                    :aria-label="t('media.upload_aria')"
-                    @change="onFileChange"
-                />
-                <span class="text-sm font-medium text-[#171717]">{{ t('media.drop_label') }}</span>
-                <UButton :loading="isUploading" color="gray" variant="solid">
-                    {{ t('media.choose_file') }}
-                </UButton>
+        <UCard class="mb-8 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]">
+            <div class="p-6">
+                <div
+                    class="flex min-h-[140px] cursor-pointer flex-col items-center justify-center gap-3 rounded-lg bg-[#fafafa] p-6 text-center transition"
+                    :class="isDragging ? 'ring-2 ring-[#0a72ef] ring-offset-2' : ''"
+                    role="button"
+                    tabindex="0"
+                    @dragover.prevent="isDragging = true"
+                    @dragleave.prevent="isDragging = false"
+                    @drop.prevent="onDrop"
+                    @click="fileInput?.click()"
+                    @keydown.enter.prevent="fileInput?.click()"
+                >
+                    <input
+                        ref="fileInput"
+                        type="file"
+                        class="sr-only"
+                        :aria-label="t('media.upload_aria')"
+                        @change="onFileChange"
+                    />
+                    <span class="text-sm font-medium text-[#171717]">{{
+                        t('media.drop_label')
+                    }}</span>
+                    <UButton :loading="isUploading" color="neutral" variant="solid">
+                        {{ t('media.choose_file') }}
+                    </UButton>
+                </div>
             </div>
         </UCard>
 
@@ -138,44 +139,47 @@
                 v-for="m in items"
                 :key="m.id"
                 class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
-                :ui="{ body: { padding: 'p-4' } }"
             >
-                <div
-                    class="mb-3 aspect-video overflow-hidden rounded-md bg-[#fafafa] shadow-[rgb(235,235,235)_0px_0px_0px_1px]"
-                >
-                    <img
-                        v-if="m.mime_type.startsWith('image/')"
-                        :src="m.thumb_url || m.url"
-                        :alt="m.original_filename"
-                        class="h-full w-full object-cover"
-                        loading="lazy"
-                    />
+                <div class="p-4">
                     <div
-                        v-else
-                        class="flex h-full items-center justify-center text-xs text-[#666666]"
+                        class="mb-3 aspect-video overflow-hidden rounded-md bg-[#fafafa] shadow-[rgb(235,235,235)_0px_0px_0px_1px]"
                     >
-                        {{ m.mime_type }}
+                        <img
+                            v-if="m.mime_type.startsWith('image/')"
+                            :src="m.thumb_url || m.url"
+                            :alt="m.original_filename"
+                            class="h-full w-full object-cover"
+                            loading="lazy"
+                        />
+                        <div
+                            v-else
+                            class="flex h-full items-center justify-center text-xs text-[#666666]"
+                        >
+                            {{ m.mime_type }}
+                        </div>
                     </div>
-                </div>
-                <p class="truncate text-sm font-medium text-[#171717]">{{ m.original_filename }}</p>
-                <p class="text-xs text-[#666666]">{{ m.collection }} · {{ m.size_bytes }} B</p>
-                <div class="mt-3">
-                    <UButton
-                        size="xs"
-                        variant="soft"
-                        color="gray"
-                        :to="m.url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {{ t('media.open') }}
-                    </UButton>
+                    <p class="truncate text-sm font-medium text-[#171717]">
+                        {{ m.original_filename }}
+                    </p>
+                    <p class="text-xs text-[#666666]">{{ m.collection }} · {{ m.size_bytes }} B</p>
+                    <div class="mt-3">
+                        <UButton
+                            size="xs"
+                            variant="soft"
+                            color="neutral"
+                            :to="m.url"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ t('media.open') }}
+                        </UButton>
+                    </div>
                 </div>
             </UCard>
         </div>
 
         <div class="mt-8">
-            <UButton variant="ghost" color="gray" :to="localePath('/dashboard')">
+            <UButton variant="ghost" color="neutral" :to="localePath('/dashboard')">
                 {{ t('media.back_dashboard') }}
             </UButton>
         </div>

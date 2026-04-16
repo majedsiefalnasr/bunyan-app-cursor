@@ -35,7 +35,7 @@
         toast.add({
             title: t('admin.user_detail.api_missing_title'),
             description: t('admin.user_detail.api_missing_note'),
-            color: 'amber',
+            color: 'warning',
         });
     }
 
@@ -58,7 +58,12 @@
                     {{ user.name }} — {{ user.email }}
                 </p>
             </div>
-            <UButton color="gray" variant="soft" to="/admin/users" icon="i-heroicons-arrow-right">
+            <UButton
+                color="neutral"
+                variant="soft"
+                to="/admin/users"
+                icon="i-heroicons-arrow-right"
+            >
                 {{ t('admin.user_detail.back_to_users') }}
             </UButton>
         </div>

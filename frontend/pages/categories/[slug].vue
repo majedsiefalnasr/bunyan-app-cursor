@@ -57,7 +57,7 @@
 
 <template>
     <div class="mx-auto max-w-5xl space-y-6">
-        <UButton :to="localePath('/categories')" color="gray" variant="ghost" class="px-0">
+        <UButton :to="localePath('/categories')" color="neutral" variant="ghost" class="px-0">
             {{ $t('categories.back_grid') }}
         </UButton>
 

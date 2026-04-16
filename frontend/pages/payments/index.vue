@@ -32,7 +32,7 @@
             <div class="flex items-center gap-2">
                 <UButton
                     :to="localePath('/orders')"
-                    color="gray"
+                    color="neutral"
                     variant="ghost"
                     icon="i-heroicons-arrow-right"
                     size="sm"
@@ -75,7 +75,7 @@
                     <UButton
                         :to="localePath(`/payments/${p.id}`)"
                         variant="soft"
-                        color="gray"
+                        color="neutral"
                         size="xs"
                     >
                         {{ $t('payments.detail_title') }}
@@ -85,13 +85,13 @@
         </UPageGrid>
 
         <div class="flex flex-wrap gap-2">
-            <UButton :to="localePath('/orders')" variant="outline" color="gray" size="sm">
+            <UButton :to="localePath('/orders')" variant="outline" color="neutral" size="sm">
                 {{ $t('payments.go_to_orders') }}
             </UButton>
             <UButton
                 :to="localePath('/payments/checkout')"
                 variant="outline"
-                color="gray"
+                color="neutral"
                 size="sm"
             >
                 {{ $t('payments.checkout_title') }}

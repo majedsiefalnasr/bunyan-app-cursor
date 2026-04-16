@@ -251,18 +251,28 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <UButton size="xs" variant="soft" color="gray" @click="openVersions(row)">
+                        <UButton
+                            size="xs"
+                            variant="soft"
+                            color="neutral"
+                            @click="openVersions(row)"
+                        >
                             {{ $t('projects.documents_versions') }}
                         </UButton>
                         <UButton
                             size="xs"
                             variant="soft"
-                            color="gray"
+                            color="neutral"
                             @click="downloadDocument(row)"
                         >
                             {{ $t('projects.documents_download') }}
                         </UButton>
-                        <UButton size="xs" color="red" variant="soft" @click="removeDocument(row)">
+                        <UButton
+                            size="xs"
+                            color="error"
+                            variant="soft"
+                            @click="removeDocument(row)"
+                        >
                             {{ $t('projects.documents_delete') }}
                         </UButton>
                     </div>

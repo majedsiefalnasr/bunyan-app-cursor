@@ -81,7 +81,7 @@
             >
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between gap-2">
-                        <UBadge color="gray" variant="soft" size="sm">
+                        <UBadge color="neutral" variant="soft" size="sm">
                             {{ inv.status_label }}
                         </UBadge>
                     </div>

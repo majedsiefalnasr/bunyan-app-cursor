@@ -40,7 +40,7 @@
     const phaseForm = reactive({
         name: '',
         description: '',
-        budget: '' as string | number,
+        budget: '' as string,
         start_date: '',
         end_date: '',
     });
@@ -147,7 +147,7 @@
             </div>
             <UAlert
                 v-else-if="phasesLoadError"
-                color="red"
+                color="error"
                 variant="soft"
                 :title="$t('shell.error')"
                 :description="phasesLoadError"
@@ -228,7 +228,7 @@
                     </div>
 
                     <div class="flex justify-end gap-2">
-                        <UButton color="gray" variant="soft" @click="isPhaseModalOpen = false">
+                        <UButton color="neutral" variant="soft" @click="isPhaseModalOpen = false">
                             {{ $t('common.cancel') }}
                         </UButton>
                         <UButton

@@ -21,7 +21,7 @@
             toast.add({
                 title: t('errors.codes.VALIDATION_ERROR.message'),
                 description: t('payments.missing_order_id'),
-                color: 'amber',
+                color: 'warning',
             });
             return;
         }
@@ -35,7 +35,7 @@
             toast.add({
                 title: t('app.name'),
                 description: t('payments.success_initiated'),
-                color: 'green',
+                color: 'success',
             });
             await navigateTo(localePath(`/payments`));
         } catch {
@@ -62,7 +62,7 @@
 
         <UAlert
             v-if="!hasOrderId"
-            color="amber"
+            color="warning"
             variant="soft"
             :title="$t('payments.missing_order_id')"
             class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
@@ -72,7 +72,7 @@
                     <UButton :to="localePath('/cart')" color="primary" variant="soft">
                         {{ $t('nav.cart') }}
                     </UButton>
-                    <UButton :to="localePath('/orders')" color="gray" variant="outline">
+                    <UButton :to="localePath('/orders')" color="neutral" variant="outline">
                         {{ $t('payments.go_to_orders') }}
                     </UButton>
                 </div>

@@ -53,7 +53,7 @@
         <div v-if="isLoading" class="text-sm text-[#666666]">
             {{ $t('shell.loading') }}
         </div>
-        <UAlert v-else-if="loadError" color="red" variant="soft" :title="$t('errors.retry')" />
+        <UAlert v-else-if="loadError" color="error" variant="soft" :title="$t('errors.retry')" />
 
         <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-5">
             <UCard
