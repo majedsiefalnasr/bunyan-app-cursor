@@ -24,6 +24,7 @@
         return [
             { to: localePath(`/projects/${id}`), label: t('projects.nav_overview') },
             { to: localePath(`/projects/${id}/tasks`), label: t('projects.nav_tasks') },
+            { to: localePath(`/projects/${id}/reports`), label: t('projects.nav_reports') },
             { to: localePath(`/projects/${id}/documents`), label: t('projects.nav_documents') },
             { to: localePath(`/projects/${id}/team`), label: t('projects.nav_team') },
             { to: localePath(`/projects/${id}/workflow`), label: t('projects.nav_workflow') },

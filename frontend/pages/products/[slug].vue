@@ -30,15 +30,20 @@
         quantity: number;
         variants?: VariantRow[];
         price_tiers?: PriceTierRow[];
+        media?: Array<{ url?: string | null; path?: string | null; type?: string | null }> | null;
     }
 
     const route = useRoute();
     const localePath = useLocalePath();
     const { apiFetch } = useApi();
     const { formatSar } = useSarPriceFormat();
+    const cart = useCartStore();
+    const toast = useToast();
+    const { t } = useI18n();
 
     const product = ref<ProductDetail | null>(null);
     const isLoading = ref(true);
+    const qty = ref(1);
 
     async function load() {
         isLoading.value = true;
@@ -60,6 +65,24 @@
         },
         { immediate: true }
     );
+
+    function addToCart() {
+        if (!product.value) return;
+        cart.add(
+            {
+                product_id: product.value.id,
+                name: product.value.name,
+                price: product.value.price,
+            },
+            qty.value
+        );
+        toast.add({ title: t('catalog.added_to_cart'), color: 'green' });
+    }
+
+    const heroUrl = computed(() => {
+        const url = (product.value?.media?.[0]?.url ?? '').toString().trim();
+        return url ? url : null;
+    });
 </script>
 
 <template>
@@ -90,6 +113,24 @@
             </div>
 
             <div
+                class="overflow-hidden rounded-lg bg-white shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)] dark:bg-[#0a0a0a]"
+            >
+                <img
+                    v-if="heroUrl"
+                    :src="heroUrl"
+                    :alt="product.name"
+                    class="aspect-[16/9] w-full object-cover"
+                    loading="lazy"
+                />
+                <div
+                    v-else
+                    class="flex aspect-[16/9] items-center justify-center bg-gradient-to-b from-[#fafafa] to-[#f0f0f0] text-[#a3a3a3] dark:from-[#0a0a0a] dark:to-[#171717] dark:text-[#525252]"
+                >
+                    <UIcon name="i-heroicons-photo" class="h-10 w-10" />
+                </div>
+            </div>
+
+            <div
                 class="rounded-lg bg-white p-4 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)] dark:bg-[#0a0a0a]"
             >
                 <p class="text-sm text-[#666666]">{{ $t('catalog.detail_title') }}</p>
@@ -103,6 +144,23 @@
                         <dd class="font-medium">{{ product.quantity }}</dd>
                     </div>
                 </dl>
+
+                <div
+                    class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+                >
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-[#666666]">{{ $t('cart.quantity') }}</span>
+                        <UInput v-model="qty" type="number" min="1" class="w-24" />
+                    </div>
+                    <UButton
+                        color="primary"
+                        variant="solid"
+                        icon="i-heroicons-plus"
+                        @click="addToCart"
+                    >
+                        {{ $t('catalog.add_to_cart') }}
+                    </UButton>
+                </div>
             </div>
 
             <div
@@ -128,17 +186,17 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="t in product.price_tiers"
-                            :key="t.id"
+                            v-for="tier in product.price_tiers"
+                            :key="tier.id"
                             class="border-b border-[#ebebeb] last:border-0 dark:border-[#262626]"
                         >
                             <td class="py-2">
-                                {{ t.min_quantity }}
+                                {{ tier.min_quantity }}
                                 —
-                                {{ t.max_quantity ?? $t('catalog.tier_open') }}
+                                {{ tier.max_quantity ?? $t('catalog.tier_open') }}
                             </td>
                             <td class="py-2 font-medium text-[#171717] dark:text-white">
-                                {{ formatSar(t.unit_price) }}
+                                {{ formatSar(tier.unit_price) }}
                             </td>
                         </tr>
                     </tbody>

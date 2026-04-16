@@ -12,11 +12,12 @@
     const toast = useToast();
 
     const orderId = computed(() => Number(route.query.orderId || 0));
+    const hasOrderId = computed(() => Number.isFinite(orderId.value) && orderId.value > 0);
     const method = ref<'mada' | 'card' | 'bank_transfer'>('mada');
     const isSubmitting = ref(false);
 
     async function submit() {
-        if (!orderId.value) {
+        if (!hasOrderId.value) {
             toast.add({
                 title: t('errors.codes.VALIDATION_ERROR.message'),
                 description: t('payments.missing_order_id'),
@@ -59,6 +60,25 @@
             </p>
         </div>
 
+        <UAlert
+            v-if="!hasOrderId"
+            color="amber"
+            variant="soft"
+            :title="$t('payments.missing_order_id')"
+            class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
+        >
+            <template #description>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <UButton :to="localePath('/cart')" color="primary" variant="soft">
+                        {{ $t('nav.cart') }}
+                    </UButton>
+                    <UButton :to="localePath('/orders')" color="gray" variant="outline">
+                        {{ $t('payments.go_to_orders') }}
+                    </UButton>
+                </div>
+            </template>
+        </UAlert>
+
         <UCard
             class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)] dark:shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06)]"
         >
@@ -76,7 +96,12 @@
                         class="w-full"
                     />
                 </UFormGroup>
-                <UButton :loading="isSubmitting" color="primary" @click="submit">
+                <UButton
+                    :loading="isSubmitting"
+                    :disabled="!hasOrderId"
+                    color="primary"
+                    @click="submit"
+                >
                     {{ $t('payments.submit') }}
                 </UButton>
             </div>

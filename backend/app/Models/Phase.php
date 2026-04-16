@@ -34,16 +34,25 @@ class Phase extends BaseModel
         'status' => PhaseStatus::class,
     ];
 
+    /**
+     * @return BelongsTo<Project, $this>
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * @return HasMany<Task, $this>
+     */
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
 
+    /**
+     * @return HasMany<Report, $this>
+     */
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);

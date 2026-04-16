@@ -126,9 +126,9 @@ class ApplicationPoliciesTest extends TestCase
         $this->assertFalse($policy->view($field, $phase));
         $this->assertTrue($policy->view($admin, $phase));
 
-        $this->assertTrue($policy->create($customer));
-        $this->assertTrue($policy->create($contractor));
-        $this->assertFalse($policy->create($field));
+        $this->assertTrue($policy->create($contractor, $project));
+        $this->assertFalse($policy->create($customer, $project));
+        $this->assertFalse($policy->create($field, $project));
 
         $this->assertTrue($policy->update($customer, $phase));
         $this->assertTrue($policy->update($contractor, $phase));

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\UserRole;
 use App\Models\Phase;
+use App\Models\Project;
 use App\Models\User;
 
 class PhasePolicy
@@ -26,9 +27,17 @@ class PhasePolicy
             || $project->supervising_architect_id === $user->id;
     }
 
-    public function create(User $user): bool
+    public function create(User $user, Project $project): bool
     {
-        return in_array($user->role, [UserRole::Customer, UserRole::Contractor, UserRole::Admin]);
+        if ($user->role === UserRole::Admin) {
+            return true;
+        }
+
+        if ($user->role !== UserRole::Contractor) {
+            return false;
+        }
+
+        return $project->contractor_id === $user->id;
     }
 
     public function update(User $user, Phase $phase): bool

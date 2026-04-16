@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Enums\UserRole;
 use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,6 +13,14 @@ class UpdateProjectRequest extends FormRequest
         $project = $this->route('project');
         if (! $project instanceof Project) {
             return false;
+        }
+
+        $wantsAssignment =
+            $this->has('contractor_id') ||
+            $this->has('supervising_architect_id');
+
+        if ($wantsAssignment) {
+            return $this->user()?->role === UserRole::Admin;
         }
 
         return $this->user()->can('update', $project);
@@ -35,6 +44,8 @@ class UpdateProjectRequest extends FormRequest
             'project_type' => ['sometimes', 'nullable', 'in:residential,commercial,infrastructure'],
             'end_date' => ['sometimes', 'nullable', 'date'],
             'start_date' => ['sometimes', 'nullable', 'date'],
+            'contractor_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
+            'supervising_architect_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
         ];
     }
 

@@ -8,7 +8,9 @@
     });
 
     const authStore = useAuthStore();
+    const route = useRoute();
     const localePath = useLocalePath();
+    const { t, te } = useI18n();
 
     const schema = loginSchema;
 
@@ -28,7 +30,12 @@
         const o = err as Record<string, unknown>;
         const fromData = (payload: unknown): string | null => {
             if (!payload || typeof payload !== 'object') return null;
-            const p = payload as { error?: { message?: string } };
+            const p = payload as { error?: { code?: string; message?: string } };
+            const code = p.error?.code;
+            if (code) {
+                const key = `errors.codes.${code}.message`;
+                if (te(key)) return t(key);
+            }
             return p.error?.message ?? null;
         };
         const direct = fromData(o.data);
@@ -37,6 +44,7 @@
         if (res && typeof res === 'object' && '_data' in res) {
             return fromData((res as { _data?: unknown })._data);
         }
+        if (typeof o.message === 'string' && o.message) return o.message;
         return null;
     }
 
@@ -50,7 +58,10 @@
                 password: state.password,
             };
             await authStore.login(payload);
-            await navigateTo(localePath('/dashboard'));
+            const redirectRaw = route.query.redirect;
+            const redirect =
+                typeof redirectRaw === 'string' && redirectRaw.startsWith('/') ? redirectRaw : null;
+            await navigateTo(redirect ? redirect : localePath('/dashboard'));
         } catch (e: unknown) {
             error.value = messageFromAuthCatch(e) || 'حدث خطأ غير متوقع';
         } finally {

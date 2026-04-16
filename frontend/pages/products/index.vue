@@ -21,6 +21,7 @@
         price: string;
         quantity: number;
         sku?: string | null;
+        media?: Array<{ url?: string | null; path?: string | null; type?: string | null }> | null;
     }
 
     const { apiFetch } = useApi();
@@ -29,6 +30,7 @@
     const products = ref<ProductRow[]>([]);
     const meta = ref<ProductListMeta | null>(null);
     const isLoading = ref(true);
+    const loadError = ref<string | null>(null);
     const categoryTree = ref<CategoryNode[]>([]);
 
     const categoryOptions = computed(() => {
@@ -56,12 +58,17 @@
 
     async function loadProducts() {
         isLoading.value = true;
+        loadError.value = null;
         try {
             const qs = buildProductListQueryString(filters.value);
             const res = await apiFetch<{ data: unknown }>(`/v1/products?${qs}`);
             const { items, meta: m } = extractProductListPayload(res);
             products.value = items as ProductRow[];
             meta.value = m;
+        } catch (e: unknown) {
+            products.value = [];
+            meta.value = null;
+            loadError.value = e instanceof Error ? e.message : String(e);
         } finally {
             isLoading.value = false;
         }
@@ -136,6 +143,14 @@
                 <div v-if="isLoading" class="text-sm text-[#666666]">
                     {{ $t('shell.loading') }}
                 </div>
+
+                <UAlert
+                    v-else-if="loadError"
+                    color="red"
+                    variant="soft"
+                    :title="$t('shell.error')"
+                    :description="loadError"
+                />
 
                 <p v-else-if="products.length === 0" class="text-sm text-[#666666]">
                     {{ $t('catalog.empty') }}

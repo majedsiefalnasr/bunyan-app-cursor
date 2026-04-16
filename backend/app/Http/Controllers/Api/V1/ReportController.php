@@ -43,11 +43,13 @@ class ReportController extends BaseController
 
     public function store(CreateReportRequest $request): JsonResponse
     {
+        $data = $request->validated();
         $report = Report::create([
-            'project_id' => $request->project_id,
-            'title' => $request->title,
-            'content' => $request->content,
-            'description' => $request->content,
+            'project_id' => $data['project_id'],
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'description' => $data['content'],
+            'attachments' => $data['attachments'] ?? null,
             'status' => 'draft',
             'created_by' => $request->user()->id,
         ]);

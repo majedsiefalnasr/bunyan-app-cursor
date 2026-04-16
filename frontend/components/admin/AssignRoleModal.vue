@@ -4,8 +4,13 @@
     interface AdminUser {
         id: number;
         name: string;
+        email: string;
         role: UserRole;
         role_label: string;
+        phone: string | null;
+        active: boolean;
+        email_verified_at: string | null;
+        created_at: string;
     }
 
     const props = defineProps<{
@@ -15,7 +20,7 @@
     const open = defineModel<boolean>('open', { default: false });
 
     const emit = defineEmits<{
-        assigned: [];
+        assigned: [updated: AdminUser];
     }>();
 
     const { apiFetch } = useApi();
@@ -44,10 +49,13 @@
 
         isSubmitting.value = true;
         try {
-            await apiFetch(`/v1/admin/users/${props.user.id}/role`, {
-                method: 'POST',
-                body: { role: selectedRole.value },
-            });
+            const res = await apiFetch<{ data: AdminUser }>(
+                `/v1/admin/users/${props.user.id}/role`,
+                {
+                    method: 'POST',
+                    body: { role: selectedRole.value },
+                }
+            );
 
             toast.add({
                 title: 'تم بنجاح',
@@ -56,11 +64,19 @@
                 icon: 'i-heroicons-check-circle',
             });
 
-            emit('assigned');
+            const updated = res?.data ?? { ...props.user, role: selectedRole.value as UserRole };
+            emit('assigned', updated);
+            open.value = false;
         } catch (error: unknown) {
+            const o = error as { response?: { _data?: unknown } };
+            const data = o?.response?._data as unknown;
             const message =
-                error && typeof error === 'object' && 'data' in error
-                    ? String((error as Record<string, unknown>).data ?? 'فشل في تعيين الدور')
+                data &&
+                typeof data === 'object' &&
+                'error' in (data as Record<string, unknown>) &&
+                (data as { error?: unknown }).error &&
+                typeof (data as { error?: { message?: unknown } }).error?.message === 'string'
+                    ? String((data as { error: { message: string } }).error.message)
                     : 'فشل في تعيين الدور';
             toast.add({
                 title: 'خطأ',

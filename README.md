@@ -34,7 +34,7 @@
 | **Frontend Runtime**  | Vue 3              | Latest                 |
 | **Frontend Language** | TypeScript         | 5.6                    |
 | **Frontend UI**       | Nuxt UI (@nuxt/ui) | Latest                 |
-| **Frontend Styling**  | Tailwind CSS       | v4                     |
+| **Frontend Styling**  | Tailwind CSS       | v3                     |
 | **Frontend i18n**     | @nuxtjs/i18n       | Arabic (RTL) + English |
 | **Frontend State**    | Pinia              | Latest                 |
 | **Backend**           | Laravel            | 11.x                   |
@@ -45,6 +45,25 @@
 | **Container**         | Docker             | 20.10+                 |
 | **Orchestration**     | Docker Compose     | 3.8+                   |
 | **CI/CD**             | GitHub Actions     | Latest                 |
+
+---
+
+## 🧾 QA Quick Start (Manual Acceptance)
+
+- **Full human test guide**: [specs/runtime/FULL_TESTING_GUIDE.md](specs/runtime/FULL_TESTING_GUIDE.md)
+- **Acceptance checklist (copy/paste)**: [Release/acceptance checklist](specs/runtime/FULL_TESTING_GUIDE.md#releaseacceptance-checklist-copypaste)
+
+Minimal flow:
+
+```bash
+npm run install
+cp .env.example .env
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+npm run docker:up
+cd backend && php artisan key:generate && php artisan migrate:fresh --seed
+cd .. && npm run dev
+```
 
 ### Directory Structure
 
@@ -192,7 +211,7 @@ Use **`php artisan test`** for everyday local runs. **`php artisan test --parall
 | Document           | Purpose                             | Location                                                             |
 | ------------------ | ----------------------------------- | -------------------------------------------------------------------- |
 | **Setup Guide**    | Local development environment setup | `docs/SETUP.md`                                                      |
-| **Testing Guide**  | Comprehensive testing instructions  | `specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md`   |
+| **Testing Guide**  | Full install → DB → user stories    | `specs/runtime/FULL_TESTING_GUIDE.md`                                |
 | **API Contract**   | RESTful API specifications          | `specs/runtime/001-project-initialization/contracts/api-contract.md` |
 | **Architecture**   | System design and ADRs              | `docs/architecture/`                                                 |
 | **Contributing**   | Development workflow                | `CONTRIBUTING.md`                                                    |
@@ -209,7 +228,7 @@ Use **`php artisan test`** for everyday local runs. **`php artisan test --parall
 - ✅ Full RTL support (Arabic default, English fallback)
 - ✅ i18n internationalization
 - ✅ Pinia state management
-- ✅ Tailwind CSS v4 with Geist fonts
+- ✅ Tailwind CSS v3 with Geist fonts
 - ✅ Form validation (VeeValidate + Zod)
 - ✅ API client with interceptors
 - ✅ Error boundaries and fallback UI
@@ -503,4 +522,4 @@ Built with:
 ---
 
 For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md)  
-For testing instructions, see [TESTING_GUIDE.md](specs/runtime/001-project-initialization/guides/TESTING_GUIDE.md)
+For testing instructions, see [FULL_TESTING_GUIDE.md](specs/runtime/FULL_TESTING_GUIDE.md)

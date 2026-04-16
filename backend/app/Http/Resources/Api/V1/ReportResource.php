@@ -14,6 +14,7 @@ class ReportResource extends JsonResource
             'project_id' => $this->project_id,
             'title' => $this->title,
             'content' => $this->content,
+            'attachments' => $this->attachments,
             'status' => $this->status,
             'created_by' => $this->created_by,
             'creator' => new UserResource($this->whenLoaded('creator')),

@@ -307,13 +307,16 @@ Route::prefix('v1')->group(function () {
             Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
         });
 
-        // Contractor-specific routes
-        Route::middleware('role:contractor,admin')->group(function () {
+        // Contractor/Customer routes
+        Route::middleware('role:customer,contractor,admin')->group(function () {
             Route::put('projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
-            Route::post('projects/{project}/phases', [PhaseController::class, 'store'])->name('projects.phases.store');
-            Route::put('projects/{project}/phases/{phase}', [PhaseController::class, 'update'])->name('projects.phases.update');
             Route::post('projects/{project}/phases/{phase}/tasks', [TaskController::class, 'store'])->name('projects.phases.tasks.store');
             Route::put('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'update'])->name('projects.phases.tasks.update');
+        });
+
+        Route::middleware('role:contractor,admin')->group(function () {
+            Route::post('projects/{project}/phases', [PhaseController::class, 'store'])->name('projects.phases.store');
+            Route::put('projects/{project}/phases/{phase}', [PhaseController::class, 'update'])->name('projects.phases.update');
         });
 
         Route::middleware('role:contractor,supervising_architect,admin')->group(function () {

@@ -77,6 +77,8 @@ class ProjectService
             'project_type',
             'start_date',
             'end_date',
+            'contractor_id',
+            'supervising_architect_id',
         ];
 
         $updated = $this->projects->update($project, Arr::only($data, $allowed));

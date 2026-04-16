@@ -9,6 +9,8 @@ class SupplierProfileResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $verificationStatus = $this->verification_status;
+
         return [
             'id' => $this->id,
             'company_name_ar' => $this->company_name_ar,
@@ -19,17 +21,25 @@ class SupplierProfileResource extends JsonResource
             'district' => $this->district,
             'address' => $this->address,
             'phone' => $this->phone,
-            'verification_status' => $this->verification_status?->value,
+            'verification_status' => $verificationStatus instanceof \BackedEnum ? $verificationStatus->value : $verificationStatus,
             'verified_at' => $this->verified_at?->toIso8601String(),
             'rating_avg' => (string) $this->rating_avg,
             'total_ratings' => $this->total_ratings,
-            'user' => $this->whenLoaded('user', fn () => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-                'phone' => $this->user->phone,
-                'role' => $this->user->role?->value ?? null,
-            ]),
+            'user' => $this->whenLoaded('user', function ($user) {
+                if ($user === null) {
+                    return null;
+                }
+
+                $role = $user->role;
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'role' => $role instanceof \BackedEnum ? $role->value : $role,
+                ];
+            }),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

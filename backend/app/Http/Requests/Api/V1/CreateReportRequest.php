@@ -18,6 +18,8 @@ class CreateReportRequest extends FormRequest
             'project_id' => ['required', 'exists:projects,id'],
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string', 'max:5000'],
+            'attachments' => ['sometimes', 'array', 'max:10'],
+            'attachments.*' => ['required', 'string', 'max:2048'],
         ];
     }
 

@@ -18,14 +18,19 @@
 
     const projects = ref<ProjectRow[]>([]);
     const isLoading = ref(true);
+    const loadError = ref<string | null>(null);
 
     onMounted(async () => {
+        loadError.value = null;
         try {
             const res = await apiFetch<{ data: { data?: ProjectRow[] } | ProjectRow[] }>(
                 '/v1/projects'
             );
             const payload = res.data as { data?: ProjectRow[] } | ProjectRow[];
             projects.value = Array.isArray(payload) ? payload : (payload.data ?? []);
+        } catch (e: unknown) {
+            projects.value = [];
+            loadError.value = e instanceof Error ? e.message : String(e);
         } finally {
             isLoading.value = false;
         }
@@ -54,6 +59,14 @@
         <div v-if="isLoading" class="text-sm text-[#666666]">
             {{ $t('shell.loading') }}
         </div>
+
+        <UAlert
+            v-else-if="loadError"
+            color="red"
+            variant="soft"
+            :title="$t('shell.error')"
+            :description="loadError"
+        />
 
         <p v-else-if="projects.length === 0" class="text-sm text-[#666666]">
             {{ $t('projects.empty') }}

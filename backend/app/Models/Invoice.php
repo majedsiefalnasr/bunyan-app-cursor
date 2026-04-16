@@ -37,21 +37,33 @@ class Invoice extends BaseModel
         'paid_at' => 'datetime',
     ];
 
+    /**
+     * @return BelongsTo<Order, $this>
+     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<SupplierProfile, $this>
+     */
     public function supplierProfile(): BelongsTo
     {
         return $this->belongsTo(SupplierProfile::class, 'supplier_id');
     }
 
+    /**
+     * @return HasMany<InvoiceItem, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(InvoiceItem::class);

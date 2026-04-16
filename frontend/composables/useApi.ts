@@ -13,8 +13,15 @@ export function useApi() {
     const { showErrorNotification } = useErrorNotification();
     const localePath = useLocalePath();
 
+    const rawBaseUrl = (config.public.apiBaseUrl || '').toString().replace(/\/$/, '');
+    const baseURL = rawBaseUrl
+        ? rawBaseUrl.endsWith('/api')
+            ? rawBaseUrl
+            : `${rawBaseUrl}/api`
+        : '';
+
     const apiFetch = $fetch.create({
-        baseURL: config.public.apiBaseUrl || '',
+        baseURL,
         headers: {
             Accept: 'application/json',
             'Accept-Language': 'ar',

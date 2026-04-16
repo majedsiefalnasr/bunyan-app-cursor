@@ -12,13 +12,15 @@ class UserAdminResource extends JsonResource
     public function toArray(Request $request): array
     {
         $roleEnum = $this->role instanceof UserRole ? $this->role : UserRole::tryFrom($this->role);
+        $roleValue = $roleEnum !== null ? $roleEnum->value : $this->role;
+        $roleLabel = $roleEnum !== null ? $roleEnum->label() : $this->role;
 
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $roleEnum?->value ?? $this->role,
-            'role_label' => $roleEnum?->label() ?? $this->role,
+            'role' => $roleValue,
+            'role_label' => $roleLabel,
             'permissions' => app(RoleService::class)->getUserPermissions($this->resource),
             'phone' => $this->phone,
             'active' => $this->active,

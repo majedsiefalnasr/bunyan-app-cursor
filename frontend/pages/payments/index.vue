@@ -25,17 +25,27 @@
 
 <template>
     <div class="mx-auto max-w-4xl space-y-6">
-        <div>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h1
                 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white"
                 style="letter-spacing: -0.06em"
             >
                 {{ $t('payments.list_title') }}
             </h1>
-            <p class="mt-1 text-sm text-[#666666]">
-                {{ $t('payments.list_subtitle') }}
-            </p>
+            <div class="flex items-center gap-2">
+                <UButton
+                    :to="localePath('/orders')"
+                    color="gray"
+                    variant="ghost"
+                    icon="i-heroicons-arrow-right"
+                >
+                    {{ $t('payments.go_to_orders') }}
+                </UButton>
+            </div>
         </div>
+        <p class="text-sm text-[#666666]">
+            {{ $t('payments.list_subtitle') }}
+        </p>
 
         <div v-if="isLoading" class="text-sm text-[#666666]">
             {{ $t('payments.loading') }}
@@ -68,8 +78,13 @@
             </UCard>
         </div>
 
-        <UButton :to="localePath('/payments/checkout')" variant="outline" color="gray">
-            {{ $t('payments.checkout_title') }}
-        </UButton>
+        <div class="flex flex-wrap gap-2">
+            <UButton :to="localePath('/orders')" variant="outline" color="gray">
+                {{ $t('payments.go_to_orders') }}
+            </UButton>
+            <UButton :to="localePath('/payments/checkout')" variant="outline" color="gray">
+                {{ $t('payments.checkout_title') }}
+            </UButton>
+        </div>
     </div>
 </template>

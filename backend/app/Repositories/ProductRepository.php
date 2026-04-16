@@ -21,7 +21,13 @@ class ProductRepository extends BaseRepository
 
     public function allActive(array $filters = []): LengthAwarePaginator
     {
-        $query = $this->newQuery()->active()->with('catalogCategory');
+        $query = $this->newQuery()
+            ->active()
+            ->with([
+                'catalogCategory',
+                // For list views, include only the first media item as a thumbnail.
+                'productMedia' => fn ($q) => $q->orderBy('sort_order')->orderBy('id')->limit(1),
+            ]);
 
         if ($filters['category_id'] ?? null) {
             $query->where('category_id', (int) $filters['category_id']);

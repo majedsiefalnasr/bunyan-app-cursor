@@ -3,6 +3,10 @@
         "name": "Bunyan",
         "description": "Arabic Construction Services and Building Materials Marketplace"
     },
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel"
+    },
     "nav": {
         "home": "Home",
         "dashboard": "Dashboard",
@@ -17,6 +21,7 @@
         "suppliers": "Suppliers",
         "rfqs": "RFQs",
         "orders": "Orders",
+        "cart": "Cart",
         "invoices": "Invoices",
         "rfq_invitations": "RFQ invitations",
         "contact": "Contact",
@@ -116,6 +121,20 @@
         "push": "Push",
         "save": "Save preferences",
         "saved": "Preferences saved"
+    },
+    "reports": {
+        "title": "Project reports",
+        "empty": "No reports yet.",
+        "load_error": "Could not load reports",
+        "create_title": "Add report",
+        "create_success": "Report created successfully",
+        "role_hint": "Only the field engineer or admin can create reports.",
+        "files_selected": "files selected",
+        "fields": {
+            "title": "Report title",
+            "content": "Report content",
+            "attachments": "Attachments (images/videos)"
+        }
     },
     "auth": {
         "login": "Login",
@@ -277,7 +296,19 @@
         "filter_max_price": "Max price",
         "filter_in_stock": "In stock only",
         "filter_apply": "Apply",
-        "filter_reset": "Reset"
+        "filter_reset": "Reset",
+        "add_to_cart": "Add to cart",
+        "added_to_cart": "Added to cart"
+    },
+    "cart": {
+        "title": "Cart",
+        "subtitle": "Review items before placing the order.",
+        "empty": "Your cart is empty.",
+        "continue_shopping": "Continue shopping",
+        "remove": "Remove",
+        "quantity": "Quantity",
+        "total": "Total",
+        "checkout": "Checkout"
     },
     "categories": {
         "list_title": "Material categories",
@@ -345,6 +376,13 @@
         "status_label": "Status",
         "timeline_title": "Timeline",
         "phases_heading": "Phases",
+        "add_phase": "Add phase",
+        "no_phases_yet": "No phases yet.",
+        "phase_name": "Phase name",
+        "phase_description": "Description",
+        "phase_budget": "Budget",
+        "phase_start_date": "Start date",
+        "phase_end_date": "End date",
         "back_to_list": "Back to list",
         "team_title": "Project team",
         "team_members": "Members",
@@ -401,6 +439,7 @@
         "shell_load_error": "Could not load this project.",
         "nav_overview": "Overview",
         "nav_tasks": "Tasks",
+        "nav_reports": "Reports",
         "nav_documents": "Documents",
         "nav_team": "Team",
         "nav_workflow": "Workflow",
@@ -537,6 +576,7 @@
         "list_title": "Orders",
         "list_subtitle": "Track material and supply orders",
         "empty": "No orders yet",
+        "created_success": "Order created successfully",
         "view": "View details",
         "total": "Total",
         "back": "Back to orders",

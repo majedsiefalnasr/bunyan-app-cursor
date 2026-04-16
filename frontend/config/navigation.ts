@@ -41,6 +41,12 @@ export const navigationItems: NavItem[] = [
         roles: ['customer', 'contractor', 'admin'],
     },
     {
+        labelKey: 'nav.cart',
+        to: '/cart',
+        icon: 'i-heroicons-shopping-bag',
+        roles: ['customer'],
+    },
+    {
         labelKey: 'nav.invoices',
         to: '/invoices',
         icon: 'i-heroicons-document-currency-dollar',
@@ -73,7 +79,7 @@ export const navigationItems: NavItem[] = [
     {
         labelKey: 'nav.products',
         to: '/products',
-        icon: 'i-heroicons-shopping-bag',
+        icon: 'i-heroicons-building-storefront',
         roles: ['customer', 'admin'],
     },
     {

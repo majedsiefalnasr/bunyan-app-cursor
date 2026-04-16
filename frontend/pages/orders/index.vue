@@ -17,11 +17,15 @@
         }>
     >([]);
     const isLoading = ref(true);
+    const loadError = ref<string | null>(null);
 
     onMounted(async () => {
         try {
             const page = await listOrders({ per_page: 20 });
             rows.value = page.data;
+        } catch (e: unknown) {
+            rows.value = [];
+            loadError.value = e instanceof Error ? e.message : String(e);
         } finally {
             isLoading.value = false;
         }
@@ -47,6 +51,14 @@
         <div v-if="isLoading" class="text-sm text-[#666666]">
             {{ $t('shell.loading') }}
         </div>
+
+        <UAlert
+            v-else-if="loadError"
+            color="red"
+            variant="soft"
+            :title="$t('shell.error')"
+            :description="loadError"
+        />
 
         <p v-else-if="rows.length === 0" class="text-sm text-[#666666]">
             {{ $t('order.empty') }}

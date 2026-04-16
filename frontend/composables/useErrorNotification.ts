@@ -2,7 +2,24 @@ import type { ErrorPayload } from '~/types/errors';
 
 export function useErrorNotification() {
     const toast = useToast();
-    const { t, te } = useI18n();
+    const composer = (typeof useI18n === 'function' ? useI18n() : undefined) as unknown as {
+        t?: (...args: unknown[]) => unknown;
+        te?: (...args: unknown[]) => unknown;
+    };
+    const t = (key: string) => {
+        if (typeof composer?.t !== 'function') {
+            return key;
+        }
+        const out = composer.t(key);
+        return typeof out === 'string' ? out : String(out ?? key);
+    };
+    const te = (key: string) => {
+        if (typeof composer?.te !== 'function') {
+            return false;
+        }
+        const out = composer.te(key);
+        return Boolean(out);
+    };
 
     function severityFor(statusCode?: number, code?: string): 'error' | 'warning' {
         if (statusCode !== undefined && statusCode >= 500) {
@@ -17,13 +34,13 @@ export function useErrorNotification() {
 
     function showErrorNotification(payload: ErrorPayload) {
         const sev = severityFor(payload.statusCode, payload.code);
-        const title = String(payload.code);
         const key = `errors.codes.${payload.code}.message`;
         const localized = te(key) ? t(key) : payload.message;
+        const title = localized || String(payload.code);
 
         toast.add({
             title,
-            description: localized,
+            description: '',
             color: sev === 'error' ? 'red' : 'yellow',
             timeout: sev === 'error' ? 8000 : 5000,
         });

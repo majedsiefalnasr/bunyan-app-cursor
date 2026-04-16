@@ -3,6 +3,10 @@
         "name": "بنيان",
         "description": "منصة الخدمات الإنشائية والمواد البناء العربية"
     },
+    "common": {
+        "save": "حفظ",
+        "cancel": "إلغاء"
+    },
     "nav": {
         "home": "الرئيسية",
         "dashboard": "لوحة التحكم",
@@ -17,6 +21,7 @@
         "suppliers": "الموردون",
         "rfqs": "طلبات التسعير",
         "orders": "الطلبات",
+        "cart": "السلة",
         "invoices": "الفواتير",
         "rfq_invitations": "دعوات التسعير",
         "contact": "اتصل بنا",
@@ -116,6 +121,20 @@
         "push": "دفع",
         "save": "حفظ التفضيلات",
         "saved": "تم حفظ التفضيلات"
+    },
+    "reports": {
+        "title": "تقارير المشروع",
+        "empty": "لا توجد تقارير بعد.",
+        "load_error": "تعذر تحميل التقارير",
+        "create_title": "إضافة تقرير",
+        "create_success": "تم إنشاء التقرير بنجاح",
+        "role_hint": "إنشاء التقارير متاح للمهندس الميداني أو الإدارة فقط.",
+        "files_selected": "ملفات محددة",
+        "fields": {
+            "title": "عنوان التقرير",
+            "content": "محتوى التقرير",
+            "attachments": "مرفقات (صور/فيديو)"
+        }
     },
     "auth": {
         "login": "تسجيل الدخول",
@@ -277,7 +296,19 @@
         "filter_max_price": "أعلى سعر",
         "filter_in_stock": "متوفر فقط",
         "filter_apply": "تطبيق",
-        "filter_reset": "إعادة ضبط"
+        "filter_reset": "إعادة ضبط",
+        "add_to_cart": "أضف للسلة",
+        "added_to_cart": "تمت الإضافة للسلة"
+    },
+    "cart": {
+        "title": "سلة المشتريات",
+        "subtitle": "راجع المنتجات قبل إتمام الطلب.",
+        "empty": "سلتك فارغة.",
+        "continue_shopping": "متابعة التسوق",
+        "remove": "إزالة",
+        "quantity": "الكمية",
+        "total": "الإجمالي",
+        "checkout": "إتمام الطلب"
     },
     "categories": {
         "list_title": "تصنيفات المواد",
@@ -345,6 +376,13 @@
         "status_label": "الحالة",
         "timeline_title": "الجدول الزمني",
         "phases_heading": "المراحل",
+        "add_phase": "إضافة مرحلة",
+        "no_phases_yet": "لا توجد مراحل بعد.",
+        "phase_name": "اسم المرحلة",
+        "phase_description": "الوصف",
+        "phase_budget": "الميزانية",
+        "phase_start_date": "تاريخ البدء",
+        "phase_end_date": "تاريخ الانتهاء",
         "back_to_list": "العودة للقائمة",
         "team_title": "فريق المشروع",
         "team_members": "الأعضاء",
@@ -401,6 +439,7 @@
         "shell_load_error": "تعذر تحميل هذا المشروع.",
         "nav_overview": "نظرة عامة",
         "nav_tasks": "المهام",
+        "nav_reports": "التقارير",
         "nav_documents": "المستندات",
         "nav_team": "الفريق",
         "nav_workflow": "سير العمل",
@@ -537,6 +576,7 @@
         "list_title": "الطلبات",
         "list_subtitle": "تتبع طلبات المواد والتوريد",
         "empty": "لا توجد طلبات بعد",
+        "created_success": "تم إنشاء الطلب بنجاح",
         "view": "عرض التفاصيل",
         "total": "الإجمالي",
         "back": "رجوع إلى الطلبات",

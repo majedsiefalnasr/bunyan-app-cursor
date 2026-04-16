@@ -25,6 +25,7 @@ trait ApiResponse
         int $statusCode = 400,
     ): JsonResponse {
         $enum = ErrorCode::tryFrom($code);
+        $enumValue = $enum !== null ? $enum->value : $code;
 
         return response()->json([
             'success' => false,
@@ -32,7 +33,7 @@ trait ApiResponse
             'message' => null,
             'errors' => [],
             'error' => [
-                'code' => $enum?->value ?? $code,
+                'code' => $enumValue,
                 'message' => $message,
                 'details' => $details,
             ],

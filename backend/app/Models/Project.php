@@ -50,21 +50,33 @@ class Project extends BaseModel
         'status' => ProjectStatus::class,
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function contractor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'contractor_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function supervisingArchitect(): BelongsTo
     {
         return $this->belongsTo(User::class, 'supervising_architect_id');
     }
 
+    /**
+     * @return HasMany<Phase, $this>
+     */
     public function phases(): HasMany
     {
         return $this->hasMany(Phase::class);
@@ -75,6 +87,9 @@ class Project extends BaseModel
         return $this->hasManyThrough(Task::class, Phase::class);
     }
 
+    /**
+     * @return HasMany<Report, $this>
+     */
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
@@ -126,8 +141,12 @@ class Project extends BaseModel
             UserRole::Customer => $query->where('customer_id', $user->id),
             UserRole::Contractor => $query->where('contractor_id', $user->id),
             UserRole::SupervisingArchitect => $query->where('supervising_architect_id', $user->id),
-            UserRole::FieldEngineer => $query->whereHas('reports', function (Builder $q) use ($user): void {
-                $q->where('created_by', $user->id);
+            UserRole::FieldEngineer => $query->where(function (Builder $q) use ($user): void {
+                $q->whereHas('members', function (Builder $m) use ($user): void {
+                    $m->where('user_id', $user->id);
+                })->orWhereHas('reports', function (Builder $r) use ($user): void {
+                    $r->where('created_by', $user->id);
+                });
             }),
             UserRole::Admin => $query,
         };

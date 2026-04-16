@@ -9,13 +9,15 @@ class RfqResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $status = $this->status;
+
         return [
             'id' => $this->id,
             'project_id' => $this->project_id,
             'created_by' => $this->created_by,
             'title' => $this->title,
             'description' => $this->description,
-            'status' => $this->status?->value ?? $this->status,
+            'status' => $status instanceof \BackedEnum ? $status->value : $status,
             'status_label' => method_exists($this->status, 'label') ? $this->status->label() : null,
             'delivery_deadline' => $this->delivery_deadline?->toDateString(),
             'response_deadline' => $this->response_deadline?->toIso8601String(),

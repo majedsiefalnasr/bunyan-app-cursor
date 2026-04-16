@@ -18,11 +18,7 @@ class LogApiActivity
         $durationMs = round((microtime(true) - $startedAt) * 1000, 2);
 
         $user = $request->user();
-        $role = null;
-        if ($user !== null && $user->role !== null) {
-            // User model casts role to UserRole (string-backed enum).
-            $role = $user->role->value;
-        }
+        $role = $user !== null ? $user->role->value : null;
 
         Log::channel('structured')->info('api.request', [
             'timestamp' => now()->toIso8601String(),

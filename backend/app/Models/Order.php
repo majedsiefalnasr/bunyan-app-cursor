@@ -44,31 +44,49 @@ class Order extends BaseModel
         'delivered_at' => 'datetime',
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<Project, $this>
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Quotation, $this>
+     */
     public function quotation(): BelongsTo
     {
         return $this->belongsTo(Quotation::class);
     }
 
+    /**
+     * @return BelongsTo<SupplierProfile, $this>
+     */
     public function supplierProfile(): BelongsTo
     {
         return $this->belongsTo(SupplierProfile::class, 'supplier_id');
     }
 
+    /**
+     * @return HasMany<OrderItem, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
+    /**
+     * @return HasMany<Transaction, $this>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
@@ -79,6 +97,9 @@ class Order extends BaseModel
         return $this->morphMany(Payment::class, 'payable');
     }
 
+    /**
+     * @return HasMany<Invoice, $this>
+     */
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);

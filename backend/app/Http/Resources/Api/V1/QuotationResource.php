@@ -9,11 +9,13 @@ class QuotationResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $status = $this->status;
+
         return [
             'id' => $this->id,
             'rfq_id' => $this->rfq_id,
             'supplier_id' => $this->supplier_id,
-            'status' => $this->status?->value ?? $this->status,
+            'status' => $status instanceof \BackedEnum ? $status->value : $status,
             'status_label' => method_exists($this->status, 'label') ? $this->status->label() : null,
             'total_price' => number_format((float) ($this->total_price ?? 0), 2, '.', ''),
             'delivery_days' => $this->delivery_days,
