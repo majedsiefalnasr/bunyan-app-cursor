@@ -22,13 +22,13 @@ export const useTasks = () => {
         if (params?.status) query.append('status', params.status);
         if (params?.priority) query.append('priority', params.priority);
 
-        const url = `/api/tasks${query.toString() ? '?' + query.toString() : ''}`;
+        const url = `/v1/tasks${query.toString() ? '?' + query.toString() : ''}`;
         const response = await apiFetch(url);
         return response;
     };
 
     const getTask = async (taskId: number | string) => {
-        const response = await apiFetch(`/api/tasks/${taskId}`);
+        const response = await apiFetch(`/v1/tasks/${taskId}`);
         return response;
     };
 
@@ -37,13 +37,13 @@ export const useTasks = () => {
         if (params?.per_page) query.append('per_page', String(params.per_page));
         if (params?.page) query.append('page', String(params.page));
 
-        const url = `/api/projects/${projectId}/tasks${query.toString() ? '?' + query.toString() : ''}`;
+        const url = `/v1/projects/${projectId}/tasks${query.toString() ? '?' + query.toString() : ''}`;
         const response = await apiFetch(url);
         return response;
     };
 
     const createTask = async (data: TaskData) => {
-        const response = await apiFetch('/api/tasks', {
+        const response = await apiFetch('/v1/tasks', {
             method: 'POST',
             body: JSON.stringify(data),
         });
@@ -51,7 +51,7 @@ export const useTasks = () => {
     };
 
     const updateTask = async (taskId: number | string, data: TaskData) => {
-        const response = await apiFetch(`/api/tasks/${taskId}`, {
+        const response = await apiFetch(`/v1/tasks/${taskId}`, {
             method: 'PUT',
             body: JSON.stringify(data),
         });
@@ -59,7 +59,7 @@ export const useTasks = () => {
     };
 
     const deleteTask = async (taskId: number | string) => {
-        const response = await apiFetch(`/api/tasks/${taskId}`, {
+        const response = await apiFetch(`/v1/tasks/${taskId}`, {
             method: 'DELETE',
         });
         return response;

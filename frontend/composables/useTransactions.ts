@@ -18,13 +18,13 @@ export const useTransactions = () => {
         if (params?.type) query.append('type', params.type);
         if (params?.status) query.append('status', params.status);
 
-        const url = `/api/transactions${query.toString() ? '?' + query.toString() : ''}`;
+        const url = `/v1/transactions${query.toString() ? '?' + query.toString() : ''}`;
         const response = await apiFetch(url);
         return response;
     };
 
     const getTransaction = async (transactionId: number | string) => {
-        const response = await apiFetch(`/api/transactions/${transactionId}`);
+        const response = await apiFetch(`/v1/transactions/${transactionId}`);
         return response;
     };
 
@@ -36,7 +36,7 @@ export const useTransactions = () => {
         if (params?.per_page) query.append('per_page', String(params.per_page));
         if (params?.page) query.append('page', String(params.page));
 
-        const url = `/api/projects/${projectId}/transactions${query.toString() ? '?' + query.toString() : ''}`;
+        const url = `/v1/projects/${projectId}/transactions${query.toString() ? '?' + query.toString() : ''}`;
         const response = await apiFetch(url);
         return response;
     };
