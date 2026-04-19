@@ -71,23 +71,23 @@
                 t('activityLog.project_activity_title')
             }}</span>
         </template>
-        <div v-if="isLoading" class="text-sm text-[#666666]">{{ $t('shell.loading') }}</div>
-        <p v-else-if="items.length === 0" class="text-sm text-[#666666]">
+        <div v-if="isLoading" class="text-sm text-muted">{{ $t('shell.loading') }}</div>
+        <p v-else-if="items.length === 0" class="text-sm text-muted">
             {{ t('activityLog.empty') }}
         </p>
-        <ul v-else class="space-y-3 text-sm text-[#4d4d4d]">
+        <ul v-else class="space-y-3 text-sm">
             <li
                 v-for="row in items"
                 :key="row.id"
-                class="rounded-md bg-[#fafafa] px-3 py-2 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06)]"
+                class="rounded-lg border border-default bg-elevated/30 px-3 py-2 dark:bg-elevated/15"
             >
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <span class="font-medium text-[#171717]">{{ row.action }}</span>
-                    <span v-if="row.created_at" class="text-xs text-[#808080]">{{
+                    <span class="font-medium text-[#171717] dark:text-white">{{ row.action }}</span>
+                    <span v-if="row.created_at" class="text-xs text-muted">{{
                         new Date(row.created_at).toLocaleString()
                     }}</span>
                 </div>
-                <p v-if="row.actor" class="mt-1 text-xs text-[#666666]">
+                <p v-if="row.actor" class="mt-1 text-xs text-muted">
                     {{ t('activityLog.actor') }}: {{ row.actor.name }}
                 </p>
             </li>

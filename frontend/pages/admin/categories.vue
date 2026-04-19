@@ -130,29 +130,31 @@
             <EcommerceCategorySelect v-model="form.parent_id" :categories="tree" />
         </UCard>
 
-        <UModal v-model="modalOpen">
-            <UCard>
-                <template #header>
-                    <span class="font-medium">تصنيف جديد</span>
-                </template>
-                <form class="space-y-4" @submit.prevent="submitCreate">
-                    <UFormGroup label="الاسم بالعربية">
-                        <UInput v-model="form.name_ar" required />
-                    </UFormGroup>
-                    <UFormGroup label="الاسم بالإنجليزية">
-                        <UInput v-model="form.name_en" required />
-                    </UFormGroup>
-                    <UFormGroup label="تصنيف أب (اختياري)">
-                        <EcommerceCategorySelect v-model="form.parent_id" :categories="tree" />
-                    </UFormGroup>
-                    <div class="flex justify-end gap-2">
-                        <UButton color="neutral" variant="ghost" @click="modalOpen = false"
-                            >إلغاء</UButton
-                        >
-                        <UButton type="submit">حفظ</UButton>
-                    </div>
-                </form>
-            </UCard>
+        <UModal v-model:open="modalOpen" :close="false">
+            <template #content>
+                <UCard>
+                    <template #header>
+                        <span class="font-medium">تصنيف جديد</span>
+                    </template>
+                    <form class="space-y-4" @submit.prevent="submitCreate">
+                        <UFormGroup label="الاسم بالعربية">
+                            <UInput v-model="form.name_ar" required />
+                        </UFormGroup>
+                        <UFormGroup label="الاسم بالإنجليزية">
+                            <UInput v-model="form.name_en" required />
+                        </UFormGroup>
+                        <UFormGroup label="تصنيف أب (اختياري)">
+                            <EcommerceCategorySelect v-model="form.parent_id" :categories="tree" />
+                        </UFormGroup>
+                        <div class="flex justify-end gap-2">
+                            <UButton color="neutral" variant="ghost" @click="modalOpen = false"
+                                >إلغاء</UButton
+                            >
+                            <UButton type="submit">حفظ</UButton>
+                        </div>
+                    </form>
+                </UCard>
+            </template>
         </UModal>
     </div>
 </template>

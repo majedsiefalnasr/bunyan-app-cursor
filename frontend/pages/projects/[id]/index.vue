@@ -76,14 +76,17 @@
     }
 
     async function submitPhase() {
-        if (!phaseForm.name) return;
+        const name = phaseForm.name.trim();
+        if (!name) {
+            return;
+        }
         isPhaseSubmitting.value = true;
         try {
             await apiFetch(`/v1/projects/${projectId.value}/phases`, {
                 method: 'POST',
                 body: {
-                    name: phaseForm.name,
-                    description: phaseForm.description || null,
+                    name,
+                    description: phaseForm.description.trim() || null,
                     budget: phaseForm.budget === '' ? null : Number(phaseForm.budget),
                     start_date: phaseForm.start_date || null,
                     end_date: phaseForm.end_date || null,
@@ -124,10 +127,22 @@
 
 <template>
     <div class="space-y-6">
+        <div>
+            <h2
+                class="text-xl font-semibold tracking-tight text-[#171717] dark:text-white"
+                style="letter-spacing: -0.04em"
+            >
+                {{ $t('projects.overview_title') }}
+            </h2>
+            <p class="mt-2 text-sm text-[#4d4d4d]">
+                {{ $t('projects.overview_subtitle') }}
+            </p>
+        </div>
+
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
                 <div class="flex items-center justify-between gap-3">
-                    <span class="font-medium text-[#171717] dark:text-white">
+                    <span class="text-sm font-medium text-[#171717] dark:text-white">
                         {{ $t('projects.phases_heading') }}
                     </span>
                     <UButton
@@ -181,7 +196,7 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
-                <span class="font-medium text-[#171717] dark:text-white">{{
+                <span class="text-sm font-medium text-[#171717] dark:text-white">{{
                     $t('projects.timeline_title')
                 }}</span>
             </template>
@@ -200,48 +215,116 @@
 
         <ActivityTimeline v-if="projectShell" entity="projects" :subject-id="projectShell.id" />
 
-        <UModal v-model="isPhaseModalOpen">
-            <UCard>
-                <template #header>
-                    <span class="font-medium text-[#171717] dark:text-white">
-                        {{ $t('projects.add_phase') }}
-                    </span>
-                </template>
+        <UModal v-model:open="isPhaseModalOpen" :close="false">
+            <template #content>
+                <UCard class="w-full min-w-0 max-w-lg">
+                    <template #header>
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0 space-y-1">
+                                <span class="font-medium text-[#171717] dark:text-white">
+                                    {{ $t('projects.add_phase') }}
+                                </span>
+                                <p class="text-sm text-[#666666]">
+                                    {{ $t('projects.add_phase_subtitle') }}
+                                </p>
+                            </div>
+                            <UButton
+                                color="neutral"
+                                variant="ghost"
+                                icon="i-heroicons-x-mark"
+                                class="shrink-0"
+                                :aria-label="$t('common.cancel')"
+                                @click="isPhaseModalOpen = false"
+                            />
+                        </div>
+                    </template>
 
-                <div class="space-y-4">
-                    <UFormGroup :label="$t('projects.phase_name')" name="name">
-                        <UInput v-model="phaseForm.name" />
-                    </UFormGroup>
-                    <UFormGroup :label="$t('projects.phase_description')" name="description">
-                        <UTextarea v-model="phaseForm.description" :rows="3" />
-                    </UFormGroup>
-                    <UFormGroup :label="$t('projects.phase_budget')" name="budget">
-                        <UInput v-model="phaseForm.budget" type="number" min="0" step="0.01" />
-                    </UFormGroup>
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <UFormGroup :label="$t('projects.phase_start_date')" name="start_date">
-                            <UInput v-model="phaseForm.start_date" type="date" />
-                        </UFormGroup>
-                        <UFormGroup :label="$t('projects.phase_end_date')" name="end_date">
-                            <UInput v-model="phaseForm.end_date" type="date" />
-                        </UFormGroup>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <UButton color="neutral" variant="soft" @click="isPhaseModalOpen = false">
-                            {{ $t('common.cancel') }}
-                        </UButton>
-                        <UButton
-                            color="primary"
-                            :loading="isPhaseSubmitting"
-                            :disabled="!phaseForm.name"
-                            @click="submitPhase"
+                    <form
+                        id="phase-create-form"
+                        class="max-h-[min(65vh,32rem)] space-y-5 overflow-y-auto overscroll-contain pe-1 -me-1"
+                        @submit.prevent="submitPhase"
+                    >
+                        <UFormField
+                            :label="$t('projects.phase_name')"
+                            name="name"
+                            required
+                            class="min-w-0"
                         >
-                            {{ $t('common.save') }}
-                        </UButton>
-                    </div>
-                </div>
-            </UCard>
+                            <UInput
+                                v-model="phaseForm.name"
+                                :placeholder="$t('projects.phase_name_placeholder')"
+                                autocomplete="off"
+                                class="w-full"
+                            />
+                        </UFormField>
+                        <UFormField
+                            :label="$t('projects.phase_description')"
+                            name="description"
+                            class="min-w-0"
+                        >
+                            <UTextarea
+                                v-model="phaseForm.description"
+                                :rows="3"
+                                autoresize
+                                :placeholder="$t('projects.phase_description_placeholder')"
+                                class="w-full min-h-20"
+                            />
+                        </UFormField>
+                        <UFormField
+                            :label="$t('projects.phase_budget')"
+                            name="budget"
+                            class="min-w-0"
+                        >
+                            <UInput
+                                v-model="phaseForm.budget"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                :placeholder="$t('projects.phase_budget_placeholder')"
+                                class="w-full"
+                            />
+                        </UFormField>
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4">
+                            <UFormField
+                                :label="$t('projects.phase_start_date')"
+                                name="start_date"
+                                class="min-w-0"
+                            >
+                                <UInput v-model="phaseForm.start_date" type="date" class="w-full" />
+                            </UFormField>
+                            <UFormField
+                                :label="$t('projects.phase_end_date')"
+                                name="end_date"
+                                class="min-w-0"
+                            >
+                                <UInput v-model="phaseForm.end_date" type="date" class="w-full" />
+                            </UFormField>
+                        </div>
+                    </form>
+
+                    <template #footer>
+                        <div class="flex flex-wrap justify-end gap-2">
+                            <UButton
+                                type="button"
+                                color="neutral"
+                                variant="soft"
+                                @click="isPhaseModalOpen = false"
+                            >
+                                {{ $t('common.cancel') }}
+                            </UButton>
+                            <UButton
+                                type="submit"
+                                form="phase-create-form"
+                                color="primary"
+                                :loading="isPhaseSubmitting"
+                                :disabled="!phaseForm.name?.trim()"
+                            >
+                                {{ $t('common.save') }}
+                            </UButton>
+                        </div>
+                    </template>
+                </UCard>
+            </template>
         </UModal>
     </div>
 </template>

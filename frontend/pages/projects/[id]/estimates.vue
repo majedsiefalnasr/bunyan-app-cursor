@@ -75,13 +75,13 @@
 </script>
 
 <template>
-    <div class="space-y-4">
+    <div class="space-y-6">
         <UAlert color="info" variant="soft" :title="$t('projects.estimates_disclaimer')" />
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <span class="font-medium text-[#171717] dark:text-white">{{
+                    <span class="text-sm font-medium text-[#171717] dark:text-white">{{
                         $t('projects.estimates_title')
                     }}</span>
                     <UButton size="sm" variant="soft" color="neutral" @click="addRow">
@@ -94,31 +94,74 @@
                 {{ $t('projects.estimates_empty') }}
             </div>
 
-            <div v-else class="space-y-3">
+            <div v-else class="space-y-4">
                 <div
-                    v-for="row in lines"
+                    v-for="(row, index) in lines"
                     :key="row.id"
-                    class="grid gap-3 sm:grid-cols-12 sm:items-end"
+                    class="rounded-xl border border-default bg-elevated/25 p-4 dark:bg-elevated/10"
                 >
-                    <UFormGroup class="sm:col-span-5" :label="$t('projects.estimates_col_label')">
-                        <UInput v-model="row.label" />
-                    </UFormGroup>
-                    <UFormGroup class="sm:col-span-2" :label="$t('projects.estimates_col_qty')">
-                        <UInput v-model.number="row.quantity" type="number" min="0" step="0.01" />
-                    </UFormGroup>
-                    <UFormGroup class="sm:col-span-3" :label="$t('projects.estimates_col_price')">
-                        <UInput v-model.number="row.unit_price" type="number" min="0" step="0.01" />
-                    </UFormGroup>
-                    <div class="flex sm:col-span-2">
-                        <UButton color="error" variant="soft" @click="removeRow(row.id)">
-                            {{ $t('projects.estimates_remove') }}
-                        </UButton>
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-12 sm:items-end">
+                        <UFormField
+                            class="min-w-0 w-full sm:col-span-6"
+                            :label="$t('projects.estimates_col_label')"
+                            :name="`estimate-${row.id}-label`"
+                        >
+                            <UInput v-model="row.label" class="w-full min-w-0" />
+                        </UFormField>
+                        <UFormField
+                            class="min-w-0 w-full sm:col-span-2"
+                            :label="$t('projects.estimates_col_qty')"
+                            :name="`estimate-${row.id}-qty`"
+                        >
+                            <UInput
+                                v-model.number="row.quantity"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                class="w-full min-w-0"
+                            />
+                        </UFormField>
+                        <UFormField
+                            class="min-w-0 w-full sm:col-span-2"
+                            :label="$t('projects.estimates_col_price')"
+                            :name="`estimate-${row.id}-price`"
+                        >
+                            <UInput
+                                v-model.number="row.unit_price"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                class="w-full min-w-0"
+                            />
+                        </UFormField>
+                        <UFormField
+                            class="min-w-0 w-full sm:col-span-2"
+                            :label="$t('projects.estimates_col_actions')"
+                            :name="`estimate-${row.id}-actions`"
+                        >
+                            <UButton
+                                class="w-full justify-center font-medium"
+                                color="error"
+                                variant="soft"
+                                icon="i-heroicons-trash"
+                                :aria-label="
+                                    $t('projects.estimates_remove_line', { n: index + 1 })
+                                "
+                                @click="removeRow(row.id)"
+                            >
+                                {{ $t('projects.estimates_remove') }}
+                            </UButton>
+                        </UFormField>
                     </div>
                 </div>
-                <p class="text-sm font-medium text-[#171717] dark:text-white">
-                    {{ $t('projects.estimates_total') }}:
-                    {{ total.toFixed(2) }}
-                </p>
+                <div
+                    class="flex flex-col gap-2 border-t border-default pt-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                    <span class="text-sm text-[#666666]">{{ $t('projects.estimates_total') }}</span>
+                    <span class="text-lg font-semibold tabular-nums text-[#171717] dark:text-white">
+                        {{ total.toFixed(2) }}
+                    </span>
+                </div>
             </div>
         </UCard>
     </div>

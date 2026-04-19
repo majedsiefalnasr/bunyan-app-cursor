@@ -164,9 +164,7 @@
             <UFormGroup :label="t('analyticsReports.type_label')">
                 <USelect
                     v-model="selectedType"
-                    :options="types.map((x) => ({ value: x.type, label: typeLabel(x.type) }))"
-                    value-attribute="value"
-                    option-attribute="label"
+                    :items="types.map((x) => ({ value: x.type, label: typeLabel(x.type) }))"
                     :loading="isLoadingTypes"
                 />
             </UFormGroup>

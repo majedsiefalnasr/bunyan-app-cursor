@@ -73,25 +73,21 @@
                 <UFormGroup label="التجميع">
                     <USelect
                         v-model="bucket"
-                        :options="[
+                        :items="[
                             { value: 'day', label: 'يومي' },
                             { value: 'week', label: 'أسبوعي' },
                             { value: 'month', label: 'شهري' },
                         ]"
-                        value-attribute="value"
-                        option-attribute="label"
                     />
                 </UFormGroup>
                 <UFormGroup label="المقارنة">
                     <USelect
                         v-model="compare"
-                        :options="[
+                        :items="[
                             { value: 'none', label: 'بدون' },
                             { value: 'previous_period', label: 'الفترة السابقة' },
                             { value: 'previous_year', label: 'السنة السابقة' },
                         ]"
-                        value-attribute="value"
-                        option-attribute="label"
                     />
                 </UFormGroup>
             </div>

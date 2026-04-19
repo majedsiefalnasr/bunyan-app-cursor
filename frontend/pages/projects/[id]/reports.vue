@@ -37,6 +37,32 @@
         content: '',
     });
     const files = ref<File[]>([]);
+    const attachmentFileInput = ref<HTMLInputElement | null>(null);
+    const isAttachmentDragging = ref(false);
+
+    function isReportMediaFile(file: File): boolean {
+        return file.type.startsWith('image/') || file.type.startsWith('video/');
+    }
+
+    function onAttachmentFileChange(e: Event) {
+        const input = e.target as HTMLInputElement;
+        const list = input.files ? Array.from(input.files) : [];
+        files.value = list.filter(isReportMediaFile);
+        input.value = '';
+    }
+
+    function onAttachmentDrop(e: DragEvent) {
+        isAttachmentDragging.value = false;
+        const list = e.dataTransfer?.files;
+        if (!list?.length) {
+            return;
+        }
+        const next = Array.from(list).filter(isReportMediaFile);
+        if (!next.length) {
+            return;
+        }
+        files.value = [...files.value, ...next];
+    }
 
     async function loadReports() {
         isLoading.value = true;
@@ -71,7 +97,11 @@
     }
 
     async function submit() {
-        if (!form.title || !form.content) return;
+        const title = form.title.trim();
+        const content = form.content.trim();
+        if (!title || !content) {
+            return;
+        }
         isSubmitting.value = true;
         try {
             const attachmentUrls: string[] = [];
@@ -96,8 +126,8 @@
                 method: 'POST',
                 body: {
                     project_id: projectId.value,
-                    title: form.title,
-                    content: form.content,
+                    title,
+                    content,
                     attachments: attachmentUrls.length ? attachmentUrls : undefined,
                 },
             });
@@ -127,17 +157,30 @@
 
 <template>
     <div class="space-y-6">
+        <div>
+            <h2
+                class="text-xl font-semibold tracking-tight text-[#171717] dark:text-white"
+                style="letter-spacing: -0.04em"
+            >
+                {{ $t('reports.title') }}
+            </h2>
+            <p class="mt-2 text-sm text-[#4d4d4d]">
+                {{ $t('reports.page_subtitle') }}
+            </p>
+        </div>
+
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
                 <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <span class="font-medium text-[#171717] dark:text-white">
-                            {{ $t('reports.title') }}
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-[#171717] dark:text-white">
+                            {{ $t('reports.hub_title') }}
                         </span>
                         <UBadge color="neutral" variant="soft">{{ reports.length }}</UBadge>
                     </div>
                     <UButton
                         v-if="canCreateReport"
+                        size="sm"
                         color="primary"
                         variant="solid"
                         icon="i-heroicons-plus"
@@ -211,66 +254,138 @@
             class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
         />
 
-        <UModal v-model="isCreateModalOpen">
-            <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
-                <template #header>
-                    <div class="flex items-center justify-between gap-3">
-                        <span class="font-medium text-[#171717] dark:text-white">
-                            {{ $t('reports.create_title') }}
-                        </span>
-                        <UButton
-                            color="neutral"
-                            variant="ghost"
-                            icon="i-heroicons-x-mark"
-                            @click="isCreateModalOpen = false"
-                        />
-                    </div>
-                </template>
+        <UModal v-model:open="isCreateModalOpen" :close="false">
+            <template #content>
+                <UCard class="w-full min-w-0 max-w-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <template #header>
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0 space-y-1">
+                                <span class="font-medium text-[#171717] dark:text-white">
+                                    {{ $t('reports.create_title') }}
+                                </span>
+                                <p class="text-sm text-[#666666]">
+                                    {{ $t('reports.create_subtitle') }}
+                                </p>
+                            </div>
+                            <UButton
+                                color="neutral"
+                                variant="ghost"
+                                icon="i-heroicons-x-mark"
+                                class="shrink-0"
+                                :aria-label="$t('common.cancel')"
+                                @click="isCreateModalOpen = false"
+                            />
+                        </div>
+                    </template>
 
-                <div class="space-y-4">
-                    <UFormGroup :label="$t('reports.fields.title')" name="title">
-                        <UInput v-model="form.title" />
-                    </UFormGroup>
-                    <UFormGroup :label="$t('reports.fields.content')" name="content">
-                        <UTextarea v-model="form.content" :rows="5" />
-                    </UFormGroup>
-                    <UFormGroup :label="$t('reports.fields.attachments')" name="attachments">
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*,video/*"
-                            class="block w-full text-sm text-[#666666] file:mr-3 file:rounded-md file:border-0 file:bg-[#f4f4f5] file:px-3 file:py-2 file:text-sm file:font-medium file:text-[#171717] hover:file:bg-[#eaeaea] dark:file:bg-[#262626] dark:file:text-white"
-                            @change="
-                                (e) => {
-                                    const input = e.target as HTMLInputElement;
-                                    files = input.files ? Array.from(input.files) : [];
-                                }
-                            "
-                        />
-                        <p v-if="files.length" class="mt-2 text-xs text-[#666666]">
-                            {{ files.length }} {{ $t('reports.files_selected') }}
-                        </p>
-                    </UFormGroup>
-                    <div class="flex justify-end gap-2">
-                        <UButton
-                            color="neutral"
-                            variant="outline"
-                            :disabled="isSubmitting"
-                            @click="isCreateModalOpen = false"
+                    <form
+                        id="report-create-form"
+                        class="max-h-[min(65vh,36rem)] space-y-6 overflow-y-auto overscroll-contain pe-1 -me-1"
+                        @submit.prevent="submit"
+                    >
+                        <UFormField
+                            :label="$t('reports.fields.title')"
+                            :description="$t('reports.fields.title_desc')"
+                            name="title"
+                            required
+                            class="min-w-0"
                         >
-                            {{ $t('common.cancel') }}
-                        </UButton>
-                        <UButton
-                            color="primary"
-                            :loading="isSubmitting"
-                            :disabled="!form.title || !form.content"
-                            @click="submit"
+                            <UInput
+                                v-model="form.title"
+                                class="w-full"
+                                :placeholder="$t('reports.fields.title_placeholder')"
+                                autocomplete="off"
+                            />
+                        </UFormField>
+                        <UFormField
+                            :label="$t('reports.fields.content')"
+                            :description="$t('reports.fields.content_desc')"
+                            name="content"
+                            required
+                            class="min-w-0"
                         >
-                            {{ $t('common.save') }}
-                        </UButton>
-                    </div>
-                </div>
-            </UCard>
+                            <UTextarea
+                                v-model="form.content"
+                                :rows="5"
+                                autoresize
+                                :placeholder="$t('reports.fields.content_placeholder')"
+                                class="w-full min-h-32"
+                            />
+                        </UFormField>
+                        <UFormField
+                            :label="$t('reports.attach_file_section')"
+                            :description="$t('reports.attach_file_hint')"
+                            name="attachments"
+                            class="min-w-0 border-t border-default pt-6"
+                        >
+                            <div
+                                class="rounded-xl border-2 border-dashed p-6 text-center transition-colors"
+                                :class="
+                                    isAttachmentDragging
+                                        ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                                        : 'border-default bg-elevated/30 dark:bg-elevated/15'
+                                "
+                                @dragover.prevent="isAttachmentDragging = true"
+                                @dragleave.prevent="isAttachmentDragging = false"
+                                @drop.prevent="onAttachmentDrop"
+                            >
+                                <UIcon
+                                    name="i-heroicons-cloud-arrow-up"
+                                    class="mx-auto h-10 w-10 text-[#666666]"
+                                    aria-hidden="true"
+                                />
+                                <p class="mt-3 text-sm text-[#4d4d4d]">
+                                    {{ $t('reports.attach_drop_hint') }}
+                                </p>
+                                <input
+                                    id="report-attachment-input"
+                                    ref="attachmentFileInput"
+                                    type="file"
+                                    multiple
+                                    accept="image/*,video/*"
+                                    class="hidden"
+                                    :aria-label="$t('reports.attach_file_section')"
+                                    @change="onAttachmentFileChange"
+                                />
+                                <UButton
+                                    type="button"
+                                    class="mt-4 w-full justify-center font-medium sm:w-auto"
+                                    aria-controls="report-attachment-input"
+                                    @click="attachmentFileInput?.click()"
+                                >
+                                    {{ $t('projects.documents_choose_file') }}
+                                </UButton>
+                                <p v-if="files.length" class="mt-2 text-xs text-[#666666]">
+                                    {{ files.length }} {{ $t('reports.files_selected') }}
+                                </p>
+                            </div>
+                        </UFormField>
+                    </form>
+
+                    <template #footer>
+                        <div class="flex flex-wrap justify-end gap-2">
+                            <UButton
+                                type="button"
+                                color="neutral"
+                                variant="outline"
+                                :disabled="isSubmitting"
+                                @click="isCreateModalOpen = false"
+                            >
+                                {{ $t('common.cancel') }}
+                            </UButton>
+                            <UButton
+                                type="submit"
+                                form="report-create-form"
+                                color="primary"
+                                :loading="isSubmitting"
+                                :disabled="!form.title?.trim() || !form.content?.trim()"
+                            >
+                                {{ $t('common.save') }}
+                            </UButton>
+                        </div>
+                    </template>
+                </UCard>
+            </template>
         </UModal>
     </div>
 </template>

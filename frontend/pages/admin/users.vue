@@ -127,9 +127,7 @@
             </h1>
             <USelect
                 v-model="roleFilter"
-                :options="roleOptions"
-                option-attribute="label"
-                value-attribute="value"
+                :items="roleOptions"
                 placeholder="تصفية حسب الدور"
                 class="w-48"
             />

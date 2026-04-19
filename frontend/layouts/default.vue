@@ -323,85 +323,100 @@
     </div>
 
     <Teleport to="body">
-        <div
-            v-if="isSearchOpen"
-            class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
-            role="dialog"
-            aria-modal="true"
-            :aria-label="t('search.palette_title')"
+        <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
         >
-            <button
-                type="button"
-                class="absolute inset-0 bg-black/40"
-                aria-label="Close"
-                @click="closeSearchPalette"
-            />
+            <div
+                v-if="isSearchOpen"
+                class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
+                role="dialog"
+                aria-modal="true"
+                :aria-label="t('search.palette_title')"
+            >
+                <button
+                    type="button"
+                    class="absolute inset-0 bg-black/40 backdrop-blur-md"
+                    aria-label="Close"
+                    @click="closeSearchPalette"
+                />
 
-            <div class="relative w-full max-w-xl">
-                <UCard class="w-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
-                    <template #header>
-                        <div class="flex items-center justify-between gap-3">
-                            <span class="font-medium text-[#171717] dark:text-white">
-                                {{ t('search.palette_title') }}
-                            </span>
-                            <UButton
-                                color="neutral"
-                                variant="ghost"
-                                icon="i-heroicons-x-mark"
-                                :aria-label="t('shell.sidebar.close')"
-                                @click="closeSearchPalette"
-                            />
-                        </div>
-                    </template>
-
-                    <form class="space-y-4 p-4 sm:p-5" @submit.prevent="submitSearch">
-                        <UInput
-                            v-model="searchQuery"
-                            autofocus
-                            size="lg"
-                            icon="i-heroicons-magnifying-glass"
-                            :placeholder="t('search.palette_placeholder')"
-                        />
-
-                        <div class="space-y-2">
-                            <p class="text-xs text-[#666666]">
-                                {{ t('search.palette_hint') }}
-                            </p>
-                            <div class="grid gap-2 sm:grid-cols-2">
+                <div class="relative w-full max-w-xl">
+                    <UCard class="w-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                        <template #header>
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="font-medium text-[#171717] dark:text-white">
+                                    {{ t('search.palette_title') }}
+                                </span>
                                 <UButton
-                                    v-for="item in quickLinks"
-                                    :key="item.to"
                                     color="neutral"
-                                    variant="soft"
-                                    :icon="item.icon"
-                                    class="justify-start"
-                                    @click="
-                                        async () => {
-                                            closeSearchPalette();
-                                            await navigateTo(item.to);
-                                        }
-                                    "
-                                >
-                                    {{ item.label }}
-                                </UButton>
+                                    variant="ghost"
+                                    icon="i-heroicons-x-mark"
+                                    :aria-label="t('shell.sidebar.close')"
+                                    @click="closeSearchPalette"
+                                />
                             </div>
-                        </div>
+                        </template>
 
-                        <div
-                            class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-[#808080]"
-                        >
-                            <span class="inline-flex items-center gap-1">
-                                <UKbd value="enter" />
-                                <span>{{ t('shell.search') }}</span>
-                            </span>
-                            <span class="inline-flex items-center gap-1">
-                                <UKbd value="esc" />
-                                <span>{{ t('common.cancel') }}</span>
-                            </span>
-                        </div>
-                    </form>
-                </UCard>
+                        <form class="space-y-4 p-4 sm:p-5" @submit.prevent="submitSearch">
+                            <div class="block w-full min-w-0">
+                                <UInput
+                                    v-model="searchQuery"
+                                    class="w-full"
+                                    :ui="{ root: 'relative inline-flex w-full min-w-0 items-center' }"
+                                    autofocus
+                                    size="lg"
+                                    icon="i-heroicons-magnifying-glass"
+                                    :placeholder="t('search.palette_placeholder')"
+                                />
+                            </div>
+
+                            <div class="space-y-2">
+                                <p class="text-xs text-[#666666]">
+                                    {{ t('search.palette_hint') }}
+                                </p>
+                                <div class="grid gap-2 sm:grid-cols-2">
+                                    <UButton
+                                        v-for="item in quickLinks"
+                                        :key="item.to"
+                                        color="neutral"
+                                        variant="soft"
+                                        :icon="item.icon"
+                                        class="justify-start"
+                                        @click="
+                                            async () => {
+                                                closeSearchPalette();
+                                                await navigateTo(item.to);
+                                            }
+                                        "
+                                    >
+                                        {{ item.label }}
+                                    </UButton>
+                                </div>
+                            </div>
+                        </form>
+
+                        <template #footer>
+                            <div
+                                class="flex flex-wrap items-center justify-between gap-2 text-xs text-[#808080]"
+                            >
+                                <span class="inline-flex items-center gap-1">
+                                    <UKbd value="enter" />
+                                    <span>{{ t('shell.search') }}</span>
+                                </span>
+                                <span class="inline-flex items-center gap-1">
+                                    <UKbd value="esc" />
+                                    <span>{{ t('common.cancel') }}</span>
+                                </span>
+                            </div>
+                        </template>
+                    </UCard>
+                </div>
             </div>
-        </div>
+        </Transition>
     </Teleport>
 </template>

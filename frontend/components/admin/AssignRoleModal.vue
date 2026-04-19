@@ -91,32 +91,32 @@
 </script>
 
 <template>
-    <UModal v-model="open">
-        <UCard>
-            <template #header>
-                <h3 class="text-lg font-semibold" style="color: #171717">تعيين دور</h3>
-                <p v-if="user" class="mt-1 text-sm" style="color: #666">
-                    {{ user.name }} — {{ user.role_label }}
-                </p>
-            </template>
+    <UModal v-model:open="open" :close="false">
+        <template #content>
+            <UCard>
+                <template #header>
+                    <h3 class="text-lg font-semibold" style="color: #171717">تعيين دور</h3>
+                    <p v-if="user" class="mt-1 text-sm" style="color: #666">
+                        {{ user.name }} — {{ user.role_label }}
+                    </p>
+                </template>
 
-            <div class="space-y-4">
-                <UFormGroup label="الدور الجديد">
-                    <USelect
-                        v-model="selectedRole"
-                        :options="roleOptions"
-                        option-attribute="label"
-                        value-attribute="value"
-                    />
-                </UFormGroup>
-            </div>
-
-            <template #footer>
-                <div class="flex justify-end gap-3">
-                    <UButton color="neutral" variant="ghost" @click="open = false"> إلغاء </UButton>
-                    <UButton :loading="isSubmitting" @click="assignRole"> تأكيد التعيين </UButton>
+                <div class="space-y-4">
+                    <UFormGroup label="الدور الجديد">
+                        <USelect
+                            v-model="selectedRole"
+                            :items="roleOptions"
+                        />
+                    </UFormGroup>
                 </div>
-            </template>
-        </UCard>
+
+                <template #footer>
+                    <div class="flex justify-end gap-3">
+                        <UButton color="neutral" variant="ghost" @click="open = false"> إلغاء </UButton>
+                        <UButton :loading="isSubmitting" @click="assignRole"> تأكيد التعيين </UButton>
+                    </div>
+                </template>
+            </UCard>
+        </template>
     </UModal>
 </template>

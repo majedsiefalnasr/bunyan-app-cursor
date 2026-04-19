@@ -142,29 +142,31 @@
             </UTable>
         </UCard>
 
-        <UModal v-model="adjustOpen">
-            <UCard>
-                <template #header>
-                    <span class="font-medium">تعديل الكمية</span>
-                </template>
-                <div v-if="selected" class="space-y-4">
-                    <p class="text-sm text-[#4d4d4d]">
-                        {{ selected.product?.name ?? `منتج #${selected.product_id}` }}
-                    </p>
-                    <UFormGroup label="التغيير (+ أو -)">
-                        <UInput v-model.number="delta" type="number" />
-                    </UFormGroup>
-                    <UFormGroup label="ملاحظات (اختياري)">
-                        <UTextarea v-model="notes" />
-                    </UFormGroup>
-                    <div class="flex justify-end gap-2">
-                        <UButton variant="soft" color="neutral" @click="adjustOpen = false"
-                            >إلغاء</UButton
-                        >
-                        <UButton :disabled="delta === 0" @click="submitAdjust">حفظ</UButton>
+        <UModal v-model:open="adjustOpen" :close="false">
+            <template #content>
+                <UCard>
+                    <template #header>
+                        <span class="font-medium">تعديل الكمية</span>
+                    </template>
+                    <div v-if="selected" class="space-y-4">
+                        <p class="text-sm text-[#4d4d4d]">
+                            {{ selected.product?.name ?? `منتج #${selected.product_id}` }}
+                        </p>
+                        <UFormGroup label="التغيير (+ أو -)">
+                            <UInput v-model.number="delta" type="number" />
+                        </UFormGroup>
+                        <UFormGroup label="ملاحظات (اختياري)">
+                            <UTextarea v-model="notes" />
+                        </UFormGroup>
+                        <div class="flex justify-end gap-2">
+                            <UButton variant="soft" color="neutral" @click="adjustOpen = false"
+                                >إلغاء</UButton
+                            >
+                            <UButton :disabled="delta === 0" @click="submitAdjust">حفظ</UButton>
+                        </div>
                     </div>
-                </div>
-            </UCard>
+                </UCard>
+            </template>
         </UModal>
     </div>
 </template>

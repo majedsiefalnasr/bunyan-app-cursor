@@ -40,9 +40,7 @@
 <template>
     <USelect
         v-model="inner"
-        :options="options"
-        option-attribute="label"
-        value-attribute="value"
+        :items="options"
         :placeholder="placeholder ?? 'اختر التصنيف'"
         class="w-full max-w-md"
     />

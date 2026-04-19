@@ -45,7 +45,15 @@
     const fileInput = ref<HTMLInputElement | null>(null);
     const isDragging = ref(false);
     const title = ref('');
-    const category = ref<string>('photo');
+    /** Default: `other` so the field does not look like “photos only” — all 7 backend categories stay available in the menu. */
+    const category = ref<string>('other');
+
+    const categoryOptions = computed(() =>
+        DOCUMENT_CATEGORIES.map((c) => ({
+            value: c.value,
+            label: t(c.labelKey),
+        }))
+    );
     const versionFor = ref<DocumentRow | null>(null);
     const versionsOpen = ref(false);
     const versions = ref<VersionRow[]>([]);
@@ -187,39 +195,105 @@
 
         <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
             <template #header>
-                <span class="font-medium text-[#171717] dark:text-white">{{
+                <span class="text-sm font-medium text-[#171717] dark:text-white">{{
                     $t('projects.documents_upload')
                 }}</span>
             </template>
-            <div class="space-y-4">
-                <UFormGroup :label="$t('projects.documents_title_label')">
-                    <UInput v-model="title" class="w-full" />
-                </UFormGroup>
-                <UFormGroup :label="$t('projects.documents_category_label')">
-                    <USelect
-                        v-model="category"
-                        :options="
-                            DOCUMENT_CATEGORIES.map((c) => ({
-                                value: c.value,
-                                label: t(c.labelKey),
-                            }))
-                        "
-                        option-attribute="label"
-                        value-attribute="value"
-                        class="w-full"
-                    />
-                </UFormGroup>
+            <div class="space-y-5">
+                <div class="space-y-3">
+                    <div>
+                        <p
+                            class="text-xs font-semibold uppercase tracking-wide text-[#666666]"
+                            id="documents-details-heading"
+                        >
+                            {{ $t('projects.documents_details_section') }}
+                        </p>
+                        <p class="mt-1 text-xs text-[#666666]">
+                            {{ $t('projects.documents_details_hint') }}
+                        </p>
+                    </div>
+                    <div
+                        class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5"
+                        role="group"
+                        aria-labelledby="documents-details-heading"
+                    >
+                        <UFormGroup :label="$t('projects.documents_title_label')" class="min-w-0">
+                            <UInput
+                                v-model="title"
+                                class="w-full"
+                                :placeholder="$t('projects.documents_title_label')"
+                                autocomplete="off"
+                            />
+                        </UFormGroup>
+                        <UFormGroup
+                            :label="$t('projects.documents_category_label')"
+                            :description="$t('projects.documents_category_hint')"
+                            class="min-w-0"
+                        >
+                            <USelect
+                                v-model="category"
+                                :items="categoryOptions"
+                                class="w-full min-w-0"
+                            />
+                        </UFormGroup>
+                    </div>
+                </div>
                 <div
-                    class="rounded-lg bg-[#fafafa] p-6 text-center text-sm text-[#666666] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]"
-                    @dragover.prevent="isDragging = true"
-                    @dragleave.prevent="isDragging = false"
-                    @drop.prevent="onDrop"
+                    class="border-t border-default pt-5"
+                    role="region"
+                    aria-labelledby="documents-attach-title"
                 >
-                    <p>{{ $t('projects.documents_drop_hint') }}</p>
-                    <input ref="fileInput" type="file" class="hidden" @change="onFileChange" />
-                    <UButton class="mt-3" :loading="isUploading" @click="fileInput?.click()">
-                        {{ $t('projects.documents_choose_file') }}
-                    </UButton>
+                    <div class="mb-3 text-start">
+                        <h3
+                            id="documents-attach-title"
+                            class="text-sm font-medium text-[#171717] dark:text-white"
+                        >
+                            {{ $t('projects.documents_file_section') }}
+                        </h3>
+                        <p class="mt-1 text-xs text-[#666666]">
+                            {{ $t('projects.documents_file_section_hint') }}
+                        </p>
+                    </div>
+                    <div
+                        class="rounded-xl border-2 border-dashed p-6 text-center transition-colors"
+                        :class="
+                            isDragging
+                                ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                                : 'border-default bg-elevated/30 dark:bg-elevated/15'
+                        "
+                        @dragover.prevent="isDragging = true"
+                        @dragleave.prevent="isDragging = false"
+                        @drop.prevent="onDrop"
+                    >
+                        <UIcon
+                            name="i-heroicons-cloud-arrow-up"
+                            class="mx-auto h-10 w-10 text-[#666666]"
+                            aria-hidden="true"
+                        />
+                        <p class="mt-3 text-sm text-[#4d4d4d]">
+                            {{ $t('projects.documents_drop_hint') }}
+                        </p>
+                        <input
+                            id="documents-file-input"
+                            ref="fileInput"
+                            type="file"
+                            class="hidden"
+                            :aria-label="$t('projects.documents_choose_file')"
+                            @change="onFileChange"
+                        />
+                        <UButton
+                            class="mt-4 w-full justify-center font-medium sm:w-auto"
+                            :loading="isUploading"
+                            :disabled="!title.trim()"
+                            aria-controls="documents-file-input"
+                            @click="fileInput?.click()"
+                        >
+                            {{ $t('projects.documents_choose_file') }}
+                        </UButton>
+                        <p v-if="!title.trim()" class="mt-2 text-xs text-[#666666]">
+                            {{ $t('projects.documents_title_required_hint') }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </UCard>
@@ -280,26 +354,44 @@
             </ul>
         </UCard>
 
-        <UModal v-model="versionsOpen">
-            <UCard>
-                <template #header>
-                    <span class="font-medium text-[#171717] dark:text-white">
-                        {{ $t('projects.documents_versions_title') }}
-                        <span v-if="versionFor" class="ms-1 text-sm font-normal text-[#666666]">
-                            — {{ versionFor.title }}
-                        </span>
-                    </span>
-                </template>
-                <div v-if="versionsLoading" class="text-sm text-[#666666]">
-                    {{ $t('shell.loading') }}
-                </div>
-                <ul v-else class="space-y-2 text-sm text-[#4d4d4d]">
-                    <li v-for="v in versions" :key="v.id" class="flex justify-between gap-2">
-                        <span>v{{ v.version }}</span>
-                        <span class="text-xs text-[#666666]">{{ v.size_bytes }} B</span>
-                    </li>
-                </ul>
-            </UCard>
+        <UModal v-model:open="versionsOpen" :close="false">
+            <template #content>
+                <UCard class="w-full min-w-0 max-w-lg">
+                    <template #header>
+                        <div class="flex items-start justify-between gap-3">
+                            <span class="min-w-0 font-medium text-[#171717] dark:text-white">
+                                {{ $t('projects.documents_versions_title') }}
+                                <span
+                                    v-if="versionFor"
+                                    class="ms-1 block text-sm font-normal text-[#666666] sm:inline"
+                                >
+                                    — {{ versionFor.title }}
+                                </span>
+                            </span>
+                            <UButton
+                                color="neutral"
+                                variant="ghost"
+                                icon="i-heroicons-x-mark"
+                                class="shrink-0"
+                                :aria-label="$t('common.cancel')"
+                                @click="versionsOpen = false"
+                            />
+                        </div>
+                    </template>
+                    <div v-if="versionsLoading" class="text-sm text-[#666666]">
+                        {{ $t('shell.loading') }}
+                    </div>
+                    <ul
+                        v-else
+                        class="max-h-60 space-y-2 overflow-y-auto overscroll-contain text-sm text-[#4d4d4d]"
+                    >
+                        <li v-for="v in versions" :key="v.id" class="flex justify-between gap-2">
+                            <span>v{{ v.version }}</span>
+                            <span class="text-xs text-[#666666]">{{ v.size_bytes }} B</span>
+                        </li>
+                    </ul>
+                </UCard>
+            </template>
         </UModal>
     </div>
 </template>

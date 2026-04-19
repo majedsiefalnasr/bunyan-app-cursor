@@ -98,9 +98,7 @@
                     <UFormGroup :label="t('admin.roles.role_label')">
                         <USelect
                             v-model="selectedRoleId"
-                            :options="roles.map((r) => ({ value: r.id, label: r.name }))"
-                            value-attribute="value"
-                            option-attribute="label"
+                            :items="roles.map((r) => ({ value: r.id, label: r.name }))"
                             :loading="isLoadingRoles"
                             :placeholder="t('admin.roles.select_role')"
                         />

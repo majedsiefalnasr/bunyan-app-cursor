@@ -86,13 +86,11 @@
                 <UFormGroup :label="$t('payments.method')">
                     <USelect
                         v-model="method"
-                        :options="[
+                        :items="[
                             { value: 'mada', label: $t('payments.method_mada') },
                             { value: 'card', label: $t('payments.method_card') },
                             { value: 'bank_transfer', label: $t('payments.method_bank') },
                         ]"
-                        value-attribute="value"
-                        option-attribute="label"
                         class="w-full"
                     />
                 </UFormGroup>
