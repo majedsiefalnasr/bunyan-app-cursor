@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import type {
         ActivityLogRow,
-        DashboardKpis,
         DashboardOverview,
         PaginatedActivity,
     } from '~/composables/useDashboard';
@@ -13,44 +12,11 @@
     });
 
     const localePath = useLocalePath();
-    const { role } = useAuth();
-    const { t } = useI18n();
     const { fetchOverview, fetchRecentActivity } = useDashboard();
 
     const overview = ref<DashboardOverview | null>(null);
     const activity = ref<PaginatedActivity | null>(null);
     const loading = ref(true);
-
-    const kpiLabelKeys: Record<keyof DashboardKpis, string> = {
-        users: 'dashboard.kpi_users',
-        projects: 'dashboard.kpi_projects',
-        orders: 'dashboard.kpi_orders',
-        revenue_sar: 'dashboard.kpi_revenue_sar',
-        tasks_assigned: 'dashboard.kpi_tasks_assigned',
-        reports: 'dashboard.kpi_reports',
-    };
-
-    const kpiEntries = computed(() => {
-        const k = overview.value?.kpis as DashboardKpis | undefined;
-        if (!k) {
-            return [];
-        }
-        const rows: { key: keyof DashboardKpis; label: string; value: string }[] = [];
-        (Object.keys(kpiLabelKeys) as (keyof DashboardKpis)[]).forEach((key) => {
-            const v = k[key];
-            if (v === null || v === undefined) {
-                return;
-            }
-            const value = typeof v === 'number' && key === 'revenue_sar' ? v.toFixed(2) : String(v);
-            rows.push({
-                key,
-                label: t(kpiLabelKeys[key]),
-                value,
-            });
-        });
-
-        return rows;
-    });
 
     const activityRows = computed<ActivityLogRow[]>(() => activity.value?.data ?? []);
 
@@ -67,20 +33,21 @@
 </script>
 
 <template>
-    <div class="mx-auto max-w-5xl space-y-6">
+    <div class="mx-auto w-full space-y-8">
         <div>
-            <h1 class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
+            <h1 class="text-3xl font-bold tracking-tight text-[#171717] dark:text-white">
                 {{ $t('nav.dashboard') }}
             </h1>
-            <p class="mt-1 text-sm text-[#666666]">
+            <p class="mt-2 text-sm text-[#666666]">
                 {{ $t('dashboard.welcome_hint') }}
             </p>
         </div>
 
-        <div v-if="loading" class="space-y-4">
-            <UPageGrid class="gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-3">
+        <div v-if="loading" class="space-y-6">
+            <!-- Stats Grid Skeleton -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <UCard
-                    v-for="i in 6"
+                    v-for="i in 4"
                     :key="i"
                     class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
                 >
@@ -89,7 +56,23 @@
                         <USkeleton class="h-8 w-20" />
                     </div>
                 </UCard>
-            </UPageGrid>
+            </div>
+
+            <!-- Charts Grid Skeleton -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="space-y-3 h-80">
+                        <USkeleton class="h-5 w-40" />
+                        <USkeleton class="h-64 w-full" />
+                    </div>
+                </UCard>
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="space-y-3 h-80">
+                        <USkeleton class="h-5 w-40" />
+                        <USkeleton class="h-64 w-full" />
+                    </div>
+                </UCard>
+            </div>
 
             <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
                 <div class="space-y-3">
@@ -105,38 +88,78 @@
         </div>
 
         <template v-else>
-            <UPageGrid
-                v-if="kpiEntries.length"
-                class="gap-4 sm:gap-6 lg:grid-cols-3 xl:grid-cols-3"
-            >
-                <UPageCard
-                    v-for="row in kpiEntries"
-                    :key="row.key"
-                    variant="subtle"
-                    :title="row.label"
-                    :ui="{
-                        container: 'gap-y-1.5',
-                        title: 'font-normal text-[#666666] text-xs uppercase',
-                    }"
-                    class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08),0px_2px_2px_rgba(0,0,0,0.04)]"
-                >
-                    <p class="text-2xl font-semibold tracking-tight text-[#171717] dark:text-white">
-                        {{ row.value }}
-                    </p>
-                </UPageCard>
-            </UPageGrid>
+            <!-- Enhanced KPI Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <DashboardStatCard
+                    icon="i-heroicons-building-office-2"
+                    label="إجمالي المشاريع"
+                    value="7"
+                    :trend="12"
+                    trend-label="زيادة عن الشهر الماضي"
+                    bg-color="bg-blue-50"
+                    text-color="text-blue-600"
+                />
+                <DashboardStatCard
+                    icon="i-heroicons-document-duplicate"
+                    label="الطلبات النشطة"
+                    value="13"
+                    :trend="8"
+                    trend-label="زيادة عن الشهر الماضي"
+                    bg-color="bg-green-50"
+                    text-color="text-green-600"
+                />
+                <DashboardStatCard
+                    icon="i-heroicons-banknotes"
+                    label="إجمالي الإيرادات"
+                    value="5.2M"
+                    :trend="15"
+                    trend-label="زيادة عن الشهر الماضي"
+                    bg-color="bg-emerald-50"
+                    text-color="text-emerald-600"
+                />
+                <DashboardStatCard
+                    icon="i-heroicons-users"
+                    label="عدد المستخدمين"
+                    value="16"
+                    :trend="25"
+                    trend-label="زيادة عن الشهر الماضي"
+                    bg-color="bg-purple-50"
+                    text-color="text-purple-600"
+                />
+            </div>
 
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DashboardRevenueChart />
+                <DashboardProjectStatusChart />
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <DashboardOrderDistributionChart />
+                <DashboardTaskProgressChart />
+            </div>
+
+            <!-- Recent Activity -->
             <UCard v-if="activityRows.length" class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
                 <template #header>
-                    <h2 class="text-base font-semibold text-[#171717] dark:text-white">
-                        {{ $t('dashboard.recent_activity') }}
-                    </h2>
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-base font-semibold text-[#171717] dark:text-white">
+                            {{ $t('dashboard.recent_activity') }}
+                        </h2>
+                        <UButton
+                            variant="ghost"
+                            color="gray"
+                            size="sm"
+                            label="عرض الكل"
+                            :to="localePath('/notifications')"
+                        />
+                    </div>
                 </template>
                 <ul class="divide-y divide-[#ebebeb] dark:divide-neutral-800">
                     <li
-                        v-for="item in activityRows"
+                        v-for="item in activityRows.slice(0, 8)"
                         :key="item.id"
-                        class="flex flex-col gap-1 py-3 text-sm text-[#4d4d4d] first:pt-0 last:pb-0"
+                        class="flex flex-col gap-1 py-3 text-sm text-[#4d4d4d] first:pt-0 last:pb-0 hover:bg-[#fafafa] dark:hover:bg-neutral-900 px-2 -mx-2 rounded transition"
                     >
                         <span class="font-medium text-[#171717] dark:text-white">{{
                             item.action
@@ -145,39 +168,79 @@
                     </li>
                 </ul>
             </UCard>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="font-semibold text-[#171717] dark:text-white">إدارة المشاريع</h3>
+                        <p class="text-sm text-[#666666]">عرض وإدارة جميع المشاريع</p>
+                        <div class="pt-2">
+                            <UButton
+                                :to="localePath('/projects')"
+                                color="primary"
+                                variant="solid"
+                                size="sm"
+                            >
+                                عرض المشاريع
+                            </UButton>
+                        </div>
+                    </div>
+                </UCard>
+
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="font-semibold text-[#171717] dark:text-white">المهام</h3>
+                        <p class="text-sm text-[#666666]">متابعة وإدارة المهام</p>
+                        <div class="pt-2">
+                            <UButton
+                                :to="localePath('/tasks')"
+                                color="primary"
+                                variant="solid"
+                                size="sm"
+                            >
+                                عرض المهام
+                            </UButton>
+                        </div>
+                    </div>
+                </UCard>
+
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="font-semibold text-[#171717] dark:text-white">الطلبات</h3>
+                        <p class="text-sm text-[#666666]">متابعة وإدارة الطلبات</p>
+                        <div class="pt-2">
+                            <UButton
+                                :to="localePath('/orders')"
+                                color="primary"
+                                variant="solid"
+                                size="sm"
+                            >
+                                عرض الطلبات
+                            </UButton>
+                        </div>
+                    </div>
+                </UCard>
+
+                <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="font-semibold text-[#171717] dark:text-white">
+                            العمليات المالية
+                        </h3>
+                        <p class="text-sm text-[#666666]">متابعة التحويلات والمدفوعات</p>
+                        <div class="pt-2">
+                            <UButton
+                                :to="localePath('/transactions')"
+                                color="primary"
+                                variant="solid"
+                                size="sm"
+                            >
+                                عرض العمليات
+                            </UButton>
+                        </div>
+                    </div>
+                </UCard>
+            </div>
         </template>
-
-        <UCard class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-sm text-[#4d4d4d]">
-                    {{ $t('dashboard.profile_cta') }}
-                </p>
-                <UButton :to="localePath('/profile')" color="primary" variant="solid">
-                    {{ $t('shell.user.profile') }}
-                </UButton>
-            </div>
-        </UCard>
-
-        <UCard v-if="role === 'customer'" class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-sm text-[#4d4d4d]">
-                    {{ $t('dashboard.rfq_customer_cta') }}
-                </p>
-                <UButton :to="localePath('/rfqs')" color="primary" variant="solid">
-                    {{ $t('nav.rfqs') }}
-                </UButton>
-            </div>
-        </UCard>
-
-        <UCard v-if="role === 'contractor'" class="shadow-[0px_0px_0px_1px_rgba(0,0,0,0.08)]">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-sm text-[#4d4d4d]">
-                    {{ $t('dashboard.rfq_contractor_cta') }}
-                </p>
-                <UButton :to="localePath('/contractor/rfqs')" color="primary" variant="solid">
-                    {{ $t('nav.rfq_invitations') }}
-                </UButton>
-            </div>
-        </UCard>
     </div>
 </template>

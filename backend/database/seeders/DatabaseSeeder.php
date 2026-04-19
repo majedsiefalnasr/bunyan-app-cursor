@@ -15,6 +15,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
+            ProjectSeeder::class,
+            PhaseSeeder::class,
+            TaskSeeder::class,
+            ReportSeeder::class,
+            TransactionSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

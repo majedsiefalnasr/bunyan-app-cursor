@@ -35,9 +35,21 @@ export const navigationItems: NavItem[] = [
         roles: ['customer'],
     },
     {
+        labelKey: 'nav.tasks',
+        to: '/tasks',
+        icon: 'i-heroicons-check-circle',
+        roles: ['customer', 'contractor', 'supervising_architect', 'field_engineer', 'admin'],
+    },
+    {
         labelKey: 'nav.orders',
         to: '/orders',
         icon: 'i-heroicons-shopping-cart',
+        roles: ['customer', 'contractor', 'admin'],
+    },
+    {
+        labelKey: 'nav.transactions',
+        to: '/transactions',
+        icon: 'i-heroicons-arrow-trending-up',
         roles: ['customer', 'contractor', 'admin'],
     },
     {

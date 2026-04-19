@@ -203,8 +203,8 @@
                 <div class="space-y-3">
                     <div>
                         <p
-                            class="text-xs font-semibold uppercase tracking-wide text-[#666666]"
                             id="documents-details-heading"
+                            class="text-xs font-semibold uppercase tracking-wide text-[#666666]"
                         >
                             {{ $t('projects.documents_details_section') }}
                         </p>
