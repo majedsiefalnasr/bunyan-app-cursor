@@ -1,9 +1,9 @@
 <script setup lang="ts">
+     
     import { use } from 'echarts';
     import { PieChart } from 'echarts/charts';
     import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
     import { CanvasRenderer } from 'echarts/renderers';
-    // @ts-expect-error - echarts type incompatibility
 
     use([PieChart, TitleComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
 

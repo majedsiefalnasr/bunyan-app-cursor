@@ -1,4 +1,5 @@
 <script setup lang="ts">
+     
     import { use } from 'echarts';
     import { LineChart } from 'echarts/charts';
     import {
@@ -8,7 +9,6 @@
         TooltipComponent,
     } from 'echarts/components';
     import { CanvasRenderer } from 'echarts/renderers';
-    // @ts-expect-error - echarts type incompatibility
 
     use([
         LineChart,
