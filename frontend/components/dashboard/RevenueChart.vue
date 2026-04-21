@@ -1,5 +1,4 @@
 <script setup lang="ts">
-     
     import { use } from 'echarts';
     import { LineChart } from 'echarts/charts';
     import {

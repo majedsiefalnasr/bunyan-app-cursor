@@ -1,5 +1,4 @@
 <script setup lang="ts">
-     
     import { use } from 'echarts';
     import { PieChart } from 'echarts/charts';
     import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
