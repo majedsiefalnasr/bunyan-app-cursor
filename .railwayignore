@@ -5,6 +5,7 @@ node_modules/
 .env.local
 backend/storage/logs/*
 backend/bootstrap/cache/*
+backend/public/storage
 frontend/.nuxt/
 frontend/.output/
 frontend/dist/

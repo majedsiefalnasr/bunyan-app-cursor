@@ -27,7 +27,10 @@ return [
         'http://127.0.0.1:3001',
     ]))),
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '/^https:\/\/[a-z0-9]+\.lhr\.life$/',         // localhost.run tunnel domains
+        '/^https:\/\/[a-z0-9-]+\.up\.railway\.app$/', // Railway production domains
+    ],
 
     'allowed_headers' => ['*'],
 

@@ -1,13 +1,18 @@
-FROM node:20-alpine
+FROM node:20-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app/frontend
 
 COPY ./frontend/package.json ./frontend/package-lock.json* ./
 
-RUN npm install
+RUN npm ci --legacy-peer-deps
 
 COPY ./frontend .
 
 EXPOSE 3000 3001
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Build for production SSR, then start the Node server
+RUN npm run build
+
+CMD ["node", ".output/server/index.mjs"]
