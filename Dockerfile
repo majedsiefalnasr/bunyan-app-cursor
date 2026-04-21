@@ -168,7 +168,32 @@ NGINX_SITE_EOF
 # Remove default Nginx config
 RUN rm -f /etc/nginx/sites-enabled/default
 
-# Create supervisord configuration
+# Create startup script for initialization
+RUN cat > /app/entrypoint.sh <<'ENTRYPOINT_EOF'
+#!/bin/bash
+set -e
+
+echo "Starting Bunyan initialization..."
+
+# Set permissions
+chmod 755 /app/backend
+chmod 755 /app/frontend
+
+# Run database migrations and setup
+echo "Setting up Laravel storage and database..."
+cd /app/backend
+php artisan storage:link --force || true
+php artisan migrate --force
+echo "Laravel setup complete!"
+
+# Start supervisor
+echo "Starting service supervisor..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/services.conf
+ENTRYPOINT_EOF
+
+RUN chmod +x /app/entrypoint.sh
+
+# Create supervisord configuration (without backend-init)
 RUN mkdir -p /etc/supervisor/conf.d && cat > /etc/supervisor/conf.d/services.conf <<'SUPERVISOR_EOF'
 [supervisord]
 nodaemon=true
@@ -200,16 +225,8 @@ environment=NODE_ENV=production,PORT=3000
 stderr_logfile=/var/log/supervisor/frontend.err.log
 stdout_logfile=/var/log/supervisor/frontend.out.log
 priority=30
-
-[program:backend-init]
-command=/bin/sh -c "cd /app/backend && php artisan storage:link --force && php artisan migrate --force && exit 0"
-autostart=true
-autorestart=false
-stderr_logfile=/var/log/supervisor/backend-init.err.log
-stdout_logfile=/var/log/supervisor/backend-init.out.log
-priority=5
 SUPERVISOR_EOF
 
 EXPOSE 8000
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/services.conf"]
+ENTRYPOINT ["/app/entrypoint.sh"]
