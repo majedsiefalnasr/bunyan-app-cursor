@@ -148,7 +148,7 @@
                         </h2>
                         <UButton
                             variant="ghost"
-                            color="gray"
+                            color="neutral"
                             size="sm"
                             label="عرض الكل"
                             :to="localePath('/notifications')"

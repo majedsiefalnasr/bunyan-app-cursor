@@ -212,7 +212,7 @@
                             </p>
                         </div>
                         <UBadge
-                            :color="statusColors[project.status]?.color || 'bg-gray-100'"
+                            :color="statusColors[project.status]?.color || 'neutral'"
                             variant="soft"
                             size="md"
                         >
@@ -281,7 +281,7 @@
                         <UButton
                             :to="localePath(`/projects/${project.id}`)"
                             variant="ghost"
-                            color="gray"
+                            color="neutral"
                             class="w-full"
                         >
                             عرض التفاصيل

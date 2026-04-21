@@ -85,12 +85,12 @@
 
     const completionPercentage = computed(() => {
         if (tasks.value.length === 0) return 0;
-        return Math.round((tasksByStatus.value.done / tasks.value.length) * 100);
+        return Math.round(((tasksByStatus.value.done ?? 0) / tasks.value.length) * 100);
     });
 
     onMounted(async () => {
         try {
-            const response = await listTasks({ per_page: 200 });
+            const response = (await listTasks({ per_page: 200 })) as { data?: unknown[] };
             tasks.value = response.data;
         } catch (e: unknown) {
             tasks.value = [];
@@ -293,11 +293,11 @@
                                 {{ task.description || 'بدون وصف' }}
                             </p>
                             <div class="flex flex-wrap items-center gap-2">
-                                <UBadge :class="statusColors[task.status].color">
-                                    {{ statusColors[task.status].label }}
+                                <UBadge :class="statusColors[task.status]?.color">
+                                    {{ statusColors[task.status]?.label }}
                                 </UBadge>
-                                <UBadge :class="priorityColors[task.priority].color">
-                                    {{ priorityColors[task.priority].label }}
+                                <UBadge :class="priorityColors[task.priority]?.color">
+                                    {{ priorityColors[task.priority]?.label }}
                                 </UBadge>
                             </div>
                         </div>

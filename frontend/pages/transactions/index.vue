@@ -88,7 +88,7 @@
 
     onMounted(async () => {
         try {
-            const response = await listTransactions({ per_page: 200 });
+            const response = (await listTransactions({ per_page: 200 })) as { data?: unknown[] };
             transactions.value = response.data;
         } catch (e: unknown) {
             transactions.value = [];
@@ -264,11 +264,11 @@
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-start gap-3 flex-1">
                             <div
-                                :class="typeColors[transaction.type].color"
+                                :class="typeColors[transaction.type]?.color"
                                 class="rounded-lg p-2 flex-shrink-0"
                             >
                                 <UIcon
-                                    :name="typeColors[transaction.type].icon"
+                                    :name="typeColors[transaction.type]?.icon"
                                     class="text-2xl text-[#171717]"
                                 />
                             </div>
@@ -280,11 +280,11 @@
                                     {{ transaction.reference }}
                                 </p>
                                 <div class="flex items-center gap-2 mt-2">
-                                    <UBadge :class="typeColors[transaction.type].color">
-                                        {{ typeColors[transaction.type].label }}
+                                    <UBadge :class="typeColors[transaction.type]?.color">
+                                        {{ typeColors[transaction.type]?.label }}
                                     </UBadge>
-                                    <UBadge :class="statusColors[transaction.status].color">
-                                        {{ statusColors[transaction.status].label }}
+                                    <UBadge :class="statusColors[transaction.status]?.color">
+                                        {{ statusColors[transaction.status]?.label }}
                                     </UBadge>
                                 </div>
                             </div>

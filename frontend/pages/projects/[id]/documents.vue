@@ -46,7 +46,7 @@
     const isDragging = ref(false);
     const title = ref('');
     /** Default: `other` so the field does not look like “photos only” — all 7 backend categories stay available in the menu. */
-    const category = ref<string>('other');
+    const category = ref<(typeof DOCUMENT_CATEGORIES)[number]['value']>('other');
 
     const categoryOptions = computed(() =>
         DOCUMENT_CATEGORIES.map((c) => ({

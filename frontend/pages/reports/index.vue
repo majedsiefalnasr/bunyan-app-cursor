@@ -73,7 +73,7 @@
         isLoading.value = true;
         loadError.value = null;
         try {
-            const res = await listReports({ per_page: 100 });
+            const res = (await listReports({ per_page: 100 })) as { data?: unknown[] };
             reports.value = res.data || [];
         } catch (e: unknown) {
             reports.value = [];
@@ -196,18 +196,18 @@
                                 </h3>
                                 <div class="flex flex-wrap gap-2">
                                     <UBadge
-                                        :class="typeColors[report.type].color"
+                                        :class="typeColors[report.type]?.color"
                                         variant="soft"
                                         size="sm"
                                     >
-                                        {{ typeColors[report.type].label }}
+                                        {{ typeColors[report.type]?.label }}
                                     </UBadge>
                                     <UBadge
-                                        :class="statusColors[report.status].color"
+                                        :class="statusColors[report.status]?.color"
                                         variant="soft"
                                         size="sm"
                                     >
-                                        {{ statusColors[report.status].label }}
+                                        {{ statusColors[report.status]?.label }}
                                     </UBadge>
                                 </div>
                             </div>
@@ -231,13 +231,13 @@
                             <div>
                                 <p class="text-xs text-[#666666] mb-1">النوع</p>
                                 <p class="text-sm font-medium text-[#171717]">
-                                    {{ typeColors[report.type].label }}
+                                    {{ typeColors[report.type]?.label }}
                                 </p>
                             </div>
                             <div>
                                 <p class="text-xs text-[#666666] mb-1">الحالة</p>
                                 <p class="text-sm font-medium text-[#171717]">
-                                    {{ statusColors[report.status].label }}
+                                    {{ statusColors[report.status]?.label }}
                                 </p>
                             </div>
                             <div>
@@ -247,7 +247,7 @@
                                 </p>
                             </div>
                             <div class="text-left">
-                                <UButton variant="ghost" color="gray" size="sm">
+                                <UButton variant="ghost" color="neutral" size="sm">
                                     عرض التفاصيل
                                     <template #trailing>
                                         <UIcon name="i-heroicons-arrow-left" />

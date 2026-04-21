@@ -176,11 +176,11 @@
                                     {{ order.order_number || `الطلب #${order.id}` }}
                                 </h3>
                                 <UBadge
-                                    :class="getStatusColor(order.status).color"
+                                    :class="getStatusColor(order.status)?.color"
                                     variant="soft"
                                     size="md"
                                 >
-                                    {{ getStatusColor(order.status).label }}
+                                    {{ getStatusColor(order.status)?.label }}
                                 </UBadge>
                             </div>
                             <p class="text-sm text-[#666666]">
@@ -208,7 +208,7 @@
                         <div>
                             <p class="text-xs text-[#666666] mb-1">حالة الطلب</p>
                             <p class="font-semibold text-[#171717]">
-                                {{ getStatusColor(order.status).label }}
+                                {{ getStatusColor(order.status)?.label }}
                             </p>
                         </div>
                         <div>
@@ -227,7 +227,7 @@
                             <UButton
                                 :to="localePath(`/orders/${order.id}`)"
                                 variant="ghost"
-                                color="gray"
+                                color="neutral"
                                 size="sm"
                                 @click.stop
                             >
