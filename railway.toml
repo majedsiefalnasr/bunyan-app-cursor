@@ -1,0 +1,9 @@
+# Railway configuration for Bunyan backend
+# Simple Docker-based deployment
+
+[build]
+dockerfile = "Dockerfile.backend"
+
+[deploy]
+startCommand = "cd backend && php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT"
+restartPolicyMaxRetries = 5

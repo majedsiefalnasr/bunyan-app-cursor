@@ -1,0 +1,12 @@
+# Railway deploy ignore patterns
+node_modules/
+.git/
+.env
+.env.local
+backend/storage/logs/*
+backend/bootstrap/cache/*
+frontend/.nuxt/
+frontend/.output/
+frontend/dist/
+.DS_Store
+*.log
