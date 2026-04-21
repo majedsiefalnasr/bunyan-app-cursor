@@ -9,7 +9,7 @@
     } from 'echarts/components';
     import { CanvasRenderer } from 'echarts/renderers';
     // @ts-expect-error - echarts type incompatibility
-     
+
     use([
         BarChart,
         TitleComponent,
