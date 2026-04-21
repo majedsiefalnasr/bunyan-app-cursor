@@ -16,7 +16,7 @@
         GridComponent,
         LegendComponent,
         CanvasRenderer,
-    ]);
+    ] as unknown as never);
 
     const chartRef = ref();
 

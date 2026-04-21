@@ -5,7 +5,13 @@
     import { graphic } from 'echarts/core';
     import { CanvasRenderer } from 'echarts/renderers';
 
-    use([BarChart, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
+    use([
+        BarChart,
+        TitleComponent,
+        TooltipComponent,
+        GridComponent,
+        CanvasRenderer,
+    ] as unknown as never);
 
     const chartRef = ref();
 

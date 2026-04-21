@@ -4,7 +4,13 @@
     import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
     import { CanvasRenderer } from 'echarts/renderers';
 
-    use([PieChart, TitleComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
+    use([
+        PieChart,
+        TitleComponent,
+        TooltipComponent,
+        LegendComponent,
+        CanvasRenderer,
+    ] as unknown as never);
 
     const chartRef = ref();
 
