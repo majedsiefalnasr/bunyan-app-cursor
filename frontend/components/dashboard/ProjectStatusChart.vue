@@ -5,6 +5,7 @@
     import { CanvasRenderer } from 'echarts/renderers';
 
     // @ts-expect-error - echarts type incompatibility with vue-volar plugin
+     
     use([PieChart, TitleComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
 
     const chartRef = ref();
