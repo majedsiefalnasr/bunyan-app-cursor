@@ -149,7 +149,9 @@
                             class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-default px-3 py-2"
                         >
                             <span>{{ inv.email }}</span>
-                            <UBadge color="neutral" variant="soft">{{ inv.project_role_label }}</UBadge>
+                            <UBadge color="neutral" variant="soft">{{
+                                inv.project_role_label
+                            }}</UBadge>
                         </li>
                     </ul>
                 </div>

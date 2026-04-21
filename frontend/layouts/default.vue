@@ -367,7 +367,9 @@
                                 <UInput
                                     v-model="searchQuery"
                                     class="w-full"
-                                    :ui="{ root: 'relative inline-flex w-full min-w-0 items-center' }"
+                                    :ui="{
+                                        root: 'relative inline-flex w-full min-w-0 items-center',
+                                    }"
                                     autofocus
                                     size="lg"
                                     icon="i-heroicons-magnifying-glass"

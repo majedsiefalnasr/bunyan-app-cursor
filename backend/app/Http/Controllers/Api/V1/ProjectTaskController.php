@@ -20,6 +20,29 @@ class ProjectTaskController extends BaseController
     ) {
     }
 
+    public function all(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $query = Task::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        $tasks = $query->paginate($request->per_page ?? 15);
+
+        return $this->sendSuccess(
+            TaskResource::collection($tasks),
+            'تم جلب المهام بنجاح',
+            200
+        );
+    }
+
     public function index(Project $project, Request $request): JsonResponse
     {
         $this->authorize('view', $project);

@@ -144,9 +144,7 @@
                                 color="error"
                                 variant="soft"
                                 icon="i-heroicons-trash"
-                                :aria-label="
-                                    $t('projects.estimates_remove_line', { n: index + 1 })
-                                "
+                                :aria-label="$t('projects.estimates_remove_line', { n: index + 1 })"
                                 @click="removeRow(row.id)"
                             >
                                 {{ $t('projects.estimates_remove') }}

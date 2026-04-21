@@ -2,6 +2,7 @@
     import { use } from 'echarts';
     import { BarChart } from 'echarts/charts';
     import { GridComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+    import { graphic } from 'echarts/core';
     import { CanvasRenderer } from 'echarts/renderers';
 
     use([BarChart, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
@@ -67,9 +68,7 @@
                 type: 'bar',
                 data: [100, 75, 45, 30, 15],
                 itemStyle: {
-                    color: new (
-                        window as unknown as { echarts: { graphic: { LinearGradient: unknown } } }
-                    ).echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    color: new graphic.LinearGradient(0, 0, 1, 0, [
                         { offset: 0, color: '#0a72ef' },
                         { offset: 1, color: '#0a72ef' },
                     ]),

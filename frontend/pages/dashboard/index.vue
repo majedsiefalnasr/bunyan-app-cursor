@@ -90,7 +90,7 @@
         <template v-else>
             <!-- Enhanced KPI Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <DashboardStatCard
+                <StatCard
                     icon="i-heroicons-building-office-2"
                     label="إجمالي المشاريع"
                     value="7"
@@ -99,7 +99,7 @@
                     bg-color="bg-blue-50"
                     text-color="text-blue-600"
                 />
-                <DashboardStatCard
+                <StatCard
                     icon="i-heroicons-document-duplicate"
                     label="الطلبات النشطة"
                     value="13"
@@ -108,7 +108,7 @@
                     bg-color="bg-green-50"
                     text-color="text-green-600"
                 />
-                <DashboardStatCard
+                <StatCard
                     icon="i-heroicons-banknotes"
                     label="إجمالي الإيرادات"
                     value="5.2M"
@@ -117,7 +117,7 @@
                     bg-color="bg-emerald-50"
                     text-color="text-emerald-600"
                 />
-                <DashboardStatCard
+                <StatCard
                     icon="i-heroicons-users"
                     label="عدد المستخدمين"
                     value="16"
@@ -130,13 +130,13 @@
 
             <!-- Charts Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DashboardRevenueChart />
-                <DashboardProjectStatusChart />
+                <RevenueChart />
+                <ProjectStatusChart />
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <DashboardOrderDistributionChart />
-                <DashboardTaskProgressChart />
+                <OrderDistributionChart />
+                <TaskProgressChart />
             </div>
 
             <!-- Recent Activity -->

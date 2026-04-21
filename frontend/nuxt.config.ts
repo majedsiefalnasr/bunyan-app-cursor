@@ -1,4 +1,8 @@
+import { URL, fileURLToPath } from 'node:url';
+
 export default defineNuxtConfig({
+    compatibilityDate: '2026-04-20',
+    srcDir: '.',
     // Avoid Vite DevTools Kit RPC noise/failures when Playwright drives `nuxt dev` (sets PLAYWRIGHT_TEST=1).
     devtools: { enabled: !(process.env.CI || process.env.PLAYWRIGHT_TEST) },
 
@@ -50,7 +54,7 @@ export default defineNuxtConfig({
         autoImports: ['defineStore'],
     },
 
-    css: ['~/assets/css/main.css'],
+    css: [fileURLToPath(new URL('./assets/css/main.css', import.meta.url))],
 
     runtimeConfig: {
         public: {
@@ -65,6 +69,12 @@ export default defineNuxtConfig({
     },
 
     ssr: true,
+
+    vite: {
+        optimizeDeps: {
+            include: ['@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'zod'],
+        },
+    },
 
     typescript: {
         strict: true,

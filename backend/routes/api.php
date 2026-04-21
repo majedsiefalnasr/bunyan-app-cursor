@@ -200,7 +200,7 @@ Route::prefix('v1')->group(function () {
             Route::get('projects/{project}/phases/{phase}/tasks', [TaskController::class, 'index'])->name('projects.phases.tasks.index');
             Route::get('projects/{project}/phases/{phase}/tasks/{task}', [TaskController::class, 'show'])->name('projects.phases.tasks.show');
             Route::get('projects/{project}/tasks', [ProjectTaskController::class, 'index'])->name('projects.tasks.index');
-            Route::get('tasks', [ProjectTaskController::class, 'index'])->name('tasks.index');
+            Route::get('tasks', [ProjectTaskController::class, 'all'])->name('tasks.index');
             Route::get('tasks/{task}', [TaskWorkspaceController::class, 'show'])->name('tasks.show');
 
             Route::middleware('throttle:60,1')->group(function () {

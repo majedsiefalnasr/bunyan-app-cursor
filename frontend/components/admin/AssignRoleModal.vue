@@ -103,17 +103,18 @@
 
                 <div class="space-y-4">
                     <UFormGroup label="الدور الجديد">
-                        <USelect
-                            v-model="selectedRole"
-                            :items="roleOptions"
-                        />
+                        <USelect v-model="selectedRole" :items="roleOptions" />
                     </UFormGroup>
                 </div>
 
                 <template #footer>
                     <div class="flex justify-end gap-3">
-                        <UButton color="neutral" variant="ghost" @click="open = false"> إلغاء </UButton>
-                        <UButton :loading="isSubmitting" @click="assignRole"> تأكيد التعيين </UButton>
+                        <UButton color="neutral" variant="ghost" @click="open = false">
+                            إلغاء
+                        </UButton>
+                        <UButton :loading="isSubmitting" @click="assignRole">
+                            تأكيد التعيين
+                        </UButton>
                     </div>
                 </template>
             </UCard>

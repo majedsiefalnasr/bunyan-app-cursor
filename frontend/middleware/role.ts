@@ -49,13 +49,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
             return;
         }
 
-        const toast = useToast();
-        toast.add({
-            title: 'غير مصرح',
-            description: 'ليس لديك الصلاحية للوصول لهذه الصفحة',
-            color: 'error',
-            icon: 'i-heroicons-exclamation-triangle',
-        });
+        // Toasts are client-only — on SSR just redirect without a toast to avoid hydration mismatches.
+        if (import.meta.client) {
+            const toast = useToast();
+            toast.add({
+                title: 'غير مصرح',
+                description: 'ليس لديك الصلاحية للوصول لهذه الصفحة',
+                color: 'error',
+                icon: 'i-heroicons-exclamation-triangle',
+            });
+        }
 
         return navigateTo(localePath('/dashboard'));
     }

@@ -35,6 +35,9 @@ export function useErrorNotification() {
     }
 
     function showErrorNotification(payload: ErrorPayload) {
+        // Toasts are client-only UI — never add them during SSR to prevent hydration mismatches.
+        if (import.meta.server) return;
+
         const sev = severityFor(payload.statusCode, payload.code);
         const key = `errors.codes.${payload.code}.message`;
         const localized = te(key) ? t(key) : payload.message;
