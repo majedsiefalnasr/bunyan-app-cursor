@@ -73,7 +73,7 @@
         isLoading.value = true;
         loadError.value = null;
         try {
-            const res = (await listReports({ per_page: 100 })) as { data?: unknown[] };
+            const res = (await listReports({ per_page: 100 })) as { data?: ReportRow[] };
             reports.value = res.data || [];
         } catch (e: unknown) {
             reports.value = [];

@@ -4,8 +4,8 @@
     import { GridComponent, TitleComponent, TooltipComponent } from 'echarts/components';
     import { graphic } from 'echarts/core';
     import { CanvasRenderer } from 'echarts/renderers';
-
-    // @ts-expect-error @typescript-eslint/no-explicit-any - echarts type incompatibility
+    // @ts-expect-error - echarts type incompatibility
+     
     use([BarChart, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
 
     const chartRef = ref();

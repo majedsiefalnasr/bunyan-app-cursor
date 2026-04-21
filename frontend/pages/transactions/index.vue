@@ -88,8 +88,10 @@
 
     onMounted(async () => {
         try {
-            const response = (await listTransactions({ per_page: 200 })) as { data?: unknown[] };
-            transactions.value = response.data;
+            const response = (await listTransactions({ per_page: 200 })) as {
+                data?: Transaction[];
+            };
+            transactions.value = response.data || [];
         } catch (e: unknown) {
             transactions.value = [];
             loadError.value = e instanceof Error ? e.message : String(e);

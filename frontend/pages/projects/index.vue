@@ -212,7 +212,7 @@
                             </p>
                         </div>
                         <UBadge
-                            :color="statusColors[project.status]?.color || 'neutral'"
+                            :color="(statusColors[project.status]?.color || 'neutral') as any"
                             variant="soft"
                             size="md"
                         >

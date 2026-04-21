@@ -76,8 +76,9 @@
             blocked: 0,
         };
         tasks.value.forEach((t) => {
-            if (result[t.status] !== undefined) {
-                result[t.status]++;
+            const status = t.status as keyof typeof result;
+            if (result[status] !== undefined) {
+                result[status]++;
             }
         });
         return result;
@@ -90,8 +91,8 @@
 
     onMounted(async () => {
         try {
-            const response = (await listTasks({ per_page: 200 })) as { data?: unknown[] };
-            tasks.value = response.data;
+            const response = (await listTasks({ per_page: 200 })) as { data?: Task[] };
+            tasks.value = response.data || [];
         } catch (e: unknown) {
             tasks.value = [];
             loadError.value = e instanceof Error ? e.message : String(e);
